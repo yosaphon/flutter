@@ -31,6 +31,9 @@ dependencies:
   form_field_validator: ^1.1.0
   firebase_core: ^1.1.1
   cloud_firestore: ^2.1.0
+  qr_code_scanner: ^0.4.0
+  flutter_automation: ^1.4.0
+  
 
 dev_dependencies:
   flutter_test:

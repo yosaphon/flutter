@@ -50,6 +50,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 25),
                           validator: MultiValidator([
                             EmailValidator(errorText: "รูปแบบไม่ถูกต้อง"),
                             RequiredValidator(errorText: "กรุณาป้อน Email")
@@ -67,6 +68,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 25),
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")
                           ]),
@@ -83,6 +85,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 25),
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
@@ -99,6 +102,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 25),
                           validator: MultiValidator(
                               [RequiredValidator(errorText: "กรุณาป้อนราคา")]),
                           onSaved: (String lotteryprice) {
@@ -113,13 +117,16 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 25),
                           validator: RequiredValidator(
                               errorText: "กรุณาป้อนชื่อผู้ใช้"),
                           onSaved: (String username) {
                             userlottery.username = username;
                           },
                         ),
+                        SizedBox(height: 30,),
                         SizedBox(
+                          height: 50,
                           width: double.infinity,
                           child: ElevatedButton(
                             child: Text(
