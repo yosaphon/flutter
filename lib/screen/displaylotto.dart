@@ -10,7 +10,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("หน้าแรก")),
+      appBar: AppBar(title: Text("หน้าแรก หฟกหกฟกหฟหก")),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("lottery").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
