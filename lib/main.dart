@@ -1,27 +1,33 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lotto/provider/google_sign_in.dart';
+import 'package:lotto/screen/display_userlotto.dart';
 import 'package:lotto/screen/displaycheck.dart';
 import 'package:lotto/screen/displaylotto.dart';
-import 'package:lotto/screen/formshowlotto.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lottery',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Lottery app'),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => GoogleSignInProvider(),
+        child: MaterialApp(
+          title: 'Lottery',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: MyHomePage(title: 'Lottery app'),
+        ),
+      );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -40,13 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
         length: 4,
         child: Scaffold(
           body: TabBarView(
-            children: [DisplayScreen(), Formqrcodescan(), Container(), Formshowlotto()],
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              DisplayScreen(),
+              Formqrcodescan(),
+              Container(),
+              UserprofileLottery()
+            ],
           ),
           backgroundColor: Colors.blue,
-         
           bottomNavigationBar: TabBar(
             labelColor: Color(0xffffffff), // สีของข้อความปุ่มที่เลือก
-            unselectedLabelColor: Color(0x55ffffff), // สีของข้อความปุ่มที่ไม่ได้เลือก
+            unselectedLabelColor:
+                Color(0x55ffffff), // สีของข้อความปุ่มที่ไม่ได้เลือก
             tabs: [
               Tab(text: "หน้าแรก", icon: Icon(Icons.home)),
               Tab(text: "ตรวจสลาก", icon: Icon(Icons.fact_check_rounded)),

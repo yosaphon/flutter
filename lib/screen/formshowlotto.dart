@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
 
+import 'menu_drawer.dart';
+
 class Formshowlotto extends StatefulWidget {
   @override
   _FormshowlottoState createState() => _FormshowlottoState();
@@ -37,6 +39,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
               appBar: AppBar(
                 title: Text("บันทึกดสลากผู้ใช้"),
               ),
+              drawer: MenuDrawer(),
               body: Container(
                 padding: EdgeInsets.all(20),
                 child: Form(
@@ -109,7 +112,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             userlottery.lotteryprice = lotteryprice;
                           },
                           keyboardType: TextInputType.number,
-                        ),SizedBox(
+                        ),
+                        SizedBox(
                           height: 15,
                         ),
                         Text(
@@ -124,7 +128,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             userlottery.username = username;
                           },
                         ),
-                        SizedBox(height: 30,),
+                        SizedBox(
+                          height: 30,
+                        ),
                         SizedBox(
                           height: 50,
                           width: double.infinity,
@@ -133,7 +139,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               "บันทกข้อมูล",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () async{
+                            onPressed: () async {
                               if (formKey.currentState.validate()) {
                                 formKey.currentState.save();
                                 await _userltottery.add({

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
+import 'menu_drawer.dart';
+
 class Formqrcodescan extends StatefulWidget {
   @override
   _FormqrcodescanState createState() => _FormqrcodescanState();
@@ -16,6 +18,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("ตรวจรางวัล")),
+      drawer: MenuDrawer(),
       body: Container(
         padding: EdgeInsets.all(30),
         child: Column(

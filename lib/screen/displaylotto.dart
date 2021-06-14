@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'menu_drawer.dart';
+
 class DisplayScreen extends StatefulWidget {
   @override
   _DisplayScreenState createState() => _DisplayScreenState();
@@ -11,6 +13,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("หน้าแรก")),
+      drawer: MenuDrawer(),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("lottery").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
