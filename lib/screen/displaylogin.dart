@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lotto/main.dart';
 import 'package:lotto/provider/google_sign_in.dart';
+import 'package:lotto/screen/check_menu.dart';
 import 'package:provider/provider.dart';
 
-import 'menu_drawer.dart';
+import 'display_userlotto.dart';
+
 
 class SignUpLoginWidget extends StatelessWidget {
   @override
@@ -12,7 +15,7 @@ class SignUpLoginWidget extends StatelessWidget {
       appBar: AppBar(
         title: Text("เข้าสู่ระบบ"),
       ),
-      drawer: MenuDrawer(),
+      drawer: CheckLogInMenu(),
       body: Container(
         padding: EdgeInsets.all(30),
         child: Column(
@@ -28,9 +31,14 @@ class SignUpLoginWidget extends StatelessWidget {
               ),
               label: Text(" Sign Up with Google"),
               onPressed: () {
-                final provider =
+                final provider = 
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.googleLogin();
+
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
               },
             ),
           ],

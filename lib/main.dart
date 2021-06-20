@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/provider/google_sign_in.dart';
-import 'package:lotto/screen/display_userlotto.dart';
+import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/displaycheck.dart';
 import 'package:lotto/screen/displaylotto.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
               DisplayScreen(),
               Formqrcodescan(),
               Container(),
-              UserprofileLottery()
+              CheckLogInUser()
             ],
           ),
           backgroundColor: Colors.blue,

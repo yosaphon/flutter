@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lotto/screen/check_menu.dart';
 
-import 'menu_drawer.dart';
 
 class DisplayScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("หน้าแรก")),
-      drawer: MenuDrawer(),
+      drawer: CheckLogInMenu(),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("lottery").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

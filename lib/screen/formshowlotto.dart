@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
-
+import 'check_menu.dart';
 import 'menu_drawer.dart';
 
 class Formshowlotto extends StatefulWidget {
@@ -29,6 +29,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
               appBar: AppBar(
                 title: Text("Error"),
               ),
+              drawer: CheckLogInMenu(),
               body: Center(
                 child: Text("${snapshot.error}"),
               ),
@@ -38,8 +39,11 @@ class _FormshowlottoState extends State<Formshowlotto> {
             return Scaffold(
               appBar: AppBar(
                 title: Text("บันทึกดสลากผู้ใช้"),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-              drawer: MenuDrawer(),
               body: Container(
                 padding: EdgeInsets.all(20),
                 child: Form(

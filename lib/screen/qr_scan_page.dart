@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'menu_drawer.dart';
 
 class QRScanPage extends StatefulWidget {
   @override
@@ -30,7 +30,13 @@ class _QRScanPageState extends State<QRScanPage> {
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
-          appBar: AppBar(title: Text("Scan QR Code")),
+          appBar: AppBar(
+            title: Text("Scan QR Code"),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
           body: Stack(
             alignment: Alignment.center,
             children: [
@@ -43,7 +49,8 @@ class _QRScanPageState extends State<QRScanPage> {
       );
 
   Widget buildControlButtons() => Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white24),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8), color: Colors.white24),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -89,6 +96,7 @@ class _QRScanPageState extends State<QRScanPage> {
       );
   void onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
-    controller.scannedDataStream.listen((barcode) => setState(() => this.barcode = barcode));
+    controller.scannedDataStream
+        .listen((barcode) => setState(() => this.barcode = barcode));
   }
 }
