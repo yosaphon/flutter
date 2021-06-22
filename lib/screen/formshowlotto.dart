@@ -29,7 +29,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
               appBar: AppBar(
                 title: Text("Error"),
               ),
-              drawer: CheckLogInMenu(),
               body: Center(
                 child: Text("${snapshot.error}"),
               ),
@@ -37,12 +36,20 @@ class _FormshowlottoState extends State<Formshowlotto> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
+              extendBodyBehindAppBar: true,
               appBar: AppBar(
-                title: Text("บันทึกดสลากผู้ใช้"),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
+                centerTitle: true,
+                title: Text(
+                  "บันทึกดสลากผู้ใช้",
+                  style: TextStyle(color: Colors.black),
                 ),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(16)),
+                ),
+                backgroundColor:
+                    Colors.transparent, // Colors.white.withOpacity(0.1),
+                elevation: 0,
               ),
               body: Container(
                 padding: EdgeInsets.all(20),

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/provider/google_sign_in.dart';
-import 'package:lotto/screen/displaylotto.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';

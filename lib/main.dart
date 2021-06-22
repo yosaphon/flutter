@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/provider/google_sign_in.dart';
 import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/displaycheck.dart';
@@ -43,13 +44,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 4,
+        length: 5,
         child: Scaffold(
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
               DisplayScreen(),
               Formqrcodescan(),
+              Container(),
               Container(),
               CheckLogInUser()
             ],
@@ -62,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
             tabs: [
               Tab(text: "หน้าแรก", icon: Icon(Icons.home)),
               Tab(text: "ตรวจสลาก", icon: Icon(Icons.fact_check_rounded)),
+              Tab(text: "ถ่ายทอดสด", icon: FaIcon(FontAwesomeIcons.youtube)),
               Tab(text: "ใบ้รางวัล", icon: Icon(Icons.remove_red_eye_outlined)),
               Tab(text: "ผู้ใช้", icon: Icon(Icons.account_circle_outlined))
             ],
