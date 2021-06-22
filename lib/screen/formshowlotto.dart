@@ -47,8 +47,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
-                backgroundColor:
-                    Colors.transparent, // Colors.white.withOpacity(0.1),
+                // backgroundColor: Colors.transparent,
+                backgroundColor: Colors.black.withOpacity(0.1),
                 elevation: 0,
               ),
               body: Container(
