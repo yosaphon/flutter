@@ -24,7 +24,8 @@ class _DisplayScreenState extends State<DisplayScreen> {
         backgroundColor: Colors.black.withOpacity(0.1),
         elevation: 0,
       ),
-      body:Text("Hello ...")
+      body:
+      Center(child: Text("Hello ...", style: TextStyle(color: Colors.red)))
     );
   }
 }
