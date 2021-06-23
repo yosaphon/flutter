@@ -25,7 +25,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         elevation: 0,
       ),
       body:
-      Center(child: Text("Hello ...", style: TextStyle(color: Colors.red)))
+      Center(child: Text("Hello ...", style:  TextStyle(color: Colors.red, fontSize: 25), ))
     );
   }
 }
