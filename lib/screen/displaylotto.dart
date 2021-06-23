@@ -24,29 +24,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         backgroundColor: Colors.black.withOpacity(0.1),
         elevation: 0,
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("lottery").snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView(
-              children: snapshot.data.docs.map((document) {
-                return Container(
-                  child: ListTile(
-                    leading: FittedBox(
-                      child: Text(document["date"]),
-                    ),
-                    title: Text(document["prizes"]),
-                  ),
-                );
-              }).toList(),
-            );
-          }
-        },
-      ),
+      body:Text("Hello ...")
     );
   }
 }
