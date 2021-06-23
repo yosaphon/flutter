@@ -3,8 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
-import 'check_menu.dart';
-import 'menu_drawer.dart';
 
 class Formshowlotto extends StatefulWidget {
   @override

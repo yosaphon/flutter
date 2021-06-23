@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lotto/screen/check_menu.dart';
 
 class DisplayScreen extends StatefulWidget {
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
-import 'check_menu.dart';
 
 class Formqrcodescan extends StatefulWidget {
   @override
