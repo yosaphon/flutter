@@ -145,7 +145,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           width: double.infinity,
                           child: ElevatedButton(
                             child: Text(
-                              "บันทกข้อมูล",
+                              "บันทึกข้อมูล",
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {

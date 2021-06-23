@@ -31,7 +31,7 @@ class UserprofileLottery extends StatelessWidget {
                   primary: Colors.white,
                   onPrimary: Colors.black,
                   minimumSize: Size(double.infinity, 50)),
-              child: Text("ทดสอบlogin"),
+              child: Text("Logout"),
               onPressed: () {
                 AuthClass().signOut();
                 Navigator.pushAndRemoveUntil(
@@ -45,7 +45,7 @@ class UserprofileLottery extends StatelessWidget {
                   primary: Colors.white,
                   onPrimary: Colors.black,
                   minimumSize: Size(double.infinity, 50)),
-              child: Text("เพิ่มสลาาก"),
+              child: Text("เพิ่มสลาก"),
               onPressed: () {
                 Navigator.push(
                   context,
