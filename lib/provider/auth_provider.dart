@@ -31,30 +31,4 @@ class AuthClass {
   }
 
 //Facebook
- Future<void> handleLogin() async {
-    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
-    switch (result.status) {
-      case FacebookLoginStatus.cancelledByUser:
-        break;
-      case FacebookLoginStatus.error:
-        break;
-      case FacebookLoginStatus.loggedIn:
-        try {
-          await loginWithfacebook(result);
-        } catch (e) {
-          print(e);
-        }
-        break;
-    }
-  }
-
-bool isSignIn = false;
-User _user;
-  Future loginWithfacebook(FacebookLoginResult result) async {
-    final FacebookAccessToken accessToken = result.accessToken;
-    AuthCredential credential =
-        FacebookAuthProvider.credential(accessToken.token);
-    var a = await FirebaseAuth.instance.signInWithCredential(credential);
-    
-  }
 }
