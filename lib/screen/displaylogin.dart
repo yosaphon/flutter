@@ -72,12 +72,13 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
               ),
               label: Text(" Sign Up with Facebook"),
               onPressed: () {
-                handleLogin().then((UserCredential value) {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                      (route) => false);
-                });
+                handleLogin();
+                // AuthClass().handleLogin().then((UserCredential value) {
+                //   Navigator.pushAndRemoveUntil(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => MyHomePage()),
+                //       (route) => false);
+                // });
               },
             ),
           ],
@@ -85,7 +86,7 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
       ),
     );
   }
-  Future<UserCredential> handleLogin() async {
+  Future<void> handleLogin() async {
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.cancelledByUser:
