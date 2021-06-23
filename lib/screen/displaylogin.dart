@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/main.dart';
 import 'package:lotto/provider/auth_provider.dart';
@@ -65,12 +64,13 @@ class SignUpLoginWidget extends StatelessWidget {
               ),
               label: Text(" Sign Up with Facebook"),
               onPressed: () {
-                AuthClass().signInWithFacebook().then((UserCredential value) {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                      (route) => false);
-                });
+                AuthClass().handleLogin();
+                // AuthClass().handleLogin().then((UserCredential value) {
+                //   Navigator.pushAndRemoveUntil(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => MyHomePage()),
+                //       (route) => false);
+                // });
               },
             ),
           ],

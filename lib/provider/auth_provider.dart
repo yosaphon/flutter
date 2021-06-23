@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthClass {
   FirebaseAuth auth = FirebaseAuth.instance;
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   //SignOut
   Future<void> signOut() async {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
-    final facebookLogin = FacebookAuth.instance;
-    await facebookLogin.logOut();
+    await facebookSignIn.logOut();
     await auth.signOut();
   }
 
@@ -31,14 +31,30 @@ class AuthClass {
   }
 
 //Facebook
-  Future<UserCredential> signInWithFacebook() async {
-    final AccessToken result = await FacebookAuth.instance.login();
-
-    final FacebookAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.token);
-
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
+ Future<void> handleLogin() async {
+    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.cancelledByUser:
+        break;
+      case FacebookLoginStatus.error:
+        break;
+      case FacebookLoginStatus.loggedIn:
+        try {
+          await loginWithfacebook(result);
+        } catch (e) {
+          print(e);
+        }
+        break;
+    }
   }
 
+bool isSignIn = false;
+User _user;
+  Future loginWithfacebook(FacebookLoginResult result) async {
+    final FacebookAccessToken accessToken = result.accessToken;
+    AuthCredential credential =
+        FacebookAuthProvider.credential(accessToken.token);
+    var a = await FirebaseAuth.instance.signInWithCredential(credential);
+    
+  }
 }
