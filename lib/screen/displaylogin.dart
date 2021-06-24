@@ -46,7 +46,7 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
               ),
               label: Text(" Sign Up with Google"),
               onPressed: () {
-                AuthClass().handleLogin().then((UserCredential value) {
+                AuthClass().signWithGoogle().then((UserCredential value) {
                   final displayName = value.user.displayName;
 
                   print(displayName);
