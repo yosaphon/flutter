@@ -1,13 +1,15 @@
 // To parse this JSON data, do
-//     final welcome = welcomeFromJson(jsonString);
+//
+//     final lotteryData = lotteryDataFromJson(jsonString);
+
 import 'dart:convert';
 
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
+LotteryData lotteryDataFromJson(String str) => LotteryData.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
+String lotteryDataToJson(LotteryData data) => json.encode(data.toJson());
 
-class Welcome {
-    Welcome({
+class LotteryData {
+    LotteryData({
         this.date,
         this.endpoint,
         this.prizes,
@@ -19,7 +21,7 @@ class Welcome {
     List<Prize> prizes;
     List<Prize> runningNumbers;
 
-    factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+    factory LotteryData.fromJson(Map<String, dynamic> json) => LotteryData(
         date: json["date"],
         endpoint: json["endpoint"],
         prizes: List<Prize>.from(json["prizes"].map((x) => Prize.fromJson(x))),
