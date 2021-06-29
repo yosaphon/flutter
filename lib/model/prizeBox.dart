@@ -4,11 +4,12 @@ class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
   String reward; //รางวัล
   List<dynamic> number; //ตัวเลข
-  int itemInRow;//จำนวนแถว
-  double size;//ขนาดตัวอักษร
+  int itemInRow; //จำนวนแ
+  double size; //ขนาดตัวอักษร
   double hig; // ขนาดช่อง
 
-  PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,this.hig);
+  PrizeBox(
+      this.name, this.reward, this.number, this.itemInRow, this.size, this.hig);
 
   @override
   Widget build(BuildContext context) {
