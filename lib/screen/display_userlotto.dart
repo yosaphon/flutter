@@ -40,6 +40,7 @@ class UserprofileLottery extends StatelessWidget {
                     (route) => false);
               },
             ),
+            SizedBox(height: 20,),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: Colors.white,
