@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/model/lotteryData.dart';
+import 'package:lotto/model/prizeBox.dart';
 
 class DisplayScreen extends StatefulWidget {
   @override
@@ -52,45 +53,50 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           style: TextStyle(fontSize: 25),
                         ),
                       ),
-                      Container(
-                        child: Column(
-                          children: [
-                            Text('รางวัลที่ 1'),
-                            Text('รางวัลละ 6,000,000 บาท'),
-                            Center(
-                              child: GridView.count(
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                shrinkWrap: true,
-                                children: snapshot.data['prizes'][0]['number']
-                                    .map<Widget>((a) {
-                                  return Text(a);
-                                }).toList(),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),Container(
-                        child: Column(
-                          children: [
-                            Text('รางวัลที่ 5'),
-                            Text('รางวัลละ 6,000,000 บาท'),
-                            Center(
-                              child: GridView.count(
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                shrinkWrap: true,
-                                children: snapshot.data['prizes'][4]['number']
-                                    .map<Widget>((a) {
-                                  return Text(a);
-                                }).toList(),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
+                      PrizeBox(
+                          snapshot.data['prizes'][0]['name'],
+                          snapshot.data['prizes'][0]['reward'],
+                          snapshot.data['prizes'][0]['number']),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: PrizeBox(
+                                snapshot.data['runningNumbers'][0]['name'],
+                                snapshot.data['runningNumbers'][0]['reward'],
+                                snapshot.data['runningNumbers'][0]['number']),
+                          ),
+                          Expanded(
+                            child: PrizeBox(
+                                snapshot.data['runningNumbers'][1]['name'],
+                                snapshot.data['runningNumbers'][1]['reward'],
+                                snapshot.data['runningNumbers'][1]['number']),
+                          ),
+                        ],
+                      ),
+                      PrizeBox(
+                          snapshot.data['runningNumbers'][2]['name'],
+                          snapshot.data['runningNumbers'][2]['reward'],
+                          snapshot.data['runningNumbers'][2]['number']),
+                      PrizeBox(
+                          snapshot.data['prizes'][1]['name'],
+                          snapshot.data['prizes'][1]['reward'],
+                          snapshot.data['prizes'][1]['number']),
+                          PrizeBox(
+                          snapshot.data['prizes'][2]['name'],
+                          snapshot.data['prizes'][2]['reward'],
+                          snapshot.data['prizes'][2]['number']),
+                          PrizeBox(
+                          snapshot.data['prizes'][3]['name'],
+                          snapshot.data['prizes'][3]['reward'],
+                          snapshot.data['prizes'][3]['number']),
+                          PrizeBox(
+                          snapshot.data['prizes'][4]['name'],
+                          snapshot.data['prizes'][4]['reward'],
+                          snapshot.data['prizes'][4]['number']),
+                          PrizeBox(
+                          snapshot.data['prizes'][5]['name'],
+                          snapshot.data['prizes'][5]['reward'],
+                          snapshot.data['prizes'][5]['number']),
                     ],
                   );
                 }
