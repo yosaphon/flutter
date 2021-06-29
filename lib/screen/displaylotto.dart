@@ -11,6 +11,7 @@ class DisplayScreen extends StatefulWidget {
 class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
+  String dorpdownvalue = "25640616";
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('lottery')
-                  .doc('25640616')
+                  .doc(dorpdownvalue)
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
@@ -47,40 +48,31 @@ class _DisplayScreenState extends State<DisplayScreen> {
                   return ListView(
                     children: <Widget>[
                       Container(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: TextButton(
-                            style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.blue),
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40)),
-                                    elevation: 16,
-                                    child: Container(
-                                      child: ListView(
-                                        shrinkWrap: true,
-                                        children: <Widget>[
-                                          SizedBox(height: 20),
-                                          Center(child: Text('เลือกวันที่')),
-                                          SizedBox(height: 20),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            child: Text(
-                              snapshot.data['date'],
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          )),
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: DropdownButton<String>(
+                          value: dorpdownvalue,
+                          icon: const Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dorpdownvalue = newValue;
+                            });
+                          },
+                          items: <String>['25640616', '25631216', '25640216']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                       PrizeBox(
                           //รางวัลที่ 1
                           snapshot.data['prizes'][0]['name'],
