@@ -9,24 +9,11 @@ class DisplayScreen extends StatefulWidget {
 
 class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
-  List<dynamic> lotteryList = [];
+  var snapshot;
 
   @override
   void initState() {
     super.initState();
-    loadData();
-  }
-
-  //ดึงข้อมูล
-  Future loadData() async {
-    var snapshot = await FirebaseFirestore.instance
-        .collection('Lottery')
-        .doc('25640616')
-        .get();
-
-    //สร้าง obj  จากคลาส LotteryData เอาข้อมูลใส่
-    LotteryData lottery = LotteryData.fromJson(snapshot.data());//ไม่ได้ ทำไม่เป็น
-    lotteryList.add(lottery);//เพิ่มลง List
   }
 
   @override
@@ -36,7 +23,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "หน้าแรก",
+            "ผลรางวัลฉลากกินแบ่งรัฐบาล",
             style: TextStyle(color: Colors.black),
           ),
           shape: RoundedRectangleBorder(
@@ -47,9 +34,67 @@ class _DisplayScreenState extends State<DisplayScreen> {
           elevation: 0,
         ),
         body: Center(
-            child: Text(
-          lotteryList[0]??'ค่ามันว่าง',
-          style: TextStyle(color: Colors.red, fontSize: 25),
-        )));
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('lottery')
+                  .doc('25640616')
+                  .snapshots(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return CircularProgressIndicator();
+                } else {
+                  return ListView(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(top: 100.0),
+                        child: Text(
+                          snapshot.data['date'],
+                          style: TextStyle(fontSize: 25),
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          children: [
+                            Text('รางวัลที่ 1'),
+                            Text('รางวัลละ 6,000,000 บาท'),
+                            Center(
+                              child: GridView.count(
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                shrinkWrap: true,
+                                children: snapshot.data['prizes'][0]['number']
+                                    .map<Widget>((a) {
+                                  return Text(a);
+                                }).toList(),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),Container(
+                        child: Column(
+                          children: [
+                            Text('รางวัลที่ 5'),
+                            Text('รางวัลละ 6,000,000 บาท'),
+                            Center(
+                              child: GridView.count(
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                shrinkWrap: true,
+                                children: snapshot.data['prizes'][4]['number']
+                                    .map<Widget>((a) {
+                                  return Text(a);
+                                }).toList(),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                }
+              }),
+        ));
   }
 }
