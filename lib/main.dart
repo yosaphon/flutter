@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lotto/provider/lottery_provider.dart';
 import 'package:lotto/screen/check_login_user.dart';
+import 'package:lotto/screen/display_youtubelive.dart';
 import 'package:lotto/screen/displaycheck.dart';
 import 'package:lotto/screen/displaylotto.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,17 +20,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) =>
-      // ChangeNotifierProvider(
-      //       create: (context) => GoogleSignInProvider(),
-      // child:
-      MaterialApp(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+          create: (context) => LotteryNotifier(),
+        child: MaterialApp(
         title: 'Lottery',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: MyHomePage(title: 'Lottery app'),
-      );
+      ),
+  );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -50,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               DisplayScreen(),
               Formqrcodescan(),
-              Container(),
+              DisplayLiveYoutube(),
               Container(),
               CheckLogInUser()
             ],

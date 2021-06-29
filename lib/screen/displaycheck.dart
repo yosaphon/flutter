@@ -87,13 +87,13 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   }
 
   List<Widget> _getLottery() {
-    List<Widget> friendsTextFields = [];
+    List<Widget> lotteryTextFields = [];
     for (int i = 0; i < lottery.length; i++) {
-      friendsTextFields.add(Padding(
+      lotteryTextFields.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Row(
           children: [
-            Expanded(child: FriendTextFields(i)),
+            Expanded(child: LotteryyTextFiled(i)),
             SizedBox(
               width: 16,
             ),
@@ -102,7 +102,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         ),
       ));
     }
-    return friendsTextFields;
+    return lotteryTextFields;
   }
 
   /// add / remove button
@@ -131,32 +131,32 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   }
 }
 
-class FriendTextFields extends StatefulWidget {
+class LotteryyTextFiled extends StatefulWidget {
   final int index;
-  FriendTextFields(this.index);
+  LotteryyTextFiled(this.index);
   @override
-  _FriendTextFieldsState createState() => _FriendTextFieldsState();
+  _LotteryyTextFiledState createState() => _LotteryyTextFiledState();
 }
 
-class _FriendTextFieldsState extends State<FriendTextFields> {
-  TextEditingController _nameController;
+class _LotteryyTextFiledState extends State<LotteryyTextFiled> {
+  TextEditingController _lotteryController;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _lotteryController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _lotteryController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = _FormqrcodescanState.lottery[widget.index] ?? '';
+      _lotteryController.text = _FormqrcodescanState.lottery[widget.index] ?? '';
     });
 
     return TextFormField(
@@ -170,7 +170,7 @@ class _FriendTextFieldsState extends State<FriendTextFields> {
           contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
-      controller: _nameController,
+      controller: _lotteryController,
       onChanged: (v) => _FormqrcodescanState.lottery[widget.index] = v,
       validator: (v) {
         if (v.isEmpty) {

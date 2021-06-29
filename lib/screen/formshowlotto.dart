@@ -16,7 +16,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _userltottery =
       FirebaseFirestore.instance.collection("userlottery");
-
+    
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -57,24 +57,24 @@ class _FormshowlottoState extends State<Formshowlotto> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Email",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        TextFormField(
-                          style: TextStyle(fontSize: 25),
-                          validator: MultiValidator([
-                            EmailValidator(errorText: "รูปแบบไม่ถูกต้อง"),
-                            RequiredValidator(errorText: "กรุณาป้อน Email")
-                          ]),
-                          onSaved: (String email) {
-                            userlottery.email = email;
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                        // Text(
+                        //   "Email",
+                        //   style: TextStyle(fontSize: 20),
+                        // ),
+                        // TextFormField(
+                        //   style: TextStyle(fontSize: 25),
+                        //   validator: MultiValidator([
+                        //     EmailValidator(errorText: "รูปแบบไม่ถูกต้อง"),
+                        //     RequiredValidator(errorText: "กรุณาป้อน Email")
+                        //   ]),
+                        //   onSaved: (String email) {
+                        //     userlottery.email = email;
+                        //   },
+                        //   keyboardType: TextInputType.emailAddress,
+                        // ),
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
                         Text(
                           "เลขสลาก",
                           style: TextStyle(fontSize: 20),
@@ -156,7 +156,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "number": userlottery.number,
                                   "amount": userlottery.amount,
                                   "lotteryprice": userlottery.lotteryprice,
-                                  "email": userlottery.email
+                                  // "email": userlottery.email
                                 });
                                 formKey.currentState.reset();
                               }

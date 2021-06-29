@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+// import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lotto/main.dart';
 import 'package:lotto/provider/auth_provider.dart';
 
-class SignUpLoginWidget extends StatefulWidget  {
+class SignUpLoginWidget extends StatefulWidget {
   @override
   _SignUpLoginWidget createState() => _SignUpLoginWidget();
-   
 }
+
 class _SignUpLoginWidget extends State<SignUpLoginWidget> {
   FirebaseAuth auth = FirebaseAuth.instance;
   // static final FacebookLogin facebookSignIn = new FacebookLogin();
@@ -48,9 +50,7 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
               onPressed: () {
                 AuthClass().signWithGoogle().then((UserCredential value) {
                   final displayName = value.user.displayName;
-
                   print(displayName);
-
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => MyHomePage()),
@@ -72,7 +72,7 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
               ),
               label: Text(" Sign Up with Facebook"),
               onPressed: () {
-               AuthClass().handleLogin().then((UserCredential value) {
+                AuthClass().handleLogin().then((UserCredential value) {
                   final displayName = value.user.displayName;
 
                   print(displayName);
