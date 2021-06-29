@@ -12,8 +12,19 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text("ลิงค์ถ่ายทอดสดออกรางวัล"),
+        centerTitle: true,
+        title: Text(
+          "ลิงค์ถ่ายทอดสด",
+          style: TextStyle(color: Colors.black),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        ),
+        // backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black.withOpacity(0.1),
+        elevation: 0,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance

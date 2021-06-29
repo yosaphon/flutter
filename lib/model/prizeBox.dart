@@ -4,9 +4,9 @@ class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
   String reward; //รางวัล
   List<dynamic> number; //ตัวเลข
-  int itemInRow;
-  double size;
-  double hig;
+  int itemInRow;//จำนวนแถว
+  double size;//ขนาดตัวอักษร
+  double hig; // ขนาดช่อง
 
   PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,this.hig);
 

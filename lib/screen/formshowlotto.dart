@@ -57,24 +57,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   "Email",
-                        //   style: TextStyle(fontSize: 20),
-                        // ),
-                        // TextFormField(
-                        //   style: TextStyle(fontSize: 25),
-                        //   validator: MultiValidator([
-                        //     EmailValidator(errorText: "รูปแบบไม่ถูกต้อง"),
-                        //     RequiredValidator(errorText: "กรุณาป้อน Email")
-                        //   ]),
-                        //   onSaved: (String email) {
-                        //     userlottery.email = email;
-                        //   },
-                        //   keyboardType: TextInputType.emailAddress,
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
                         Text(
                           "เลขสลาก",
                           style: TextStyle(fontSize: 20),
