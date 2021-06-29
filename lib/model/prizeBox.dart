@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PrizeBox extends StatelessWidget {
-  String name; //ชื่อรางวัล
-  String reward; //รางวัล
-  List<dynamic> number; //ตัวเลข
-  int itemInRow;
-  double size;
-  double hig;
+  final String name; //ชื่อรางวัล
+  final String reward; //รางวัล
+  final List<dynamic> number; //ตัวเลข
+  final int itemInRow;
+  final double size;
+  final double hig;
 
   PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,this.hig);
 
