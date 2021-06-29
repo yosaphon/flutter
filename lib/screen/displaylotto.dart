@@ -56,47 +56,48 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       PrizeBox(//รางวัลที่ 1
                           snapshot.data['prizes'][0]['name'],
                           snapshot.data['prizes'][0]['reward'],
-                          snapshot.data['prizes'][0]['number']),
+                          snapshot.data['prizes'][0]['number'],1),
+                          
                       Row(//รางวัลเลขหน้า, เลขท้าย
                         children: <Widget>[
                           Expanded(
                             child: PrizeBox(
                                 snapshot.data['runningNumbers'][0]['name'],
                                 snapshot.data['runningNumbers'][0]['reward'],
-                                snapshot.data['runningNumbers'][0]['number']),
+                                snapshot.data['runningNumbers'][0]['number'],2),
                           ),
                           Expanded(
                             child: PrizeBox(
                                 snapshot.data['runningNumbers'][1]['name'],
                                 snapshot.data['runningNumbers'][1]['reward'],
-                                snapshot.data['runningNumbers'][1]['number']),
+                                snapshot.data['runningNumbers'][1]['number'],2),
                           ),
                         ],
                       ),
                       PrizeBox(//รางวัลเลขท้าย 2 ตัว
                           snapshot.data['runningNumbers'][2]['name'],
                           snapshot.data['runningNumbers'][2]['reward'],
-                          snapshot.data['runningNumbers'][2]['number']),
+                          snapshot.data['runningNumbers'][2]['number'],1),
                       PrizeBox(//รางวัลใกล้เคียง รางวัลที่ 1
                           snapshot.data['prizes'][1]['name'],
                           snapshot.data['prizes'][1]['reward'],
-                          snapshot.data['prizes'][1]['number']),
+                          snapshot.data['prizes'][1]['number'],2),
                           PrizeBox(//รางวัลที่ 2
                           snapshot.data['prizes'][2]['name'],
                           snapshot.data['prizes'][2]['reward'],
-                          snapshot.data['prizes'][2]['number']),
+                          snapshot.data['prizes'][2]['number'],4),
                           PrizeBox(//รางวัลที่ 3
                           snapshot.data['prizes'][3]['name'],
                           snapshot.data['prizes'][3]['reward'],
-                          snapshot.data['prizes'][3]['number']),
+                          snapshot.data['prizes'][3]['number'],5),
                           PrizeBox(//รางวัลที่ 4
                           snapshot.data['prizes'][4]['name'],
                           snapshot.data['prizes'][4]['reward'],
-                          snapshot.data['prizes'][4]['number']),
+                          snapshot.data['prizes'][4]['number'],5),
                           PrizeBox(//รางวัลที่ 5
                           snapshot.data['prizes'][5]['name'],
                           snapshot.data['prizes'][5]['reward'],
-                          snapshot.data['prizes'][5]['number']),
+                          snapshot.data['prizes'][5]['number'],5),
                     ],
                   );
                 }

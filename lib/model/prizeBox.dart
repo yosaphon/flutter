@@ -4,8 +4,9 @@ class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
   String reward; //รางวัล
   List<dynamic> number; //ตัวเลข
+  int itemInRow;
 
-  PrizeBox(this.name, this.reward, this.number);
+  PrizeBox(this.name, this.reward, this.number, this.itemInRow);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class PrizeBox extends StatelessWidget {
           Text('รางวัลละ $reward บาท'),
           Center(
             child: GridView.count(
-              crossAxisCount: 4,
+              crossAxisCount: itemInRow,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               physics: NeverScrollableScrollPhysics(),
