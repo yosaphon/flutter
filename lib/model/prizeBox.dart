@@ -6,19 +6,24 @@ class PrizeBox extends StatelessWidget {
   List<dynamic> number; //ตัวเลข
   int itemInRow;
   double size;
+  double hig;
 
-  PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size);
+  PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,this.hig);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(20),
       child: Column(
         children: [
-          Text(name),
-          Text('รางวัลละ $reward บาท'),
+          Text(name, style: TextStyle(fontSize: 16)),
+          Text('รางวัลละ $reward บาท', style: TextStyle(fontSize: 12)),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: GridView.count(
-              childAspectRatio: 3 / 2,
+              childAspectRatio: 2 / (1.5 / hig),
               crossAxisCount: itemInRow,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
@@ -27,7 +32,7 @@ class PrizeBox extends StatelessWidget {
               children: number.map<Widget>((a) {
                 return Text(
                   a,
-                  style: TextStyle(fontSize: size),
+                  style: TextStyle(fontSize: size, color: Colors.blue),
                   textAlign: TextAlign.center,
                 );
               }).toList(),
