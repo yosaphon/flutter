@@ -116,7 +116,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                                 snapshot.data['runningNumbers'][0]['reward'],
                                 snapshot.data['runningNumbers'][0]['number'],
                                 2,
-                                25,
+                                28,
                                 2),
                           ),
                           Expanded(
@@ -125,7 +125,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                                 snapshot.data['runningNumbers'][1]['reward'],
                                 snapshot.data['runningNumbers'][1]['number'],
                                 2,
-                                25,
+                                28,
                                 2),
                           ),
                         ],
@@ -139,7 +139,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           snapshot.data['runningNumbers'][2]['reward'],
                           snapshot.data['runningNumbers'][2]['number'],
                           1,
-                          25,
+                          28,
                           9),
                       PrizeBox(
                           //รางวัลใกล้เคียง รางวัลที่ 1
@@ -147,7 +147,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           snapshot.data['prizes'][1]['reward'],
                           snapshot.data['prizes'][1]['number'],
                           2,
-                          20,
+                          22,
                           6),
                       PrizeBox(
                           //รางวัลที่ 2
@@ -155,7 +155,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           snapshot.data['prizes'][2]['reward'],
                           snapshot.data['prizes'][2]['number'],
                           4,
-                          20,
+                          22,
                           3),
                       PrizeBox(
                           //รางวัลที่ 3
