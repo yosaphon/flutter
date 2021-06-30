@@ -59,6 +59,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       color: Colors.deepPurpleAccent,
                     ),
                     onChanged: (value) {
+                      debugPrint('selected onchange: $value');
                       setState(() {
                         debugPrint('make selected: $value');
                           // Selected value will be stored
