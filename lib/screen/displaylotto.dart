@@ -55,7 +55,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                   .collection('lottery')
                   .doc(date.keys.firstWhere(
                       (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                      orElse: () => date.keys.last))
+                      orElse: () => null))
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData || !snapshot.data.exists) {
