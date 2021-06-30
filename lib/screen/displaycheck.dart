@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lotto/model/checking.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
-
 
 class Formqrcodescan extends StatefulWidget {
   @override
@@ -20,6 +20,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   @override
   void initState() {
     super.initState();
+    Checking checking = new Checking('25640616', '691861');
+    print(checking.prize_name);
+    print(checking.prize_number);
   }
 
   @override
@@ -156,7 +159,8 @@ class _LotteryyTextFiledState extends State<LotteryyTextFiled> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _lotteryController.text = _FormqrcodescanState.lottery[widget.index] ?? '';
+      _lotteryController.text =
+          _FormqrcodescanState.lottery[widget.index] ?? '';
     });
 
     return TextFormField(
