@@ -63,36 +63,38 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       Container(
                         alignment: AlignmentDirectional.topCenter,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26, width: 0.5),
+                            border:
+                                Border.all(color: Colors.black26, width: 0.5),
                             borderRadius: BorderRadius.circular(10)),
                         padding: const EdgeInsets.only(top: 10.0),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                          value: dateValue,
-                          icon: const Icon(Icons.arrow_drop_down),
-                          iconSize: 30,
-                          elevation: 2,
-                          
-                          style: TextStyle(color: Colors.blue,fontSize: 30),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.blue,
+                            value: dateValue,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            iconSize: 30,
+                            elevation: 2,
+                            style: TextStyle(color: Colors.blue, fontSize: 30),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dateValue = newValue;
+                              });
+                            },
+                            items: date.values
+                                .map<DropdownMenuItem<String>>((dynamic value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  textAlign: TextAlign.right,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dateValue = newValue;
-                            });
-                          },
-                          items: date.values
-                              .map<DropdownMenuItem<String>>((dynamic value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value,textAlign: TextAlign.right,),
-                            );
-                          }).toList(),
                         ),
-                        ),
-                        
                       ),
                       PrizeBox(
                           //รางวัลที่ 1
