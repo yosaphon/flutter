@@ -67,7 +67,12 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           setDefaultvalue = false;
                           
                       });
-                    }, items: [],
+                    }, items: snapshot.data.docs.map((value) {
+                      return DropdownMenuItem(
+                        value: value.get('date'),
+                        child: Text('${value.get('date')}'),
+                      );
+                    }).toList(),
                   );
                 }),
               )),
