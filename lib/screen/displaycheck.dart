@@ -58,7 +58,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                 ),
                 ..._getLottery(),
                 SizedBox(
-                  height: 40,
+                  height: 16,
                 ),
                 ElevatedButton(
                   onPressed: () {

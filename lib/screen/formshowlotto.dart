@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
 
@@ -12,11 +14,12 @@ class Formshowlotto extends StatefulWidget {
 class _FormshowlottoState extends State<Formshowlotto> {
   final formKey = GlobalKey<FormState>();
   Userlottery userlottery = Userlottery();
+  final user = FirebaseAuth.instance.currentUser;
   // เตรียม firebase
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _userltottery =
       FirebaseFirestore.instance.collection("userlottery");
-    
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -57,12 +60,17 @@ class _FormshowlottoState extends State<Formshowlotto> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 60,),
                         Text(
                           "เลขสลาก",
                           style: TextStyle(fontSize: 20),
                         ),
                         TextFormField(
                           style: TextStyle(fontSize: 25),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(6),
+                          ],
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")
                           ]),
@@ -70,6 +78,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             userlottery.number = number;
                           },
                           keyboardType: TextInputType.number,
+                          
                         ),
                         SizedBox(
                           height: 15,
@@ -80,6 +89,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         ),
                         TextFormField(
                           style: TextStyle(fontSize: 25),
+                          
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
@@ -105,21 +115,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           keyboardType: TextInputType.number,
                         ),
                         SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          "ชื่อผู้ใช้",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        TextFormField(
-                          style: TextStyle(fontSize: 25),
-                          validator: RequiredValidator(
-                              errorText: "กรุณาป้อนชื่อผู้ใช้"),
-                          onSaved: (String username) {
-                            userlottery.username = username;
-                          },
-                        ),
-                        SizedBox(
                           height: 30,
                         ),
                         SizedBox(
@@ -134,11 +129,11 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               if (formKey.currentState.validate()) {
                                 formKey.currentState.save();
                                 await _userltottery.add({
-                                  "username": userlottery.username,
+                                  "username": user.displayName,
                                   "number": userlottery.number,
                                   "amount": userlottery.amount,
                                   "lotteryprice": userlottery.lotteryprice,
-                                  // "email": userlottery.email
+                                  "email": user.email
                                 });
                                 formKey.currentState.reset();
                               }
