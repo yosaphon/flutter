@@ -10,10 +10,10 @@ class DisplayScreen extends StatefulWidget {
 
 class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
-  var snapshot, _listDate ;
+  var snapshot, _listDate;
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
-  String dorpdownvalue = "16 มิถุนายน 2564";
+  String dateValue = "16 มิถุนายน 2564";
 
   @override
   void initState() {
@@ -52,7 +52,8 @@ class _DisplayScreenState extends State<DisplayScreen> {
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('lottery')
-                  .doc(dorpdownvalue)
+                  .doc(date.keys.firstWhere((k) => date[k] == dateValue,//หา Keys โดยใช้ value
+                      orElse: () => null))
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData || !snapshot.data.exists) {
@@ -63,7 +64,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       Container(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: DropdownButton<String>(
-                          value: dorpdownvalue,
+                          value: dateValue,
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 24,
                           elevation: 16,
@@ -74,7 +75,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           ),
                           onChanged: (String newValue) {
                             setState(() {
-                              dorpdownvalue = newValue;
+                              dateValue = newValue;
                             });
                           },
                           items: date.values
