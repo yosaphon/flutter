@@ -38,7 +38,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         ),
         body: Column(children: [
           Expanded(
-              
+              flex: 1,
               child: Center(
                 child: new StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance.collection('lottery').orderBy('date',descending: true).snapshots(),
@@ -46,7 +46,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       if (!snapshot.hasData) return Container();
                       if (setDefaultvalue) {
                     dorpdownvalue = snapshot.data.docs[0].get('date');
-                    debugPrint('setDefault make: $dorpdownvalue');
+                    debugPrint('setDefault: $dorpdownvalue');
                   } return
                   DropdownButton(
                     value: dorpdownvalue.get("date"),
@@ -60,18 +60,19 @@ class _DisplayScreenState extends State<DisplayScreen> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        debugPrint('date selected: $value');
+                        debugPrint('make selected: $value');
                           // Selected value will be stored
                           dorpdownvalue = value;
                           // Default dropdown value won't be displayed anymore
                           setDefaultvalue = false;
+                          
                       });
-                    },
+                    }, items: [],
                   );
                 }),
               )),
               Expanded(
-              
+              flex: 4,
               child: Center(
                 child: StreamBuilder(
               stream: FirebaseFirestore.instance
