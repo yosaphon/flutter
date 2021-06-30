@@ -11,7 +11,8 @@ class DisplayScreen extends StatefulWidget {
 class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
-  String dorpdownvalue = "25640616";
+  var setDefaultvalue = true;
+  var dorpdownvalue;
 
   @override
   void initState() {
@@ -35,11 +36,47 @@ class _DisplayScreenState extends State<DisplayScreen> {
           backgroundColor: Colors.black.withOpacity(0.1),
           elevation: 0,
         ),
-        body: Center(
-          child: StreamBuilder(
+        body: Column(children: [
+          Expanded(
+              
+              child: Center(
+                child: new StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('lottery').orderBy('date',descending: true).snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (!snapshot.hasData) return Container();
+                      if (setDefaultvalue) {
+                    dorpdownvalue = snapshot.data.docs[0].get('date');
+                    debugPrint('setDefault make: $dorpdownvalue');
+                  } return
+                  DropdownButton(
+                    value: dorpdownvalue.get("date"),
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        debugPrint('date selected: $value');
+                          // Selected value will be stored
+                          dorpdownvalue = value;
+                          // Default dropdown value won't be displayed anymore
+                          setDefaultvalue = false;
+                      });
+                    },
+                  );
+                }),
+              )),
+              Expanded(
+              
+              child: Center(
+                child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('lottery')
-                  .doc(dorpdownvalue)
+                  .doc('25631216')
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
@@ -47,32 +84,6 @@ class _DisplayScreenState extends State<DisplayScreen> {
                 } else {
                   return ListView(
                     children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: DropdownButton<String>(
-                          value: dorpdownvalue,
-                          icon: const Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dorpdownvalue = newValue;
-                            });
-                          },
-                          items: <String>['25640616', '25631216', '25640216']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
                       PrizeBox(
                           //รางวัลที่ 1
                           snapshot.data['prizes'][0]['name'],
@@ -161,10 +172,13 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           5,
                           18,
                           2),
+                          
                     ],
                   );
                 }
-              }),
-        ));
+              }
+              )
+              ))
+        ]));
   }
 }
