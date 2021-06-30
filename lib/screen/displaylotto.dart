@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lotto/model/lotteryData.dart';
 import 'package:lotto/model/prizeBox.dart';
+
 
 class DisplayScreen extends StatefulWidget {
   @override
@@ -10,10 +10,10 @@ class DisplayScreen extends StatefulWidget {
 
 class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
-  var snapshot, _listDate;
+  var snapshot;
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
-  String dateValue = "16 มิถุนายน 2564";
+  String dateValue ;
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         setState(() {
           documents = snapAll.docs;
           documents.forEach((data) => date[data.id] = data['date']);
-          print(date);
+          dateValue = date.values.last;
         });
     
   }
@@ -55,7 +55,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                   .collection('lottery')
                   .doc(date.keys.firstWhere(
                       (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                      orElse: () => null))
+                      orElse: () => date.keys.last))
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData || !snapshot.data.exists) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
@@ -18,7 +19,7 @@ class PrizeBox extends StatelessWidget {
       child: Column(
         children: [
           Text(name, style: TextStyle(fontSize: 16)),
-          Text('รางวัลละ $reward บาท', style: TextStyle(fontSize: 12)),
+          Text('รางวัลละ ${NumberFormat("#,###").format(int.parse(reward))} บาท', style: TextStyle(fontSize: 12)),
           SizedBox(
             height: 10,
           ),
