@@ -24,9 +24,12 @@ class _DisplayScreenState extends State<DisplayScreen> {
   Future loadData() async {
     QuerySnapshot snapAll =
         await FirebaseFirestore.instance.collection('lottery').get();
-    documents = snapAll.docs;
-    documents.forEach((data) => date[data.id] = data['date']);
-    print(date);
+        setState(() {
+          documents = snapAll.docs;
+          documents.forEach((data) => date[data.id] = data['date']);
+          print(date);
+        });
+    
   }
 
   @override
