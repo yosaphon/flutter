@@ -25,7 +25,25 @@ class UserprofileLottery extends StatelessWidget {
         padding: EdgeInsets.all(30),
         child: Column(
           children: [
-            SizedBox(height: 60,),
+            SizedBox(
+              height: 60,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.black,
+                  minimumSize: Size(double.infinity, 50)),
+              child: Text("เพิ่มสลาก"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Formshowlotto()),
+                );
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: Colors.white,
@@ -38,20 +56,6 @@ class UserprofileLottery extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),
                     (route) => false);
-              },
-            ),
-            SizedBox(height: 20,),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.black,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Text("เพิ่มสลาก"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Formshowlotto()),
-                );
               },
             ),
           ],

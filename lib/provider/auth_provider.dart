@@ -69,4 +69,5 @@ User _user;
 //   // Once signed in, return the UserCredential
 //   return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 // }
+
 }
