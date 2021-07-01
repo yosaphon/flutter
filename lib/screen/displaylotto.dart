@@ -105,7 +105,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           snapshot.data['prizes'][0]['reward'],
                           snapshot.data['prizes'][0]['number'],
                           1,
-                          30,
+                          35,
                           8),
                       Row(
                         //รางวัลเลขหน้า, เลขท้าย

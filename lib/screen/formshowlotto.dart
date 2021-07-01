@@ -133,7 +133,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "number": userlottery.number,
                                   "amount": userlottery.amount,
                                   "lotteryprice": userlottery.lotteryprice,
-                                  "email": user.email
+                                  "userid": user.uid
                                 });
                                 formKey.currentState.reset();
                               }
