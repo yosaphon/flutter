@@ -20,8 +20,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   @override
   void initState() {
     super.initState();
-
-    CheckDialog('25640616', '000000').alertChecking(context);  }
+  }
 
   @override
   void dispose() {
@@ -63,9 +62,10 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                    }
+                     CheckDialog('25640616', '691861').alertChecking(context);
+                    // if (_formKey.currentState.validate()) {
+                    //   _formKey.currentState.save();
+                    // }
                   },
                   child: Text('Submit'),
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/provider/lottery_provider.dart';
 import 'package:lotto/screen/check_login_user.dart';
+import 'package:lotto/screen/display_predictor.dart';
 import 'package:lotto/screen/display_youtubelive.dart';
 import 'package:lotto/screen/displaycheck.dart';
 import 'package:lotto/screen/displaylotto.dart';
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               DisplayScreen(),
               Formqrcodescan(),
               DisplayLiveYoutube(),
-              Container(),
+              DispalyPredictor(),
               CheckLogInUser()
             ],
           ),
