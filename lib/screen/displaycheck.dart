@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lotto/model/checking.dart';
+import 'package:lotto/model/check_dialog.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
 class Formqrcodescan extends StatefulWidget {
@@ -20,10 +20,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   @override
   void initState() {
     super.initState();
-    Checking checking = new Checking('25640616', '691861');
-    print(checking.prize_name);
-    print(checking.prize_number);
-  }
+
+    CheckDialog('25640616', '000000').alertChecking(context);  }
 
   @override
   void dispose() {
