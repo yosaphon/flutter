@@ -20,7 +20,7 @@ class DispalyPredictor extends StatelessWidget {
       body: Stack(
         children: [
           
-        ],
+        ],        
       ),
 
     );

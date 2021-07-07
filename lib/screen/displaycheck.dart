@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto/model/check_dialog.dart';
@@ -12,14 +13,19 @@ String scanresult;
 bool checkLineURL = false;
 bool checkFacebookURL = false;
 bool checkYoutubeURL = false;
+List<String> number;
 
 class _FormqrcodescanState extends State<Formqrcodescan> {
   final _formKey = GlobalKey<FormState>();
   static List<String> lottery = [null];
+  List<DocumentSnapshot> documents;
+  Map<String, String> date = {};
+  String dateValue;
 
   @override
   void initState() {
     super.initState();
+    loadData();
   }
 
   @override
@@ -27,11 +33,21 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     super.dispose();
   }
 
+  Future loadData() async {
+    QuerySnapshot snapAll =
+        await FirebaseFirestore.instance.collection('lottery').get();
+    setState(() {
+      documents = snapAll.docs;
+      documents.forEach((data) => date[data.id] = data['date']);
+      dateValue = date.values.last;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -50,26 +66,78 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 60,
-                ),
-                ..._getLottery(),
-                SizedBox(
-                  height: 16,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                     CheckDialog('25640616', '691861').alertChecking(context);
-                    // if (_formKey.currentState.validate()) {
-                    //   _formKey.currentState.save();
-                    // }
-                  },
-                  child: Text('Submit'),
-                ),
-              ],
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('lottery')
+                  .doc(date.keys.firstWhere(
+                      (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                      orElse: () => null))
+                  .snapshots(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData || !snapshot.data.exists) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                        alignment: AlignmentDirectional.topCenter,
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black26, width: 0.5),
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: dateValue,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            iconSize: 30,
+                            elevation: 2,
+                            style: TextStyle(color: Colors.blue, fontSize: 30),
+                            underline: Container(
+                              height: 2,
+                              
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dateValue = newValue;
+                              });
+                            },
+                            items: date.values
+                                .map<DropdownMenuItem<String>>((dynamic value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  textAlign: TextAlign.right,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ..._getLottery(),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              CheckDialog('25640616', '691861')
+                                  .alertChecking(context);
+                              // if (_formKey.currentState.validate()) {
+                              //   _formKey.currentState.save();
+                              // }
+                            },
+                            child: Text('Submit'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
           ),
         ),
@@ -173,7 +241,7 @@ class _LotteryyTextFiledState extends State<LotteryyTextFiled> {
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
       controller: _lotteryController,
-      onChanged: (v) => _FormqrcodescanState.lottery[widget.index] = v,
+      onSaved: (v) => _FormqrcodescanState.lottery[widget.index] = v,
       validator: (v) {
         if (v.isEmpty) {
           return null;
