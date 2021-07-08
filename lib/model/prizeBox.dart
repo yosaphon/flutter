@@ -18,8 +18,8 @@ class PrizeBox extends StatelessWidget {
       padding: EdgeInsets.all(20),
       child: Column(
         children: [
-          Text(name, style: TextStyle(fontSize: 16)),
-          Text('รางวัลละ ${NumberFormat("#,###").format(int.parse(reward))} บาท', style: TextStyle(fontSize: 12)),
+          Text(name, style: TextStyle(fontSize: 18)),
+          Text('รางวัลละ ${NumberFormat("#,###").format(int.parse(reward))} บาท', style: TextStyle(fontSize: 16)),
           SizedBox(
             height: 10,
           ),
@@ -27,8 +27,8 @@ class PrizeBox extends StatelessWidget {
             child: GridView.count(
               childAspectRatio: 2 / (1.5 / hig),
               crossAxisCount: itemInRow,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: number.map<Widget>((a) {
