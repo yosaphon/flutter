@@ -187,6 +187,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           5,
                           18,
                           2),
+                          SizedBox(
+                            height: 55,
+                          )
                     ],
                   );
                 }
