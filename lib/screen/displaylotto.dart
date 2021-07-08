@@ -25,9 +25,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
     QuerySnapshot snapAll =
         await FirebaseFirestore.instance.collection('lottery').get();
         setState(() {
-          documents = snapAll.docs;
-          documents.forEach((data) => date[data.id] = data['date']);
-          dateValue = date.values.last;
+          documents = snapAll.docs; //รับทุก docs ใน firebase
+          documents.forEach((data) => date[data.id] = data['date']);//เก็บชื่อวัน และ เลขวันเป็น map
+          dateValue = date.values.last;//เรียกค่าอันสุดท้าย
         });
     
   }
