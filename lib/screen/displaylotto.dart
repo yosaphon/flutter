@@ -191,6 +191,17 @@ class _DisplayScreenState extends State<DisplayScreen> {
                   );
                 }
               }),
-        ));
+        ),
+         floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => QRScanPage()),
+          // );
+        },
+        child: Text("ใบตรวจ"),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        );
   }
 }
