@@ -13,7 +13,7 @@ String scanresult;
 bool checkLineURL = false;
 bool checkFacebookURL = false;
 bool checkYoutubeURL = false;
-List<String> number;
+List<String> numbers;
 
 class _FormqrcodescanState extends State<Formqrcodescan> {
   final _formKey = GlobalKey<FormState>();
@@ -37,9 +37,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     QuerySnapshot snapAll =
         await FirebaseFirestore.instance.collection('lottery').get();
     setState(() {
-      documents = snapAll.docs;
-      documents.forEach((data) => date[data.id] = data['date']);
-      dateValue = date.values.last;
+      documents = snapAll.docs; //รับทุก docs จาก firebase
+      documents.forEach((data) =>
+          date[data.id] = data['date']); //เก็บชื่อวัน และ เลขวันเป็น map
+      dateValue = date.values.last; //เรียกค่าอันสุดท้าย
+      print(dateValue);
     });
   }
 
@@ -64,83 +66,75 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('lottery')
-                  .doc(date.keys.firstWhere(
-                      (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                      orElse: () => null))
-                  .snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData || !snapshot.data.exists) {
-                  return CircularProgressIndicator();
-                } else {
-                  return Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: AlignmentDirectional.topCenter,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.black26, width: 0.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: dateValue,
-                            icon: const Icon(Icons.arrow_drop_down),
-                            iconSize: 30,
-                            elevation: 2,
-                            style: TextStyle(color: Colors.blue, fontSize: 30),
-                            underline: Container(
-                              height: 2,
-                              
-                            ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                dateValue = newValue;
-                              });
-                            },
-                            items: date.values
-                                .map<DropdownMenuItem<String>>((dynamic value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  textAlign: TextAlign.right,
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+            child: Column(
+          children: <Widget>[
+            Container(
+              alignment: AlignmentDirectional.topCenter,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 0.5),
+                  borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.only(top: 10.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: dateValue,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 30,
+                  elevation: 2,
+                  style: TextStyle(color: Colors.blue, fontSize: 30),
+                  underline: Container(
+                    height: 2,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dateValue = newValue; //รับค่าจาก item ที่เลือก
+                    });
+                  },
+                  items: date.values
+                      .map<DropdownMenuItem<String>>((dynamic value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        textAlign: TextAlign.right,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ..._getLottery(),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              CheckDialog('25640616', '691861')
-                                  .alertChecking(context);
-                              // if (_formKey.currentState.validate()) {
-                              //   _formKey.currentState.save();
-                              // }
-                            },
-                            child: Text('Submit'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                }
-              },
+                    );
+                  }).toList(),
+                ),
+              ),
             ),
-          ),
-        ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ..._getLottery(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 100,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        CheckDialog(
+                                date.keys.firstWhere(
+                                    (k) =>
+                                        date[k] == dateValue, //หา Keys โดยใช้ value
+                                    orElse: () => null),
+                                '691861')
+                            .alertChecking(context);
+                        // if (_formKey.currentState.validate()) {
+                        //   _formKey.currentState.save();
+                        // }
+                      },
+                      child: Text('ตรวจ',style: TextStyle(fontSize: 40),),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
