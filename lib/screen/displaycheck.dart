@@ -39,7 +39,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     setState(() {
       documents = snapAll.docs; //รับทุก docs จาก firebase
       documents.forEach((data) =>
-          date[data.id] = data['date']); //เก็บชื่อวัน และ เลขวันเป็น map
+          date[data.id] = data['drawdate']); //เก็บชื่อวัน และ เลขวันเป็น map
       dateValue = date.values.last; //เรียกค่าอันสุดท้าย
       print(dateValue);
     });
