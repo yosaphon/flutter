@@ -1,16 +1,24 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
-  String reward; //รางวัล
-  List<dynamic> number; //ตัวเลข
+  int reward; //รางวัล
+  dynamic number; //ตัวเลข 1 ตัว
+  List<dynamic> mNum = []; //ตัวเลขหลายตัว
   int itemInRow; //จำนวนแ
   double size; //ขนาดตัวอักษร
   double hig; // ขนาดช่อง
 
-  PrizeBox(
-      this.name, this.reward, this.number, this.itemInRow, this.size, this.hig);
+  PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,
+      this.hig) {
+    if (name == 'รางวัลที่ 1' || name == 'เลขท้าย 2 ตัว') {
+      mNum.add(number);
+    } else {
+      number.forEach((e) => mNum.add(e));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,8 @@ class PrizeBox extends StatelessWidget {
       child: Column(
         children: [
           Text(name, style: TextStyle(fontSize: 18)),
-          Text('รางวัลละ ${NumberFormat("#,###").format(int.parse(reward))} บาท', style: TextStyle(fontSize: 16)),
+          Text('รางวัลละ ${NumberFormat("#,###").format(reward)} บาท',
+              style: TextStyle(fontSize: 16)),
           SizedBox(
             height: 10,
           ),
@@ -31,7 +40,7 @@ class PrizeBox extends StatelessWidget {
               mainAxisSpacing: 5,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              children: number.map<Widget>((a) {
+              children: mNum.map<Widget>((a) {
                 return Text(
                   a,
                   style: TextStyle(fontSize: size, color: Colors.blue),
