@@ -26,7 +26,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         await FirebaseFirestore.instance.collection('lottery').get();
         setState(() {
           documents = snapAll.docs; //รับทุก docs ใน firebase
-          documents.forEach((data) => date[data.id] = data['date']);//เก็บชื่อวัน และ เลขวันเป็น map
+          documents.forEach((data) => date[data.id] = data['drawdate']);//เก็บชื่อวัน และ เลขวันเป็น map
           dateValue = date.values.last;//เรียกค่าอันสุดท้าย
         });
     
@@ -101,9 +101,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       ),
                       PrizeBox(
                           //รางวัลที่ 1
-                          snapshot.data['prizes'][0]['name'],
-                          snapshot.data['prizes'][0]['reward'],
-                          snapshot.data['prizes'][0]['number'],
+                          snapshot.data['result'][0]['name'],
+                          snapshot.data['result'][0]['reword'],
+                          snapshot.data['result'][0]['number'],
                           1,
                           35,
                           8),
@@ -112,18 +112,18 @@ class _DisplayScreenState extends State<DisplayScreen> {
                         children: <Widget>[
                           Expanded(
                             child: PrizeBox(
-                                snapshot.data['runningNumbers'][0]['name'],
-                                snapshot.data['runningNumbers'][0]['reward'],
-                                snapshot.data['runningNumbers'][0]['number'],
+                                snapshot.data['result'][1]['name'],
+                                snapshot.data['result'][1]['reword'],
+                                snapshot.data['result'][1]['number'],
                                 2,
                                 28,
                                 2),
                           ),
                           Expanded(
                             child: PrizeBox(
-                                snapshot.data['runningNumbers'][1]['name'],
-                                snapshot.data['runningNumbers'][1]['reward'],
-                                snapshot.data['runningNumbers'][1]['number'],
+                                snapshot.data['result'][2]['name'],
+                                snapshot.data['result'][2]['reword'],
+                                snapshot.data['result'][2]['number'],
                                 2,
                                 28,
                                 2),
@@ -135,33 +135,33 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       ),
                       PrizeBox(
                           //รางวัลเลขท้าย 2 ตัว
-                          snapshot.data['runningNumbers'][2]['name'],
-                          snapshot.data['runningNumbers'][2]['reward'],
-                          snapshot.data['runningNumbers'][2]['number'],
+                          snapshot.data['result'][3]['name'],
+                          snapshot.data['result'][3]['reword'],
+                          snapshot.data['result'][3]['number'],
                           1,
                           28,
                           9),
                       PrizeBox(
                           //รางวัลใกล้เคียง รางวัลที่ 1
-                          snapshot.data['prizes'][1]['name'],
-                          snapshot.data['prizes'][1]['reward'],
-                          snapshot.data['prizes'][1]['number'],
+                          snapshot.data['result'][4]['name'],
+                          snapshot.data['result'][4]['reword'],
+                          snapshot.data['result'][4]['number'],
                           2,
                           22,
                           6),
                       PrizeBox(
                           //รางวัลที่ 2
-                          snapshot.data['prizes'][2]['name'],
-                          snapshot.data['prizes'][2]['reward'],
-                          snapshot.data['prizes'][2]['number'],
+                          snapshot.data['result'][5]['name'],
+                          snapshot.data['result'][5]['reword'],
+                          snapshot.data['result'][5]['number'],
                           4,
                           22,
                           3),
                       PrizeBox(
                           //รางวัลที่ 3
-                          snapshot.data['prizes'][3]['name'],
-                          snapshot.data['prizes'][3]['reward'],
-                          snapshot.data['prizes'][3]['number'],
+                          snapshot.data['result'][6]['name'],
+                          snapshot.data['result'][6]['reword'],
+                          snapshot.data['result'][6]['number'],
                           5,
                           18,
                           2),
@@ -170,9 +170,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       ),
                       PrizeBox(
                           //รางวัลที่ 4
-                          snapshot.data['prizes'][4]['name'],
-                          snapshot.data['prizes'][4]['reward'],
-                          snapshot.data['prizes'][4]['number'],
+                          snapshot.data['result'][7]['name'],
+                          snapshot.data['result'][7]['reword'],
+                          snapshot.data['result'][7]['number'],
                           5,
                           18,
                           2),
@@ -181,9 +181,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       ),
                       PrizeBox(
                           //รางวัลที่ 5
-                          snapshot.data['prizes'][5]['name'],
-                          snapshot.data['prizes'][5]['reward'],
-                          snapshot.data['prizes'][5]['number'],
+                          snapshot.data['result'][8]['name'],
+                          snapshot.data['result'][8]['reword'],
+                          snapshot.data['result'][8]['number'],
                           5,
                           18,
                           2),
