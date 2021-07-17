@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CheckDialog {
   final String date;
-  final String userNum;
+  final List<String> userNum;
   String name= "ไม่ถูกรางวัล", number="", reward="";
 
   CheckDialog(this.date, this.userNum);
@@ -26,7 +26,7 @@ class CheckDialog {
         context: context,
         builder: (context) => AlertDialog(
               title: ListTile(
-                title: Text(userNum),
+                title: Text(userNum.first),
                 subtitle: Text('$name มูลค่า $reward บาท'),
               ),
               actions: [

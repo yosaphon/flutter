@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +19,7 @@ List<String> numbers;
 
 class _FormqrcodescanState extends State<Formqrcodescan> {
   final _formKey = GlobalKey<FormState>();
-  static List<String> lottery = [null];
+  static List<String> lotterylist = [null];
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
   String dateValue;
@@ -26,11 +28,6 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   void initState() {
     super.initState();
     loadData();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future loadData() async {
@@ -119,15 +116,16 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                         CheckDialog(
                                 date.keys.firstWhere(
                                     (k) =>
-                                        date[k] == dateValue, //หา Keys โดยใช้ value
+                                        date[k] ==
+                                        dateValue, //หา Keys โดยใช้ value
                                     orElse: () => null),
-                                '691861')
+                                lotterylist)
                             .alertChecking(context);
-                        // if (_formKey.currentState.validate()) {
-                        //   _formKey.currentState.save();
-                        // }
                       },
-                      child: Text('ตรวจ',style: TextStyle(fontSize: 40),),
+                      child: Text(
+                        'ตรวจ',
+                        style: TextStyle(fontSize: 40),
+                      ),
                     ),
                   ),
                 ],
@@ -137,7 +135,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () 
+        {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => QRScanPage()),
@@ -149,23 +148,25 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     );
   }
 
+  /// get firends text-fields
   List<Widget> _getLottery() {
-    List<Widget> lotteryTextFields = [];
-    for (int i = 0; i < lottery.length; i++) {
-      lotteryTextFields.add(Padding(
+    List<Widget> lotteryTextFilds = [];
+    for (int i = 0; i < lotterylist.length; i++) {
+      lotteryTextFilds.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Row(
           children: [
-            Expanded(child: LotteryyTextFiled(i)),
+            Expanded(child: LotteryTextFilds(i)),
             SizedBox(
               width: 16,
             ),
-            _addRemoveButton(i == lottery.length - 1, i),
+            // we need add button at last friends row
+            _addRemoveButton(i == lotterylist.length - 1, i),
           ],
         ),
       ));
     }
-    return lotteryTextFields;
+    return lotteryTextFilds;
   }
 
   /// add / remove button
@@ -173,9 +174,10 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     return InkWell(
       onTap: () {
         if (add) {
-          lottery.insert(0, null);
+          // add new text-fields at the top of all friends textfields
+          lotterylist.insert(0, null);
         } else
-          lottery.removeAt(index);
+          lotterylist.removeAt(index);
         setState(() {});
       },
       child: Container(
@@ -194,14 +196,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   }
 }
 
-class LotteryyTextFiled extends StatefulWidget {
+class LotteryTextFilds extends StatefulWidget {
   final int index;
-  LotteryyTextFiled(this.index);
+  LotteryTextFilds(this.index);
   @override
-  _LotteryyTextFiledState createState() => _LotteryyTextFiledState();
+  _LotteryTextFildsState createState() => _LotteryTextFildsState();
 }
 
-class _LotteryyTextFiledState extends State<LotteryyTextFiled> {
+class _LotteryTextFildsState extends State<LotteryTextFilds> {
   TextEditingController _lotteryController;
 
   @override
@@ -220,22 +222,22 @@ class _LotteryyTextFiledState extends State<LotteryyTextFiled> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _lotteryController.text =
-          _FormqrcodescanState.lottery[widget.index] ?? '';
+          _FormqrcodescanState.lotterylist[widget.index] ?? '';
     });
 
     return TextFormField(
+      style: TextStyle(fontSize: 30),
+      keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
         LengthLimitingTextInputFormatter(6),
       ],
-      style: TextStyle(fontSize: 30),
-      keyboardType: TextInputType.number,
+      controller: _lotteryController,
+      onChanged: (v) => _FormqrcodescanState.lotterylist[widget.index] = v,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
-      controller: _lotteryController,
-      onSaved: (v) => _FormqrcodescanState.lottery[widget.index] = v,
       validator: (v) {
         if (v.isEmpty) {
           return null;
