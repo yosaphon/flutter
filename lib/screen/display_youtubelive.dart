@@ -42,12 +42,21 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
               return Container(
                 margin: const EdgeInsets.all(10.0),
                 padding: const EdgeInsets.all(3.0),
-                decoration:BoxDecoration(
-                 borderRadius :BorderRadius.circular(15.0),
-                 color: Colors.blue.shade100
-                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.blue.shade100),
                 child: ListTile(
-                  leading: FlutterLogo(size: 72.0),
+                  leading: Container(
+                    width: 75,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/800px-YouTube_full-color_icon_%282017%29.svg.png')),
+                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                      color: Colors.redAccent,
+                    ),
+                  ),
                   title: Text(document["name"]),
                   onTap: () async {
                     if (await canLaunch(document["link"])) {
@@ -55,7 +64,6 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
                     }
                   },
                 ),
-                
               );
             }).toList(),
           );
