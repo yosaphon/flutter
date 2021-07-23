@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lotto/model/check_dialog.dart';
+import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
 class Formqrcodescan extends StatefulWidget {
