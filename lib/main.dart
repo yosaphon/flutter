@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lotto/provider/lottery_provider.dart';
 import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/display_predictor.dart';
 import 'package:lotto/screen/display_youtubelive.dart';
@@ -21,16 +20,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-          create: (context) => LotteryNotifier(),
-        child: MaterialApp(
-        title: 'Lottery',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(title: 'Lottery app'),
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Lottery',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-  );
+      home: MyHomePage(title: 'Lottery app'),
+    );
+  }
 }
 
 class MyHomePage extends StatefulWidget {
