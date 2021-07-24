@@ -6,15 +6,28 @@ class CheckNumber {
   Map<int, Map<String, dynamic>> checked = {};
   Map<String, dynamic> result = {};
   int key = 0;
+  int index; //งวด
 
-  CheckNumber(this.date, this.userNum);
+  CheckNumber(this.date, this.userNum, this.index);
 
   Future<Null> getSnapshot() async {
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('lottery').doc(date).get();
-    checkPrize(snapshot);
-    print(checked);
-    //DialogHelper.exit(context);
+    if (index == null) {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('lottery')
+          .doc(date)
+          .get();
+      checkPrize(snapshot);
+      print(checked);
+    } else {
+      QuerySnapshot snapshotMany =
+          await FirebaseFirestore.instance.collection('lottery').get();
+      DocumentSnapshot snapshotOne = snapshotMany.docs[index];
+      
+      //dynamic snapshotOne = snapshotMany[index];
+
+      checkPrize(snapshotOne);
+      print(checked);
+    }
   }
 
   checkPrize(snapshot) async {
