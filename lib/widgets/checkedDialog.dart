@@ -1,11 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CheckedDialog extends StatelessWidget {
-  Map<int, Map<String, dynamic>> data = {};
-  Color boxColor = Colors.white;
+  final Map<int, Map<String, dynamic>> data;
+
+  Color boxColor ;
   List<Widget> dialogList = [];
+
   CheckedDialog(this.data) {
     data.forEach((key, value) {
       List<Widget> listData = wonOrNot(value);
@@ -59,7 +60,7 @@ class CheckedDialog extends StatelessWidget {
       data
         ..add(Text(
           result['usernumber'],
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(fontSize: 20, color: Colors.blueAccent),
         ))
         ..add(Text(
           "คุณไม่ถูกรางวัล",
