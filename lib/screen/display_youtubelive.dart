@@ -52,7 +52,7 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/800px-YouTube_full-color_icon_%282017%29.svg.png')),
+                          image: AssetImage('asset/YouTube_full-color_icon.svg.png')),
                       borderRadius: BorderRadius.all(Radius.circular(13.0)),
                       color: Colors.redAccent,
                     ),
