@@ -117,9 +117,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                                 (k) =>
                                     date[k] == dateValue, //หา Keys โดยใช้ value
                                 orElse: () => null),
-                            lotterylist);
+                            lotterylist,null);
                         data.getSnapshot().then((e) => DialogHelper.exit(context,data.checked));
-                        ;
+                        
                       },
                       child: Text(
                         'ตรวจ',
