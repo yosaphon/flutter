@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
@@ -111,14 +112,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     height: 100,
                     child: ElevatedButton(
                       onPressed: () {
-                        CheckDialog(
-                                date.keys.firstWhere(
-                                    (k) =>
-                                        date[k] ==
-                                        dateValue, //หา Keys โดยใช้ value
-                                    orElse: () => null),
-                                lotterylist)
-                            .alertChecking(context);
+                        var data = new CheckNumber(
+                            date.keys.firstWhere(
+                                (k) =>
+                                    date[k] == dateValue, //หา Keys โดยใช้ value
+                                orElse: () => null),
+                            lotterylist);
+                        data.getSnapshot().then((e) => DialogHelper.exit(context,data.checked));
+                        ;
                       },
                       child: Text(
                         'ตรวจ',
@@ -133,8 +134,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () 
-        {
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => QRScanPage()),
