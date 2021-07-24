@@ -1,32 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
-class CheckDialog {
+class CheckNumber {
   final String date;
   final List<String> userNum;
   Map<int, Map<String, dynamic>> checked = {};
   Map<String, dynamic> result = {};
   int key = 0;
 
-  CheckDialog(this.date, this.userNum);
+  CheckNumber(this.date, this.userNum);
 
-  Future<Null> alertChecking(BuildContext context) async {
+  Future<Null> getSnapshot() async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('lottery').doc(date).get();
-
     checkPrize(snapshot);
     print(checked);
+    //DialogHelper.exit(context);
   }
 
   checkPrize(snapshot) async {
     userNum.forEach((usernumber) {
       int keyNow = key;
-      checkNormal(snapshot, usernumber);//ตรวจรางวัลปกติ
-      checkFirst3(snapshot, usernumber);//ตรวจรางวัล 3 ตัวหน้า
-      checkLast3(snapshot, usernumber);//ตรวจรางวัล 3 ตัวท้าย
-      checkLast2(snapshot, usernumber);//ตรวจรางวัล 2 ตัวท้าย
-      if (keyNow == key) { //ถ้าไม่มีข้อมูลที่ถูกเลย
+      checkNormal(snapshot, usernumber); //ตรวจรางวัลปกติ
+      checkFirst3(snapshot, usernumber); //ตรวจรางวัล 3 ตัวหน้า
+      checkLast3(snapshot, usernumber); //ตรวจรางวัล 3 ตัวท้าย
+      checkLast2(snapshot, usernumber); //ตรวจรางวัล 2 ตัวท้าย
+      if (keyNow == key) {
+        //ถ้าไม่มีข้อมูลที่ถูกเลย
         result = {
           'date': snapshot['drawdate'],
           'usernumber': usernumber,
@@ -43,8 +42,10 @@ class CheckDialog {
 
   checkNormal(snapshot, usernumber) {
     snapshot['result'].forEach((index) {
-      try { //รางวัลอื่นๆ
+      try {
+        //รางวัลอื่นๆ
         for (final item in index['number']) {
+          //print(usernumber+":"+item);
           if (usernumber == item) {
             result = {
               'date': snapshot['drawdate'],
@@ -58,7 +59,8 @@ class CheckDialog {
             key++;
           }
         }
-      } catch (e) { //รางวัลที่ 1
+      } catch (e) {
+        //รางวัลที่ 1
         if (usernumber == index['number']) {
           result = {
             'date': snapshot['drawdate'],
