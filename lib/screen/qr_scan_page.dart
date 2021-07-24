@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:lotto/helpers/dialog_helper.dart';
+import 'package:lotto/model/checkNumber.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanPage extends StatefulWidget {
@@ -39,8 +41,7 @@ class _QRScanPageState extends State<QRScanPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
             ),
-            backgroundColor:
-                Colors.white.withOpacity(0.1),
+            backgroundColor: Colors.white.withOpacity(0.1),
             elevation: 0,
             leading: IconButton(
               color: Colors.black,
@@ -107,7 +108,28 @@ class _QRScanPageState extends State<QRScanPage> {
       );
   void onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
-    controller.scannedDataStream
-        .listen((barcode) => setState(() => this.barcode = barcode));
+    controller.scannedDataStream.listen((barcode) {
+      setState(() => this.barcode = barcode);
+      getDateAndNumber(barcode.code.toString());
+      //var data = barcode.code;
+    });
+  }
+
+  getDateAndNumber(String barcode) {
+    List<String> data = barcode.split('-');
+    print(data);
+    if (data.length == 4) {
+      List<String> number = [data[3]];
+      String date = '25' + data[0] + data[1] + data[2];
+      print(date);
+      print(number);
+      int times = int.parse(data[1]); //งวด
+      int index = (times / 2).ceil();
+      print(index);
+      var check = new CheckNumber(null, number, index-1);
+      check
+          .getSnapshot()
+          .then((e) => DialogHelper.exit(context, check.checked));
+    }
   }
 }
