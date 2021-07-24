@@ -1,3 +1,4 @@
+import 'package:auth_buttons/auth_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -33,57 +34,107 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
         elevation: 0,
       ),
       body: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.only(left: 60 ,right: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.black,
-                  minimumSize: Size(double.infinity, 50)),
-              icon: FaIcon(
-                FontAwesomeIcons.google,
-                color: Colors.red,
-              ),
-              label: Text(" Sign Up with Google"),
-              onPressed: () {
-                AuthClass().signWithGoogle().then((UserCredential value) {
-                  final displayName = value.user.displayName;
-                  print(displayName);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                      (route) => false);
-                });
-              },
-            ),
+            // ElevatedButton.icon(
+            //   style: ElevatedButton.styleFrom(
+            //       primary: Colors.red[900],
+            //       onPrimary: Colors.black,
+            //       minimumSize: Size(double.infinity, 50)),
+            //   icon: FaIcon(
+            //     FontAwesomeIcons.google,
+
+            //     color: Colors.white,
+            //   ),
+            //   label: Text(" Sign Up with Google"),
+            //   onPressed: () {
+            //     AuthClass().signWithGoogle().then((UserCredential value) {
+            //       final displayName = value.user.displayName;
+            //       print(displayName);
+            //       Navigator.pushAndRemoveUntil(
+            //           context,
+            //           MaterialPageRoute(builder: (context) => MyHomePage()),
+            //           (route) => false);
+            //     });
+            //   },
+            // ),
+            // SizedBox(
+            //   height: 40,
+            // ),
+            GoogleAuthButton(
+                style: AuthButtonStyle(
+                  borderRadius: 8,
+                  width: 280,
+                  height: 50,
+                  iconSize: 35,
+                  separator: 10.0,
+                  padding: const EdgeInsets.all(8.0),
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.50,
+                  ),
+                ),
+                onPressed: () {
+                  AuthClass().signWithGoogle().then((UserCredential value) {
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => MyHomePage()),
+                    //     (route) => false);
+                  });
+                }),
             SizedBox(
-              height: 60,
+              height: 40,
             ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.black,
-                  minimumSize: Size(double.infinity, 50)),
-              icon: FaIcon(
-                FontAwesomeIcons.facebook,
-                color: Colors.red,
-              ),
-              label: Text(" Sign Up with Facebook"),
+            FacebookAuthButton(
+              style: AuthButtonStyle(
+                  borderRadius: 8,
+                  width: 280,
+                  height: 50,
+                  iconSize: 35,
+                  separator: 10.0,
+                  padding: const EdgeInsets.all(8.0),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.50,
+                  ),
+                ),
               onPressed: () {
-                AuthClass().handleLogin().then((UserCredential value) {
-                  final displayName = value.user.displayName;
+              AuthClass().handleLogin().then((UserCredential value) {
+                // Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => MyHomePage()),
+                //     (route) => false);
+              });
+            }),
 
-                  print(displayName);
+            // ElevatedButton.icon(
+            //   style: ElevatedButton.styleFrom(
+            //       primary: Colors.blue[900],
+            //       onPrimary: Colors.black,
+            //       minimumSize: Size(double.infinity, 50)),
+            //   icon: FaIcon(
+            //     FontAwesomeIcons.facebook,
+            //     color: Colors.white,
+            //   ),
+            //   label: Text(" Sign Up with Facebook"),
+            //   onPressed: () {
+            //     AuthClass().handleLogin().then((UserCredential value) {
+            //       final displayName = value.user.displayName;
 
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                      (route) => false);
-                });
-              },
-            ),
+            //       print(displayName);
+
+            //       Navigator.pushAndRemoveUntil(
+            //           context,
+            //           MaterialPageRoute(builder: (context) => MyHomePage()),
+            //           (route) => false);
+            //     });
+            //   },
+            // ),
           ],
         ),
       ),

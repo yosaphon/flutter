@@ -78,11 +78,11 @@ class UserprofileLottery extends StatelessWidget {
                             child: Text("Logout"),
                             onPressed: () {
                               AuthClass().signOut();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyHomePage()),
-                                  (route) => false);
+                              // Navigator.pushAndRemoveUntil(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => MyHomePage()),
+                              //     (route) => false);
                             },
                           ),
                         ],
