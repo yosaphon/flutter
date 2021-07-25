@@ -23,11 +23,15 @@ class DispalyPredictor extends StatelessWidget {
             children: [
               SizedBox(height: 20,),
               Container(
-                
                 height: 150.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   color: Colors.blue[100],
+                ),
+                child: Column(
+                  children: [
+
+                  ],
                 ),
               ),
               SizedBox(height: 20,),
@@ -37,6 +41,11 @@ class DispalyPredictor extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   color: Colors.blue[100],
+                ),
+                child: Column(
+                  children: [
+
+                  ],
                 ),
               ),
             ],
