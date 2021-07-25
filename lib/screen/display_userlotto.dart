@@ -26,22 +26,11 @@ class UserprofileLottery extends StatelessWidget {
               user.displayName,
               style: TextStyle(color: Colors.black),
             ),
-
-            // IconButton(
-            //   alignment: Alignment.centerRight,
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => Formshowlotto()),
-            //       );
-            //     },
-            //     icon: Icon(Icons.add_business)),
           ],
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        // backgroundColor: Colors.transparent,
         backgroundColor: Colors.black.withOpacity(0.1),
         elevation: 0,
         actions: <Widget>[
@@ -60,14 +49,14 @@ class UserprofileLottery extends StatelessWidget {
               textTheme: TextTheme().apply(bodyColor: Colors.black),
             ),
             child: PopupMenuButton<int>(
-              color: Colors.white60,
+              color: Colors.white70,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [
                 
                 PopupMenuItem<int>(
                   value: 0,
                   child: Text('Purchase Report',
-                      style: TextStyle(fontSize: 18, color: Colors.black)),
+                      style: TextStyle( color: Colors.black)),
                 ),
                 PopupMenuDivider(),
                 PopupMenuItem<int>(
@@ -77,7 +66,7 @@ class UserprofileLottery extends StatelessWidget {
                       Icon(Icons.logout),
                       const SizedBox(width: 8),
                       Text('Sign Out',
-                          style: TextStyle(fontSize: 18, color: Colors.black)),
+                          style: TextStyle( color: Colors.black)),
                     ],
                   ),
                 ),
@@ -86,24 +75,11 @@ class UserprofileLottery extends StatelessWidget {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      children: [],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: ListView(
+          
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
