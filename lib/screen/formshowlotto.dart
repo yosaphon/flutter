@@ -139,7 +139,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               }
                             },
                           ),
-                        )
+                        ),
+                        // Flexible(flex:1,child: Container(color: Colors.amber,))
                       ],
                     ),
                   ),

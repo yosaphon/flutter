@@ -1,3 +1,4 @@
+ 
 class Userlottery {
   String userid;
   String number;

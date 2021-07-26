@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/provider/auth_provider.dart';
@@ -10,7 +11,7 @@ class UserprofileLottery extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -52,11 +53,10 @@ class UserprofileLottery extends StatelessWidget {
               color: Colors.white70,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [
-                
                 PopupMenuItem<int>(
                   value: 0,
                   child: Text('Purchase Report',
-                      style: TextStyle( color: Colors.black)),
+                      style: TextStyle(color: Colors.black)),
                 ),
                 PopupMenuDivider(),
                 PopupMenuItem<int>(
@@ -65,8 +65,7 @@ class UserprofileLottery extends StatelessWidget {
                     children: [
                       Icon(Icons.logout),
                       const SizedBox(width: 8),
-                      Text('Sign Out',
-                          style: TextStyle( color: Colors.black)),
+                      Text('Sign Out', style: TextStyle(color: Colors.black)),
                     ],
                   ),
                 ),
@@ -75,11 +74,35 @@ class UserprofileLottery extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: ListView(
-          
-        ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("userlottery")
+            .where('userid', isEqualTo: user.uid)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView(
+            children: snapshot.data.docs.map((document) {
+              return Card(
+                child: ListTile(
+                  // tileColor: Colors.cyan[100],
+                  leading: Image.network(
+                    user.photoURL,
+                    width: 100,
+                    fit: BoxFit.fitWidth,
+                  ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+                  title: Text(document["number"]),
+                  subtitle: Text("จำนวน "+document["amount"]+" ใบ   "+document["lotteryprice"]+" บาท"),
+                  onTap: () async {},
+                ),
+              );
+            }).toList(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -101,10 +124,10 @@ class UserprofileLottery extends StatelessWidget {
 void onSelected(BuildContext context, int item) {
   switch (item) {
     case 0:
-    //  Navigator.push(
-    //         context,
-    //         MaterialPageRoute(builder: (context) => Formshowlotto()),
-    //       );
+      //  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => Formshowlotto()),
+      //       );
       break;
     case 1:
       AuthClass().signOut();
