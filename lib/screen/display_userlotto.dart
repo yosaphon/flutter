@@ -96,8 +96,23 @@ class UserprofileLottery extends StatelessWidget {
                     fit: BoxFit.fitWidth,
                   ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
                   title: Text(document["number"]),
-                  subtitle: Text("จำนวน "+document["amount"]+" ใบ   "+document["lotteryprice"]+" บาท"),
-                  onTap: () async {},
+                  subtitle: Text("จำนวน " +
+                      document["amount"] +
+                      " ใบ   " +
+                      document["lotteryprice"] +
+                      " บาท"),
+                  trailing: IconButton(  // สามารถปรับทำว่าถถ้าตรวจแล้วเป็น ถูกถ้ายังเป็น x
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                  onTap: () async {
+                    //กดเพื่อดูรายละเอียด
+                  },
+                  onLongPress: () async {
+                    // กดเพื่อลบ
+                  },
                 ),
               );
             }).toList(),
