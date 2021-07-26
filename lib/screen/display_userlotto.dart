@@ -10,89 +10,103 @@ class UserprofileLottery extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "ผู้ใช้",
-            style: TextStyle(color: Colors.black),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-          ),
-          // backgroundColor: Colors.transparent,
-          backgroundColor: Colors.black.withOpacity(0.1),
-          elevation: 0,
-        ),
-        body: Stack(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Row(
           children: [
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 64,
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage: NetworkImage(user.photoURL),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(user.displayName),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(30),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 60,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.lightBlueAccent.shade400,
-                                onPrimary: Colors.black,
-                                minimumSize: Size(double.infinity, 50)),
-                            child: Text("เพิ่มสลาก"),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Formshowlotto()),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.redAccent,
-                                onPrimary: Colors.black,
-                                minimumSize: Size(double.infinity, 50)),
-                            child: Text("Logout"),
-                            onPressed: () {
-                              AuthClass().signOut();
-                              // Navigator.pushAndRemoveUntil(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => MyHomePage()),
-                              //     (route) => false);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(user.photoURL),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              user.displayName,
+              style: TextStyle(color: Colors.black),
+            ),
           ],
-        ));
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        ),
+        backgroundColor: Colors.black.withOpacity(0.1),
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+              size: 35,
+            ),
+            onPressed: () {},
+          ),
+          Theme(
+            data: Theme.of(context).copyWith(
+              dividerColor: Colors.black,
+              iconTheme: IconThemeData(color: Colors.black),
+              textTheme: TextTheme().apply(bodyColor: Colors.black),
+            ),
+            child: PopupMenuButton<int>(
+              color: Colors.white70,
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (context) => [
+                
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text('Purchase Report',
+                      style: TextStyle( color: Colors.black)),
+                ),
+                PopupMenuDivider(),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout),
+                      const SizedBox(width: 8),
+                      Text('Sign Out',
+                          style: TextStyle( color: Colors.black)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: ListView(
+          
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Formshowlotto()),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          size: 40,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+}
+
+void onSelected(BuildContext context, int item) {
+  switch (item) {
+    case 0:
+    //  Navigator.push(
+    //         context,
+    //         MaterialPageRoute(builder: (context) => Formshowlotto()),
+    //       );
+      break;
+    case 1:
+      AuthClass().signOut();
   }
 }
