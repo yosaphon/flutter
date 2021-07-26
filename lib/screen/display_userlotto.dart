@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import '../main.dart';
 import 'formshowlotto.dart';
@@ -101,7 +102,8 @@ class UserprofileLottery extends StatelessWidget {
                       " ใบ   " +
                       document["lotteryprice"] +
                       " บาท"),
-                  trailing: IconButton(  // สามารถปรับทำว่าถถ้าตรวจแล้วเป็น ถูกถ้ายังเป็น x
+                  trailing: IconButton(
+                    // สามารถปรับทำว่าถถ้าตรวจแล้วเป็น ถูกถ้ายังเป็น x
                     icon: Icon(
                       Icons.check_circle,
                       color: Colors.green,
@@ -110,8 +112,13 @@ class UserprofileLottery extends StatelessWidget {
                   onTap: () async {
                     //กดเพื่อดูรายละเอียด
                   },
-                  onLongPress: () async {
+                  onLongPress: () {
                     // กดเพื่อลบ
+                    confirmDialog(context, document.id);
+
+                    // deleteUserLottery(document.id);
+                    // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
+                    // Navigator.pop(context);
                   },
                 ),
               );
@@ -147,4 +154,48 @@ void onSelected(BuildContext context, int item) {
     case 1:
       AuthClass().signOut();
   }
+}
+
+Future<Null> confirmDialog(BuildContext context, String documentId) {
+  return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('คุณต้องการลบสลากใช่หรือไม่'),
+          actions: <Widget>[
+            new FlatButton(
+              child: Container(
+                width: 60.0,
+                child: Text('ลบข้อมูล',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.red
+                        )),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                FirebaseFirestore.instance
+                    .collection('userlottery')
+                    .doc(documentId)
+                    .delete();
+              },
+            ),
+            SizedBox(width: 20,),
+            new FlatButton(
+              child: Container(
+                width: 60.0,
+                child: Text('ยกเลิก',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        backgroundColor: Colors.white70)),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      });
 }
