@@ -20,3 +20,6 @@ Future deleteUserLottery(String documentId) async {
       .doc(documentId)
       .delete();
 }
+// Future addUserLottery() async{
+
+// }

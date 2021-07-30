@@ -24,18 +24,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
   // final ImagePicker _picker = ImagePicker();
   var convertedImage;
   String urlpiture;
-
-  String number;
-  String amount = "1";
-  String lotteryprice = "0";
-  String date;
-
   Userlottery userlottery = Userlottery();
   final user = FirebaseAuth.instance.currentUser;
   // เตรียม firebase
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
-  // CollectionReference _userltottery =
-  //     FirebaseFirestore.instance.collection("userlottery");
+  CollectionReference _userltottery =
+      FirebaseFirestore.instance.collection("userlottery");
 
   // Future<void> chooseImage(ImageSource imageSource) async {
   //   try {
@@ -86,30 +80,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
     firebase_storage.UploadTask uploadTask = reference.putFile(_image);
     urlpiture = await (await uploadTask).ref.getDownloadURL();
     print('url = $urlpiture');
-    inserttoFirebase();
-  }
-
-  Future inserttoFirebase() async {
-    Map<String, dynamic> map = Map();
-
-    map["username"] = user.displayName;
-    map["number"] = number;
-    map["amount"] = amount;
-    map["lotteryprice"] = lotteryprice;
-    map["date"] = date;
-    map["imageurl"] = urlpiture;
-    map["userid"] = user.uid;
-
-    await FirebaseFirestore.instance
-        .collection("userlottery")
-        .doc()
-        .set(map)
-        .then((value) {
-      MaterialPageRoute route = MaterialPageRoute(
-        builder: (value) => UserprofileLottery(),
-      );
-      Navigator.of(context).pushAndRemoveUntil(route, (value) => false);
-    });
   }
 
   @override
@@ -173,8 +143,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   RequiredValidator(
                                       errorText: "กรุณาป้อน เลขสลาก")
                                 ]),
-                                onChanged: (String string) {
-                                  number = string;
+                                onSaved: (String number) {
+                                  userlottery.number = number;
                                 },
                                 keyboardType: TextInputType.number,
                               ),
@@ -198,30 +168,31 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           //ยังไม่ใช้
                           decoration: InputDecoration(labelText: 'งวดที่'),
                           style: TextStyle(fontSize: 25),
-                          onChanged: (String string) {
-                            date = string;
+                          onSaved: (String date) {
+                            userlottery.date = date;
                           },
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'จำนวน'),
                           style: TextStyle(fontSize: 25),
-                          initialValue: amount = "1",
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
-                          onChanged: (String string) {
-                            amount = string;
+                          onSaved: (String amount) {
+                            userlottery.amount = amount;
                           },
                           keyboardType: TextInputType.number,
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'ราคา'),
-                          initialValue: lotteryprice = "0",
                           style: TextStyle(fontSize: 25),
                           validator: MultiValidator(
                               [RequiredValidator(errorText: "กรุณาป้อนราคา")]),
-                          onChanged: (String string) {
-                            lotteryprice = string;
+                          onSaved: (String lotteryprice) {
+                            if (lotteryprice == null) {
+                              lotteryprice = "0";
+                            }
+                            userlottery.lotteryprice = lotteryprice;
                           },
                           keyboardType: TextInputType.number,
                         ),
@@ -232,9 +203,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           padding: EdgeInsets.all(20),
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.4,
-                          child: _image == null
-                              ? Image.asset('asset/gallery-187-902099.png')
-                              : Image.file(_image),
+                          child: _image != null
+                              ? Image.file(_image)
+                              : Image.asset('asset/gallery-187-902099.png'),
                         ),
                         Container(
                           child: Row(
@@ -265,22 +236,22 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               "บันทึกข้อมูล",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
-                              UploadPicture();
-                              // if (formKey.currentState.validate()) {
-
-                              //   formKey.currentState.save();
-                              //   await _userltottery.add({
-                              //     "username": user.displayName,
-                              //     "number": userlottery.number,
-                              //     "amount": userlottery.amount,
-                              //     "lotteryprice": userlottery.lotteryprice,
-                              //     "date": userlottery.date,
-                              //     "imageurl": userlottery.imageurl,
-                              //     "userid": user.uid
-                              //   });
-                              //   formKey.currentState.reset();
-                              // }
+                            onPressed: () async {
+                              await UploadPicture();
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                await _userltottery.add({
+                                  "username": user.displayName,
+                                  "number": userlottery.number,
+                                  "amount": userlottery.amount,
+                                  "lotteryprice": userlottery.lotteryprice,
+                                  "imageurl": urlpiture,
+                                  "date": userlottery.date,
+                                  "userid": user.uid
+                                });
+                               
+                                Navigator.pop(context);
+                              }
                             },
                           ),
                         ),
