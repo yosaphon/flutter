@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
+import 'package:lotto/screen/display_userlotto.dart';
 import 'package:uuid/uuid.dart';
 
 class Formshowlotto extends StatefulWidget {
@@ -23,12 +24,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
   // final ImagePicker _picker = ImagePicker();
   var convertedImage;
   String urlpiture;
-  
-  String number ;
+
+  String number;
   String amount = "1";
-  String lotteryprice="0";
+  String lotteryprice = "0";
   String date;
-  
+
   Userlottery userlottery = Userlottery();
   final user = FirebaseAuth.instance.currentUser;
   // เตรียม firebase
@@ -103,7 +104,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
         .collection("userlottery")
         .doc()
         .set(map)
-        .then((value) => null);
+        .then((value) {
+      MaterialPageRoute route = MaterialPageRoute(
+        builder: (value) => UserprofileLottery(),
+      );
+      Navigator.of(context).pushAndRemoveUntil(route, (value) => false);
+    });
   }
 
   @override
@@ -210,7 +216,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'ราคา'),
-                          initialValue: lotteryprice ="0",
+                          initialValue: lotteryprice = "0",
                           style: TextStyle(fontSize: 25),
                           validator: MultiValidator(
                               [RequiredValidator(errorText: "กรุณาป้อนราคา")]),
