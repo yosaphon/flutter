@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/provider/auth_provider.dart';
+import 'package:path/path.dart' as Path;
 import '../main.dart';
 import 'formshowlotto.dart';
 
 class UserprofileLottery extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -114,7 +117,7 @@ class UserprofileLottery extends StatelessWidget {
                   },
                   onLongPress: () {
                     // กดเพื่อลบ
-                    confirmDialog(context, document.id);
+                    confirmDialog(context, document.id, document['imageurl']);
 
                     // deleteUserLottery(document.id);
                     // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
@@ -143,20 +146,8 @@ class UserprofileLottery extends StatelessWidget {
   }
 }
 
-void onSelected(BuildContext context, int item) {
-  switch (item) {
-    case 0:
-      //  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => Formshowlotto()),
-      //       );
-      break;
-    case 1:
-      AuthClass().signOut();
-  }
-}
-
-Future<Null> confirmDialog(BuildContext context, String documentId) {
+Future<Null> confirmDialog(
+    BuildContext context, String documentId, String imageurl) {
   return showDialog<Null>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -168,20 +159,31 @@ Future<Null> confirmDialog(BuildContext context, String documentId) {
               child: Container(
                 width: 60.0,
                 child: Text('ลบข้อมูล',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.red
-                        )),
+                    style: TextStyle(fontSize: 16, color: Colors.red)),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                FirebaseFirestore.instance
+                if (imageurl != null) {
+                  deleteImage(imageurl);
+                  // String filePath = imageurl
+                  // .replaceAll(new
+                  // RegExp(r'https://firebasestorage.googleapis.com/v0/b/testfirebase01-6d017.appspot.com/o/userimg%2F'), '').split('?')[0];
+                  // firebase_storage.FirebaseStorage.instance.ref().child(filePath).delete().then((_) => print('Successfully deleted $filePath storage item' ));
+
+                  //  firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance.ref().child(imageurl);
+                  //   print("url     =   "+imageurl);
+                  //   await reference.delete();
+                  // print('image deleted'); gs://testfirebase01-6d017.appspot.com/userimg/873e4625-1cca-486e-a649-e4634bbe7cbb
+                }
+                await FirebaseFirestore.instance
                     .collection('userlottery')
                     .doc(documentId)
                     .delete();
               },
             ),
-            SizedBox(width: 20,),
+            SizedBox(
+              width: 20,
+            ),
             new FlatButton(
               child: Container(
                 width: 60.0,
@@ -198,4 +200,26 @@ Future<Null> confirmDialog(BuildContext context, String documentId) {
           ],
         );
       });
+}
+
+Future<void> deleteImage(String imageFileUrl) async {
+  var fileUrl = Uri.decodeFull(Path.basename(imageFileUrl))
+      .replaceAll(new RegExp(r'(\?alt).*'), '');
+
+  final firebase_storage.Reference firebaseStorageRef =
+      firebase_storage.FirebaseStorage.instance.ref().child(fileUrl);
+  await firebaseStorageRef.delete();
+}
+
+void onSelected(BuildContext context, int item) {
+  switch (item) {
+    case 0:
+      //  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => Formshowlotto()),
+      //       );
+      break;
+    case 1:
+      AuthClass().signOut();
+  }
 }

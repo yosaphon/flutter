@@ -13,7 +13,8 @@ class Userlottery {
   Userlottery({this.userid, this.number, this.amount,this.lotteryprice, this.username , this.imageurl ,this.date});
 }
 
-Future deleteUserLottery(String documentId) async {
+Future deleteUserLottery(String documentId ) async {
+  
   
   await FirebaseFirestore.instance
       .collection('userlottery')

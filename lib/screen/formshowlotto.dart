@@ -70,13 +70,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   Future UploadPicture() async {
     var uuid = Uuid().v4();
-    var now = DateTime.now();
     firebase_storage.FirebaseStorage firebaseStorage =
         firebase_storage.FirebaseStorage.instance;
     firebase_storage.Reference reference = firebase_storage
         .FirebaseStorage.instance
         .ref()
-        .child('userimg/$uuid$now');
+        .child('userimg/$uuid');
     firebase_storage.UploadTask uploadTask = reference.putFile(_image);
     urlpiture = await (await uploadTask).ref.getDownloadURL();
     print('url = $urlpiture');
