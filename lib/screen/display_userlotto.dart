@@ -93,12 +93,13 @@ class UserprofileLottery extends StatelessWidget {
             children: snapshot.data.docs.map((document) {
               return Card(
                 child: ListTile(
-                  // tileColor: Colors.cyan[100],
-                  leading: Image.network(
+                  tileColor: Colors.cyan[100],
+                  leading: document['imageurl'] != null ? Image.network(
                     document["imageurl"],
                     width: 100,
                     fit: BoxFit.fitWidth,
-                  ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+                  ) : Image.asset('asset/gallery-187-902099.png',width: 100,
+                    fit: BoxFit.fitWidth,), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
                   title: Text(document["number"]),
                   subtitle: Text("จำนวน " +
                       document["amount"] +
@@ -111,6 +112,7 @@ class UserprofileLottery extends StatelessWidget {
                       Icons.check_circle,
                       color: Colors.green,
                     ),
+                    onPressed: (){},
                   ),
                   onTap: () async {
                     //กดเพื่อดูรายละเอียด

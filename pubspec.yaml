@@ -51,7 +51,7 @@ dependencies:
   # google map
   geoflutterfire: ^3.0.1
   location: ^4.3.0
-  
+  google_maps_flutter: ^2.0.6
 
   # firebase
   firebase_auth: ^1.4.1

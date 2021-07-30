@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
@@ -20,6 +23,7 @@ class Formshowlotto extends StatefulWidget {
 
 class _FormshowlottoState extends State<Formshowlotto> {
   final formKey = GlobalKey<FormState>();
+  Completer<GoogleMapController> _controller = Completer();
   // File file;
   // final ImagePicker _picker = ImagePicker();
   var convertedImage;
@@ -72,10 +76,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
     var uuid = Uuid().v4();
     firebase_storage.FirebaseStorage firebaseStorage =
         firebase_storage.FirebaseStorage.instance;
-    firebase_storage.Reference reference = firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('userimg/$uuid');
+    firebase_storage.Reference reference =
+        firebase_storage.FirebaseStorage.instance.ref().child('userimg/$uuid');
     firebase_storage.UploadTask uploadTask = reference.putFile(_image);
     urlpiture = await (await uploadTask).ref.getDownloadURL();
     print('url = $urlpiture');
@@ -227,6 +229,19 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             ],
                           ),
                         ),
+                        // Container(
+                        //     padding: EdgeInsets.all(20),
+                        //     width: 100,
+                        //     height: 100,
+                        //     child: GoogleMap(
+                        //       initialCameraPosition: CameraPosition(
+                        //         target: LatLng(24.142, -110.321),
+                        //         zoom: 15,
+                        //       ),
+                        //       onMapCreated: (GoogleMapController controller) {
+                        //         _controller.complete(controller);
+                        //       },
+                        //     )),
                         SizedBox(
                           height: 50,
                           width: double.infinity,
@@ -236,7 +251,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-                              await UploadPicture();
+                              if(_image != null){
+                                await UploadPicture();
+                              }
+                              
                               if (formKey.currentState.validate()) {
                                 formKey.currentState.save();
                                 await _userltottery.add({
@@ -248,7 +266,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "date": userlottery.date,
                                   "userid": user.uid
                                 });
-                               
+
                                 Navigator.pop(context);
                               }
                             },
