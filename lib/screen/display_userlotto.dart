@@ -92,7 +92,7 @@ class UserprofileLottery extends StatelessWidget {
                 child: ListTile(
                   // tileColor: Colors.cyan[100],
                   leading: Image.network(
-                    user.photoURL,
+                    document["imageurl"],
                     width: 100,
                     fit: BoxFit.fitWidth,
                   ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน

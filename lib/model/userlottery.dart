@@ -7,8 +7,10 @@ class Userlottery {
   String amount;
   String lotteryprice;
   String username;
+  String imageurl;
+  String date;
 
-  Userlottery({this.userid, this.number, this.amount,this.lotteryprice, this.username});
+  Userlottery({this.userid, this.number, this.amount,this.lotteryprice, this.username , this.imageurl ,this.date});
 }
 
 Future deleteUserLottery(String documentId) async {
