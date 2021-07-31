@@ -315,7 +315,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
             GoogleMap(
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
-                target: LatLng(13.6904, 100.5544),
+                target: LatLng(13.7535, 100.5237),
                 zoom: 15,
               ),
               onMapCreated: _onMapCreated,
@@ -337,10 +337,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
         ));
   }
 
-  _onMapCreated(GoogleMapController controller) {
-    setState(() {
+  void _onMapCreated(GoogleMapController controller) {
+    // setState(() {
       mapController = controller;
-    });
+    // });
   }
 
   Future<Position> _getuserlocation() async {
