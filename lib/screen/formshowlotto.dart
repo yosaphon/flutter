@@ -8,12 +8,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/screen/display_userlotto.dart';
+import 'package:lotto/screen/googlemapshow.dart';
 import 'package:uuid/uuid.dart';
 
 class Formshowlotto extends StatefulWidget {
@@ -26,6 +28,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
   Completer<GoogleMapController> _controller = Completer();
   // File file;
   // final ImagePicker _picker = ImagePicker();
+  GoogleMapController mapController;
+  Position userlocation;
   var convertedImage;
   String urlpiture;
   Userlottery userlottery = Userlottery();
@@ -229,19 +233,26 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             ],
                           ),
                         ),
-                        // Container(
-                        //     padding: EdgeInsets.all(20),
-                        //     width: 100,
-                        //     height: 100,
-                        //     child: GoogleMap(
-                        //       initialCameraPosition: CameraPosition(
-                        //         target: LatLng(24.142, -110.321),
-                        //         zoom: 15,
-                        //       ),
-                        //       onMapCreated: (GoogleMapController controller) {
-                        //         _controller.complete(controller);
-                        //       },
-                        //     )),
+                        FutureBuilder(
+                          future: _getuserlocation(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              return GoogleMap(
+                                mapType: MapType.normal,
+                                onMapCreated: _onMapCreated,
+                                myLocationEnabled: true,
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(userlocation.latitude,
+                                        userlocation.longitude),
+                                    zoom: 15),
+                              );
+                            } else {
+                              return _buildGoogleMap(context);
+                            }
+                          },
+                        ),
+                        // _buildGoogleMap(context),
                         SizedBox(
                           height: 50,
                           width: double.infinity,
@@ -251,10 +262,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-                              if(_image != null){
+                              if (_image != null) {
                                 await UploadPicture();
                               }
-                              
+
                               if (formKey.currentState.validate()) {
                                 formKey.currentState.save();
                                 await _userltottery.add({
@@ -286,5 +297,65 @@ class _FormshowlottoState extends State<Formshowlotto> {
             ),
           );
         });
+  }
+
+  Widget _buildGoogleMap(BuildContext context) {
+    return Container(
+        height: 200,
+        width: double.infinity,
+        margin: EdgeInsets.only(left: 30, right: 30),
+        decoration: BoxDecoration(
+          
+          border: Border.all(
+            style: BorderStyle.solid,
+          ),
+        ),
+        child: Stack(
+          children: [
+            GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(13.6904, 100.5544),
+                zoom: 15,
+              ),
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              compassEnabled: true,
+            ),
+            // Positioned(
+            //   bottom: 50,
+            //   right: 10,
+            //   child: IconButton(
+            //     icon: Icon(Icons.pin_drop),
+            //     color: Colors.blue,
+            //     onPressed: () {
+            //       _addmarker();
+            //     },
+            //   ),
+            // )
+          ],
+        ));
+  }
+
+  _onMapCreated(GoogleMapController controller) {
+    setState(() {
+      mapController = controller;
+    });
+  }
+
+  Future<Position> _getuserlocation() async {
+    try {
+      userlocation = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      userlocation = null;
+    }
+    return userlocation;
+  }
+
+  _addmarker() {
+    var marker = Marker(
+        markerId: const MarkerId('location'),
+        infoWindow: const InfoWindow(title: 'location'));
   }
 }
