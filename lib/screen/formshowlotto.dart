@@ -26,10 +26,6 @@ class Formshowlotto extends StatefulWidget {
 class _FormshowlottoState extends State<Formshowlotto> {
   final formKey = GlobalKey<FormState>();
   Completer<GoogleMapController> _controller = Completer();
-  // File file;
-  // final ImagePicker _picker = ImagePicker();
-  GoogleMapController mapController;
-  Position userlocation;
   var convertedImage;
   String urlpiture;
   Userlottery userlottery = Userlottery();
@@ -38,28 +34,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _userltottery =
       FirebaseFirestore.instance.collection("userlottery");
-
-  // Future<void> chooseImage(ImageSource imageSource) async {
-  //   try {
-  //     // final pickedFile = await _picker.pickImage(
-  //     //   source: imageSource,
-  //     //   maxWidth: 800,
-  //     //   maxHeight: 800,
-  //     //   imageQuality: 70,
-  //     // );
-  //     // setState(() {
-  //     //   _imageFile = pickedFile;
-  //     // });
-  //     final objectimage = await _picker.pickImage(
-  //       source: imageSource,
-  //       maxHeight: 800,
-  //       maxWidth: 800,
-  //     );
-  //     setState(() {
-  //       file = objectimage as File;
-  //     });
-  //   } catch (e) {}
-  // }
   File _image;
   final picker = ImagePicker();
 
@@ -233,42 +207,26 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             ],
                           ),
                         ),
-                        FutureBuilder(
-                          future: _getuserlocation(),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData) {
-                              return Container(
-                                height: 200,
-                                width: double.infinity,
-                                margin: EdgeInsets.only(left: 30, right: 30),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    style: BorderStyle.solid,
-                                  ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    GoogleMap(
-                                      mapType: MapType.normal,
-                                      initialCameraPosition: CameraPosition(
-                                        target: LatLng(userlocation.latitude,
-                                            userlocation.longitude),
-                                        zoom: 15,
-                                      ),
-                                      onMapCreated: _onMapCreated,
-                                      myLocationEnabled: true,
-                                      compassEnabled: true,
-                                    )
-                                  ],
-                                ),
+                        SizedBox(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            child: Text(
+                              "เพิ่มตำแหน่ง",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => showuserGooglemap()),
                               );
-                            } else {
-                              return _buildGoogleMap(context);
-                            }
-                          },
+                            },
+                          ),
                         ),
-                        // _buildGoogleMap(context),
+                        SizedBox(
+                          height: 20,
+                        ),
                         SizedBox(
                           height: 50,
                           width: double.infinity,
@@ -313,64 +271,5 @@ class _FormshowlottoState extends State<Formshowlotto> {
             ),
           );
         });
-  }
-
-  Widget _buildGoogleMap(BuildContext context) {
-    return Container(
-        height: 200,
-        width: double.infinity,
-        margin: EdgeInsets.only(left: 30, right: 30),
-        decoration: BoxDecoration(
-          border: Border.all(
-            style: BorderStyle.solid,
-          ),
-        ),
-        child: Stack(
-          children: [
-            GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(13.7535, 100.5237),
-                zoom: 15,
-              ),
-              onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
-              compassEnabled: true,
-            ),
-            // Positioned(
-            //   bottom: 50,
-            //   right: 10,
-            //   child: IconButton(
-            //     icon: Icon(Icons.pin_drop),
-            //     color: Colors.blue,
-            //     onPressed: () {
-            //       _addmarker();
-            //     },
-            //   ),
-            // )
-          ],
-        ));
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    // setState(() {
-    mapController = controller;
-    // });
-  }
-
-  Future<Position> _getuserlocation() async {
-    try {
-      userlocation = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } catch (e) {
-      userlocation = null;
-    }
-    return userlocation;
-  }
-
-  _addmarker() {
-    var marker = Marker(
-        markerId: const MarkerId('location'),
-        infoWindow: const InfoWindow(title: 'location'));
   }
 }
