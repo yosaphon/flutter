@@ -50,6 +50,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.1
   # google map
   geolocator: ^7.4.0
+  geoflutterfire: ^3.0.1
   location: ^4.3.0
   google_maps_flutter: ^2.0.6
 
