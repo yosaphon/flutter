@@ -27,21 +27,17 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
     mapController = controller;
   }
 
-  
-
   _addMarker(LatLng tappedPoint) {
     setState(() {
       myMarker = [];
-      myMarker.add(
-        Marker(
-            markerId: MarkerId(
-              tappedPoint.toString(),
-            ),
-            position: tappedPoint),
-      );
+      myMarker.add(Marker(
+          markerId: MarkerId(
+            tappedPoint.toString(),
+          ),
+          position: tappedPoint));
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +50,7 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
           if (snapshot.hasData) {
             return GoogleMap(
               mapType: MapType.normal,
+              markers: Set.from(myMarker),
               onTap: _addMarker,
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,
@@ -74,8 +71,7 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-        },
+        onPressed: () {},
         label: Text("ปักหมุด"),
         icon: Icon(Icons.pin_drop),
       ),
