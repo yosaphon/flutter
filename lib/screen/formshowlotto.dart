@@ -238,14 +238,30 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.hasData) {
-                              return GoogleMap(
-                                mapType: MapType.normal,
-                                onMapCreated: _onMapCreated,
-                                myLocationEnabled: true,
-                                initialCameraPosition: CameraPosition(
-                                    target: LatLng(userlocation.latitude,
-                                        userlocation.longitude),
-                                    zoom: 15),
+                              return Container(
+                                height: 200,
+                                width: double.infinity,
+                                margin: EdgeInsets.only(left: 30, right: 30),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    GoogleMap(
+                                      mapType: MapType.normal,
+                                      initialCameraPosition: CameraPosition(
+                                        target: LatLng(userlocation.latitude,
+                                            userlocation.longitude),
+                                        zoom: 15,
+                                      ),
+                                      onMapCreated: _onMapCreated,
+                                      myLocationEnabled: true,
+                                      compassEnabled: true,
+                                    )
+                                  ],
+                                ),
                               );
                             } else {
                               return _buildGoogleMap(context);
@@ -305,7 +321,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
         width: double.infinity,
         margin: EdgeInsets.only(left: 30, right: 30),
         decoration: BoxDecoration(
-          
           border: Border.all(
             style: BorderStyle.solid,
           ),
@@ -339,7 +354,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   void _onMapCreated(GoogleMapController controller) {
     // setState(() {
-      mapController = controller;
+    mapController = controller;
     // });
   }
 
