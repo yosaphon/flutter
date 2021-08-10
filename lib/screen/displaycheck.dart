@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
@@ -112,14 +113,18 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     height: 100,
                     child: ElevatedButton(
                       onPressed: () {
-                        var data = new CheckNumber(
-                            date.keys.firstWhere(
-                                (k) =>
-                                    date[k] == dateValue, //หา Keys โดยใช้ value
-                                orElse: () => null),
-                            lotterylist,null);
-                        data.getSnapshot().then((e) => DialogHelper.exit(context,data.checked));
-                        
+                        if (_formKey.currentState.validate()) {
+                          var data = new CheckNumber(
+                              date.keys.firstWhere(
+                                  (k) =>
+                                      date[k] ==
+                                      dateValue, //หา Keys โดยใช้ value
+                                  orElse: () => null),
+                              lotterylist,
+                              null);
+                          data.getSnapshot().then(
+                              (e) => DialogHelper.exit(context, data.checked));
+                        }
                       },
                       child: Text(
                         'ตรวจ',
@@ -236,9 +241,11 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
           contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
+      // validator:
+      //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
       validator: (v) {
         if (v.isEmpty) {
-          return null;
+           return 'กรุณากรอกเลขสลาก';
         } else if (v.trim().length < 5 && v.isNotEmpty)
           return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
         return null;
