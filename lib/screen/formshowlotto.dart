@@ -19,6 +19,7 @@ import 'package:lotto/screen/googlemapshow.dart';
 import 'package:uuid/uuid.dart';
 
 class Formshowlotto extends StatefulWidget {
+  const Formshowlotto({Key key}) : super(key: key);
   @override
   _FormshowlottoState createState() => _FormshowlottoState();
 }
@@ -36,6 +37,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
       FirebaseFirestore.instance.collection("userlottery");
   File _image;
   final picker = ImagePicker();
+  ShowuserGooglemap location = ShowuserGooglemap();
 
   Future getImage(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(
@@ -143,14 +145,14 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           ],
                         ),
                         SizedBox(height: 16),
-                        TextFormField(
-                          //ยังไม่ใช้
-                          decoration: InputDecoration(labelText: 'งวดที่'),
-                          style: TextStyle(fontSize: 25),
-                          onSaved: (String date) {
-                            userlottery.date = date;
-                          },
-                        ),
+                        // TextFormField(
+                        //   //ยังไม่ใช้
+                        //   decoration: InputDecoration(labelText: 'งวดที่'),
+                        //   style: TextStyle(fontSize: 25),
+                        //   onSaved: (String date) {
+                        //     userlottery.date = date;
+                        //   },
+                        // ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'จำนวน'),
                           style: TextStyle(fontSize: 25),
@@ -216,11 +218,13 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () async {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => showuserGooglemap()),
-                              );
+                              _navigateAndDisplaySelection(context);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => ShowuserGooglemap()),
+                              // );
+                              // print(location);
                             },
                           ),
                         ),
@@ -249,6 +253,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "lotteryprice": userlottery.lotteryprice,
                                   "imageurl": urlpiture,
                                   "date": userlottery.date,
+                                  "latlng": userlottery.latlng,
                                   "userid": user.uid
                                 });
 
@@ -271,5 +276,21 @@ class _FormshowlottoState extends State<Formshowlotto> {
             ),
           );
         });
+  }
+
+  void _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ShowuserGooglemap()),
+    );
+
+    // After the Selection Screen returns a result, hide any previous snackbars
+    // and show the new result.
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('$result')));
+      userlottery.latlng = result;
   }
 }

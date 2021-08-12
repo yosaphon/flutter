@@ -1,16 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
-class showuserGooglemap extends StatefulWidget {
+class ShowuserGooglemap extends StatefulWidget { 
   @override
-  _showuserGooglemapState createState() => _showuserGooglemapState();
+  _ShowuserGooglemapState createState() => _ShowuserGooglemapState();
 }
 
-class _showuserGooglemapState extends State<showuserGooglemap> {
+class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
   GoogleMapController mapController;
   Position userLocation;
   List<Marker> myMarker = [];
+  String positionontap;
   // Marker _marker;
 
   Future<Position> _getLocation() async {
@@ -34,7 +37,9 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
           markerId: MarkerId(
             tappedPoint.toString(),
           ),
+          draggable: true,
           position: tappedPoint));
+      return positionontap = tappedPoint.toString();
     });
   }
 
@@ -49,8 +54,8 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return GoogleMap(
-              mapType: MapType.normal,
               markers: Set.from(myMarker),
+              mapType: MapType.normal,
               onTap: _addMarker,
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,
@@ -71,8 +76,13 @@ class _showuserGooglemapState extends State<showuserGooglemap> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text("ปักหมุด"),
+        onPressed: () {
+          String location = positionontap.replaceAll('LatLng', "");
+
+          // print(location); // positionontap เป็นค่าตำแหน่ง
+          Navigator.pop(context,location);
+        },
+        label: Text("บันทึกตำแหน่ง"),
         icon: Icon(Icons.pin_drop),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

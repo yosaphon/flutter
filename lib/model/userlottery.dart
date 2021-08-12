@@ -9,8 +9,9 @@ class Userlottery {
   String username;
   String imageurl;
   String date;
+  String latlng;
 
-  Userlottery({this.userid, this.number, this.amount,this.lotteryprice, this.username , this.imageurl ,this.date});
+  Userlottery({this.userid, this.number, this.amount,this.lotteryprice, this.username , this.imageurl ,this.date,this.latlng});
 }
 
 Future deleteUserLottery(String documentId ) async {
