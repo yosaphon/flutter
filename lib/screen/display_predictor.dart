@@ -128,9 +128,18 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                     lottoerypredition(
                         //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
                         snapshot.data['result'][0]['number'],
+                        snapshot.data['result'][3]['number'],
                         snapshot.data['result'][1]['number'],
                         snapshot.data['result'][2]['number'],
+                        "1"
+                        ),
+                         lottoerypredition(
+                        //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                        snapshot.data['result'][0]['number'],
                         snapshot.data['result'][3]['number'],
+                        snapshot.data['result'][1]['number'],
+                        snapshot.data['result'][2]['number'],
+                        "2"
                         ),
                   ],
                 );
