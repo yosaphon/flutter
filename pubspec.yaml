@@ -46,6 +46,7 @@ dependencies:
   share: ^2.0.4
   path_provider: ^2.0.2
 
+
   
 # image uploade
   image_picker: ^0.8.2
