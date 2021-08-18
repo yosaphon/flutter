@@ -49,6 +49,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
       angle1 = (angle1 + pi) % (2 * pi);
     });
   }
+
   void _flip2() {
     setState(() {
       angle2 = (angle2 + pi) % (2 * pi);
@@ -104,8 +105,10 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                                 ..setEntry(3, 2, 0.001)
                                 ..rotateY(val),
                               child: Container(
-                                  width: 180,
-                                  height: 300,
+                                  height:
+                                      MediaQuery.of(context).size.height / 2.15,
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.15,
                                   child: isBack
                                       ? Container(
                                           decoration: BoxDecoration(
@@ -150,7 +153,9 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                             ));
                           }),
                     ),
-                    SizedBox(width: 5,),
+                    SizedBox(
+                      width: 5,
+                    ),
                     GestureDetector(
                       onTap: _flip2,
                       child: TweenAnimationBuilder(
@@ -170,8 +175,10 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                                 ..setEntry(3, 2, 0.001)
                                 ..rotateY(val),
                               child: Container(
-                                  width: 180,
-                                  height: 300,
+                                  height:
+                                      MediaQuery.of(context).size.height / 2.15,
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.15,
                                   child: isBack
                                       ? Container(
                                           decoration: BoxDecoration(

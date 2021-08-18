@@ -47,7 +47,7 @@ class lottoerypredition extends StatelessWidget {
           "  " +
           O1.toString() +
           P2str +
-          "  " +
+          '\n\n'+
           P1str +
           O2.toString() +
           "  " +
