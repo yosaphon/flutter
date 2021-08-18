@@ -58,16 +58,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           backgroundColor: Colors.blue,
           bottomNavigationBar: TabBar(
+            labelStyle: TextStyle(fontSize: 10.0),
             labelColor: Color(0xffffffff), // สีของข้อความปุ่มที่เลือก
+            
             unselectedLabelColor:
                 Color(0x55ffffff), // สีของข้อความปุ่มที่ไม่ได้เลือก
             tabs: [
               Tab(text: "หน้าแรก", icon: Icon(Icons.home)),
-              Tab(text: "ตรวจสลาก", icon: Icon(Icons.fact_check_rounded)),
+              Tab(text: "ตรวจสลาก", icon: Icon(Icons.qr_code_2)),
               Tab(text: "ถ่ายทอดสด", icon: FaIcon(FontAwesomeIcons.youtube)),
-              Tab(text: "ใบ้รางวัล", icon: Icon(Icons.remove_red_eye_outlined)),
+              Tab(text: "ใบ้รางวัล", icon: Icon(Icons.online_prediction)),
               Tab(text: "ผู้ใช้", icon: Icon(Icons.account_circle_outlined))
             ],
+            
           ),
         ));
   }

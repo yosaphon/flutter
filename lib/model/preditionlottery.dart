@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class lottoerypredition extends StatelessWidget {
+  
   dynamic number1, number2, numberfornt3, numberblack3; //ตัวเลข 1 ตัว
   // List<dynamic> mNum = []; //ตัวเลขหลายตัว
   String a, b, c, d, e, f, g, h;
@@ -77,37 +78,15 @@ class lottoerypredition extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 20,
+          height: 80,
         ),
-        Container(
-          height: 150.0,
-          width: 350,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            color: Colors.blue[100],
-          ),
-          child: Column(
-            children: [
-              Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
-              Container(
-                height: 120.0,
-                width: 320,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  color: Colors.white,
-                ),
-                child:  Column(children: [
-                  SizedBox(height: 30,),
+        Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
+        SizedBox(height: 30,),
                   Text(
                   Result,
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 ),
-                ],), 
-              )
-            ],
-          ),
-        ),
       ],
     );
   }

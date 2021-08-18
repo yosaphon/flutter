@@ -46,8 +46,8 @@ dependencies:
   share: ^2.0.4
   path_provider: ^2.0.2
 
-
-  
+# animation
+  animations: ^2.0.1
 # image uploade
   image_picker: ^0.8.2
   firebase_storage: ^10.0.1
