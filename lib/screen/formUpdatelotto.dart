@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-
+import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,17 +45,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   File _image;
   final picker = ImagePicker();
   ShowuserGooglemap location = ShowuserGooglemap();
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
-  Future loadData() async {
-    CollectionReference userlotto =
-        FirebaseFirestore.instance.collection("userlottery");
-    userlotto.doc(docid).get();
-  }
 
   Future getImage(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(
@@ -118,191 +107,268 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                       .collection('userlottery')
                       .doc(docid)
                       .snapshots(),
-                  builder: (context, snapshot) {
-                    return Container(
-                      padding: EdgeInsets.all(20),
-                      child: Form(
-                        key: formKey,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 60,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: 250,
-                                    child: TextFormField(
-                                      decoration:
-                                          InputDecoration(labelText: "เลขสลาก"),
-                                      style: TextStyle(fontSize: 25),
-                                      initialValue: snapshot.data['number'],
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]')),
-                                        LengthLimitingTextInputFormatter(6),
-                                      ],
-                                      validator: MultiValidator([
-                                        RequiredValidator(
-                                            errorText: "กรุณาป้อน เลขสลาก")
-                                      ]),
-                                      onSaved: (String number) {
-                                        userlottery.number = number;
-                                      },
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: SizedBox(
-                                      height: 60,
-                                      width: 100,
-                                      child: ElevatedButton(
-                                        child: Text('Qrcode',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        onPressed: () {},
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData || !snapshot.data.exists) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return Container(
+                        padding: EdgeInsets.all(20),
+                        child: Form(
+                          key: formKey,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 60,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: 250,
+                                      child: TextFormField(
+                                        decoration: InputDecoration(
+                                            labelText: "เลขสลาก"),
+                                        style: TextStyle(fontSize: 25),
+                                        initialValue: snapshot.data['number'],
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9]')),
+                                          LengthLimitingTextInputFormatter(6),
+                                        ],
+                                        validator: MultiValidator([
+                                          RequiredValidator(
+                                              errorText: "กรุณาป้อน เลขสลาก")
+                                        ]),
+                                        onSaved: (String number) {
+                                          userlottery.number = number;
+                                        },
+                                        keyboardType: TextInputType.number,
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 16),
-                              // TextFormField(
-                              //   //ยังไม่ใช้
-                              //   decoration: InputDecoration(labelText: 'งวดที่'),
-                              //   style: TextStyle(fontSize: 25),
-                              //   onSaved: (String date) {
-                              //     userlottery.date = date;
-                              //   },
-                              // ),
-                              TextFormField(
-                                decoration: InputDecoration(labelText: 'จำนวน'),
-                                style: TextStyle(fontSize: 25),
-                                initialValue: snapshot.data['amount'],
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "กรุณาป้อน จำนวน")
-                                ]),
-                                onSaved: (String amount) {
-                                  userlottery.amount = amount;
-                                },
-                                keyboardType: TextInputType.number,
-                              ),
-                              TextFormField(
-                                decoration: InputDecoration(labelText: 'ราคา'),
-                                style: TextStyle(fontSize: 25),
-                                initialValue: snapshot.data['lotteryprice'],
-                                validator: MultiValidator([
-                                  RequiredValidator(errorText: "กรุณาป้อนราคา")
-                                ]),
-                                onSaved: (String lotteryprice) {
-                                  if (lotteryprice == null) {
-                                    lotteryprice = "0";
-                                  }
-                                  userlottery.lotteryprice = lotteryprice;
-                                },
-                                keyboardType: TextInputType.number,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(20),
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.4,
-                                child: _image != null
-                                    ? Image.file(_image)
-                                    : Image.asset(
-                                        'asset/gallery-187-902099.png'),
-                              ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          getImage(ImageSource.camera);
-                                        },
-                                        iconSize: 36,
-                                        color: Colors.amber[400],
-                                        icon: Icon(Icons.add_a_photo)),
-                                    IconButton(
-                                        onPressed: () {
-                                          getImage(ImageSource.gallery);
-                                        },
-                                        iconSize: 36,
-                                        color: Colors.green[400],
-                                        icon: Icon(Icons.collections)),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: SizedBox(
+                                        height: 60,
+                                        width: 100,
+                                        child: ElevatedButton(
+                                          child: Text('Qrcode',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    "เพิ่มตำแหน่ง",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  onPressed: () async {
-                                    _navigateAndDisplaySelection(context);
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) => ShowuserGooglemap()),
-                                    // );
-                                    // print(location);
+                                SizedBox(height: 16),
+                                // TextFormField(
+                                //   //ยังไม่ใช้
+                                //   decoration: InputDecoration(labelText: 'งวดที่'),
+                                //   style: TextStyle(fontSize: 25),
+                                //   onSaved: (String date) {
+                                //     userlottery.date = date;
+                                //   },
+                                // ),
+                                TextFormField(
+                                  decoration:
+                                      InputDecoration(labelText: 'จำนวน'),
+                                  style: TextStyle(fontSize: 25),
+                                  initialValue: snapshot.data['amount'],
+                                  validator: MultiValidator([
+                                    RequiredValidator(
+                                        errorText: "กรุณาป้อน จำนวน")
+                                  ]),
+                                  onSaved: (String amount) {
+                                    userlottery.amount = amount;
                                   },
+                                  keyboardType: TextInputType.number,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    "บันทึกข้อมูล",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  onPressed: () async {
-                                    if (_image != null) {
-                                      await UploadPicture();
+                                TextFormField(
+                                  decoration:
+                                      InputDecoration(labelText: 'ราคา'),
+                                  style: TextStyle(fontSize: 25),
+                                  initialValue: snapshot.data['lotteryprice'],
+                                  validator: MultiValidator([
+                                    RequiredValidator(
+                                        errorText: "กรุณาป้อนราคา")
+                                  ]),
+                                  onSaved: (String lotteryprice) {
+                                    if (lotteryprice == null) {
+                                      lotteryprice = "0";
                                     }
-
-                                    if (formKey.currentState.validate()) {
-                                      formKey.currentState.save();
-                                      await _userltottery.doc(docid).update({
-                                        "username": user.displayName,
-                                        "number": userlottery.number,
-                                        "amount": userlottery.amount,
-                                        "lotteryprice":
-                                            userlottery.lotteryprice,
-                                        "imageurl": urlpiture,
-                                        "date": userlottery.date,
-                                        "latlng": userlottery.latlng,
-                                        "userid": user.uid
-                                      });
-
-                                      Navigator.pop(context);
-                                    }
+                                    userlottery.lotteryprice = lotteryprice;
                                   },
+                                  keyboardType: TextInputType.number,
                                 ),
-                              ),
-                              // Flexible(flex:1,child: Container(color: Colors.amber,))
-                            ],
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                if (_image != null) ...[
+                                  Container(
+                                      padding: EdgeInsets.all(20),
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      child: Image.file(_image))
+                                ] else if (snapshot.data['imageurl'] ==
+                                    null) ...[
+                                  Container(
+                                      padding: EdgeInsets.all(20),
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      child: Image.asset(
+                                          'asset/gallery-187-902099.png'))
+                                ] else
+                                  Container(
+                                      padding: EdgeInsets.all(20),
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      child: Image.network(
+                                          snapshot.data['imageurl'])),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            getImage(ImageSource.camera);
+                                          },
+                                          iconSize: 36,
+                                          color: Colors.amber[400],
+                                          icon: Icon(Icons.add_a_photo)),
+                                      IconButton(
+                                          onPressed: () {
+                                            getImage(ImageSource.gallery);
+                                          },
+                                          iconSize: 36,
+                                          color: Colors.green[400],
+                                          icon: Icon(Icons.collections)),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      "เพิ่มตำแหน่ง",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    onPressed: () async {
+                                      _navigateAndDisplaySelection(context);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => ShowuserGooglemap()),
+                                      // );
+                                      // print(location);
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      "บันทึกข้อมูล",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    onPressed: () async {
+                                      // await deleteImage(snapshot.data['imageurl']);
+                                      // if (_image != null) {
+                                      //   await UploadPicture();
+
+                                      // }
+                                      if (formKey.currentState.validate()) {
+                                        formKey.currentState.save();
+                                        if (_image != null) {
+                                          deleteImage(
+                                              snapshot.data['imageurl']);
+                                          await UploadPicture();
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({"imageurl": urlpiture});
+                                        }
+                                        if (userlottery.number !=
+                                            snapshot.data["number"]) {
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({
+                                            "number": userlottery.number,
+                                          });
+                                        }
+                                        if (userlottery.amount !=
+                                            snapshot.data["amount"]) {
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({
+                                            "amount": userlottery.amount,
+                                          });
+                                        }
+                                        if (userlottery.lotteryprice !=
+                                            snapshot.data["lotteryprice"]) {
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({
+                                            "lotteryprice":
+                                                userlottery.lotteryprice,
+                                          });
+                                        }
+                                        if (userlottery.date !=
+                                            snapshot.data["date"]) {
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({
+                                            "date": userlottery.date,
+                                          });
+                                        }
+                                        if (userlottery.latlng !=
+                                            snapshot.data["latlng"]) {
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update({
+                                            "latlng": userlottery.latlng,
+                                          });
+                                        }
+                                      }
+                                      // if (formKey.currentState.validate()) {
+                                      //   formKey.currentState.save();
+                                      //   await _userltottery.doc(docid).update({
+                                      //     "username": user.displayName,
+                                      //     "number": userlottery.number,
+                                      //     "amount": userlottery.amount,
+                                      //     "lotteryprice":
+                                      //         userlottery.lotteryprice,
+                                      //     "imageurl": urlpiture,
+                                      //     "date": userlottery.date,
+                                      //     "latlng": userlottery.latlng,
+                                      //     "userid": user.uid
+                                      //   });
+
+                                        Navigator.pop(context);
+                                      // }
+                                    },
+                                  ),
+                                ),
+                                // Flexible(flex:1,child: Container(color: Colors.amber,))
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }),
             );
           }
@@ -312,6 +378,15 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
             ),
           );
         });
+  }
+
+  Future<void> deleteImage(String imageFileUrl) async {
+    var fileUrl = Uri.decodeFull(Path.basename(imageFileUrl))
+        .replaceAll(new RegExp(r'(\?alt).*'), '');
+
+    final firebase_storage.Reference firebaseStorageRef =
+        firebase_storage.FirebaseStorage.instance.ref().child(fileUrl);
+    await firebaseStorageRef.delete();
   }
 
   void _navigateAndDisplaySelection(BuildContext context) async {
