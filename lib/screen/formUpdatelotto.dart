@@ -140,8 +140,19 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         ],
                                         validator: MultiValidator([
                                           RequiredValidator(
-                                              errorText: "กรุณาป้อน เลขสลาก")
+                                              errorText: "กรุณาป้อน เลขสลาก"),
+                                          MinLengthValidator(6,
+                                              errorText:
+                                                  'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
                                         ]),
+                                        // validator: (v) {
+                                        //   if (v.isEmpty) {
+                                        //     return 'กรุณากรอกเลขสลาก';
+                                        //   } else if (v.trim().length < 6 &&
+                                        //       v.isNotEmpty)
+                                        //     return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
+                                        //   return null;
+                                        // },
                                         onSaved: (String number) {
                                           userlottery.number = number;
                                         },
@@ -342,6 +353,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "latlng": userlottery.latlng,
                                           });
                                         }
+                                        Navigator.pop(context);
                                       }
                                       // if (formKey.currentState.validate()) {
                                       //   formKey.currentState.save();
@@ -357,7 +369,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       //     "userid": user.uid
                                       //   });
 
-                                        Navigator.pop(context);
+                                      // Navigator.pop(context);
                                       // }
                                     },
                                   ),

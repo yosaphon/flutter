@@ -121,6 +121,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   LengthLimitingTextInputFormatter(6),
                                 ],
                                 validator: MultiValidator([
+                                  MinLengthValidator(6, errorText: 'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
                                   RequiredValidator(
                                       errorText: "กรุณาป้อน เลขสลาก")
                                 ]),
