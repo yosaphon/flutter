@@ -246,7 +246,7 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       validator: (v) {
         if (v.isEmpty) {
            return 'กรุณากรอกเลขสลาก';
-        } else if (v.trim().length < 5 && v.isNotEmpty)
+        } else if (v.trim().length < 6 && v.isNotEmpty)
           return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
         return null;
       },

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/provider/auth_provider.dart';
+import 'package:lotto/screen/formUpdatelotto.dart';
 import 'package:path/path.dart' as Path;
 import '../main.dart';
 import 'formshowlotto.dart';
@@ -94,12 +95,17 @@ class UserprofileLottery extends StatelessWidget {
               return Card(
                 child: ListTile(
                   tileColor: Colors.cyan[100],
-                  leading: document['imageurl'] != null ? Image.network(
-                    document["imageurl"],
-                    width: 100,
-                    fit: BoxFit.fitWidth,
-                  ) : Image.asset('asset/gallery-187-902099.png',width: 100,
-                    fit: BoxFit.fitWidth,), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+                  leading: document['imageurl'] != null
+                      ? Image.network(
+                          document["imageurl"],
+                          width: 100,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Image.asset(
+                          'asset/gallery-187-902099.png',
+                          width: 100,
+                          fit: BoxFit.fitWidth,
+                        ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
                   title: Text(document["number"]),
                   subtitle: Text("จำนวน " +
                       document["amount"] +
@@ -112,14 +118,21 @@ class UserprofileLottery extends StatelessWidget {
                       Icons.check_circle,
                       color: Colors.green,
                     ),
-                    onPressed: (){},
+                    onPressed: () {},
                   ),
                   onTap: () async {
                     //กดเพื่อดูรายละเอียด
                   },
                   onLongPress: () {
-                    // กดเพื่อลบ
-                    confirmDialog(context, document.id, document['imageurl']);
+                    var docid = document.id;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FormUpdatelotto(
+                          docid: docid,)),
+                    );
+                    // // กดเพื่อลบ
+                    // confirmDialog(context, document.id, document['imageurl']);
 
                     // deleteUserLottery(document.id);
                     // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
