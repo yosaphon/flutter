@@ -411,9 +411,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
     // After the Selection Screen returns a result, hide any previous snackbars
     // and show the new result.
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
+    // ScaffoldMessenger.of(context)
+    //   ..removeCurrentSnackBar()
+    //   ..showSnackBar(SnackBar(content: Text('$result')));
     userlottery.latlng = result;
   }
 }

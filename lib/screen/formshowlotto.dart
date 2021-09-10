@@ -121,7 +121,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   LengthLimitingTextInputFormatter(6),
                                 ],
                                 validator: MultiValidator([
-                                  MinLengthValidator(6, errorText: 'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
+                                  MinLengthValidator(6,
+                                      errorText:
+                                          'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
                                   RequiredValidator(
                                       errorText: "กรุณาป้อน เลขสลาก")
                                 ]),
@@ -289,9 +291,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
     // After the Selection Screen returns a result, hide any previous snackbars
     // and show the new result.
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
-      userlottery.latlng = result;
+    // ScaffoldMessenger.of(context)..removeCurrentSnackBar();
+    // ..showSnackBar(SnackBar(content: Text('$result')));
+    userlottery.latlng = result;
   }
 }
