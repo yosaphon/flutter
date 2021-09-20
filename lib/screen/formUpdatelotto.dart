@@ -271,11 +271,11 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     child: Text(
-                                      "เพิ่มตำแหน่ง",
+                                      "แก้ไขตำแหน่ง",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     onPressed: () async {
-                                      _navigateAndDisplaySelection(context);
+                                      _navigateAndDisplaySelection(context,snapshot.data["latlng"]);
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(
@@ -401,12 +401,13 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
     await firebaseStorageRef.delete();
   }
 
-  void _navigateAndDisplaySelection(BuildContext context) async {
+  void _navigateAndDisplaySelection(BuildContext context,String locamark) async {
     // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
+    // Navigator.pop on the Selection Screen
+    
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ShowuserGooglemap()),
+      MaterialPageRoute(builder: (context) => ShowuserGooglemap(locamark: locamark)),
     );
 
     // After the Selection Screen returns a result, hide any previous snackbars

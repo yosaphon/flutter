@@ -4,15 +4,33 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class ShowuserGooglemap extends StatefulWidget { 
+class ShowuserGooglemap extends StatefulWidget {
+  String locamark;
+  ShowuserGooglemap({this.locamark});
   @override
-  _ShowuserGooglemapState createState() => _ShowuserGooglemapState();
+  _ShowuserGooglemapState createState() => _ShowuserGooglemapState(locamark);
 }
 
 class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
+  final locamark;
+
+  _ShowuserGooglemapState(this.locamark);
+
   GoogleMapController mapController;
   Position userLocation;
+  Set<Marker> usermark() {
+    return <Marker>[localMarker()].toSet();
+  }
+
+  Marker localMarker() {
+    return Marker(
+        markerId: MarkerId('userbuy'),
+        position: LatLng(double.parse(locamark.substring(1, 18)),
+            double.parse(locamark.substring(20, locamark.length - 1))));
+  }
+
   List<Marker> myMarker = [];
+  int count=0;
   String positionontap;
   // Marker _marker;
 
@@ -33,6 +51,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
   _addMarker(LatLng tappedPoint) {
     setState(() {
       myMarker = [];
+      count += 1;
       myMarker.add(Marker(
           markerId: MarkerId(
             tappedPoint.toString(),
@@ -54,7 +73,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return GoogleMap(
-              markers: Set.from(myMarker),
+              markers: locamark != null && count <1 ? usermark() : Set.from(myMarker),
               mapType: MapType.normal,
               onTap: _addMarker,
               onMapCreated: _onMapCreated,
@@ -80,7 +99,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
           String location = positionontap.replaceAll('LatLng', "");
 
           // print(location); // positionontap เป็นค่าตำแหน่ง
-          Navigator.pop(context,location);
+          Navigator.pop(context, location);
         },
         label: Text("บันทึกตำแหน่ง"),
         icon: Icon(Icons.pin_drop),
