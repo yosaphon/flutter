@@ -20,6 +20,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
   TextEditingController _searchController = TextEditingController();
   int selectedindex = 0;
+  int selectedindexsecond = 0;
   String number;
   void initiateSearch(String val) {
     setState(() {
@@ -287,11 +288,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     );
   }
 
-  void changeIndex(int index) {
+  void changeIndexfirst(int index) {
     setState(() {
       selectedindex = index;
     });
   }
+
+  void changeIndexsecon(int index) {
+    setState(() {
+      selectedindexsecond = index;
+    });
+  }
+
+  Widget textcutom(String data) {
+    return Text(
+      data,
+      style: TextStyle(color: Colors.blue, fontSize: 20),
+    );
+  }
+
   Widget _lotteryEditModalBottomSheet(context) {
     // void _lotteryEditModalBottomSheet(context) {
     showModalBottomSheet(
@@ -305,7 +320,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 children: [
                   Row(
                     children: [
-                      Text("Edit Lottery search"),
                       Spacer(),
                       IconButton(
                           onPressed: () {
@@ -318,9 +332,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           ))
                     ],
                   ),
-                  Text(
-                    "สถานะการถูกรางวัล",
-                    style: TextStyle(),
+                  textcutom("สถานะการถูกรางวัล"),
+                  SizedBox(
+                    height: 8,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -330,7 +344,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       OutlinedButton(
                         onPressed: () {
                           mystate(() {
-                            changeIndex(0);
+                            changeIndexfirst(0);
                           });
                         },
                         child: Row(
@@ -367,7 +381,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       OutlinedButton(
                         onPressed: () {
                           mystate(() {
-                            changeIndex(1);
+                            changeIndexfirst(1);
                           });
                         },
                         child: Row(
@@ -404,7 +418,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       OutlinedButton(
                         onPressed: () {
                           mystate(() {
-                            changeIndex(2);
+                            changeIndexfirst(2);
                           });
                         },
                         child: Row(
@@ -438,7 +452,133 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       ),
                       Spacer(),
                     ],
-                  )
+                  ),
+                  textcutom("งวด"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Spacer(),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(0);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindexsecond == 0
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "ทั้งหมด",
+                              style: TextStyle(
+                                  color: selectedindexsecond == 0
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 0
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                      // customRadio("ถูกรางวัล", 1),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(1);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindexsecond == 1
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "ล่าสุด",
+                              style: TextStyle(
+                                  color: selectedindexsecond == 1
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 1
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                      // customRadio("ไม่ถูกรางวัล", 2),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(2);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindexsecond == 2
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "เลือกงวด",
+                              style: TextStyle(
+                                  color: selectedindexsecond == 2
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 2
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      
+                    ],
+                  ),
                 ],
               ),
             );

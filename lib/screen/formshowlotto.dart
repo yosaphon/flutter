@@ -136,9 +136,15 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             Padding(
                               padding: const EdgeInsets.only(top: 20),
                               child: SizedBox(
-                                height: 60,
+                                height: 40,
                                 width: 100,
                                 child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ))),
                                   child: Text('Qrcode',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {},
@@ -216,6 +222,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           height: 50,
                           width: double.infinity,
                           child: ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ))),
                             child: Text(
                               "เพิ่มตำแหน่ง",
                               style: TextStyle(fontSize: 20),
@@ -238,6 +250,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           height: 50,
                           width: double.infinity,
                           child: ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ))),
                             child: Text(
                               "บันทึกข้อมูล",
                               style: TextStyle(fontSize: 20),

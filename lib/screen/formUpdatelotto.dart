@@ -162,9 +162,16 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 20),
                                       child: SizedBox(
-                                        height: 60,
+                                        height: 40,
                                         width: 100,
                                         child: ElevatedButton(
+                                          style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                                ))),
                                           child: Text('Qrcode',
                                               style: TextStyle(
                                                   color: Colors.white)),
@@ -270,12 +277,20 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   height: 50,
                                   width: double.infinity,
                                   child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                                ))),
                                     child: Text(
                                       "แก้ไขตำแหน่ง",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     onPressed: () async {
-                                      _navigateAndDisplaySelection(context,snapshot.data["latlng"]);
+                                      _navigateAndDisplaySelection(
+                                          context, snapshot.data["latlng"]);
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(
@@ -292,6 +307,13 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   height: 50,
                                   width: double.infinity,
                                   child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                                ))),
                                     child: Text(
                                       "บันทึกข้อมูล",
                                       style: TextStyle(fontSize: 20),
@@ -401,13 +423,15 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
     await firebaseStorageRef.delete();
   }
 
-  void _navigateAndDisplaySelection(BuildContext context,String locamark) async {
+  void _navigateAndDisplaySelection(
+      BuildContext context, String locamark) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen
-    
+
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ShowuserGooglemap(locamark: locamark)),
+      MaterialPageRoute(
+          builder: (context) => ShowuserGooglemap(locamark: locamark)),
     );
 
     // After the Selection Screen returns a result, hide any previous snackbars
