@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -7,6 +9,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/formUpdatelotto.dart';
+import 'package:lotto/screen/userlotteryDetail.dart';
 import 'package:path/path.dart' as Path;
 import '../main.dart';
 import 'formshowlotto.dart';
@@ -31,36 +34,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    _searchController.removeListener(_onSearchChanged);
-    _searchController.dispose();
     super.dispose();
-  }
-
-  _onSearchChanged() {}
-
-  Stream<QuerySnapshot> searchData(String number) async* {
-    var firestore = FirebaseFirestore.instance;
-    var _search = firestore
-        .collection("userlottery")
-        .where('userid', isEqualTo: user.uid)
-        .where('number', isLessThanOrEqualTo: number)
-        .snapshots();
-
-    yield* _search;
-  }
-
-  Stream<QuerySnapshot> stream() async* {
-    var firestore = FirebaseFirestore.instance;
-    var _stream = firestore
-        .collection("userlottery")
-        .where('userid', isEqualTo: user.uid)
-        .snapshots();
-    yield* _stream;
   }
 
   @override
@@ -129,12 +107,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 .where('userid', isEqualTo: user.uid)
                 .snapshots()
             : FirebaseFirestore.instance
-                .collection("userlottery")
-                .where('userid', isEqualTo: user.uid)
-                .where('number', isEqualTo: number)
-                // .where('number',isGreaterThanOrEqualTo:number.substring(0, 1).toUpperCase())
-                // .where('number', isLessThanOrEqualTo: number + "\uf7ff")
-                .snapshots(),
+                    .collection("userlottery")
+                    .where('userid',  isEqualTo: user.uid)
+                    .where('number', isEqualTo: number)
+                    .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -238,24 +214,47 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           document["lotteryprice"] +
                           " บาท"),
                       trailing: IconButton(
-                        icon: document["state"] == true? Icon(Icons.check_circle,color: Colors.green,)
-                        : document["state"] == false ? Icon( Icons.cancel,color: Colors.red,):Icon( Icons.circle,color: Colors.white54,),
+                        icon: document["state"] == true
+                            ? Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                            : document["state"] == false
+                                ? Icon(
+                                    Icons.cancel,
+                                    color: Colors.red,
+                                  )
+                                : Icon(
+                                    Icons.circle,
+                                    color: Colors.white54,
+                                  ),
                         onPressed: () {},
                       ),
                       onTap: () async {
                         //กดเพื่อดูรายละเอียด
-                      },
-                      onLongPress: () {
                         var docid = document.id;
+                        var locamark = document["latlng"];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FormUpdatelotto(
-                                    docid: docid,
-                                  )),
+                              builder: (context) => Formshowdetaillotto(
+                                  docid: docid, locamark: locamark)),
                         );
+                      },
+                      onLongPress: () {
+                        //แก้ไข
+                        // var docid = document.id;
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => FormUpdatelotto(
+                        //             docid: docid,
+                        //           )),
+                        // );
+
                         // // กดเพื่อลบ
-                        // confirmDialog(context, document.id, document['imageurl']);
+                        confirmDialog(
+                            context, document.id, document['imageurl']);
 
                         // deleteUserLottery(document.id);
                         // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
@@ -269,18 +268,66 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Formshowlotto()),
-          );
-        },
-        child: Icon(
-          Icons.add,
-          size: 30,
-        ),
+
+      floatingActionButton: Column(
+        children: [
+          Spacer(),
+          FloatingActionButton.extended(
+            heroTag: "btn1",
+            onPressed: () async {},
+            icon: Icon(Icons.feed),
+            label: const Text(
+              'ดูรายงาน',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          FloatingActionButton.extended(
+            heroTag: "btn2",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Formshowlotto()),
+              );
+            },
+            icon: Icon(Icons.add),
+            label: const Text(
+              'เพิ่มข้อมูล',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.amber,
+          ),
+        ],
       ),
+      // FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => Formshowlotto()),
+      //     );
+      //   },
+      //   child: Row(
+      //     children: [
+      //       Text(
+      //         'แก้ไข',
+      //         style: TextStyle(
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //       Icon(
+      //         Icons.add,
+      //         size: 30,
+      //       ),
+      //     ],
+      //   ),
+      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
@@ -582,29 +629,37 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                     children: [
                       Spacer(),
                       FloatingActionButton.extended(
-                    onPressed: () {
-                      mystate(() {
-                        changeIndexsecon(0);
-                        changeIndexfirst(0);
-                      });
-                      
-                    },
-                    label: const Text('ล้าง',style: TextStyle(color: Colors.black,),),
-                    backgroundColor: Colors.amberAccent,
-                  ),
-                  Spacer(),
-                  FloatingActionButton.extended(
-                    
-                    onPressed: () {
-                      // กดเพื่อส่งค่าออกไป
-                    },
-                    label: const Text('ตกลง',style: TextStyle(color: Colors.black,),),
-                    backgroundColor: Colors.amberAccent,
-                  ),
-                  Spacer(),
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(0);
+                            changeIndexfirst(0);
+                          });
+                        },
+                        label: const Text(
+                          'ล้าง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          // กดเพื่อส่งค่าออกไป
+                        },
+                        label: const Text(
+                          'ตกลง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
                     ],
                   )
-                  
+
                   // Row(
                   //   children: [
                   //     Spacer(),
