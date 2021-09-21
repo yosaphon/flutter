@@ -19,6 +19,7 @@ class UserprofileLottery extends StatefulWidget {
 class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
   TextEditingController _searchController = TextEditingController();
+  int selectedindex = 0;
   String number;
   void initiateSearch(String val) {
     setState(() {
@@ -39,9 +40,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     super.dispose();
   }
 
-  _onSearchChanged() {
-    
-  }
+  _onSearchChanged() {}
 
   Stream<QuerySnapshot> searchData(String number) async* {
     var firestore = FirebaseFirestore.instance;
@@ -131,8 +130,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             : FirebaseFirestore.instance
                 .collection("userlottery")
                 .where('userid', isEqualTo: user.uid)
-                .where('number', isGreaterThanOrEqualTo: number.substring(0,1).toUpperCase())
-                .where('number', isLessThanOrEqualTo: number+"\uf7ff")
+                .where('number', isEqualTo: number)
+                // .where('number',isGreaterThanOrEqualTo:number.substring(0, 1).toUpperCase())
+                // .where('number', isLessThanOrEqualTo: number + "\uf7ff")
                 .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -195,7 +195,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                     width: size.width * 0.005,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _lotteryEditModalBottomSheet(context);
+                    },
                     child: Container(
                       width: 35,
                       height: 35,
@@ -283,6 +285,165 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
+  }
+
+  void changeIndex(int index) {
+    setState(() {
+      selectedindex = index;
+    });
+  }
+  Widget _lotteryEditModalBottomSheet(context) {
+    // void _lotteryEditModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter mystate) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Edit Lottery search"),
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.blue,
+                            size: 25,
+                          ))
+                    ],
+                  ),
+                  Text(
+                    "สถานะการถูกรางวัล",
+                    style: TextStyle(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Spacer(),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndex(0);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindex == 0
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "ทั้งหมด",
+                              style: TextStyle(
+                                  color: selectedindex == 0
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 0
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                      // customRadio("ถูกรางวัล", 1),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndex(1);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindex == 1
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "ถูกรางวัล",
+                              style: TextStyle(
+                                  color: selectedindex == 1
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 1
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                      // customRadio("ไม่ถูกรางวัล", 2),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndex(2);
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              color: selectedindex == 2
+                                  ? Colors.blue
+                                  : Colors.white10,
+                              size: 20,
+                            ),
+                            Text(
+                              "ไม่ถูกรางวัล",
+                              style: TextStyle(
+                                  color: selectedindex == 2
+                                      ? Colors.blue
+                                      : Colors.blueGrey),
+                            ),
+                          ],
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 2
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
   }
 }
 
