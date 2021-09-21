@@ -207,7 +207,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Icon(
-                        Icons.manage_search_rounded,
+                        Icons.filter_alt,
                         color: Colors.white,
                       ),
                     ),
@@ -238,11 +238,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           document["lotteryprice"] +
                           " บาท"),
                       trailing: IconButton(
-                        // สามารถปรับทำว่าถถ้าตรวจแล้วเป็น ถูกถ้ายังเป็น x
-                        icon: Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                        ),
+                        icon: document["state"] == true? Icon(Icons.check_circle,color: Colors.green,)
+                        : document["state"] == false ? Icon( Icons.cancel,color: Colors.red,):Icon( Icons.circle,color: Colors.white54,),
                         onPressed: () {},
                       ),
                       onTap: () async {
@@ -334,7 +331,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   ),
                   textcutom("สถานะการถูกรางวัล"),
                   SizedBox(
-                    height: 8,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -453,9 +450,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Spacer(),
                     ],
                   ),
+                  SizedBox(
+                    height: 9,
+                  ),
                   textcutom("งวด"),
                   SizedBox(
-                    height: 8,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -574,11 +574,82 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Spacer(),
                     ],
                   ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
+                      Spacer(),
+                      FloatingActionButton.extended(
+                    onPressed: () {
+                      mystate(() {
+                        changeIndexsecon(0);
+                        changeIndexfirst(0);
+                      });
                       
-                    ],
+                    },
+                    label: const Text('ล้าง',style: TextStyle(color: Colors.black,),),
+                    backgroundColor: Colors.amberAccent,
                   ),
+                  Spacer(),
+                  FloatingActionButton.extended(
+                    
+                    onPressed: () {
+                      // กดเพื่อส่งค่าออกไป
+                    },
+                    label: const Text('ตกลง',style: TextStyle(color: Colors.black,),),
+                    backgroundColor: Colors.amberAccent,
+                  ),
+                  Spacer(),
+                    ],
+                  )
+                  
+                  // Row(
+                  //   children: [
+                  //     Spacer(),
+                  //     SizedBox(
+                  //       height: 30,
+                  //       width: MediaQuery.of(context).size.width * 0.3,
+                  //       child: ElevatedButton(
+                  //         style: ButtonStyle(
+                  //             backgroundColor: MaterialStateProperty.all<Color>(
+                  //                 Colors.amberAccent),
+                  //             shape: MaterialStateProperty.all<
+                  //                     RoundedRectangleBorder>(
+                  //                 RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(30.0),
+                  //             ))),
+                  //         child: Text(
+                  //           "ล้าง",
+                  //           style: TextStyle(fontSize: 20),
+                  //         ),
+                  //         onPressed: () async {},
+                  //       ),
+                  //     ),
+                  //     Spacer(),
+                  //     SizedBox(
+                  //       height: 30,
+                  //       width: MediaQuery.of(context).size.width * 0.3,
+                  //       child: ElevatedButton(
+                  //         style: ButtonStyle(
+                  //             backgroundColor: MaterialStateProperty.all<Color>(
+                  //                 Colors.amberAccent),
+                  //             shape: MaterialStateProperty.all<
+                  //                     RoundedRectangleBorder>(
+                  //                 RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(30.0),
+                  //             ))),
+                  //         child: Text(
+                  //           "ตกลง",
+                  //           style: TextStyle(fontSize: 20),
+                  //         ),
+                  //         onPressed: () async {},
+                  //       ),
+                  //     ),
+                  //     Spacer(),
+                  //   ],
+                  // ),
                 ],
               ),
             );

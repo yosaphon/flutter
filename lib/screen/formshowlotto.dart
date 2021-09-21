@@ -275,7 +275,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "imageurl": urlpiture,
                                   "date": userlottery.date,
                                   "latlng": userlottery.latlng,
-                                  "userid": user.uid
+                                  "userid": user.uid,
+                                  "state" : null,
                                 });
 
                                 Navigator.pop(context);
