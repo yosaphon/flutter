@@ -66,6 +66,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -76,7 +77,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
       ),
       body: Center(

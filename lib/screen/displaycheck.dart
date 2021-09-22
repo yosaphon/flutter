@@ -60,7 +60,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF3FFFE),
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
@@ -72,7 +72,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
       ),
       body: Form(

@@ -31,7 +31,6 @@ class _DisplayScreenState extends State<DisplayScreen> {
 
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
-
     prizeNotifier.prizeList.forEach((key, value) =>
         date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
     dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
@@ -70,6 +69,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -80,7 +80,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
       ),
       body: Center(
@@ -103,7 +103,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       icon: const Icon(Icons.arrow_drop_down),
                       iconSize: 30,
                       elevation: 2,
-                      style: TextStyle(color: Colors.blue, fontSize: 30),
+                      style: TextStyle(color: Colors.black, fontSize: 24),
                       underline: Container(
                         height: 2,
                         color: Colors.blue,

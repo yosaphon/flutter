@@ -26,6 +26,7 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
         Provider.of<PrizeNotifier>(context, listen: false);
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -36,7 +37,7 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
       ),
       body: StreamBuilder(

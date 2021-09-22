@@ -53,6 +53,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: false,
+      backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -73,7 +74,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
         actions: <Widget>[
           Theme(
