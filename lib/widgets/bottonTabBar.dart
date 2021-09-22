@@ -30,21 +30,35 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
         children: [
           buildTabItem(
             index: 0,
-            icon: Icon(Icons.home,size: 30,),
+            icon: Icon(
+              Icons.home,
+              size: 30,
+            ),
+            text: "หน้าหลัก",
           ),
           buildTabItem(
             index: 1,
-            icon: Icon(FontAwesomeIcons.youtube,),
+            icon: Icon(
+              FontAwesomeIcons.youtube,
+            ),
+            text: "ดูออนไลน์",
           ),
           placeholder,
           buildTabItem(
             index: 2,
-            icon: Icon(Icons.visibility,size: 30,),
+            icon: Icon(
+              Icons.visibility,
+              size: 30,
+            ),
+            text: "ทำนาย",
           ),
           buildTabItem(
             index: 3,
-            icon: Icon(Icons.account_circle_outlined,size: 30,),
-            
+            icon: Icon(
+              Icons.account_circle_outlined,
+              size: 30,
+            ),
+            text: "ผู้ใช้",
           ),
         ],
       ),
@@ -54,6 +68,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
   Widget buildTabItem({
     @required int index,
     @required Icon icon,
+    String text
   }) {
     final isSelected = index == widget.index;
 
@@ -61,33 +76,33 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
       data: IconThemeData(
         color: isSelected ? Colors.blue : Colors.black,
       ),
-      child: IconButton(
-        icon: icon,
-        onPressed: () => widget.onChangedTab(index),
+      child: AnimatedContainer(
+        width: 52,
+        height: 52,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeIn,
+        child: InkWell(
+          onTap: () {
+            widget.onChangedTab(index);
+          }, // button pressed
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              icon, // icon
+              Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.blue : Colors.black,),) // text
+            ],
+          ),
+        ),
       ),
     );
-    // IconTheme(
+    //  IconTheme(
     //   data: IconThemeData(
     //     color: isSelected ? Colors.blue : Colors.black,
     //   ),
-    //   child: AnimatedContainer(
-    //     width: 80,
-    //     height: 80,
-    //     duration: const Duration(seconds: 2),
-    //   curve: Curves.easeIn,
-    //     child: InkWell(
-          
-    //       onTap: () {
-    //         widget.onChangedTab(index);
-    //       }, // button pressed
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: <Widget>[
-    //           icon, // icon
-    //           Text(text,style: TextStyle(fontSize: 10),), // text
-    //         ],
-    //       ),
-    //     ),
+    //   child: IconButton(
+    //     icon: icon,
+    //     onPressed: () => widget.onChangedTab(index),
     //   ),
+    // );
   }
 }

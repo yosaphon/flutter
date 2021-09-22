@@ -171,14 +171,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                 .then((e) => DialogHelper.exit(context, data.checked));
           }
         },
-        icon: Icon(Icons.qr_code_scanner_rounded),
+        icon: Icon(Icons.pin),
         label: const Text(
           'ตรวจ',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: Color(0xFFF63C4F),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
