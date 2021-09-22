@@ -1,38 +1,33 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/formUpdatelotto.dart';
-import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_automation/flutter_automation.dart';
-import 'package:form_field_validator/form_field_validator.dart';
+
+
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/screen/display_userlotto.dart';
 import 'package:lotto/screen/googlemapshow.dart';
-import 'package:uuid/uuid.dart';
+
 
 class Formshowdetaillotto extends StatefulWidget {
-  final docid;
-  Formshowdetaillotto({this.docid});
+  final docid , userID;
+  Formshowdetaillotto({this.docid, this.userID});
   @override
   _FormshowdetaillottoState createState() =>
-      _FormshowdetaillottoState(docid);
+      _FormshowdetaillottoState(docid, userID);
 }
 
 class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
-  final docid;
+  final docid,userID;
   // final locamark;
 
-  _FormshowdetaillottoState(this.docid,);
+  _FormshowdetaillottoState(this.docid,this.userID);
   GoogleMapController mapController;
   // final Map<String, Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
@@ -390,7 +385,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       heroTag: "btn1",
                                       onPressed: () async {
                                         await confirmDialog(context, docid,
-                                            snapshot.data["imageurl"]);
+                                            snapshot.data["imageurl"], userID);
                                         Navigator.pop(context);
                                       },
                                       icon: Icon(Icons.delete),

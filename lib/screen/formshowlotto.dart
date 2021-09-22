@@ -13,9 +13,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/userlottery.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/display_userlotto.dart';
 import 'package:lotto/screen/googlemapshow.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class Formshowlotto extends StatefulWidget {
@@ -65,6 +68,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context , listen: false);
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
@@ -110,7 +114,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width*0.6,
+                              width: MediaQuery.of(context).size.width * 0.6,
                               child: TextFormField(
                                 decoration:
                                     InputDecoration(labelText: 'เลขสลาก'),
@@ -165,10 +169,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         TextFormField(
                           decoration: InputDecoration(labelText: 'จำนวน'),
                           style: TextStyle(fontSize: 20),
-                           inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                ],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
@@ -179,9 +182,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         ),
                         TextFormField(
                           inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                ],
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
                           decoration: InputDecoration(labelText: 'ราคา'),
                           style: TextStyle(fontSize: 20),
                           validator: MultiValidator(
@@ -284,10 +286,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "date": userlottery.date,
                                   "latlng": userlottery.latlng,
                                   "userid": user.uid,
-                                  "state" : null,
-                                  "reward":null,
+                                  "state": null,
+                                  "reward": null,
                                 });
-
+                                if (user.uid != null) {
+                                  getUser(userNotifier, user.uid);
+                                }
                                 Navigator.pop(context);
                               }
                             },
