@@ -29,39 +29,47 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildTabItem(
-              index: 0,
-              icon: Icon(
-                Icons.home,
-                size: 30,
-              ),
-              text: "หน้าหลัก"),
+            index: 0,
+            icon: Icon(
+              Icons.home,
+              size: 30,
+            ),
+            text: "หน้าหลัก",
+          ),
           buildTabItem(
-              index: 1,
-              icon: Icon(
-                FontAwesomeIcons.youtube,
-              ),
-              text: "ดูออนไลน์"),
+            index: 1,
+            icon: Icon(
+              FontAwesomeIcons.youtube,
+            ),
+            text: "ดูออนไลน์",
+          ),
           placeholder,
           buildTabItem(
-              index: 2,
-              icon: Icon(
-                Icons.visibility,
-                size: 30,
-              ),
-              text: "ทำนาย"),
+            index: 2,
+            icon: Icon(
+              Icons.visibility,
+              size: 30,
+            ),
+            text: "ทำนาย",
+          ),
           buildTabItem(
-              index: 3,
-              icon: Icon(
-                Icons.account_circle_outlined,
-                size: 30,
-              ),
-              text: "ผู้ใช้"),
+            index: 3,
+            icon: Icon(
+              Icons.account_circle_outlined,
+              size: 30,
+            ),
+            text: "ผู้ใช้",
+          ),
         ],
       ),
     );
   }
 
-  Widget buildTabItem({@required int index, @required Icon icon, String text}) {
+  Widget buildTabItem({
+    @required int index,
+    @required Icon icon,
+    String text
+  }) {
     final isSelected = index == widget.index;
 
     return IconTheme(
@@ -71,8 +79,8 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
       child: AnimatedContainer(
         width: 52,
         height: 52,
-        duration: const Duration(seconds: 1),
-      curve: Curves.easeIn,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeIn,
         child: InkWell(
           onTap: () {
             widget.onChangedTab(index);
@@ -81,29 +89,20 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               icon, // icon
-              Text(text,style: TextStyle(fontSize: 10),), // text
+              Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.blue : Colors.black,),) // text
             ],
           ),
         ),
       ),
-
-      // Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   children: <Widget>[
-      //     IconButton(
-      //       icon: icon,
-      //       onPressed: () {
-      //         widget.onChangedTab(index);
-      //       },
-      //     ),
-      //     Text(text,style: TextStyle(color: isSelected ? Colors.blue : Colors.black),),
-      //   ],
-      // )
-
-      // IconButton(
-      //   icon: icon,
-      //   onPressed: () => widget.onChangedTab(index),
-      // ),
     );
+    //  IconTheme(
+    //   data: IconThemeData(
+    //     color: isSelected ? Colors.blue : Colors.black,
+    //   ),
+    //   child: IconButton(
+    //     icon: icon,
+    //     onPressed: () => widget.onChangedTab(index),
+    //   ),
+    // );
   }
 }
