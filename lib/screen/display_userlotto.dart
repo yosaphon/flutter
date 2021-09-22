@@ -48,7 +48,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   Widget build(BuildContext context) {
-
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
 
     var size = MediaQuery.of(context).size;
@@ -112,7 +111,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม"),
             );
           }
           return Column(
@@ -236,7 +235,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Formshowdetaillotto(docid: docid)),
+                                      Formshowdetaillotto(docid: docid, userID: user.uid)),
                             );
                           },
                           onLongPress: () {
@@ -252,7 +251,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
                             // // กดเพื่อลบ
                             confirmDialog(context, userNotifier.docID[index],
-                                userNotifier.currentUser[index].imageurl);
+                                userNotifier.currentUser[index].imageurl, user.uid);
 
                             // deleteUserLottery(document.id);
                             // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
@@ -266,7 +265,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         color: Colors.black,
                       );
                     },
-                    itemCount: userNotifier.currentUser.length??0),
+                    itemCount: userNotifier.currentUser.length ?? 0),
               )
             ],
           );
@@ -723,7 +722,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 }
 
 Future<Null> confirmDialog(
-    BuildContext context, String documentId, String imageurl) {
+    BuildContext context, String documentId, String imageurl, String userID) {
+  UserNotifier userNotifier = Provider.of<UserNotifier>(context,listen: false);
+
   return showDialog<Null>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -755,6 +756,10 @@ Future<Null> confirmDialog(
                     .collection('userlottery')
                     .doc(documentId)
                     .delete();
+                if(userID!=null){
+                  getUser(userNotifier, userID);
+                }
+                
               },
             ),
             SizedBox(
