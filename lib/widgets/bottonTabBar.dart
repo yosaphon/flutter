@@ -69,8 +69,8 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
         color: isSelected ? Colors.blue : Colors.black,
       ),
       child: AnimatedContainer(
-        width: 80,
-        height: 80,
+        width: 52,
+        height: 52,
         duration: const Duration(seconds: 1),
       curve: Curves.easeIn,
         child: InkWell(

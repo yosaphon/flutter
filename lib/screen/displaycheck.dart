@@ -138,21 +138,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                         height: 30,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              var data = new CheckNumber(
-                                  date.keys.firstWhere(
-                                      (k) =>
-                                          date[k] ==
-                                          dateValue, //หา Keys โดยใช้ value
-                                      orElse: () => null),
-                                  lotterylist,
-                                  null);
-                              data.getSnapshot().then((e) =>
-                                  DialogHelper.exit(context, data.checked));
-                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QRScanPage()),
+                            );
                           },
                           child: Text(
-                            'ตรวจ',
+                            'scan qr code',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
@@ -168,14 +161,21 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => QRScanPage()),
-          );
+          if (_formKey.currentState.validate()) {
+            var data = new CheckNumber(
+                date.keys.firstWhere(
+                    (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                    orElse: () => null),
+                lotterylist,
+                null);
+            data
+                .getSnapshot()
+                .then((e) => DialogHelper.exit(context, data.checked));
+          }
         },
         icon: Icon(Icons.qr_code_scanner_rounded),
         label: const Text(
-          'Scan QR',
+          'ตรวจ',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -196,10 +196,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           children: [
             Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      
                     ),
                     child: LotteryTextFilds(i))),
             SizedBox(
