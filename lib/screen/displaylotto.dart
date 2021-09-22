@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/model/prizeBox.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/showCheckImage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DisplayScreen extends StatefulWidget {
   @override
@@ -212,17 +214,60 @@ class _DisplayScreenState extends State<DisplayScreen> {
           }
         }),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+       floatingActionButton: Column(
+        children: [
+          Spacer(),
+          FloatingActionButton.extended(
+            heroTag: "btnyoutube",
+            onPressed: () async {
+                    // if (await canLaunch(document.youtubeUrl)) {
+                    //   await launch(document.youtubeUrl);
+                    // }
+            },
+            icon: FaIcon(FontAwesomeIcons.youtube),
+            label: const Text(
+              'Youtube',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          FloatingActionButton.extended(
+            heroTag: "btnreadpdf",
+            onPressed: () {
+              Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => new ShowCheckImage(
                       date: getNumberByNameDate().substring(2, 8),
                     )),
           );
-        },
-        child: Text("ใบตรวจ"),
+            },
+            icon: Icon(Icons.receipt_long),
+            label: const Text(
+              'ใบตรวจ',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.amber,
+          ),
+          FloatingActionButton.extended(
+            heroTag: "btn3",
+            tooltip: 'Increment',
+            elevation: 0,
+            splashColor: Colors.transparent,
+            onPressed: () async {},
+            label: Opacity(
+              opacity: 0,
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

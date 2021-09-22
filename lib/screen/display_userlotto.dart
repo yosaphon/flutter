@@ -234,8 +234,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      Formshowdetaillotto(docid: docid, userID: user.uid)),
+                                  builder: (context) => Formshowdetaillotto(
+                                      docid: docid, userID: user.uid)),
                             );
                           },
                           onLongPress: () {
@@ -250,8 +250,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                             // );
 
                             // // กดเพื่อลบ
-                            confirmDialog(context, userNotifier.docID[index],
-                                userNotifier.currentUser[index].imageurl, user.uid);
+                            confirmDialog(
+                                context,
+                                userNotifier.docID[index],
+                                userNotifier.currentUser[index].imageurl,
+                                user.uid);
 
                             // deleteUserLottery(document.id);
                             // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
@@ -271,7 +274,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           );
         },
       ),
-
       floatingActionButton: Column(
         children: [
           Spacer(),
@@ -312,31 +314,20 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             ),
             backgroundColor: Colors.amber,
           ),
+           FloatingActionButton.extended(
+            heroTag: "btn3",
+            tooltip: 'Increment',
+            elevation: 0,
+            splashColor: Colors.transparent,
+            onPressed: () async {},
+            label: Opacity(
+              opacity: 0,
+            ),
+            backgroundColor: Colors.transparent,
+          ),
         ],
       ),
-      // FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => Formshowlotto()),
-      //     );
-      //   },
-      //   child: Row(
-      //     children: [
-      //       Text(
-      //         'แก้ไข',
-      //         style: TextStyle(
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //       Icon(
-      //         Icons.add,
-      //         size: 30,
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -629,7 +620,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Spacer(),
                     ],
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -667,52 +657,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Spacer(),
                     ],
                   )
-
-                  // Row(
-                  //   children: [
-                  //     Spacer(),
-                  //     SizedBox(
-                  //       height: 30,
-                  //       width: MediaQuery.of(context).size.width * 0.3,
-                  //       child: ElevatedButton(
-                  //         style: ButtonStyle(
-                  //             backgroundColor: MaterialStateProperty.all<Color>(
-                  //                 Colors.amberAccent),
-                  //             shape: MaterialStateProperty.all<
-                  //                     RoundedRectangleBorder>(
-                  //                 RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(30.0),
-                  //             ))),
-                  //         child: Text(
-                  //           "ล้าง",
-                  //           style: TextStyle(fontSize: 20),
-                  //         ),
-                  //         onPressed: () async {},
-                  //       ),
-                  //     ),
-                  //     Spacer(),
-                  //     SizedBox(
-                  //       height: 30,
-                  //       width: MediaQuery.of(context).size.width * 0.3,
-                  //       child: ElevatedButton(
-                  //         style: ButtonStyle(
-                  //             backgroundColor: MaterialStateProperty.all<Color>(
-                  //                 Colors.amberAccent),
-                  //             shape: MaterialStateProperty.all<
-                  //                     RoundedRectangleBorder>(
-                  //                 RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(30.0),
-                  //             ))),
-                  //         child: Text(
-                  //           "ตกลง",
-                  //           style: TextStyle(fontSize: 20),
-                  //         ),
-                  //         onPressed: () async {},
-                  //       ),
-                  //     ),
-                  //     Spacer(),
-                  //   ],
-                  // ),
                 ],
               ),
             );
@@ -723,7 +667,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {
-  UserNotifier userNotifier = Provider.of<UserNotifier>(context,listen: false);
+  UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
 
   return showDialog<Null>(
       context: context,
@@ -742,24 +686,14 @@ Future<Null> confirmDialog(
                 Navigator.of(context).pop();
                 if (imageurl != null) {
                   deleteImage(imageurl);
-                  // String filePath = imageurl
-                  // .replaceAll(new
-                  // RegExp(r'https://firebasestorage.googleapis.com/v0/b/testfirebase01-6d017.appspot.com/o/userimg%2F'), '').split('?')[0];
-                  // firebase_storage.FirebaseStorage.instance.ref().child(filePath).delete().then((_) => print('Successfully deleted $filePath storage item' ));
-
-                  //  firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance.ref().child(imageurl);
-                  //   print("url     =   "+imageurl);
-                  //   await reference.delete();
-                  // print('image deleted'); gs://testfirebase01-6d017.appspot.com/userimg/873e4625-1cca-486e-a649-e4634bbe7cbb
                 }
                 await FirebaseFirestore.instance
                     .collection('userlottery')
                     .doc(documentId)
                     .delete();
-                if(userID!=null){
+                if (userID != null) {
                   getUser(userNotifier, userID);
                 }
-                
               },
             ),
             SizedBox(
