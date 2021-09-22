@@ -40,7 +40,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     setState(() {
       prizeNotifier.prizeList.forEach((key, value) =>
           date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.last; //เรียกค่าอันสุดท้าย});
+      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
       prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
     });
   }
@@ -60,7 +60,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
