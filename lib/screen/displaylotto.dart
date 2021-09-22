@@ -12,7 +12,7 @@ class DisplayScreen extends StatefulWidget {
   _DisplayScreenState createState() => _DisplayScreenState();
 }
 
-class _DisplayScreenState extends State<DisplayScreen> {
+class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveClientMixin{
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
   List<DocumentSnapshot> documents;
@@ -20,6 +20,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
   
   String dateValue;
   int i = 0;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {

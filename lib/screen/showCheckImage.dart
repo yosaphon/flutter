@@ -5,15 +5,22 @@ import 'package:photo_view/photo_view.dart';
 class ShowCheckImage extends StatelessWidget {
   final String date;
   String imageUrl;
+  List<String> nDate = [];
+  String y;
 
   ShowCheckImage({this.date}) {
     print(date);
-    imageUrl = "https://cdn.lottery.co.th/lotto/image/640916.jpg";
+    nDate = date.split("-");
+    y = (int.parse(nDate[0]) + 543).toString();
+    y = y.substring(2, 4);
+    print(y+nDate[1]+nDate[2]);
+    imageUrl = "https://cdn.lottery.co.th/lotto/image/$y$nDate[1]$nDate[2].jpg";
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
@@ -38,10 +45,7 @@ class ShowCheckImage extends StatelessWidget {
           ),
           placeholder: (context, url) => CircularProgressIndicator(),
           errorWidget: (context, url, error) => Row(
-            children: [
-              Icon(Icons.error),
-              Text("เกิดข้อผิดพลาด")
-            ],
+            children: [Icon(Icons.error), Text("เกิดข้อผิดพลาด")],
           ),
         ),
       ),
