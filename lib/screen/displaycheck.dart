@@ -29,10 +29,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
 
   @override
   void initState() {
-    super.initState();
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+
     loadData(prizeNotifier);
+    super.initState();
   }
 
   Future loadData(PrizeNotifier prizeNotifier) async {
@@ -44,17 +45,18 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
       prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
     });
   }
+
   getNumberByNameDate() {
     return date.keys
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
   }
+
   getKeyByValue() {
     return date.keys
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                   borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.only(top: 10.0),
               child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
+                child: DropdownButton(
                   value: dateValue,
                   icon: const Icon(Icons.arrow_drop_down),
                   iconSize: 30,
@@ -95,22 +97,23 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                   style: TextStyle(color: Colors.blue, fontSize: 30),
                   underline: Container(
                     height: 2,
+                    color: Colors.blue,
                   ),
                   onChanged: (String newValue) {
                     setState(() {
-                          dateValue = newValue;
-                          prizeNotifier.selectedPrize =
-                              prizeNotifier.prizeList[getKeyByValue()];
-                          print(getKeyByValue());
-                          print(prizeNotifier.prizeList[getKeyByValue()]);
-                        });
+                      dateValue = newValue;
+                      prizeNotifier.selectedPrize =
+                          prizeNotifier.prizeList[getKeyByValue()];
+                      print(getKeyByValue());
+                      print(prizeNotifier.prizeList[getKeyByValue()]);
+                    });
                   },
-                  items: date.values
+                  items: prizeNotifier.prizeList.values
                       .map<DropdownMenuItem<String>>((dynamic value) {
                     return DropdownMenuItem<String>(
-                      value: value,
+                      value: value.date,
                       child: Text(
-                        value,
+                        value.date,
                         textAlign: TextAlign.right,
                       ),
                     );
@@ -127,29 +130,35 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                   SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 100,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          var data = new CheckNumber(
-                              date.keys.firstWhere(
-                                  (k) =>
-                                      date[k] ==
-                                      dateValue, //หา Keys โดยใช้ value
-                                  orElse: () => null),
-                              lotterylist,
-                              null);
-                          data.getSnapshot().then(
-                              (e) => DialogHelper.exit(context, data.checked));
-                        }
-                      },
-                      child: Text(
-                        'ตรวจ',
-                        style: TextStyle(fontSize: 40),
+                  Row(
+                    children: [
+                      Spacer(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              var data = new CheckNumber(
+                                  date.keys.firstWhere(
+                                      (k) =>
+                                          date[k] ==
+                                          dateValue, //หา Keys โดยใช้ value
+                                      orElse: () => null),
+                                  lotterylist,
+                                  null);
+                              data.getSnapshot().then((e) =>
+                                  DialogHelper.exit(context, data.checked));
+                            }
+                          },
+                          child: Text(
+                            'ตรวจ',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
-                    ),
+                      Spacer(),
+                    ],
                   ),
                 ],
               ),
@@ -157,14 +166,21 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           ],
         )),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => QRScanPage()),
           );
         },
-        child: Icon(Icons.qr_code_scanner_rounded),
+        icon: Icon(Icons.qr_code_scanner_rounded),
+        label: const Text(
+          'Scan QR',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.blue.shade300,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -175,12 +191,19 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     List<Widget> lotteryTextFilds = [];
     for (int i = 0; i < lotterylist.length; i++) {
       lotteryTextFilds.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: Row(
           children: [
-            Expanded(child: LotteryTextFilds(i)),
+            Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      
+                    ),
+                    child: LotteryTextFilds(i))),
             SizedBox(
-              width: 16,
+              width: 10,
             ),
             // we need add button at last friends row
             _addRemoveButton(i == lotterylist.length - 1, i),
@@ -207,7 +230,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         height: 30,
         decoration: BoxDecoration(
           color: (add) ? Colors.green : Colors.red,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(30),
         ),
         child: Icon(
           (add) ? Icons.add : Icons.remove,
@@ -248,7 +271,7 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
     });
 
     return TextFormField(
-      style: TextStyle(fontSize: 30),
+      style: TextStyle(fontSize: 20),
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -257,14 +280,14 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       controller: _lotteryController,
       onChanged: (v) => _FormqrcodescanState.lotterylist[widget.index] = v,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
       // validator:
       //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
       validator: (v) {
         if (v.isEmpty) {
-           return 'กรุณากรอกเลขสลาก';
+          return 'กรุณากรอกเลขสลาก';
         } else if (v.trim().length < 6 && v.isNotEmpty)
           return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
         return null;
