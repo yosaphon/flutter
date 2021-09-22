@@ -191,6 +191,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 //   },
                                 // ),
                                 TextFormField(
+                                  inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                ],
                                   decoration:
                                       InputDecoration(labelText: 'จำนวน'),
                                   style: TextStyle(fontSize: 20),
@@ -205,6 +209,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   keyboardType: TextInputType.number,
                                 ),
                                 TextFormField(
+                                  inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                ],
                                   decoration:
                                       InputDecoration(labelText: 'ราคา'),
                                   style: TextStyle(fontSize: 20),

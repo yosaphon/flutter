@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/checkNumber.dart';
+import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
+import 'package:provider/provider.dart';
 
 class Formqrcodescan extends StatefulWidget {
   @override
@@ -27,23 +30,35 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    PrizeNotifier prizeNotifier =
+        Provider.of<PrizeNotifier>(context, listen: false);
+    loadData(prizeNotifier);
   }
 
-  Future loadData() async {
-    QuerySnapshot snapAll =
-        await FirebaseFirestore.instance.collection('lottery').get();
+  Future loadData(PrizeNotifier prizeNotifier) async {
+    await getPrize(prizeNotifier);
     setState(() {
-      documents = snapAll.docs; //รับทุก docs จาก firebase
-      documents.forEach((data) =>
-          date[data.id] = data['drawdate']); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.last; //เรียกค่าอันสุดท้าย
-      print(dateValue);
+      prizeNotifier.prizeList.forEach((key, value) =>
+          date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
+      dateValue = date.values.last; //เรียกค่าอันสุดท้าย});
+      prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
     });
   }
+  getNumberByNameDate() {
+    return date.keys
+        .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
+            orElse: () => null);
+  }
+  getKeyByValue() {
+    return date.keys
+        .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
+            orElse: () => null);
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       // extendBodyBehindAppBar: true,
@@ -83,8 +98,12 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                   ),
                   onChanged: (String newValue) {
                     setState(() {
-                      dateValue = newValue; //รับค่าจาก item ที่เลือก
-                    });
+                          dateValue = newValue;
+                          prizeNotifier.selectedPrize =
+                              prizeNotifier.prizeList[getKeyByValue()];
+                          print(getKeyByValue());
+                          print(prizeNotifier.prizeList[getKeyByValue()]);
+                        });
                   },
                   items: date.values
                       .map<DropdownMenuItem<String>>((dynamic value) {
