@@ -2,26 +2,32 @@ import 'package:flutter/material.dart';
 
 class lottoerypredition extends StatelessWidget {
   
-  dynamic number1, number2, numberfornt3, numberblack3; //ตัวเลข 1 ตัว
+  dynamic number1, number2, numberfornt3f,numberfornt3s, numberblack3f, numberblack3s; //ตัวเลข 1 ตัว
   // List<dynamic> mNum = []; //ตัวเลขหลายตัว
   String a, b, c, d, e, f, g, h;
   String type, R1str, P1str, R2str, P2str, Result;
   int R1, O1, P1, R2, O2, P2;
 
-  lottoerypredition(this.number1, this.number2, this.numberfornt3,
-      this.numberblack3, this.type) {
+  lottoerypredition(this.number1, this.number2, this.numberfornt3f, this.numberfornt3s,
+      this.numberblack3f,
+      this.numberblack3s, this.type) {
     if (type == "1") {
 // a = หลักที่สิบของเลขท้ายสองตัว, b = สามตัวหน้าของครั้งที่ 1 ที่เป็นหลักร้อย
 //c = สามตัวท้ายครั้งที่ 2 ที่เป็นหลักร้อย,d = สามตัวท้ายครั้งที่ 2 หลักที่สิบ, e = หลักแสนของรางวัลที่ 1,
 //f = หลักหมื่นของรางวัลที่ 1, g = หลักหน่วยของรางวัลที่ 1, h = สามตัวหน้าครั้งที่ 2 หลักร้อย
       a = number2.toString().substring(0, 1);
-      b = numberfornt3.toString().substring(1, 2);
-      c = numberblack3.toString().substring(6, 7);
-      d = numberblack3.toString().substring(7, 8);
+
+      b = numberfornt3f.toString().substring(0, 1);
+
+      h = numberfornt3s.toString().substring(0, 1);
+
+      c = numberblack3f.toString().substring(0, 1);
+      d = numberblack3s.toString().substring(1, 2);
+
       e = number1.toString().substring(0, 1);
       f = number1.toString().substring(1, 2);
       g = number1.toString().substring(5, 6);
-      h = numberfornt3.toString().substring(6, 7);
+      
       R1 = int.parse(a) + int.parse(b) + int.parse(c) + int.parse(d);
       R1str = R1.toString();
       R1str = R1str.substring(R1str.length - 1, R1str.length);

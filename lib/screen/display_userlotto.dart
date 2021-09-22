@@ -6,12 +6,15 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/userlottery.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/formUpdatelotto.dart';
 import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
 import 'package:path/path.dart' as Path;
+import 'package:provider/provider.dart';
 import '../main.dart';
 import 'formshowlotto.dart';
 
@@ -27,13 +30,16 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindexsecond = 0;
   String number;
   void initiateSearch(String val) {
-     setState(() {
+    setState(() {
       number = val.toLowerCase().trim();
     });
   }
 
   @override
   void initState() {
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
+    getUser(userNotifier, user.uid);
     super.initState();
   }
 
@@ -44,6 +50,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -197,9 +205,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   return Card(
                     child: ListTile(
                       tileColor: Colors.white54,
-                      leading: document['imageurl'] != null
+                      leading: userNotifier.currentUser.imageurl != null
                           ? Image.network(
-                              document["imageurl"],
+                              userNotifier.currentUser.imageurl,
                               width: 100,
                               fit: BoxFit.fitWidth,
                             )
@@ -208,19 +216,19 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                               width: 100,
                               fit: BoxFit.fitWidth,
                             ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
-                      title: Text(document["number"]),
+                      title: Text(userNotifier.currentUser.number),
                       subtitle: Text("จำนวน " +
-                          document["amount"] +
+                          userNotifier.currentUser.amount +
                           " ใบ   " +
-                          document["lotteryprice"] +
+                          userNotifier.currentUser.lotteryprice +
                           " บาท"),
                       trailing: IconButton(
-                        icon: document["state"] == true
+                        icon: userNotifier.currentUser.state == true
                             ? Icon(
                                 Icons.check_circle,
                                 color: Colors.green,
                               )
-                            : document["state"] == false
+                            : userNotifier.currentUser.state == false
                                 ? Icon(
                                     Icons.cancel,
                                     color: Colors.red,
@@ -234,12 +242,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       onTap: () async {
                         //กดเพื่อดูรายละเอียด
                         var docid = document.id;
-                        var locamark = document["latlng"];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Formshowdetaillotto(
-                                  docid: docid)),
+                              builder: (context) =>
+                                  Formshowdetaillotto(docid: docid)),
                         );
                       },
                       onLongPress: () {
@@ -255,7 +262,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
                         // // กดเพื่อลบ
                         confirmDialog(
-                            context, document.id, document['imageurl']);
+                            context, document.id, userNotifier.currentUser.imageurl);
 
                         // deleteUserLottery(document.id);
                         // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();

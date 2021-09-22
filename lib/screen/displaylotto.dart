@@ -34,7 +34,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
     setState(() {
       prizeNotifier.prizeList.forEach((key, value) =>
           date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.last; //เรียกค่าอันสุดท้าย});
+      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
       prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
     });
   }
