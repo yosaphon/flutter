@@ -165,6 +165,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         TextFormField(
                           decoration: InputDecoration(labelText: 'จำนวน'),
                           style: TextStyle(fontSize: 20),
+                           inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                ],
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
@@ -174,6 +178,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           keyboardType: TextInputType.number,
                         ),
                         TextFormField(
+                          inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                ],
                           decoration: InputDecoration(labelText: 'ราคา'),
                           style: TextStyle(fontSize: 20),
                           validator: MultiValidator(

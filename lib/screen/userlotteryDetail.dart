@@ -319,8 +319,11 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       Text(
                                         snapshot.data['reward'],
                                         style: TextStyle(fontSize: 16),
+                                      ),Spacer(),
+                                      Text(
+                                        "บาท",
+                                        style: TextStyle(fontSize: 16),
                                       ),
-                                      Spacer(),
                                     ],
                                   ),
                                 ):SizedBox(),
