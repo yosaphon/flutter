@@ -17,6 +17,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
   var snapshot;
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
+  
   String dateValue;
   int i = 0;
 
@@ -31,10 +32,12 @@ class _DisplayScreenState extends State<DisplayScreen> {
 
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
-    prizeNotifier.prizeList.forEach((key, value) =>
+
+      prizeNotifier.prizeList.forEach((key, value) =>
         date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
-    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
+      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
+
+    
   }
 
   getKeyByValue() {
