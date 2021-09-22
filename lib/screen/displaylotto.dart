@@ -6,8 +6,6 @@ import 'package:lotto/model/prizeBox.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/showCheckImage.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DisplayScreen extends StatefulWidget {
   @override
@@ -33,23 +31,37 @@ class _DisplayScreenState extends State<DisplayScreen> {
 
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
-    setState(() {
-      prizeNotifier.prizeList.forEach((key, value) =>
-          date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
-      prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
-    });
+
+    prizeNotifier.prizeList.forEach((key, value) =>
+        date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
+    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
+    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
   }
 
-  getNumberByNameDate() {
-    return date.keys
-        .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
-            orElse: () => null);
-  }
   getKeyByValue() {
     return date.keys
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
+  }
+
+  String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return w[2] +" "+ month[int.parse(w[1])-1] +" "+ (int.parse(w[0]) + 543).toString();
   }
 
   @override
@@ -110,8 +122,8 @@ class _DisplayScreenState extends State<DisplayScreen> {
                         return DropdownMenuItem<String>(
                           value: value.date,
                           child: Text(
-                            value.date,
-                            textAlign: TextAlign.right,
+                            numToWord(value.date),
+                            textAlign: TextAlign.center,
                           ),
                         );
                       }).toList(),
@@ -214,15 +226,15 @@ class _DisplayScreenState extends State<DisplayScreen> {
           }
         }),
       ),
-       floatingActionButton: Column(
+      floatingActionButton: Column(
         children: [
           Spacer(),
           FloatingActionButton.extended(
             heroTag: "btnyoutube",
             onPressed: () async {
-                    // if (await canLaunch(document.youtubeUrl)) {
-                    //   await launch(document.youtubeUrl);
-                    // }
+              // if (await canLaunch(document.youtubeUrl)) {
+              //   await launch(document.youtubeUrl);
+              // }
             },
             icon: FaIcon(FontAwesomeIcons.youtube),
             label: const Text(
@@ -240,12 +252,12 @@ class _DisplayScreenState extends State<DisplayScreen> {
             heroTag: "btnreadpdf",
             onPressed: () {
               Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => new ShowCheckImage(
-                      date: getNumberByNameDate().substring(2, 8),
-                    )),
-          );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => new ShowCheckImage(
+                          date: dateValue,
+                        )),
+              );
             },
             icon: Icon(Icons.receipt_long),
             label: const Text(

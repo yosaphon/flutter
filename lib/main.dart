@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Lottery',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          fontFamily: 'Opun',
         ),
         home: MyHomePage(title: 'Lottery app'),
       ),

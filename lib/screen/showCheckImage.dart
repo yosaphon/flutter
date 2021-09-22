@@ -8,7 +8,7 @@ class ShowCheckImage extends StatelessWidget {
 
   ShowCheckImage({this.date}) {
     print(date);
-    imageUrl = "https://cdn.lottery.co.th/lotto/image/"+date+".jpg";
+    imageUrl = "https://cdn.lottery.co.th/lotto/image/640916.jpg";
   }
 
   @override
