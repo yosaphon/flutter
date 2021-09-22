@@ -182,7 +182,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         ),
         backgroundColor: Colors.blue.shade300,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
