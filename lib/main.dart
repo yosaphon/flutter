@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/display_predictor.dart';
 import 'package:lotto/screen/display_youtubelive.dart';
@@ -21,12 +22,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lottery',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) {
+          return PrizeNotifier();
+        })
+      ],
+      child: MaterialApp(
+        title: 'Lottery',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Lottery app'),
       ),
-      home: MyHomePage(title: 'Lottery app'),
     );
   }
 }
@@ -46,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return DefaultTabController(
         length: 5,
         child: Scaffold(
-          
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
@@ -61,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           bottomNavigationBar: TabBar(
             labelStyle: TextStyle(fontSize: 10.0),
             labelColor: Color(0xffffffff), // สีของข้อความปุ่มที่เลือก
-            
+
             unselectedLabelColor:
                 Color(0x55ffffff), // สีของข้อความปุ่มที่ไม่ได้เลือก
             tabs: [
@@ -71,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
               Tab(text: "ใบ้รางวัล", icon: Icon(Icons.online_prediction)),
               Tab(text: "ผู้ใช้", icon: Icon(Icons.account_circle_outlined))
             ],
-            
           ),
         ));
   }

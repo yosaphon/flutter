@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 
 class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
-  int reward; //รางวัล
+  String reward; //รางวัล
   dynamic number; //ตัวเลข 1 ตัว
-  List<dynamic> mNum = []; //ตัวเลขหลายตัว
+  List<String> mNum = []; //ตัวเลขหลายตัว
   int itemInRow; //จำนวนแ
   double size; //ขนาดตัวอักษร
   double hig; // ขนาดช่อง
@@ -27,7 +27,7 @@ class PrizeBox extends StatelessWidget {
       child: Column(
         children: [
           Text(name, style: TextStyle(fontSize: 18)),
-          Text('รางวัลละ ${NumberFormat("#,###").format(reward)} บาท',
+          Text('รางวัลละ $reward บาท',
               style: TextStyle(fontSize: 16)),
           SizedBox(
             height: 10,
