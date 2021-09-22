@@ -110,11 +110,11 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: 250,
+                              width: MediaQuery.of(context).size.width*0.6,
                               child: TextFormField(
                                 decoration:
                                     InputDecoration(labelText: 'เลขสลาก'),
-                                style: TextStyle(fontSize: 25),
+                                style: TextStyle(fontSize: 20),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'[0-9]')),
@@ -136,9 +136,15 @@ class _FormshowlottoState extends State<Formshowlotto> {
                             Padding(
                               padding: const EdgeInsets.only(top: 20),
                               child: SizedBox(
-                                height: 60,
+                                height: 40,
                                 width: 100,
                                 child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ))),
                                   child: Text('Qrcode',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {},
@@ -158,7 +164,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         // ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'จำนวน'),
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 20),
                           validator: MultiValidator([
                             RequiredValidator(errorText: "กรุณาป้อน จำนวน")
                           ]),
@@ -169,7 +175,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'ราคา'),
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 20),
                           validator: MultiValidator(
                               [RequiredValidator(errorText: "กรุณาป้อนราคา")]),
                           onSaved: (String lotteryprice) {
@@ -181,12 +187,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           keyboardType: TextInputType.number,
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         Container(
                           padding: EdgeInsets.all(20),
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.3,
                           child: _image != null
                               ? Image.file(_image)
                               : Image.asset('asset/gallery-187-902099.png'),
@@ -216,6 +222,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           height: 50,
                           width: double.infinity,
                           child: ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ))),
                             child: Text(
                               "เพิ่มตำแหน่ง",
                               style: TextStyle(fontSize: 20),
@@ -238,6 +250,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                           height: 50,
                           width: double.infinity,
                           child: ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ))),
                             child: Text(
                               "บันทึกข้อมูล",
                               style: TextStyle(fontSize: 20),
@@ -257,7 +275,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "imageurl": urlpiture,
                                   "date": userlottery.date,
                                   "latlng": userlottery.latlng,
-                                  "userid": user.uid
+                                  "userid": user.uid,
+                                  "state" : null,
+                                  "reward":null,
                                 });
 
                                 Navigator.pop(context);
