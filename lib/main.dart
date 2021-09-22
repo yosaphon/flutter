@@ -1,7 +1,5 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check_login_user.dart';
@@ -82,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
           text: "ตรวจ",
           // icon: Icon(Icons.qr_code_scanner)
         ),
-        elevation: 1, //เงาของปุ่ม
+        backgroundColor: Color(0xFFF63C4F),
         onPressed: () {
           Navigator.push(
             context,
