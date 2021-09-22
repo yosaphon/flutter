@@ -99,11 +99,13 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
 
   # To add custom fonts to your application, add a fonts section here,
-
   fonts:
-    -family: Opun
-    fonts:
-      -asset:fonts/Opun-Regular.ttf
+    - family: Mitr
+      fonts:
+        - asset: fonts/Mitr-Regular.ttf
+        - asset: fonts/Mitr-Bold.ttf
+          weight: 700
+
 
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
