@@ -29,81 +29,65 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildTabItem(
-              index: 0,
-              icon: Icon(
-                Icons.home,
-                size: 30,
-              ),
-              text: "หน้าหลัก"),
+            index: 0,
+            icon: Icon(Icons.home,size: 30,),
+          ),
           buildTabItem(
-              index: 1,
-              icon: Icon(
-                FontAwesomeIcons.youtube,
-              ),
-              text: "ดูออนไลน์"),
+            index: 1,
+            icon: Icon(FontAwesomeIcons.youtube,),
+          ),
           placeholder,
           buildTabItem(
-              index: 2,
-              icon: Icon(
-                Icons.visibility,
-                size: 30,
-              ),
-              text: "ทำนาย"),
+            index: 2,
+            icon: Icon(Icons.visibility,size: 30,),
+          ),
           buildTabItem(
-              index: 3,
-              icon: Icon(
-                Icons.account_circle_outlined,
-                size: 30,
-              ),
-              text: "ผู้ใช้"),
+            index: 3,
+            icon: Icon(Icons.account_circle_outlined,size: 30,),
+            
+          ),
         ],
       ),
     );
   }
 
-  Widget buildTabItem({@required int index, @required Icon icon, String text}) {
+  Widget buildTabItem({
+    @required int index,
+    @required Icon icon,
+  }) {
     final isSelected = index == widget.index;
 
     return IconTheme(
       data: IconThemeData(
         color: isSelected ? Colors.blue : Colors.black,
       ),
-      child: AnimatedContainer(
-        width: 52,
-        height: 52,
-        duration: const Duration(seconds: 1),
-      curve: Curves.easeIn,
-        child: InkWell(
-          onTap: () {
-            widget.onChangedTab(index);
-          }, // button pressed
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              icon, // icon
-              Text(text,style: TextStyle(fontSize: 10),), // text
-            ],
-          ),
-        ),
+      child: IconButton(
+        icon: icon,
+        onPressed: () => widget.onChangedTab(index),
       ),
-
-      // Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   children: <Widget>[
-      //     IconButton(
-      //       icon: icon,
-      //       onPressed: () {
-      //         widget.onChangedTab(index);
-      //       },
-      //     ),
-      //     Text(text,style: TextStyle(color: isSelected ? Colors.blue : Colors.black),),
-      //   ],
-      // )
-
-      // IconButton(
-      //   icon: icon,
-      //   onPressed: () => widget.onChangedTab(index),
-      // ),
     );
+    // IconTheme(
+    //   data: IconThemeData(
+    //     color: isSelected ? Colors.blue : Colors.black,
+    //   ),
+    //   child: AnimatedContainer(
+    //     width: 80,
+    //     height: 80,
+    //     duration: const Duration(seconds: 2),
+    //   curve: Curves.easeIn,
+    //     child: InkWell(
+          
+    //       onTap: () {
+    //         widget.onChangedTab(index);
+    //       }, // button pressed
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: <Widget>[
+    //           icon, // icon
+    //           Text(text,style: TextStyle(fontSize: 10),), // text
+    //         ],
+    //       ),
+    //     ),
+    //   ),
   }
 }
