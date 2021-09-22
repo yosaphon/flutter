@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -7,15 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
-import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
-import 'package:lotto/screen/formUpdatelotto.dart';
 import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
-import '../main.dart';
 import 'formshowlotto.dart';
 
 class UserprofileLottery extends StatefulWidget {
@@ -53,9 +48,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier =
-        Provider.of<UserNotifier>(context);
-        
+
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -114,18 +109,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ],
       ),
       body: StreamBuilder(
-        stream: number == "" || number == null
-            ? FirebaseFirestore.instance
-                .collection("userlottery")
-                .where('userid', isEqualTo: user.uid)
-                .snapshots()
-            : FirebaseFirestore.instance
-                .collection("userlottery")
-                .where('userid', isEqualTo: user.uid)
-                .where('number', isEqualTo: number)
-                .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (userNotifier.currentUser.isEmpty) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -204,78 +189,85 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 ],
               ),
               Expanded(
-                  child: ListView(
-                children: snapshot.data.docs.map((document) {
-                  return Card(
-                    child: ListTile(
-                      tileColor: Colors.white54,
-                      leading: userNotifier.currentUser.imageurl != null
-                          ? Image.network(
-                              userNotifier.currentUser.imageurl,
-                              width: 100,
-                              fit: BoxFit.fitWidth,
-                            )
-                          : Image.asset(
-                              'asset/gallery-187-902099.png',
-                              width: 100,
-                              fit: BoxFit.fitWidth,
-                            ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
-                      title: Text(userNotifier.currentUser.number),
-                      subtitle: Text("จำนวน " +
-                          userNotifier.currentUser.amount +
-                          " ใบ   " +
-                          userNotifier.currentUser.lotteryprice +
-                          " บาท"),
-                      trailing: IconButton(
-                        icon: userNotifier.currentUser.state == true
-                            ? Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
-                            : userNotifier.currentUser.state == false
+                child: ListView.separated(
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: ListTile(
+                          tileColor: Colors.white54,
+                          leading: userNotifier.currentUser[index].imageurl !=
+                                  null
+                              ? Image.network(
+                                  userNotifier.currentUser[index].imageurl,
+                                  width: 100,
+                                  fit: BoxFit.fitWidth,
+                                )
+                              : Image.asset(
+                                  'asset/gallery-187-902099.png',
+                                  width: 100,
+                                  fit: BoxFit.fitWidth,
+                                ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+                          title: Text(userNotifier.currentUser[index].number),
+                          subtitle: Text("จำนวน " +
+                              userNotifier.currentUser[index].amount +
+                              " ใบ   " +
+                              userNotifier.currentUser[index].lotteryprice +
+                              " บาท"),
+                          trailing: IconButton(
+                            icon: userNotifier.currentUser[index].state == true
                                 ? Icon(
-                                    Icons.cancel,
-                                    color: Colors.red,
+                                    Icons.check_circle,
+                                    color: Colors.green,
                                   )
-                                : Icon(
-                                    Icons.circle,
-                                    color: Colors.white54,
-                                  ),
-                        onPressed: () {},
-                      ),
-                      onTap: () async {
-                        //กดเพื่อดูรายละเอียด
-                        var docid = document.id;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Formshowdetaillotto(docid: docid)),
-                        );
-                      },
-                      onLongPress: () {
-                        //แก้ไข
-                        // var docid = document.id;
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => FormUpdatelotto(
-                        //             docid: docid,
-                        //           )),
-                        // );
+                                : userNotifier.currentUser[index].state == false
+                                    ? Icon(
+                                        Icons.cancel,
+                                        color: Colors.red,
+                                      )
+                                    : Icon(
+                                        Icons.circle,
+                                        color: Colors.white54,
+                                      ),
+                            onPressed: () {},
+                          ),
+                          onTap: () async {
+                            //กดเพื่อดูรายละเอียด
+                            var docid = userNotifier.docID[index];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Formshowdetaillotto(docid: docid)),
+                            );
+                          },
+                          onLongPress: () {
+                            //แก้ไข
+                            // var docid = document.id;
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => FormUpdatelotto(
+                            //             docid: docid,
+                            //           )),
+                            // );
 
-                        // // กดเพื่อลบ
-                        confirmDialog(
-                            context, document.id, userNotifier.currentUser.imageurl);
+                            // // กดเพื่อลบ
+                            confirmDialog(context, userNotifier.docID[index],
+                                userNotifier.currentUser[index].imageurl);
 
-                        // deleteUserLottery(document.id);
-                        // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
-                        // Navigator.pop(context);
-                      },
-                    ),
-                  );
-                }).toList(),
-              )),
+                            // deleteUserLottery(document.id);
+                            // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
+                            // Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(
+                        color: Colors.black,
+                      );
+                    },
+                    itemCount: userNotifier.currentUser.length??0),
+              )
             ],
           );
         },

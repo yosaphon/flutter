@@ -4,12 +4,29 @@ import 'package:flutter/foundation.dart';
 import 'package:lotto/model/UserData.dart';
 
 class UserNotifier with ChangeNotifier {
-  UserData _currentUser;
+  List<UserData> _currentUser=[];
+  UserData _selectedData;
+  List<String> _docID =[];
 
-  UserData get currentUser => _currentUser;
+  UnmodifiableListView<UserData> get currentUser =>
+      UnmodifiableListView(_currentUser);
 
-  set currentUser(UserData userData) {
+  UnmodifiableListView<String> get docID => UnmodifiableListView(_docID);
+
+  get selectedData => _selectedData;
+
+  set currentUser(List<UserData> userData) {
     _currentUser = userData;
+    notifyListeners();
+  }
+
+  set docID(List<String> docID) {
+    _docID = docID;
+    notifyListeners();
+  }
+
+  set selectedData(UserData userData) {
+    _selectedData = userData;
     notifyListeners();
   }
 }

@@ -10,17 +10,18 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
       .where('userid', isEqualTo: userId)
       .get();
 
-  dynamic _currentUser;
+  List<UserData> _currentUser=[];
+  List<String> _docID =[];
 
   List<DocumentSnapshot> documents;
   documents = snapshot.docs;
-  
+
   documents.forEach((data) {
     UserData userData = UserData.fromJson(data.data());
-    _currentUser = userData;
-
-    // _id.add(data.id);
+    _currentUser.add(userData);
+    _docID.add(data.id);
   });
 
   userNotifier.currentUser = _currentUser;
+  userNotifier.docID = _docID;
 }
