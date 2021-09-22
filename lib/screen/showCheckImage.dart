@@ -13,8 +13,9 @@ class ShowCheckImage extends StatelessWidget {
     nDate = date.split("-");
     y = (int.parse(nDate[0]) + 543).toString();
     y = y.substring(2, 4);
-    print(y+nDate[1]+nDate[2]);
-    imageUrl = "https://cdn.lottery.co.th/lotto/image/$y$nDate[1]$nDate[2].jpg";
+    print(y + nDate[1] + nDate[2]);
+    y = y + nDate[1] + nDate[2];
+    imageUrl = "https://cdn.lottery.co.th/lotto/image/$y.jpg";
   }
 
   @override
