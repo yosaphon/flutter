@@ -15,8 +15,12 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
   List<DocumentSnapshot> documents;
   documents = snapshot.docs;
   
-  _currentUser = documents;
+  documents.forEach((data) {
+    UserData userData = UserData.fromJson(data.data());
+    _currentUser = userData;
 
+    // _id.add(data.id);
+  });
 
   userNotifier.currentUser = _currentUser;
 }

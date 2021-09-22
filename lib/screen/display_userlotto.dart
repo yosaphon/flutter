@@ -39,7 +39,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   void initState() {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
-    getUser(userNotifier, user.uid);
+    if (user.uid.isNotEmpty) {
+      getUser(userNotifier, user.uid);
+    }
+
     super.initState();
   }
 
@@ -52,6 +55,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   Widget build(BuildContext context) {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context);
+        
     var size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: false,

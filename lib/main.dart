@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/display_predictor.dart';
 import 'package:lotto/screen/display_youtubelive.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) {
           return PrizeNotifier();
+        }),
+        ChangeNotifierProvider(create: (context) {
+          return UserNotifier();
         })
       ],
       child: MaterialApp(
