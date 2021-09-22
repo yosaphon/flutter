@@ -127,11 +127,11 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: 250,
+                                      width: MediaQuery.of(context).size.width*0.6,
                                       child: TextFormField(
                                         decoration: InputDecoration(
                                             labelText: "เลขสลาก"),
-                                        style: TextStyle(fontSize: 25),
+                                        style: TextStyle(fontSize: 20),
                                         initialValue: snapshot.data['number'],
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(
@@ -181,7 +181,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 16),
+                                SizedBox(height: 15),
                                 // TextFormField(
                                 //   //ยังไม่ใช้
                                 //   decoration: InputDecoration(labelText: 'งวดที่'),
@@ -193,7 +193,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 TextFormField(
                                   decoration:
                                       InputDecoration(labelText: 'จำนวน'),
-                                  style: TextStyle(fontSize: 25),
+                                  style: TextStyle(fontSize: 20),
                                   initialValue: snapshot.data['amount'],
                                   validator: MultiValidator([
                                     RequiredValidator(
@@ -207,7 +207,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 TextFormField(
                                   decoration:
                                       InputDecoration(labelText: 'ราคา'),
-                                  style: TextStyle(fontSize: 25),
+                                  style: TextStyle(fontSize: 20),
                                   initialValue: snapshot.data['lotteryprice'],
                                   validator: MultiValidator([
                                     RequiredValidator(
@@ -222,39 +222,38 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   keyboardType: TextInputType.number,
                                 ),
                                 SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
                                 if (_image != null) ...[
                                   Container(
-                                      padding: EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.4,
+                                              0.3,
                                       child: Image.file(_image))
                                 ] else if (snapshot.data['imageurl'] ==
                                     null) ...[
                                   Container(
-                                      padding: EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.4,
+                                              0.3,
                                       child: Image.asset(
                                           'asset/gallery-187-902099.png'))
                                 ] else
                                   Container(
-                                      padding: EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.4,
+                                              0.3,
                                       child: Image.network(
                                           snapshot.data['imageurl'])),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:MainAxisAlignment.spaceAround,
                                     children: [
                                       IconButton(
                                           onPressed: () {
@@ -274,7 +273,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 50,
+                                  height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
@@ -301,7 +300,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 10,
                                 ),
                                 SizedBox(
                                   height: 50,

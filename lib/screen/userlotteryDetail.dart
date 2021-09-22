@@ -22,18 +22,17 @@ import 'package:uuid/uuid.dart';
 
 class Formshowdetaillotto extends StatefulWidget {
   final docid;
-  String locamark;
-  Formshowdetaillotto({this.docid, this.locamark});
+  Formshowdetaillotto({this.docid});
   @override
   _FormshowdetaillottoState createState() =>
-      _FormshowdetaillottoState(docid, locamark);
+      _FormshowdetaillottoState(docid);
 }
 
 class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
   final docid;
-  final locamark;
-  
-  _FormshowdetaillottoState(this.docid, this.locamark);
+  // final locamark;
+
+  _FormshowdetaillottoState(this.docid,);
   GoogleMapController mapController;
   // final Map<String, Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
@@ -54,16 +53,16 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
 
   final picker = ImagePicker();
 
-  Set<Marker> usermark() {
-    return <Marker>[localMarker()].toSet();
-  }
+  // Set<Marker> usermark() {
+  //   return <Marker>[localMarker()].toSet();
+  // }
 
-  Marker localMarker() {
-    return Marker(
-        markerId: MarkerId('userbuy'),
-        position: LatLng(double.parse(locamark.substring(1, 18)),
-            double.parse(locamark.substring(20, locamark.length - 1))));
-  }
+  // Marker localMarker() {
+  //   return Marker(
+  //       markerId: MarkerId('userbuy'),
+  //       position: LatLng(double.parse(locamark.substring(1, 18)),
+  //           double.parse(locamark.substring(20, locamark.length - 1))));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +129,8 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                                   spreadRadius: -13,
                                                   color: Colors.black38)
                                             ]),
-                                        margin: EdgeInsets.only(top: 10,bottom: 10),
+                                        margin: EdgeInsets.only(
+                                            top: 10, bottom: 10),
                                         padding: EdgeInsets.all(10),
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -139,20 +139,18 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                                 0.3,
                                         child: Align(
                                           alignment: Alignment.center,
-                                          
-                                            child: Image.network(
-                                              snapshot.data['imageurl'],
-                                              fit: BoxFit.cover,
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width *
-                                              //     1,
-                                              // height: MediaQuery.of(context)
-                                              //         .size
-                                              //         .height *
-                                              //     1,
-                                            ),
-                                          
+                                          child: Image.network(
+                                            snapshot.data['imageurl'],
+                                            fit: BoxFit.cover,
+                                            // width: MediaQuery.of(context)
+                                            //         .size
+                                            //         .width *
+                                            //     1,
+                                            // height: MediaQuery.of(context)
+                                            //         .size
+                                            //         .height *
+                                            //     1,
+                                          ),
                                         ))
                                     : SizedBox(
                                         height: 10,
@@ -262,11 +260,74 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                     ],
                                   ),
                                 ),
-
+                                SizedBox(height: 10,),
+                                snapshot.data["state"] != null?Container(
+                                  width: MediaQuery.of(context).size.width * 1,
+                                  height: 45,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.teal.shade100,
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            offset: Offset(0, 17),
+                                            blurRadius: 23,
+                                            spreadRadius: -13,
+                                            color: Colors.black38)
+                                      ]),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // Spacer(),
+                                      Text(
+                                        "สถานะ    ",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        snapshot.data['state'] == true?"ถูกรางวัล":"ไม่ถูกรางวัล",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ):SizedBox(),
+                                 SizedBox(height: 10,),
+                                snapshot.data["state"] == true?Container(
+                                  width: MediaQuery.of(context).size.width * 1,
+                                  height: 45,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.teal.shade100,
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            offset: Offset(0, 17),
+                                            blurRadius: 23,
+                                            spreadRadius: -13,
+                                            color: Colors.black38)
+                                      ]),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // Spacer(),
+                                      Text(
+                                        "เงินรางวัล    ",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        snapshot.data['reward'],
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ):SizedBox(),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                locamark != null
+                                snapshot.data["latlng"] != null
                                     ? Container(
                                         decoration: BoxDecoration(
                                             color: Colors.teal.shade100,
@@ -286,27 +347,29 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                                 .width,
                                             child: GoogleMap(
                                               mapType: MapType.normal,
-                                              markers: locamark != null
-                                                  ? usermark()
-                                                  : null,
+                                              markers: snapshot.data["latlng"] !=null? Set.from([
+                                                Marker(
+                                                    markerId:
+                                                        MarkerId('google_plex'),
+                                                    position: LatLng(
+                                                        double.parse(snapshot
+                                                            .data["latlng"]
+                                                            .substring(1, 18)),
+                                                        double.parse(snapshot
+                                                            .data["latlng"]
+                                                            .substring(20,snapshot.data["latlng"].length -1))))
+                                              ]):null,
                                               onMapCreated: _onMapCreated,
                                               myLocationEnabled: true,
                                               initialCameraPosition: CameraPosition(
-                                                  target: locamark != null
+                                                  target: snapshot.data["latlng"] != null
                                                       ? LatLng(
                                                           double.parse(snapshot
                                                               .data['latlng']
-                                                              .substring(
-                                                                  1, 18)),
+                                                              .substring(1, 18)),
                                                           double.parse(snapshot
                                                               .data['latlng']
-                                                              .substring(
-                                                                  20,
-                                                                  snapshot
-                                                                          .data[
-                                                                              'latlng']
-                                                                          .length -
-                                                                      1)))
+                                                              .substring(20,snapshot.data['latlng'].length-1)))
                                                       : LatLng(13.736717, 100.523186),
                                                   zoom: 15),
                                             )),
@@ -337,16 +400,18 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       backgroundColor: Colors.red,
                                     ),
                                     Spacer(),
-                                    FloatingActionButton.extended(
+                                    
+                                    snapshot.data["state"] == null ? FloatingActionButton.extended(
                                       heroTag: "btn2",
-                                      onPressed: () {
-                                        Navigator.push(
+                                      onPressed: () async {
+                                        await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     FormUpdatelotto(
                                                       docid: docid,
                                                     )));
+                                        // Navigator.pop(context);
                                       },
                                       icon: Icon(Icons.edit),
                                       label: const Text(
@@ -356,14 +421,13 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                         ),
                                       ),
                                       backgroundColor: Colors.amber,
-                                    ),
+                                    ):Spacer(),
                                     Spacer(),
                                   ],
                                 ),
                                 SizedBox(
                                   height: 10,
                                 )
-                                // Flexible(flex:1,child: Container(color: Colors.amber,))
                               ],
                             ),
                           ),

@@ -9,6 +9,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/formUpdatelotto.dart';
+import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
 import 'package:path/path.dart' as Path;
 import '../main.dart';
@@ -26,7 +27,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindexsecond = 0;
   String number;
   void initiateSearch(String val) {
-    setState(() {
+     setState(() {
       number = val.toLowerCase().trim();
     });
   }
@@ -107,10 +108,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 .where('userid', isEqualTo: user.uid)
                 .snapshots()
             : FirebaseFirestore.instance
-                    .collection("userlottery")
-                    .where('userid',  isEqualTo: user.uid)
-                    .where('number', isEqualTo: number)
-                    .snapshots(),
+                .collection("userlottery")
+                .where('userid', isEqualTo: user.uid)
+                .where('number', isEqualTo: number)
+                .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -238,7 +239,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Formshowdetaillotto(
-                                  docid: docid, locamark: locamark)),
+                                  docid: docid)),
                         );
                       },
                       onLongPress: () {
@@ -274,7 +275,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           Spacer(),
           FloatingActionButton.extended(
             heroTag: "btn1",
-            onPressed: () async {},
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PurchaseReport()),
+              );
+            },
             icon: Icon(Icons.feed),
             label: const Text(
               'ดูรายงาน',
