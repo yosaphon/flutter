@@ -10,7 +10,6 @@ import 'package:lotto/screen/displaylotto.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto/widgets/bottonTabBar.dart';
 import 'package:provider/provider.dart';
-import 'api/prize_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -56,16 +54,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-   @override
-  void initState() {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
-    getPrize(prizeNotifier);
-    super.initState();
-  }
-
   int index = 0;
-  
+  final pages = <Widget>[
+    DisplayScreen(),
+    DisplayLiveYoutube(),
+    DispalyPredictor(),
+    CheckLogInUser()
+  ];
   void onChangedTab(int index) {
     setState(() {
       this.index = index;
@@ -74,14 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
-        final pages = <Widget>[
-    DisplayScreen(prizeNotifier: prizeNotifier,),
-    DisplayLiveYoutube(),
-    DispalyPredictor(),
-    CheckLogInUser()
-  ];
     return Scaffold(
       extendBody: true,
       body: pages[index],
