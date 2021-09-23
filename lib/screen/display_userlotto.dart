@@ -283,7 +283,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             onPressed: () async {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PurchaseReport()),
+                MaterialPageRoute(builder: (context) => PurchaseReportfilter(userdate: userNotifier.currentUser,)),
               );
             },
             icon: Icon(Icons.feed),

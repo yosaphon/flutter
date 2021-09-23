@@ -25,3 +25,4 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
 }
+

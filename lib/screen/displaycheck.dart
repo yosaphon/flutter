@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/checkNumber.dart';

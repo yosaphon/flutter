@@ -8,16 +8,21 @@ import 'package:lotto/screen/showCheckImage.dart';
 import 'package:provider/provider.dart';
 
 class DisplayScreen extends StatefulWidget {
+  final prizeNotifier;
+  DisplayScreen({this.prizeNotifier});
   @override
-  _DisplayScreenState createState() => _DisplayScreenState();
+  _DisplayScreenState createState() => _DisplayScreenState(prizeNotifier);
 }
 
-class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveClientMixin{
+class _DisplayScreenState extends State<DisplayScreen>
+    with AutomaticKeepAliveClientMixin {
+  final prizeNotifier;
+  _DisplayScreenState(this.prizeNotifier);
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
-  
+
   String dateValue;
   int i = 0;
 
@@ -26,22 +31,18 @@ class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveC
 
   @override
   void initState() {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
 
     loadData(prizeNotifier);
     super.initState();
   }
 
-  Future loadData(PrizeNotifier prizeNotifier) async {
-    await getPrize(prizeNotifier);
+  loadData(PrizeNotifier prizeNotifier)  {
 
-      prizeNotifier.prizeList.forEach((key, value) =>
+    prizeNotifier.prizeList.forEach((key, value) =>
         date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
+    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
 
-    
-     prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
+    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
   }
 
   getKeyByValue() {
@@ -67,7 +68,11 @@ class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveC
     ];
     List<String> w = n.split('-');
 
-    return w[2] +" "+ month[int.parse(w[1])-1] +" "+ (int.parse(w[0]) + 543).toString();
+    return w[2] +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
   }
 
   @override
