@@ -23,15 +23,14 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
   void initState() {
     // UserNotifier userNotifier = Provider.of<UserNotifier>(context);
 
-    userdate.forEach((element) {
-      date1.add(element.date);
-    });
+    // userdate.forEach((element) {
+    //   date1.add(element.date);
+    // });
+    date1 = userdate;
     date2 = date1;
     date1.sort();
     dateValue = date1.first;
     // var ids = [1, 4, 4, 4, 5, 6, 6];
-    print(date1);
-    date1 = date1.toSet().toList();
     print(date1);
     super.initState();
   }
@@ -229,6 +228,9 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                                 start = newValue;
                                 dateValue = newValue;
                                 date2.removeRange(0, date1.indexOf(newValue));
+                                print("userdate$userdate");
+                                print("userdate$date1");
+                                print("userdat2222$date2");
                               });
                             },
                             items: date1

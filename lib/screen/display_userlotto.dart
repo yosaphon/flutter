@@ -281,9 +281,17 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           FloatingActionButton.extended(
             heroTag: "btn1",
             onPressed: () async {
+              List<String> date1 = [];
+              userNotifier.currentUser.forEach((element) {
+                date1.add(element.date);
+                date1.toSet().toList();
+              });
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PurchaseReportfilter(userdate: userNotifier.currentUser,)),
+                MaterialPageRoute(
+                    builder: (context) => PurchaseReportfilter(
+                          userdate: date1,
+                        )),
               );
             },
             icon: Icon(Icons.feed),
@@ -315,7 +323,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             ),
             backgroundColor: Colors.amber,
           ),
-           FloatingActionButton.extended(
+          FloatingActionButton.extended(
             heroTag: "btn3",
             tooltip: 'Increment',
             elevation: 0,
