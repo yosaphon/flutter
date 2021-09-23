@@ -12,17 +12,14 @@ class DisplayScreen extends StatefulWidget {
   _DisplayScreenState createState() => _DisplayScreenState();
 }
 
-class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveClientMixin{
+class _DisplayScreenState extends State<DisplayScreen> {
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
-  
+
   String dateValue;
   int i = 0;
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -36,12 +33,11 @@ class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveC
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
 
-      prizeNotifier.prizeList.forEach((key, value) =>
+    prizeNotifier.prizeList.forEach((key, value) =>
         date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-      dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
+    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
 
-    
-     prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
+    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
   }
 
   getKeyByValue() {
@@ -67,7 +63,11 @@ class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveC
     ];
     List<String> w = n.split('-');
 
-    return w[2] +" "+ month[int.parse(w[1])-1] +" "+ (int.parse(w[0]) + 543).toString();
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
   }
 
   @override
@@ -93,7 +93,7 @@ class _DisplayScreenState extends State<DisplayScreen>  with AutomaticKeepAliveC
       body: Center(
         child: StreamBuilder(
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (prizeNotifier.prizeList.isEmpty) {
+          if (prizeNotifier.prizeList.isEmpty || dateValue == null) {
             return CircularProgressIndicator();
           } else {
             return ListView(

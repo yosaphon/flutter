@@ -3,10 +3,13 @@ import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 
 getPrize(PrizeNotifier prizeNotifier) async {
-  QuerySnapshot snapshot =
-      await FirebaseFirestore.instance.collection('lottery').orderBy('date',descending: true).get();
-
   Map<String, PrizeData> _prizeList = {};
+
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('lottery')
+      .orderBy('date', descending: true)
+      .get();
+
   List<String> _id = [];
   List<DocumentSnapshot> documents;
   documents = snapshot.docs;
