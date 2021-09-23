@@ -84,7 +84,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
           style: TextStyle(color: Colors.black),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+         
         ),
         // backgroundColor: Colors.transparent,
         backgroundColor: Color(0xFF25D4C2),
@@ -99,18 +99,19 @@ class _DisplayScreenState extends State<DisplayScreen> {
             return ListView(
               children: <Widget>[
                 Container(
-                  alignment: AlignmentDirectional.topCenter,
+                  alignment: AlignmentDirectional.topCenter,  
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26, width: 0.5),
-                      borderRadius: BorderRadius.circular(10)),
-                  padding: const EdgeInsets.only(top: 10.0),
+                     
+                    color: Color(0xFF25D4C2),
+                      borderRadius:BorderRadius.vertical(bottom: Radius.circular(36))),
+                  
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                       value: dateValue,
                       icon: const Icon(Icons.arrow_drop_down),
                       iconSize: 30,
                       elevation: 2,
-                      style: TextStyle(color: Colors.black, fontSize: 24),
+                      style: TextStyle(color: Colors.black, fontSize: 22),
                       underline: Container(
                         height: 2,
                         color: Colors.blue,
@@ -137,14 +138,32 @@ class _DisplayScreenState extends State<DisplayScreen> {
                     ),
                   ),
                 ),
-                PrizeBox(
-                    //รางวัลที่ 1
-                    "รางวัลที่ 1",
-                    prizeNotifier.selectedPrize.data['first'].price,
-                    prizeNotifier.selectedPrize.data['first'].number[0].value,
-                    1,
-                    35,
-                    8),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 5),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0,
+                            blurRadius:7,
+                            offset: Offset(0, 4), // changes position of shadow
+                          ),
+                        ],
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    child: PrizeBox(
+                        //รางวัลที่ 1
+                        "รางวัลที่ 1",
+                        prizeNotifier.selectedPrize.data['first'].price,
+                        prizeNotifier.selectedPrize.data['first'].number[0].value,
+                        1,
+                        35,
+                        8),
+                  ),
+                ),
                 // Row(
                 //   //รางวัลเลขหน้า, เลขท้าย
                 //   children: <Widget>[

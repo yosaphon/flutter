@@ -8,10 +8,11 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
   QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection("userlottery")
       .where('userid', isEqualTo: userId)
+      .orderBy('date', descending: true)
       .get();
 
-  List<UserData> _currentUser=[];
-  List<String> _docID =[];
+  List<UserData> _currentUser = [];
+  List<String> _docID = [];
 
   List<DocumentSnapshot> documents;
   documents = snapshot.docs;
@@ -25,4 +26,3 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
 }
-

@@ -1,17 +1,20 @@
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class PrizeBox extends StatelessWidget {
   String name; //ชื่อรางวัล
   String reward; //รางวัล
   dynamic number; //ตัวเลข 1 ตัว
   List<String> mNum = []; //ตัวเลขหลายตัว
+  List<String> sReward = []; //ตัวเลขหลายตัว
   int itemInRow; //จำนวนแ
   double size; //ขนาดตัวอักษร
   double hig; // ขนาดช่อง
 
   PrizeBox(this.name, this.reward, this.number, this.itemInRow, this.size,
       this.hig) {
+    sReward = reward.split('.');
     if (name == 'รางวัลที่ 1' || name == 'เลขท้าย 2 ตัว') {
       mNum.add(number);
     } else {
@@ -26,7 +29,8 @@ class PrizeBox extends StatelessWidget {
       child: Column(
         children: [
           Text(name, style: TextStyle(fontSize: 18)),
-          Text('รางวัลละ $reward บาท',
+          Text(
+              'รางวัลละ ${NumberFormat("#,###").format(int.parse(sReward[0]))} บาท',
               style: TextStyle(fontSize: 16)),
           SizedBox(
             height: 10,

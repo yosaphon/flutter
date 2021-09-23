@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lotto/api/prize_api.dart';
-import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/purchaseShow.dart';
 import 'package:provider/provider.dart';
@@ -17,22 +15,24 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
   final userdate;
   _PurchaseReportfilterState(this.userdate);
   int selectedindexsecond = 0;
-  int index = 0, index2 = 0;
   String start, end;
-  String dateuser;
-  List<String> date = [];
+  String dateuser, dateValue;
+  List<String> date1 = [], date2 = [];
 
   @override
   void initState() {
     // UserNotifier userNotifier = Provider.of<UserNotifier>(context);
 
     userdate.forEach((element) {
-      date.add(element.date);
+      date1.add(element.date);
     });
+    date2 = date1;
+    date1.sort();
+    dateValue = date1.first;
     // var ids = [1, 4, 4, 4, 5, 6, 6];
-    print(date);
-    date = date.toSet().toList();
-    print(date);
+    print(date1);
+    date1 = date1.toSet().toList();
+    print(date1);
     super.initState();
   }
 
@@ -212,7 +212,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
                             menuMaxHeight: 300,
-                            value: index.toString(),
+                            value: dateValue,
                             icon: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.blue,
@@ -227,18 +227,19 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                             onChanged: (String newValue) {
                               setState(() {
                                 start = newValue;
+                                dateValue = newValue;
+                                date2.removeRange(0, date1.indexOf(newValue));
                               });
                             },
-                            items: date
+                            items: date1
                                 .map<DropdownMenuItem<String>>((dynamic value) {
                               Widget drop = DropdownMenuItem<String>(
-                                value: index.toString(),
+                                value: value,
                                 child: Text(
                                   value,
                                   textAlign: TextAlign.right,
                                 ),
                               );
-                              index++;
 
                               return drop;
                             }).toList(),
@@ -257,7 +258,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
                             menuMaxHeight: 300,
-                            value: index2.toString(),
+                            value: dateValue,
                             icon: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.blue,
@@ -272,20 +273,20 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                             onChanged: (String newValue) {
                               setState(() {
                                 end = newValue;
-                                index2 = int.parse(newValue);
+                                dateValue = newValue;
                               });
                             },
-                            items: date
+                            items: date2
                                 .map<DropdownMenuItem<String>>((dynamic value) {
-                              Widget sss = DropdownMenuItem<String>(
-                                value: index2.toString(),
+                              Widget drop = DropdownMenuItem<String>(
+                                value: value,
                                 child: Text(
                                   value,
                                   textAlign: TextAlign.right,
                                 ),
                               );
-                              index2++;
-                              return sss;
+
+                              return drop;
                               // }
                               // index2++;
                             }).toList(),
