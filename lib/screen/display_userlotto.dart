@@ -284,13 +284,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               List<String> date1 = [];
               userNotifier.currentUser.forEach((element) {
                 date1.add(element.date);
-                date1.toSet().toList();
               });
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => PurchaseReportfilter(
-                          userdate: date1,
+                          userdate: date1.toSet().toList(),
                         )),
               );
             },

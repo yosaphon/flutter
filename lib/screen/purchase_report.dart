@@ -15,23 +15,19 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
   final userdate;
   _PurchaseReportfilterState(this.userdate);
   int selectedindexsecond = 0;
+  bool state = false;
   String start, end;
-  String dateuser, dateValue;
+  String dateuser, dateValue1, dateValue2;
   List<String> date1 = [], date2 = [];
 
   @override
   void initState() {
-    // UserNotifier userNotifier = Provider.of<UserNotifier>(context);
-
-    // userdate.forEach((element) {
-    //   date1.add(element.date);
-    // });
     date1 = userdate;
-    date2 = date1;
+    
     date1.sort();
-    dateValue = date1.first;
-    // var ids = [1, 4, 4, 4, 5, 6, 6];
-    print(date1);
+    start = userdate[0];
+    end = userdate[date1.length-1];
+    dateValue1 = date1.first;
     super.initState();
   }
 
@@ -49,7 +45,6 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        // backgroundColor: Colors.transparent,
         backgroundColor: Colors.black.withOpacity(0.1),
         elevation: 0,
       ),
@@ -73,7 +68,8 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                   onPressed: () {
                     setState(() {
                       changeIndexsecon(0);
-                      dateuser = "0";
+                      start = userdate[0];
+                      end = userdate[date1.length-1];
                     });
                   },
                   child: Row(
@@ -110,8 +106,8 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                   onPressed: () {
                     setState(() {
                       changeIndexsecon(1);
-                      start = "0";
-                      end = userNotifier.currentUser.length.toString();
+                      start = userdate[date1.length-1];
+                      end = userdate[date1.length-1];
                     });
                   },
                   child: Row(
@@ -211,7 +207,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
                             menuMaxHeight: 300,
-                            value: dateValue,
+                            value: dateValue1,
                             icon: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.blue,
@@ -225,12 +221,15 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                             ),
                             onChanged: (String newValue) {
                               setState(() {
+                                state = true;
+                                date2 = [];
                                 start = newValue;
-                                dateValue = newValue;
-                                date2.removeRange(0, date1.indexOf(newValue));
-                                print("userdate$userdate");
-                                print("userdate$date1");
-                                print("userdat2222$date2");
+                                dateValue1 = newValue;
+                                for (var i = 0; i < date1.length; i++) {
+                                  if (i >= date1.indexOf(newValue)) {
+                                    date2.add(date1[i]);
+                                  }
+                                }
                               });
                             },
                             items: date1
@@ -249,52 +248,111 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        alignment: AlignmentDirectional.topCenter,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.black26, width: 0.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            menuMaxHeight: 300,
-                            value: dateValue,
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.blue,
-                            ),
-                            iconSize: 30,
-                            elevation: 2,
-                            style: TextStyle(color: Colors.blue, fontSize: 15),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.blue,
-                            ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                end = newValue;
-                                dateValue = newValue;
-                              });
-                            },
-                            items: date2
-                                .map<DropdownMenuItem<String>>((dynamic value) {
-                              Widget drop = DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  textAlign: TextAlign.right,
-                                ),
-                              );
+                      state == false
+                          ? IgnorePointer(
+                              child: Container(
+                                alignment: AlignmentDirectional.topCenter,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFF2F2F2),
+                                    border: Border.all(
+                                        color: Colors.black26, width: 0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                      menuMaxHeight: 300,
+                                      value: "0",
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.grey,
+                                      ),
+                                      iconSize: 30,
+                                      elevation: 2,
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 15),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.grey,
+                                      ),
+                                      onChanged: (String newValue) {},
+                                      items: [
+                                        DropdownMenuItem<String>(
+                                          value: "0",
+                                          child: Text(
+                                            "YYYY/MM/DD",
+                                            style: TextStyle(fontSize: 11),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        )
+                                      ]
 
-                              return drop;
-                              // }
-                              // index2++;
-                            }).toList(),
-                          ),
-                        ),
-                      ),
+                                      // date2.map<DropdownMenuItem<String>>(
+                                      //     (dynamic value) {
+                                      //   Widget drop = DropdownMenuItem<String>(
+                                      //     value: "0",
+                                      //     child: Text(
+                                      //       "YYYY/MM/DD",
+                                      //       textAlign: TextAlign.right,
+                                      //     ),
+                                      //   );
+
+                                      //   return drop;
+                                      // }).toList(),
+                                      ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              alignment: AlignmentDirectional.topCenter,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.black26, width: 0.5),
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  menuMaxHeight: 300,
+                                  value: dateValue2 ?? dateValue1,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.blue,
+                                  ),
+                                  iconSize: 30,
+                                  elevation: 2,
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: 15),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.blue,
+                                  ),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      if (date1.length != userdate.length) {
+                                        date1 = userdate;
+                                      }
+                                      end = newValue;
+                                      dateValue2 = newValue;
+                                    });
+                                  },
+                                  items: date2.map<DropdownMenuItem<String>>(
+                                      (dynamic value) {
+                                    Widget drop = DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    );
+
+                                    return drop;
+                                    // }
+                                    // index2++;
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
                       Spacer(),
                     ],
                   ],
@@ -309,11 +367,12 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                 Spacer(),
                 FloatingActionButton.extended(
                   onPressed: () {
+                    List<String> datauser = [start, end];
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ShowPurchaseReport(dateuser: dateuser)),
+                              ShowPurchaseReport(dateuser: datauser)),
                     );
                   },
                   label: const Text(

@@ -2,14 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 
-getUser(UserNotifier userNotifier, dynamic userId) async {
-  // QuerySnapshot snapshot =
-  //     await FirebaseFirestore.instance.collection('userlottery').get();
-  QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection("userlottery")
-      .where('userid', isEqualTo: userId)
-      .orderBy('date', descending: true)
-      .get();
+getUser(UserNotifier userNotifier, dynamic userId,
+    {String start = null, String end = null}) async {
+  QuerySnapshot snapshot;
+  if (start == null || end == null) {
+    snapshot = await FirebaseFirestore.instance
+        .collection("userlottery")
+        .where('userid', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .get();
+  } else {
+    snapshot = await FirebaseFirestore.instance
+        .collection("userlottery")
+        .where('userid', isEqualTo: userId)
+        .where("date", isLessThanOrEqualTo: end)
+        .where("date", isGreaterThanOrEqualTo: start)
+        .orderBy('date', descending: true)
+        .get();
+  }
 
   List<UserData> _currentUser = [];
   List<String> _docID = [];
