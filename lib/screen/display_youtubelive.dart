@@ -48,32 +48,43 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
             );
           }
           return ListView(
+            padding:EdgeInsets.only(top: 100,left: 30,right: 30,bottom: 80),
             children: prizeNotifier.prizeList.values.map((document) {
               return Container(
-                margin: const EdgeInsets.all(10.0),
+                height: 80,
+                margin: const EdgeInsets.all(5.0),
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.blue.shade100),
-                child: ListTile(
-                  leading: Container(
-                    width: 75,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                              'asset/YouTube_full-color_icon.svg.png')),
-                      borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                      color: Colors.redAccent,
+                  boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0,
+                            blurRadius:7,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                    color: Colors.white),
+                child: Center(
+                  child: ListTile(
+                    leading: Container(
+                      width: 100,
+                      height: 75,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                                'asset/YouTube_full-color_icon.svg.png')),
+                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                        color: Colors.redAccent,
+                      ),
                     ),
+                    title: Text("วันที่ ${document.date} งวดที่ ${document.period[0]},${document.period[1]}" ),
+                    onTap: () async {
+                      if (await canLaunch(document.youtubeUrl)) {
+                        await launch(document.youtubeUrl);
+                      }
+                    },
                   ),
-                  title: Text("วันที่ ${document.date} งวดที่ ${document.period[0]},${document.period[1]}" ),
-                  onTap: () async {
-                    if (await canLaunch(document.youtubeUrl)) {
-                      await launch(document.youtubeUrl);
-                    }
-                  },
                 ),
               );
             }).toList(),

@@ -22,7 +22,7 @@ class ShowCheckImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -33,7 +33,7 @@ class ShowCheckImage extends StatelessWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Colors.white,//withOpacity(0.1),
         elevation: 0,
       ),
       body: Center(

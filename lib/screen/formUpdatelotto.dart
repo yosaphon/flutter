@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,13 +7,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
-import 'package:lotto/screen/display_userlotto.dart';
 import 'package:lotto/screen/googlemapshow.dart';
 import 'package:uuid/uuid.dart';
 
@@ -384,26 +380,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         }
                                         Navigator.pop(context);
                                       }
-                                      // if (formKey.currentState.validate()) {
-                                      //   formKey.currentState.save();
-                                      //   await _userltottery.doc(docid).update({
-                                      //     "username": user.displayName,
-                                      //     "number": userlottery.number,
-                                      //     "amount": userlottery.amount,
-                                      //     "lotteryprice":
-                                      //         userlottery.lotteryprice,
-                                      //     "imageurl": urlpiture,
-                                      //     "date": userlottery.date,
-                                      //     "latlng": userlottery.latlng,
-                                      //     "userid": user.uid
-                                      //   });
-
-                                      // Navigator.pop(context);
-                                      // }
+                                      
                                     },
                                   ),
                                 ),
-                                // Flexible(flex:1,child: Container(color: Colors.amber,))
                               ],
                             ),
                           ),
@@ -432,20 +412,11 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
   void _navigateAndDisplaySelection(
       BuildContext context, String locamark) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen
-
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ShowuserGooglemap(locamark: locamark)),
     );
-
-    // After the Selection Screen returns a result, hide any previous snackbars
-    // and show the new result.
-    // ScaffoldMessenger.of(context)
-    //   ..removeCurrentSnackBar()
-    //   ..showSnackBar(SnackBar(content: Text('$result')));
     userlottery.latlng = result;
   }
 }
