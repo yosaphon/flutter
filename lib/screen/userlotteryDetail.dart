@@ -175,7 +175,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       Spacer(),
                                       Text(
                                         snapshot.data['number'],
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
                                     ],
@@ -207,7 +207,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       Spacer(),
                                       Text(
                                         snapshot.data['amount'],
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
                                       Text(
@@ -244,7 +244,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       Spacer(),
                                       Text(
                                         snapshot.data['lotteryprice'],
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
                                       Text(
