@@ -287,18 +287,6 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                                         )
                                       ]
 
-                                      // date2.map<DropdownMenuItem<String>>(
-                                      //     (dynamic value) {
-                                      //   Widget drop = DropdownMenuItem<String>(
-                                      //     value: "0",
-                                      //     child: Text(
-                                      //       "YYYY/MM/DD",
-                                      //       textAlign: TextAlign.right,
-                                      //     ),
-                                      //   );
-
-                                      //   return drop;
-                                      // }).toList(),
                                       ),
                                 ),
                               ),
