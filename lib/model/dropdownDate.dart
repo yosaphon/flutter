@@ -29,6 +29,7 @@ class _DropdownDateState extends State<DropdownDate> {
     // prizeData.forEach((value) =>
     //     date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
     dateValue = prizeData.first.date; //เรียกค่าอันสุดท้าย});
+
   }
 
   getKeyByValue(String value) {

@@ -72,38 +72,62 @@ class _DisplayScreenState extends State<DisplayScreen> {
                             "รางวัลที่ 1",
                             prizeNotifier.selectedPrize.data['first'].price,
                             prizeNotifier
-                                .selectedPrize.data['first'].number[0].value,
-                            1,
+                                .selectedPrize.data['first'].number,
                             35,
+                            5,
                             8),
                       ),
                     ),
-                    // Row(
-                    //   //รางวัลเลขหน้า, เลขท้าย
-                    //   children: <Widget>[
-                    //     Expanded(
-                    //       child: PrizeBox(
-                    //           snapshot.data['result'][1]['name'],
-                    //           snapshot.data['result'][1]['reword'],
-                    //           snapshot.data['result'][1]['number'],
-                    //           2,
-                    //           28,
-                    //           2),
-                    //     ),
-                    //     Expanded(
-                    //       child: PrizeBox(
-                    //           snapshot.data['result'][2]['name'],
-                    //           snapshot.data['result'][2]['reword'],
-                    //           snapshot.data['result'][2]['number'],
-                    //           2,
-                    //           28,
-                    //           2),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 10, bottom: 5),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 0,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 4), // changes position of shadow
+                              ),
+                            ],
+                            color: Colors.white,
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12))),
+                        child: Row(
+                          //รางวัลเลขหน้า 3, เลขท้าย 3
+                          children: <Widget>[
+                            Expanded(
+                              child: PrizeBox(
+                                  "เลขหน้า 3 ตัว",
+                                  prizeNotifier
+                                      .selectedPrize.data['last3f'].price,
+                                  prizeNotifier.selectedPrize.data['last3f']
+                                      .number,
+                                 
+                                  22,
+                                  5,
+                                  2),
+                            ),
+                            Expanded(
+                              child: PrizeBox(
+                                  "เลขท้าย 3 ตัว",
+                                  prizeNotifier
+                                      .selectedPrize.data['last3b'].price,
+                                  prizeNotifier.selectedPrize.data['last3b']
+                                      .number,
+                                  22,
+                                  5,
+                                  2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     // PrizeBox(
                     //     //รางวัลเลขท้าย 2 ตัว
                     //     snapshot.data['result'][3]['name'],
