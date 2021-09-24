@@ -20,11 +20,6 @@ class _DisplayScreenState extends State<DisplayScreen> {
   Map<String, String> date = {};
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
 
@@ -46,9 +41,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
         child: FutureBuilder(
             future: getPrize(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
+              if (!snapshot.hasData || snapshot.data == null) {
                 return CircularProgressIndicator();
-              } else {
+              } else if (snapshot.hasData) {
+                print(snapshot.data);
                 return ListView(
                   children: <Widget>[
                     DropdownDate(snapshot.data),
@@ -71,8 +67,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                             shape: BoxShape.rectangle,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(12))),
-                        child: 
-                        PrizeBox(
+                        child: PrizeBox(
                             //รางวัลที่ 1
                             "รางวัลที่ 1",
                             prizeNotifier.selectedPrize.data['first'].price,
@@ -168,6 +163,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
                     // )
                   ],
                 );
+              } else {
+                print(snapshot.data);
+                return CircularProgressIndicator();
               }
             }),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
+import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
@@ -25,6 +26,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   static List<String> lotterylist = [null];
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
+  List<PrizeData> prizeData = [];
   String dateValue;
 
   @override
@@ -38,10 +40,12 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
 
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
-    prizeNotifier.prizeList.forEach((key, value) =>
-        date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
+    prizeNotifier.prizeList.forEach((key, value) {
+      date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
+      prizeData.add(value);
+    });
+
     dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
-    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
   }
 
   getKeyByValue() {
@@ -77,92 +81,100 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFF3FFFE),
-      // extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "ตรวจรางวัล",
-          style: TextStyle(color: Colors.black),
+    return Builder(builder: (context) {
+      return Scaffold(
+        backgroundColor: Color(0xFFF3FFFE),
+        // extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "ตรวจรางวัล",
+            style: TextStyle(color: Colors.black),
+          ),
+          shape: RoundedRectangleBorder(),
+          // backgroundColor: Colors.transparent,
+          backgroundColor: Color(0xFF25D4C2),
+          elevation: 0,
         ),
-        shape: RoundedRectangleBorder(
-        
-        ),
-        // backgroundColor: Colors.transparent,
-        backgroundColor: Color(0xFF25D4C2),
-        elevation: 0,
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-            child: Column(
-          children: <Widget>[
-            DropdownDate(prizeNotifier.prizeList),
-            
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ..._getLottery(),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Spacer(),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        height: 30,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => QRScanPage()),
-                            );
-                          },
-                          child: Text(
-                            'scan qr code',
-                            style: TextStyle(fontSize: 20),
-                          ),
+        body: FutureBuilder(
+            future: getPrize(prizeNotifier),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData || snapshot.data == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                      child: Column(
+                    children: <Widget>[
+                      DropdownDate(snapshot.data),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ..._getLottery(),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              children: [
+                                Spacer(),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  height: 30,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => QRScanPage()),
+                                      );
+                                    },
+                                    child: Text(
+                                      'scan qr code',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Spacer(),
                     ],
-                  ),
-                ],
-              ),
+                  )),
+                );
+              }
+            }),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              var data = new CheckNumber(
+                  date.keys.firstWhere(
+                      (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                      orElse: () => null),
+                  lotterylist,
+                  null);
+              data
+                  .getSnapshot()
+                  .then((e) => DialogHelper.exit(context, data.checked));
+            }
+          },
+          icon: Icon(Icons.pin),
+          label: const Text(
+            'ตรวจ',
+            style: TextStyle(
+              color: Colors.white,
             ),
-          ],
-        )),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            var data = new CheckNumber(
-                date.keys.firstWhere(
-                    (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                    orElse: () => null),
-                lotterylist,
-                null);
-            data
-                .getSnapshot()
-                .then((e) => DialogHelper.exit(context, data.checked));
-          }
-        },
-        icon: Icon(Icons.pin),
-        label: const Text(
-          'ตรวจ',
-          style: TextStyle(
-            color: Colors.white,
           ),
+          backgroundColor: Color(0xFFF63C4F),
         ),
-        backgroundColor: Color(0xFFF63C4F),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      );
+    });
   }
 
   /// get firends text-fields
