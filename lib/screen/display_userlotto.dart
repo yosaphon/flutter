@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/UserData.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
+import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 import 'formshowlotto.dart';
@@ -23,7 +25,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   TextEditingController _searchController = TextEditingController();
   int selectedindex = 0;
   int selectedindexsecond = 0;
-  String number;
+  List<UserData> lottos;
+  String number, query = '';
+
   void initiateSearch(String val) {
     setState(() {
       number = val.toLowerCase().trim();
@@ -32,13 +36,17 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   void initState() {
+    loadData();
+    super.initState();
+  }
+
+  loadData() async {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
     if (user.uid.isNotEmpty) {
-      getUser(userNotifier, user.uid);
+      await getUser(userNotifier, user.uid);
     }
-
-    super.initState();
+    lottos = userNotifier.currentUser;
   }
 
   @override
@@ -49,8 +57,92 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    //var size = MediaQuery.of(context).size;
 
-    var size = MediaQuery.of(context).size;
+    void searchLotto(String query) {
+      final lottos = userNotifier.currentUser.where((lotto) {
+        final lNumber = lotto.number;
+        return lNumber.contains(query);
+      }).toList();
+
+      setState(() {
+        this.query = query;
+        this.lottos = lottos;
+      });
+    }
+
+    Widget buildSearch() => SearchWidget(
+          text: query,
+          hintText: 'เลข',
+          onChanged: searchLotto,
+        );
+    Widget buildLotto(UserData lotto, String docID) {
+      return Card(
+        child: ListTile(
+          tileColor: Colors.white54,
+          leading: lotto.imageurl != null
+              ? Image.network(
+                  lotto.imageurl,
+                  width: 100,
+                  fit: BoxFit.fitWidth,
+                )
+              : Image.asset(
+                  'asset/gallery-187-902099.png',
+                  width: 100,
+                  fit: BoxFit.fitWidth,
+                ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+          title: Text(lotto.number),
+          subtitle: Text(
+              "จำนวน " + lotto.amount + " ใบ   " + lotto.lotteryprice + " บาท"),
+          trailing: IconButton(
+            icon: lotto.state == true
+                ? Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                  )
+                : lotto.state == false
+                    ? Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                      )
+                    : Icon(
+                        Icons.circle,
+                        color: Colors.white54,
+                      ),
+            onPressed: () {},
+          ),
+          onTap: () async {
+            //กดเพื่อดูรายละเอียด
+            var docid = docID;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Formshowdetaillotto(docid: docid, userID: user.uid)),
+            );
+          },
+          onLongPress: () {
+            //แก้ไข
+            // var docid = document.id;
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => FormUpdatelotto(
+            //             docid: docid,
+            //           )),
+            // );
+
+            // // กดเพื่อลบ
+            confirmDialog(context, docID, lotto.imageurl, user.uid);
+
+            // deleteUserLottery(document.id);
+            // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
+            // Navigator.pop(context);
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
@@ -118,158 +210,21 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: size.width * 0.8,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 30),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(29.5),
-                      ),
-                      child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          LengthLimitingTextInputFormatter(6),
-                        ],
-                        keyboardType: TextInputType.number,
-                        validator: MultiValidator([
-                          RequiredValidator(errorText: "กรุณาป้อน เลขสลาก"),
-                          MinLengthValidator(6,
-                              errorText: 'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
-                        ]),
-                        controller: _searchController,
-                        onSaved: (val) {
-                          // number = val;
-                          // initiateSearch(val);
-                        },
-                        decoration: InputDecoration(
-                            hintText: "ค้นหาสลาก",
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  number = _searchController.text;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.all(12),
-                            border: InputBorder.none,
-                            fillColor: Colors.transparent),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.005,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _lotteryEditModalBottomSheet(context);
-                    },
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(
-                        Icons.filter_alt,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              buildSearch(),
               Expanded(
                 child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        child: ListTile(
-                          tileColor: Colors.white54,
-                          leading: userNotifier.currentUser[index].imageurl !=
-                                  null
-                              ? Image.network(
-                                  userNotifier.currentUser[index].imageurl,
-                                  width: 100,
-                                  fit: BoxFit.fitWidth,
-                                )
-                              : Image.asset(
-                                  'asset/gallery-187-902099.png',
-                                  width: 100,
-                                  fit: BoxFit.fitWidth,
-                                ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
-                          title: Text(userNotifier.currentUser[index].number),
-                          subtitle: Text("จำนวน " +
-                              userNotifier.currentUser[index].amount +
-                              " ใบ   " +
-                              userNotifier.currentUser[index].lotteryprice +
-                              " บาท"),
-                          trailing: IconButton(
-                            icon: userNotifier.currentUser[index].state == true
-                                ? Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  )
-                                : userNotifier.currentUser[index].state == false
-                                    ? Icon(
-                                        Icons.cancel,
-                                        color: Colors.red,
-                                      )
-                                    : Icon(
-                                        Icons.circle,
-                                        color: Colors.white54,
-                                      ),
-                            onPressed: () {},
-                          ),
-                          onTap: () async {
-                            //กดเพื่อดูรายละเอียด
-                            var docid = userNotifier.docID[index];
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Formshowdetaillotto(
-                                      docid: docid, userID: user.uid)),
-                            );
-                          },
-                          onLongPress: () {
-                            //แก้ไข
-                            // var docid = document.id;
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => FormUpdatelotto(
-                            //             docid: docid,
-                            //           )),
-                            // );
+                  itemCount: lottos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final lotto = lottos[index];
 
-                            // // กดเพื่อลบ
-                            confirmDialog(
-                                context,
-                                userNotifier.docID[index],
-                                userNotifier.currentUser[index].imageurl,
-                                user.uid);
-
-                            // deleteUserLottery(document.id);
-                            // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
-                            // Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(
-                        color: Colors.black,
-                      );
-                    },
-                    itemCount: userNotifier.currentUser.length ?? 0),
+                    return buildLotto(lotto, userNotifier.docID[index]);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(
+                      color: Colors.black,
+                    );
+                  },
+                ),
               )
             ],
           );
@@ -358,320 +313,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     );
   }
 
-  Widget _lotteryEditModalBottomSheet(context) {
-    // void _lotteryEditModalBottomSheet(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter mystate) {
-            return Container(
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(
-                            Icons.clear,
-                            color: Colors.blue,
-                            size: 25,
-                          ))
-                    ],
-                  ),
-                  textcutom("สถานะการถูกรางวัล"),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Spacer(),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexfirst(0);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindex == 0
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "ทั้งหมด",
-                              style: TextStyle(
-                                  color: selectedindex == 0
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindex == 0
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                      // customRadio("ถูกรางวัล", 1),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexfirst(1);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindex == 1
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "ถูกรางวัล",
-                              style: TextStyle(
-                                  color: selectedindex == 1
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindex == 1
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                      // customRadio("ไม่ถูกรางวัล", 2),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexfirst(2);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindex == 2
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "ไม่ถูกรางวัล",
-                              style: TextStyle(
-                                  color: selectedindex == 2
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindex == 2
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 9,
-                  ),
-                  textcutom("งวด"),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Spacer(),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexsecon(0);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindexsecond == 0
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "ทั้งหมด",
-                              style: TextStyle(
-                                  color: selectedindexsecond == 0
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindexsecond == 0
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                      // customRadio("ถูกรางวัล", 1),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexsecon(1);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindexsecond == 1
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "ล่าสุด",
-                              style: TextStyle(
-                                  color: selectedindexsecond == 1
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindexsecond == 1
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                      // customRadio("ไม่ถูกรางวัล", 2),
-                      OutlinedButton(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexsecon(2);
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline_outlined,
-                              color: selectedindexsecond == 2
-                                  ? Colors.blue
-                                  : Colors.white10,
-                              size: 20,
-                            ),
-                            Text(
-                              "เลือกงวด",
-                              style: TextStyle(
-                                  color: selectedindexsecond == 2
-                                      ? Colors.blue
-                                      : Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(
-                              width: 2,
-                              color: selectedindexsecond == 2
-                                  ? Colors.blue
-                                  : Colors.blueGrey),
-                        ),
-                      ),
-                      Spacer(),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Spacer(),
-                      FloatingActionButton.extended(
-                        onPressed: () {
-                          mystate(() {
-                            changeIndexsecon(0);
-                            changeIndexfirst(0);
-                          });
-                        },
-                        label: const Text(
-                          'ล้าง',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        backgroundColor: Colors.amberAccent,
-                      ),
-                      Spacer(),
-                      FloatingActionButton.extended(
-                        onPressed: () {
-                          // กดเพื่อส่งค่าออกไป
-                        },
-                        label: const Text(
-                          'ตกลง',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        backgroundColor: Colors.amberAccent,
-                      ),
-                      Spacer(),
-                    ],
-                  )
-                ],
-              ),
-            );
-          });
-        });
   }
-}
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {

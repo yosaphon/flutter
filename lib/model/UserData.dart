@@ -15,6 +15,7 @@ class UserData {
         this.imageurl,
         this.latlng,
         this.lotteryprice,
+        this.namewin,
         this.number,
         this.reward,
         this.state,
@@ -27,6 +28,7 @@ class UserData {
     String imageurl;
     String latlng;
     String lotteryprice;
+    String namewin;
     String number;
     String reward;
     bool state;
@@ -39,6 +41,7 @@ class UserData {
         imageurl: json["imageurl"] == null ? null : json["imageurl"],
         latlng: json["latlng"] == null ? null : json["latlng"],
         lotteryprice: json["lotteryprice"] == null ? null : json["lotteryprice"],
+        namewin: json["namewin"] == null ? null : json["namewin"],
         number: json["number"] == null ? null : json["number"],
         reward: json["reward"] == null ? null : json["reward"],
         state: json["state"] == null ? null : json["state"],
@@ -52,6 +55,7 @@ class UserData {
         "imageurl": imageurl == null ? null : imageurl,
         "latlng": latlng == null ? null : latlng,
         "lotteryprice": lotteryprice == null ? null : lotteryprice,
+        "namewin": namewin == null ? null : namewin,
         "number": number == null ? null : number,
         "reward": reward == null ? null : reward,
         "state": state == null ? null : state,

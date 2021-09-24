@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:lotto/api/user_api.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +14,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/screen/googlemapshow.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class FormUpdatelotto extends StatefulWidget {
@@ -68,6 +71,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
   @override
   Widget build(BuildContext context) {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
@@ -123,7 +127,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width*0.6,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
                                       child: TextFormField(
                                         decoration: InputDecoration(
                                             labelText: "เลขสลาก"),
@@ -162,12 +167,12 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         width: 100,
                                         child: ElevatedButton(
                                           style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                                ))),
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                          ))),
                                           child: Text('Qrcode',
                                               style: TextStyle(
                                                   color: Colors.white)),
@@ -188,9 +193,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 // ),
                                 TextFormField(
                                   inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                ],
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')),
+                                  ],
                                   decoration:
                                       InputDecoration(labelText: 'จำนวน'),
                                   style: TextStyle(fontSize: 20),
@@ -206,9 +211,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 ),
                                 TextFormField(
                                   inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                ],
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')),
+                                  ],
                                   decoration:
                                       InputDecoration(labelText: 'ราคา'),
                                   style: TextStyle(fontSize: 20),
@@ -257,7 +262,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                           snapshot.data['imageurl'])),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       IconButton(
                                           onPressed: () {
@@ -284,9 +290,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                                ))),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ))),
                                     child: Text(
                                       "แก้ไขตำแหน่ง",
                                       style: TextStyle(fontSize: 20),
@@ -314,9 +319,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                                ))),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ))),
                                     child: Text(
                                       "บันทึกข้อมูล",
                                       style: TextStyle(fontSize: 20),
@@ -378,9 +382,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "latlng": userlottery.latlng,
                                           });
                                         }
+                                        getUser(userNotifier, user.uid);
                                         Navigator.pop(context);
                                       }
-                                      
                                     },
                                   ),
                                 ),
