@@ -63,7 +63,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
         firebase_storage.FirebaseStorage.instance.ref().child('userimg/$uuid');
     firebase_storage.UploadTask uploadTask = reference.putFile(_image);
     urlpiture = await (await uploadTask).ref.getDownloadURL();
-    print('url = $urlpiture');
   }
 
   @override
@@ -94,7 +93,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
-                // backgroundColor: Colors.transparent,
                 backgroundColor: Colors.black.withOpacity(0.1),
                 elevation: 0,
               ),
@@ -141,14 +139,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                               errorText:
                                                   'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
                                         ]),
-                                        // validator: (v) {
-                                        //   if (v.isEmpty) {
-                                        //     return 'กรุณากรอกเลขสลาก';
-                                        //   } else if (v.trim().length < 6 &&
-                                        //       v.isNotEmpty)
-                                        //     return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
-                                        //   return null;
-                                        // },
                                         onSaved: (String number) {
                                           userlottery.number = number;
                                         },
@@ -178,14 +168,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   ],
                                 ),
                                 SizedBox(height: 15),
-                                // TextFormField(
-                                //   //ยังไม่ใช้
-                                //   decoration: InputDecoration(labelText: 'งวดที่'),
-                                //   style: TextStyle(fontSize: 25),
-                                //   onSaved: (String date) {
-                                //     userlottery.date = date;
-                                //   },
-                                // ),
                                 TextFormField(
                                   inputFormatters: [
                                   FilteringTextInputFormatter.allow(
@@ -294,12 +276,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     onPressed: () async {
                                       _navigateAndDisplaySelection(
                                           context, snapshot.data["latlng"]);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //       builder: (context) => ShowuserGooglemap()),
-                                      // );
-                                      // print(location);
                                     },
                                   ),
                                 ),
@@ -322,11 +298,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     onPressed: () async {
-                                      // await deleteImage(snapshot.data['imageurl']);
-                                      // if (_image != null) {
-                                      //   await UploadPicture();
-
-                                      // }
                                       if (formKey.currentState.validate()) {
                                         formKey.currentState.save();
                                         if (_image != null) {
