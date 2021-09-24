@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/checkNumber.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 import 'package:provider/provider.dart';
@@ -38,21 +39,39 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Future loadData(PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
     prizeNotifier.prizeList.forEach((key, value) =>
-          date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
+        date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
     dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
     prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
-  }
-
-  getNumberByNameDate() {
-    return date.keys
-        .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
-            orElse: () => null);
   }
 
   getKeyByValue() {
     return date.keys
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
+  }
+
+  String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
   }
 
   @override
@@ -68,7 +87,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           style: TextStyle(color: Colors.black),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        
         ),
         // backgroundColor: Colors.transparent,
         backgroundColor: Color(0xFF25D4C2),
@@ -79,45 +98,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         child: SingleChildScrollView(
             child: Column(
           children: <Widget>[
-            Container(
-              alignment: AlignmentDirectional.topCenter,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black26, width: 0.5),
-                  borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.only(top: 10.0),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: dateValue,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 30,
-                  elevation: 2,
-                  style: TextStyle(color: Colors.blue, fontSize: 30),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.blue,
-                  ),
-                  onChanged: (String newValue) {
-                    setState(() {
-                      dateValue = newValue;
-                      prizeNotifier.selectedPrize =
-                          prizeNotifier.prizeList[getKeyByValue()];
-                      print(getKeyByValue());
-                      print(prizeNotifier.prizeList[getKeyByValue()]);
-                    });
-                  },
-                  items: prizeNotifier.prizeList.values
-                      .map<DropdownMenuItem<String>>((dynamic value) {
-                    return DropdownMenuItem<String>(
-                      value: value.date,
-                      child: Text(
-                        value.date,
-                        textAlign: TextAlign.right,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
+            DropdownDate(prizeNotifier.prizeList),
+            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

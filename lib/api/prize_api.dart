@@ -16,10 +16,9 @@ getPrize(PrizeNotifier prizeNotifier) async {
   documents.forEach((data) {
     PrizeData prizeData = PrizeData.fromJson(data.data());
     _prizeList[data.id] = prizeData;
-    // _prizeList.add(prizeData);
-    // _id.add(data.id);
   });
 
   prizeNotifier.prizeList = _prizeList;
   prizeNotifier.id = _id;
+  return prizeNotifier.prizeList;
 }
