@@ -27,7 +27,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       new TotalDataCharts('2021-09-01', 1200),
       new TotalDataCharts('2021-10-01', 80),
     ];
-    
+    //กุจะอัป
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
