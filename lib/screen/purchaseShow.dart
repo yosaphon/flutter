@@ -8,23 +8,21 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class ShowPurchaseReport extends StatefulWidget {
   final dateuser; // filter สำหรับหาวันที่
   const ShowPurchaseReport({this.dateuser});
-
   @override
   _ShowPurchaseReportState createState() => _ShowPurchaseReportState(dateuser);
 }
-
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateuser;
   List<charts.Series<TotalDataCharts, String>> _seriesData;
   _generateData() {
-    var data1 = 
+    var dataWon = 
     [
       new TotalDataCharts('2021-08-01', 10000),
       new TotalDataCharts('2021-09-01', 0),
       new TotalDataCharts('2021-10-01', 2000),
     ];
-    var data2 = [
+    var dataLose = [
       new TotalDataCharts('2021-08-01', 2500),
       new TotalDataCharts('2021-09-01', 1200),
       new TotalDataCharts('2021-10-01', 80),
@@ -35,26 +33,25 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
         measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
         id: 'Win',
-        data: data1,
+        data: dataWon,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
             charts.ColorUtil.fromDartColor(Colors.green),
       ), 
     );
-
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
         measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
         id: 'Lose',
-        data: data2,
+        data: dataLose,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
            charts.ColorUtil.fromDartColor(Colors.red),
       ),
     );
   }
-
+  
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
