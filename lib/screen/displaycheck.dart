@@ -86,7 +86,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           ),
           shape: RoundedRectangleBorder(),
           // backgroundColor: Colors.transparent,
-          backgroundColor: Color(0xFF25D4C2),
+          backgroundColor: Colors.indigo,
           elevation: 0,
         ),
         body: FutureBuilder(

@@ -10,6 +10,7 @@ import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindexsecond = 0;
   List<UserData> lottos = [];
   String number, query = '';
-
+  _DisplayScreenState paddingStyle;
   void initiateSearch(String val) {
     setState(() {
       number = val.toLowerCase().trim();
@@ -36,16 +37,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   void initState() {
-    loadData();
+    //loadData();
     super.initState();
   }
 
-  loadData() async {
-    UserNotifier userNotifier =
-        Provider.of<UserNotifier>(context, listen: false);
-    if (user.uid.isNotEmpty) {
-      await getUser(userNotifier, user.uid);
-    }
+  Future loadData(userNotifier) async {
+    await getUser(userNotifier, user.uid);
+
     lottos = userNotifier.currentUser;
   }
 
@@ -77,8 +75,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           onChanged: searchLotto,
         );
     Widget buildLotto(UserData lotto, String docID) {
-      return Card(
-        child: ListTile(
+      return ListTile(
           tileColor: Colors.white54,
           leading: lotto.imageurl != null
               ? Image.network(
@@ -92,8 +89,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   fit: BoxFit.fitWidth,
                 ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
           title: Text(lotto.number),
-          subtitle: Text(
-              "จำนวน " + lotto.amount + " ใบ   " + lotto.lotteryprice + " บาท"),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("จำนวน " + lotto.amount + " ใบ"),
+              Text("ราคา " + lotto.lotteryprice + " บาท")
+            ],
+          ),
           trailing: IconButton(
             icon: lotto.state == true
                 ? Icon(
@@ -139,8 +141,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
             // Navigator.pop(context);
           },
-        ),
-      );
+        )
+      ;
     }
 
     return Scaffold(
@@ -166,7 +168,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        backgroundColor: Color(0xFF25D4C2),
+        backgroundColor: Colors.indigo,
         elevation: 0,
         actions: <Widget>[
           Theme(
@@ -200,8 +202,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           ),
         ],
       ),
-      body: StreamBuilder(
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+        future: (query.isEmpty || userNotifier.currentUser.isEmpty)
+            ? loadData(userNotifier)
+            : null,
+        builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
               child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม"),
@@ -212,17 +217,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             children: [
               buildSearch(),
               Expanded(
-                child: ListView.separated(
+                child: ListView.builder(
                   itemCount: lottos.length,
                   itemBuilder: (BuildContext context, int index) {
                     final lotto = lottos[index];
 
-                    return buildLotto(lotto, userNotifier.docID[index]);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      color: Colors.black,
-                    );
+                    return frameWidget(buildLotto(lotto, userNotifier.docID[index]));
+                    
                   },
                 ),
               )
@@ -312,8 +313,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       style: TextStyle(color: Colors.blue, fontSize: 20),
     );
   }
+}
 
-  }
+class _DisplayScreenState {}
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {
@@ -326,7 +328,7 @@ Future<Null> confirmDialog(
         return new AlertDialog(
           title: new Text('คุณต้องการลบสลากใช่หรือไม่'),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: Container(
                 width: 60.0,
                 child: Text('ลบข้อมูล',
@@ -341,15 +343,12 @@ Future<Null> confirmDialog(
                     .collection('userlottery')
                     .doc(documentId)
                     .delete();
-                if (userID != null) {
-                  getUser(userNotifier, userID);
-                }
               },
             ),
             SizedBox(
               width: 20,
             ),
-            new FlatButton(
+            new TextButton(
               child: Container(
                 width: 60.0,
                 child: Text('ยกเลิก',

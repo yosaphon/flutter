@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lotto/model/PrizeData.dart';
+
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -59,15 +59,15 @@ class _DropdownDateState extends State<DropdownDate> {
     return Container(
       alignment: AlignmentDirectional.topCenter,
       decoration: BoxDecoration(
-          color: Color(0xFF25D4C2),
+          color: Colors.indigo,
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(36))),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           value: dateValue,
-          icon: const Icon(Icons.arrow_drop_down),
+          icon: const Icon(Icons.arrow_drop_down , color: Colors.amber,),
           iconSize: 30,
           elevation: 2,
-          style: TextStyle(color: Colors.black, fontSize: 22),
+          style: TextStyle(color: Colors.white, fontSize: 22),
           underline: Container(
             height: 2,
             color: Colors.blue,

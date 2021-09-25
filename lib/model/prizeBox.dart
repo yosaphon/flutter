@@ -11,7 +11,7 @@ class PrizeBox extends StatelessWidget {
   double size; //ขนาดตัวอักษร
   double hig, higth; // ขนาดช่อง สูง
   List<String> _listNumber = [];
-  int count ;
+  int count;
 
   PrizeBox(this.name, this.reward, this.roundNumber, this.size, this.higth,
       this.count) {
@@ -28,9 +28,20 @@ class PrizeBox extends StatelessWidget {
       child: Column(
         children: [
           Text(name, style: TextStyle(fontSize: 18)),
-          Text(
-              'รางวัลละ ${NumberFormat("#,###").format(int.parse(sReward[0]))} บาท',
-              style: TextStyle(fontSize: 12)),
+          RichText(
+            text: TextSpan(children: <TextSpan>[
+              TextSpan(
+                  text:
+                      'รางวัลละ ',
+                  style: TextStyle(fontSize: 12,color: Colors.black, fontFamily: "Mitr")),TextSpan(
+                  text:
+                      '${NumberFormat("#,###").format(int.parse(sReward[0]))}',
+                  style: TextStyle(fontSize: 13,color: Colors.orange, fontFamily: "Mitr")),TextSpan(
+                  text:
+                      ' บาท',
+                  style: TextStyle(fontSize: 12,color: Colors.black, fontFamily: "Mitr")),
+            ]),
+          ),
           SizedBox(
             height: 10,
           ),

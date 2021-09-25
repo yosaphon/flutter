@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +14,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/display_userlotto.dart';
 import 'package:lotto/screen/googlemapshow.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -290,9 +287,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "reward": null,
                                   "namewin":null
                                 });
-                                if (user.uid != null) {
-                                  getUser(userNotifier, user.uid);
-                                }
+                                
+                                //getUser(userNotifier, user.uid);
+                                
                                 Navigator.pop(context);
                               }
                             },

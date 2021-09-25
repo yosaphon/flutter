@@ -5,8 +5,8 @@ class lottoerypredition extends StatelessWidget {
   dynamic number1, number2, numberfornt3f,numberfornt3s, numberblack3f, numberblack3s; //ตัวเลข 1 ตัว
   // List<dynamic> mNum = []; //ตัวเลขหลายตัว
   String a, b, c, d, e, f, g, h;
-  String type, R1str, P1str, R2str, P2str, Result;
-  int R1, O1, P1, R2, O2, P2;
+  String type, r1str, p1str, r2str, p2str, result;
+  int r1, o1, p1, r2, o2, p2;
 
   lottoerypredition(this.number1, this.number2, this.numberfornt3f, this.numberfornt3s,
       this.numberblack3f,
@@ -28,37 +28,37 @@ class lottoerypredition extends StatelessWidget {
       f = number1.toString().substring(1, 2);
       g = number1.toString().substring(5, 6);
       
-      R1 = int.parse(a) + int.parse(b) + int.parse(c) + int.parse(d);
-      R1str = R1.toString();
-      R1str = R1str.substring(R1str.length - 1, R1str.length);
-      O1 = int.parse(R1str);
-      P1 = O1 + 5;
-      P1str = P1.toString();
-      P1str = P1.toString().substring(P1str.length - 1, P1str.length);
+      r1 = int.parse(a) + int.parse(b) + int.parse(c) + int.parse(d);
+      r1str = r1.toString();
+      r1str = r1str.substring(r1str.length - 1, r1str.length);
+      o1 = int.parse(r1str);
+      p1 = o1 + 5;
+      p1str = p1.toString();
+      p1str = p1.toString().substring(p1str.length - 1, p1str.length);
 
-      R2 = int.parse(b) +
+      r2 = int.parse(b) +
           int.parse(c) +
           int.parse(e) +
           int.parse(f) +
           int.parse(g) +
           int.parse(h);
-      R2str = R2.toString();
-      R2str = R2str.substring(R2str.length - 1, R2str.length);
-      O2 = int.parse(R2str);
-      P2 = O2 + 7;
-      P2str = P2.toString();
-      P2str = P2.toString().substring(P2str.length - 1, P2str.length);
-      Result = O1.toString() +
-          O2.toString() +
+      r2str = r2.toString();
+      r2str = r2str.substring(r2str.length - 1, r2str.length);
+      o2 = int.parse(r2str);
+      p2 = o2 + 7;
+      p2str = p2.toString();
+      p2str = p2.toString().substring(p2str.length - 1, p2str.length);
+      result = o1.toString() +
+          o2.toString() +
           "  " +
-          O1.toString() +
-          P2str +
+          o1.toString() +
+          p2str +
           '\n\n'+
-          P1str +
-          O2.toString() +
+          p1str +
+          o2.toString() +
           "  " +
-          P1str +
-          P2str;
+          p1str +
+          p2str;
     } else if (type == "2") {
 // a = หลักร้อยของรางวัลที่ 1,b = หลักสิบของเลขท้าย 2 ตัว,c = หลักหน่วยของเลขท้าย 2 ตัว
 // d = หลักแสนของรางวัลที่ 1,e = หลักหมื่นของรางวัลที่ 1,f = หลักพันของรางวัลที่ 1
@@ -68,14 +68,14 @@ class lottoerypredition extends StatelessWidget {
       d = number1.toString().substring(0, 1);
       e = number1.toString().substring(1, 2);
       f = number1.toString().substring(2, 3);
-      R1 = int.parse(a) + int.parse(b) + (int.parse(c) * 4) + 4;
-      R1str = R1.toString();
-      R1str = R1str.substring(R1str.length - 1, R1str.length);
+      r1 = int.parse(a) + int.parse(b) + (int.parse(c) * 4) + 4;
+      r1str = r1.toString();
+      r1str = r1str.substring(r1str.length - 1, r1str.length);
 
-      R2 = int.parse(b) + int.parse(e) + (int.parse(f) * 2) + int.parse(b) + 2;
-      R2str = R2.toString();
-      R2str = R2str.substring(R2str.length - 1, R2str.length);
-      Result = R1str + R2str + "     " + R2str + R1str;
+      r2 = int.parse(b) + int.parse(e) + (int.parse(f) * 2) + int.parse(b) + 2;
+      r2str = r2.toString();
+      r2str = r2str.substring(r2str.length - 1, r2str.length);
+      result = r1str + r2str + "     " + r2str + r1str;
     }
   }
 
@@ -89,7 +89,7 @@ class lottoerypredition extends StatelessWidget {
         Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
         SizedBox(height: 30,),
                   Text(
-                  Result,
+                  result,
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 ),

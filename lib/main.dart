@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     getPrize(prizeNotifier);
+    
     return Scaffold(
       extendBody: true,
       body: pages[index],
@@ -81,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onChangedTab: onChangedTab,
       ),
       floatingActionButton: FloatingActionButton(
+        
         child: Tab(
           text: "ตรวจ",
           // icon: Icon(Icons.qr_code_scanner)

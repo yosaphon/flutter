@@ -74,7 +74,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
 
     return IconTheme(
       data: IconThemeData(
-        color: isSelected ? Colors.blue : Colors.black,
+        color: isSelected ? Colors.indigo : Colors.blueGrey,
       ),
       child: AnimatedContainer(
         width: 52,
@@ -89,7 +89,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               icon, // icon
-              Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.blue : Colors.black,),) // text
+              Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.indigo : Colors.blueGrey,),) // text
             ],
           ),
         ),

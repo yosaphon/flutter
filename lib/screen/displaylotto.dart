@@ -6,6 +6,7 @@ import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/prizeBox.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/showCheckImage.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:provider/provider.dart';
 
 class DisplayScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         ),
         shape: RoundedRectangleBorder(),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Color(0xFF25D4C2),
+        backgroundColor: Colors.indigo,
         elevation: 0,
       ),
       body: Center(
@@ -119,27 +120,27 @@ class _DisplayScreenState extends State<DisplayScreen> {
                             "รางวัลที่ 3",
                             prizeNotifier.selectedPrize.data['third'].price,
                             prizeNotifier.selectedPrize.data['third'].number,
-                            12,
+                            16,
                             4,
-                            5),
+                            4),
                       ),
                       frameWidget(
                         PrizeBox(
                             "รางวัลที่ 4",
                             prizeNotifier.selectedPrize.data['fourth'].price,
                             prizeNotifier.selectedPrize.data['fourth'].number,
-                            12,
+                            16,
                             4,
-                            5),
+                            4),
                       ),
                       frameWidget(
                         PrizeBox(
                             "รางวัลที่ 5",
                             prizeNotifier.selectedPrize.data['fifth'].price,
                             prizeNotifier.selectedPrize.data['fifth'].number,
-                            12,
+                            16,
                             4,
-                            5),
+                            4),
                       ),
                       SizedBox(height: 100,)
                     
@@ -154,25 +155,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
       floatingActionButton: Column(
         children: [
           Spacer(),
-          FloatingActionButton.extended(
-            heroTag: "btnyoutube",
-            onPressed: () async {
-              // if (await canLaunch(document.youtubeUrl)) {
-              //   await launch(document.youtubeUrl);
-              // }
-            },
-            icon: FaIcon(FontAwesomeIcons.youtube),
-            label: const Text(
-              'Youtube',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.red,
-          ),
-          SizedBox(
-            height: 5,
-          ),
+          
           FloatingActionButton.extended(
             heroTag: "btnreadpdf",
             onPressed: () {
@@ -210,24 +193,5 @@ class _DisplayScreenState extends State<DisplayScreen> {
     );
   }
 
-  Widget frameWidget(Widget dataWidget) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 5),
-      child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 7,
-                  offset: Offset(0, 4), // changes position of shadow
-                ),
-              ],
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          child: dataWidget),
-    );
-  }
+   
 }
