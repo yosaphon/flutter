@@ -3,7 +3,7 @@ import 'package:lotto/model/UserData.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 
 getUser(UserNotifier userNotifier, dynamic userId,
-    {String start = null, String end = null}) async {
+    {String start, String end}) async {
   QuerySnapshot snapshot;
   if (start == null || end == null) {
     snapshot = await FirebaseFirestore.instance
@@ -35,4 +35,5 @@ getUser(UserNotifier userNotifier, dynamic userId,
 
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
+
 }
