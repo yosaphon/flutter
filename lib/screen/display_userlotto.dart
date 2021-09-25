@@ -249,6 +249,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         )),
               );
             },
+            //upsdat
+            
             icon: Icon(Icons.feed),
             label: const Text(
               'ดูรายงาน',
