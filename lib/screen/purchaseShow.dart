@@ -16,6 +16,25 @@ class ShowPurchaseReport extends StatefulWidget {
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateuser;
+  List<ChartData> _chartData;
+  List<ChartData> getChartData() {
+    List<ChartData> chartDataWon = [
+      ChartData("งวด1", 2000),
+      ChartData("งวด2", 1000),
+      ChartData("งวด3", 5000),
+      ChartData("งวด4", 0),
+      ChartData("งวด5", 0),
+    ];
+    List<ChartData> chartDataLose = [
+      ChartData("งวด1", 1000),
+      ChartData("งวด2", 6000),
+      ChartData("งวด3", 1000),
+      ChartData("งวด4", 400),
+      ChartData("งวด5", 400),
+    ];
+    return chartDataLose;
+  }
+
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
@@ -31,6 +50,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   @override
   void initState() {
     loadData();
+    _chartData = getChartData();
     super.initState();
   }
 
@@ -80,11 +100,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     allresultdate2 = allresultdate.toSet().toList();
   }
 
-
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
-    
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
@@ -243,16 +262,20 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   Flexible(
                     child: Row(
                       children: <Widget>[
-                        _buildStatCard('Total Won', '$totalWon','บาท', Colors.orange),
-                        _buildStatCard('Total Lose', '$totalLose','บาท', Colors.red),
+                        _buildStatCard(
+                            'Total Won', '$totalWon', 'บาท', Colors.orange),
+                        _buildStatCard(
+                            'Total Lose', '$totalLose', 'บาท', Colors.red),
                       ],
                     ),
                   ),
                   Flexible(
                     child: Row(
                       children: <Widget>[
-                        _buildStatCard('Amount', '${totalAmount.toString()}','ใบ',Colors.green),
-                        _buildStatCard('Total', '$totalProfit','บาท',Colors.lightBlue),
+                        _buildStatCard('Amount', '${totalAmount.toString()}',
+                            'ใบ', Colors.green),
+                        _buildStatCard(
+                            'Total', '$totalProfit', 'บาท', Colors.lightBlue),
                       ],
                     ),
                   ),
@@ -298,7 +321,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 
-  Expanded _buildStatCard(String title, String count,String typestring, MaterialColor color) {
+  Expanded _buildStatCard(
+      String title, String count, String typestring, MaterialColor color) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -353,4 +377,11 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
+}
+
+class ChartData {
+  final String date;
+  final int sales;
+
+  ChartData(this.date, this.sales);
 }
