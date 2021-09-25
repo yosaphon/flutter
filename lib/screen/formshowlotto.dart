@@ -288,6 +288,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   "userid": user.uid,
                                   "state": null,
                                   "reward": null,
+                                  "namewin":null
                                 });
                                 if (user.uid != null) {
                                   getUser(userNotifier, user.uid);

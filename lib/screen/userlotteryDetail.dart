@@ -25,14 +25,10 @@ class Formshowdetaillotto extends StatefulWidget {
 
 class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
   final docid,userID;
-  // final locamark;
-
   _FormshowdetaillottoState(this.docid,this.userID);
   GoogleMapController mapController;
-  // final Map<String, Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    // final  = Marker(markerId: markerId)
   }
 
   final formKey = GlobalKey<FormState>();
@@ -45,20 +41,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
   List<DocumentSnapshot> documents;
   // เตรียม firebase
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
-
   final picker = ImagePicker();
-
-  // Set<Marker> usermark() {
-  //   return <Marker>[localMarker()].toSet();
-  // }
-
-  // Marker localMarker() {
-  //   return Marker(
-  //       markerId: MarkerId('userbuy'),
-  //       position: LatLng(double.parse(locamark.substring(1, 18)),
-  //           double.parse(locamark.substring(20, locamark.length - 1))));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -137,14 +120,6 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                           child: Image.network(
                                             snapshot.data['imageurl'],
                                             fit: BoxFit.cover,
-                                            // width: MediaQuery.of(context)
-                                            //         .size
-                                            //         .width *
-                                            //     1,
-                                            // height: MediaQuery.of(context)
-                                            //         .size
-                                            //         .height *
-                                            //     1,
                                           ),
                                         ))
                                     : SizedBox(
@@ -164,8 +139,8 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                             spreadRadius: -13,
                                             color: Colors.black38)
                                       ]),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       // Spacer(),
                                       Text(
@@ -198,21 +173,19 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       ]),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       // Spacer(),
-                                      Text(
+                                      textSty(
                                         "จำนวนสลาก",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         snapshot.data['amount'],
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         "ใบ",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       // Spacer(),
                                     ],
@@ -235,21 +208,19 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       ]),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       // Spacer(),
-                                      Text(
-                                        "ราคา    ",
-                                        style: TextStyle(fontSize: 16),
+                                      textSty(
+                                        "ราคา      ",
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         snapshot.data['lotteryprice'],
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         "บาท",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       // Spacer(),
                                     ],
@@ -274,14 +245,12 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       // Spacer(),
-                                      Text(
+                                      textSty(
                                         "สถานะ    ",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         snapshot.data['state'] == true?"ถูกรางวัล":"ไม่ถูกรางวัล",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
                                     ],
@@ -306,18 +275,15 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       // Spacer(),
-                                      Text(
+                                      textSty(
                                         "เงินรางวัล    ",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Spacer(),
-                                      Text(
+                                      textSty(
                                         snapshot.data['reward'],
-                                        style: TextStyle(fontSize: 16),
                                       ),Spacer(),
-                                      Text(
+                                      textSty(
                                         "บาท",
-                                        style: TextStyle(fontSize: 16),
                                       ),
                                     ],
                                   ),
@@ -442,23 +408,19 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
           );
         });
   }
+  Widget textSty(String text){
+    return Center(
+      child: Text(text,style: TextStyle(fontSize: 16),),
+    );
+  }
 
   void _navigateAndDisplaySelection(
       BuildContext context, String locamark) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen
-
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ShowuserGooglemap(locamark: locamark)),
     );
-
-    // After the Selection Screen returns a result, hide any previous snackbars
-    // and show the new result.
-    // ScaffoldMessenger.of(context)
-    //   ..removeCurrentSnackBar()
-    //   ..showSnackBar(SnackBar(content: Text('$result')));
     userlottery.latlng = result;
   }
 }
