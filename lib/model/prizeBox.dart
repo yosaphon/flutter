@@ -9,21 +9,16 @@ class PrizeBox extends StatelessWidget {
   List<String> mNum = []; //ตัวเลขหลายตัว
   List<String> sReward = []; //รางวัล
   double size; //ขนาดตัวอักษร
-  double hig,higth; // ขนาดช่อง สูง
+  double hig, higth; // ขนาดช่อง สูง
   List<String> _listNumber = [];
+  int count ;
 
-  PrizeBox(this.name, this.reward, this.roundNumber, this.size,
-      this.higth,this.hig) {
+  PrizeBox(this.name, this.reward, this.roundNumber, this.size, this.higth,
+      this.count) {
     sReward = reward.split('.');
     roundNumber.forEach((e) {
       _listNumber.add(e.value);
     });
-
-    // if (name == 'รางวัลที่ 1' || name == 'เลขท้าย 2 ตัว') {
-    //   mNum.add(number);
-    // } else {
-    //   number.forEach((e) => mNum.add(e));
-    // }
   }
 
   @override
@@ -41,16 +36,16 @@ class PrizeBox extends StatelessWidget {
           ),
           Center(
             child: GridView.count(
-              childAspectRatio: 2 / (((higth*higth)/10) / hig),
-              crossAxisCount: _listNumber.length,
+              childAspectRatio: 2 / (((higth * higth) / 10) / 1.5),
+              crossAxisCount: count,
               crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
+              mainAxisSpacing: 1,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: _listNumber.map<Widget>((n) {
                 return Text(
                   n,
-                  style: TextStyle(fontSize: size, color: Colors.blue),
+                  style: TextStyle(fontSize: size, color: Colors.indigo),
                   textAlign: TextAlign.center,
                 );
               }).toList(),

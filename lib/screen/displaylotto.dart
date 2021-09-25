@@ -24,7 +24,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
@@ -41,157 +41,115 @@ class _DisplayScreenState extends State<DisplayScreen> {
         child: FutureBuilder(
             //future: getPrize(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty) {
-                return CircularProgressIndicator();
-              } else if (prizeNotifier.prizeList.isNotEmpty) {
-                //print(snapshot.data);
-                return ListView(
-                  children: <Widget>[
-                    DropdownDate(prizeNotifier.prizeList.values),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, right: 30, top: 10, bottom: 5),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 4), // changes position of shadow
-                              ),
-                            ],
-                            color: Colors.white,
-                            shape: BoxShape.rectangle,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
-                        child: PrizeBox(
+          if (prizeNotifier.prizeList.isEmpty) {
+            return CircularProgressIndicator();
+          } else {
+            //print(snapshot.data);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DropdownDate(prizeNotifier.prizeList.values),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[ 
+                      frameWidget(
+                        PrizeBox(
                             //รางวัลที่ 1
                             "รางวัลที่ 1",
                             prizeNotifier.selectedPrize.data['first'].price,
-                            prizeNotifier
-                                .selectedPrize.data['first'].number,
+                            prizeNotifier.selectedPrize.data['first'].number,
                             35,
-                            5,
-                            8),
+                            2.2,
+                            1),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, right: 30, top: 10, bottom: 5),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 4), // changes position of shadow
-                              ),
-                            ],
-                            color: Colors.white,
-                            shape: BoxShape.rectangle,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
-                        child: Row(
+                      frameWidget(
+                        Row(
                           //รางวัลเลขหน้า 3, เลขท้าย 3
                           children: <Widget>[
                             Expanded(
                               child: PrizeBox(
                                   "เลขหน้า 3 ตัว",
-                                  prizeNotifier
-                                      .selectedPrize.data['last3f'].price,
-                                  prizeNotifier.selectedPrize.data['last3f']
-                                      .number,
-                                 
+                                  prizeNotifier.selectedPrize.data['last3f'].price,
+                                  prizeNotifier.selectedPrize.data['last3f'].number,
                                   22,
-                                  5,
+                                  4,
                                   2),
                             ),
                             Expanded(
                               child: PrizeBox(
                                   "เลขท้าย 3 ตัว",
-                                  prizeNotifier
-                                      .selectedPrize.data['last3b'].price,
-                                  prizeNotifier.selectedPrize.data['last3b']
-                                      .number,
+                                  prizeNotifier.selectedPrize.data['last3b'].price,
+                                  prizeNotifier.selectedPrize.data['last3b'].number,
                                   22,
-                                  5,
+                                  4,
                                   2),
                             ),
                           ],
                         ),
                       ),
-                    ),
-
-                    // PrizeBox(
-                    //     //รางวัลเลขท้าย 2 ตัว
-                    //     snapshot.data['result'][3]['name'],
-                    //     snapshot.data['result'][3]['reword'],
-                    //     snapshot.data['result'][3]['number'],
-                    //     1,
-                    //     28,
-                    //     9),
-                    // PrizeBox(
-                    //     //รางวัลใกล้เคียง รางวัลที่ 1
-                    //     snapshot.data['result'][4]['name'],
-                    //     snapshot.data['result'][4]['reword'],
-                    //     snapshot.data['result'][4]['number'],
-                    //     2,
-                    //     22,
-                    //     6),
-                    // PrizeBox(
-                    //     //รางวัลที่ 2
-                    //     snapshot.data['result'][5]['name'],
-                    //     snapshot.data['result'][5]['reword'],
-                    //     snapshot.data['result'][5]['number'],
-                    //     4,
-                    //     22,
-                    //     3),
-                    // PrizeBox(
-                    //     //รางวัลที่ 3
-                    //     snapshot.data['result'][6]['name'],
-                    //     snapshot.data['result'][6]['reword'],
-                    //     snapshot.data['result'][6]['number'],
-                    //     5,
-                    //     18,
-                    //     2),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // PrizeBox(
-                    //     //รางวัลที่ 4
-                    //     snapshot.data['result'][7]['name'],
-                    //     snapshot.data['result'][7]['reword'],
-                    //     snapshot.data['result'][7]['number'],
-                    //     5,
-                    //     18,
-                    //     2),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // PrizeBox(
-                    //     //รางวัลที่ 5
-                    //     snapshot.data['result'][8]['name'],
-                    //     snapshot.data['result'][8]['reword'],
-                    //     snapshot.data['result'][8]['number'],
-                    //     5,
-                    //     18,
-                    //     2),
-                    // SizedBox(
-                    //   height: 55,
-                    // )
-                  ],
-                );
-              } else {
-                print(snapshot.data);
-                return CircularProgressIndicator();
-              }
-            }),
+                      frameWidget(
+                        PrizeBox(
+                            "เลขท้าย 2 ตัว",
+                            prizeNotifier.selectedPrize.data['last2'].price,
+                            prizeNotifier.selectedPrize.data['last2'].number,
+                            30,
+                            2,
+                            1),
+                      ),
+                      frameWidget(
+                        PrizeBox(
+                            "รางวัลใกล้เคียง",
+                            prizeNotifier.selectedPrize.data['near1'].price,
+                            prizeNotifier.selectedPrize.data['near1'].number,
+                            24,
+                            3,
+                            2),
+                      ),
+                      frameWidget(
+                        PrizeBox(
+                            "รางวัลที่ 2",
+                            prizeNotifier.selectedPrize.data['second'].price,
+                            prizeNotifier.selectedPrize.data['second'].number,
+                            18,
+                            3,
+                            3),
+                      ),
+                      frameWidget(
+                        PrizeBox(
+                            "รางวัลที่ 3",
+                            prizeNotifier.selectedPrize.data['third'].price,
+                            prizeNotifier.selectedPrize.data['third'].number,
+                            12,
+                            4,
+                            5),
+                      ),
+                      frameWidget(
+                        PrizeBox(
+                            "รางวัลที่ 4",
+                            prizeNotifier.selectedPrize.data['fourth'].price,
+                            prizeNotifier.selectedPrize.data['fourth'].number,
+                            12,
+                            4,
+                            5),
+                      ),
+                      frameWidget(
+                        PrizeBox(
+                            "รางวัลที่ 5",
+                            prizeNotifier.selectedPrize.data['fifth'].price,
+                            prizeNotifier.selectedPrize.data['fifth'].number,
+                            12,
+                            4,
+                            5),
+                      ),
+                      SizedBox(height: 100,)
+                    
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+        }),
       ),
       floatingActionButton: Column(
         children: [
@@ -249,6 +207,27 @@ class _DisplayScreenState extends State<DisplayScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  Widget frameWidget(Widget dataWidget) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 5),
+      child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 0,
+                  blurRadius: 7,
+                  offset: Offset(0, 4), // changes position of shadow
+                ),
+              ],
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(12))),
+          child: dataWidget),
     );
   }
 }
