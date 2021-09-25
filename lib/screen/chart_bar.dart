@@ -33,17 +33,17 @@ class GroupedFillColorBarChart extends StatelessWidget {
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> _createSampleData() {
     final totaReward = [
-      new OrdinalSales('งวด1', "TotalWon(เดือน1)"),
-      new OrdinalSales('งวด2', "TotalWon(เดือน2)"),
-      new OrdinalSales('เดือน3', "TotalWon(เดือน3)"),
-      new OrdinalSales('เดือน4', "TotalWon(เดือน4)"),
+      new OrdinalSales('2014', 25),
+      new OrdinalSales('2015', 50),
+      new OrdinalSales('2016', 10),
+      new OrdinalSales('2017', 20),
     ];
 
     final totaLose = [
-      new OrdinalSales('เดือน1', "TotalLose(เดือน1)"),
-      new OrdinalSales('เดือน1', "TotalLose(เดือน1)"),
-      new OrdinalSales('เดือน1', "TotalLose(เดือน1)"),
-      new OrdinalSales('เดือน1', "TotalLOse(เดือน1)"),
+      new OrdinalSales('2014', 10),
+      new OrdinalSales('2015', 50),
+      new OrdinalSales('2016', 50),
+      new OrdinalSales('2017', 45),
     ];
 
     return [
