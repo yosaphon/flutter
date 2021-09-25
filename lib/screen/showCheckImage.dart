@@ -16,6 +16,7 @@ class ShowCheckImage extends StatelessWidget {
     print(y + nDate[1] + nDate[2]);
     y = y + nDate[1] + nDate[2];
     imageUrl = "https://cdn.lottery.co.th/lotto/image/$y.jpg";
+    print(y);
   }
 
   @override
@@ -33,7 +34,7 @@ class ShowCheckImage extends StatelessWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
         // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.white,//withOpacity(0.1),
+        backgroundColor: Colors.white, //withOpacity(0.1),
         elevation: 0,
       ),
       body: Center(

@@ -30,17 +30,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   String dateValue;
 
   Future loadData(PrizeNotifier prizeNotifier) async {
-    //await getPrize(prizeNotifier);
-    try {
+    if (prizeNotifier.prizeList.isNotEmpty) {
       prizeNotifier.prizeList.forEach((key, value) {
         date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
         prizeData.add(value);
       });
-
-      dateValue = date.values.first;
-    } on Exception catch (e) {
-      print(e);
+    dateValue = date.values.first;
     }
+    
 //เรียกค่าอันสุดท้าย});
   }
 
@@ -95,8 +92,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         body: FutureBuilder(
             future: loadData(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty) {
-                return CircularProgressIndicator();
+              if (prizeNotifier.prizeList.isEmpty || dateValue == null) {
+                return Center(child: CircularProgressIndicator());
               } else {
                 return Form(
                   key: _formKey,
