@@ -76,73 +76,106 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         );
     Widget buildLotto(UserData lotto, String docID) {
       return ListTile(
-          tileColor: Colors.white54,
-          leading: lotto.imageurl != null
-              ? Image.network(
-                  lotto.imageurl,
-                  width: 100,
-                  fit: BoxFit.fitWidth,
+        tileColor: Colors.white54,
+        leading: lotto.imageurl != null
+            ? Image.network(
+                lotto.imageurl,
+                width: 100,
+                fit: BoxFit.fitWidth,
+              )
+            : Image.asset(
+                'asset/guraLottery.png',
+                width: 50,
+                fit: BoxFit.fitWidth,
+              ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
+        title: Row(
+          children: [
+            Text(
+              lotto.number,
+              style: TextStyle(color: Colors.indigo),
+            ),
+            Padding(        
+              padding: const EdgeInsets.only(left:16.0),
+              child: Text(
+                "${lotto.date}",
+                style: TextStyle(color: Colors.black, fontSize: 14 ),
+              ),
+            ),
+          ],
+        ),
+        subtitle:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          RichText(
+              text: TextSpan(children: <TextSpan>[
+            TextSpan(
+                text: "จำนวน ",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+            TextSpan(
+                text: lotto.amount,
+                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
+            TextSpan(
+                text: " ใบ",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
+          ])),
+          RichText(
+              text: TextSpan(children: <TextSpan>[
+            TextSpan(
+                text: "ราคา ",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+            TextSpan(
+                text: lotto.lotteryprice,
+                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
+            TextSpan(
+                text: " บาท",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
+          ]))
+        ]),
+        trailing: IconButton(
+          icon: lotto.state == true
+              ? Icon(
+                  Icons.check_circle,
+                  color: Colors.lightGreenAccent,
                 )
-              : Image.asset(
-                  'asset/gallery-187-902099.png',
-                  width: 100,
-                  fit: BoxFit.fitWidth,
-                ), //ต้องแก้เป็นรูปที่บันทึก ตอนนี้เอามาแสดงไว้ก่อน
-          title: Text(lotto.number),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("จำนวน " + lotto.amount + " ใบ"),
-              Text("ราคา " + lotto.lotteryprice + " บาท")
-            ],
-          ),
-          trailing: IconButton(
-            icon: lotto.state == true
-                ? Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                  )
-                : lotto.state == false
-                    ? Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.circle,
-                        color: Colors.white54,
-                      ),
-            onPressed: () {},
-          ),
-          onTap: () async {
-            //กดเพื่อดูรายละเอียด
-            var docid = docID;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      Formshowdetaillotto(docid: docid, userID: user.uid)),
-            );
-          },
-          onLongPress: () {
-            //แก้ไข
-            // var docid = document.id;
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => FormUpdatelotto(
-            //             docid: docid,
-            //           )),
-            // );
+              : lotto.state == false
+                  ? Icon(
+                      Icons.cancel,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.circle,
+                      color: Colors.white54,
+                    ),
+          onPressed: () {},
+        ),
+        onTap: () async {
+          //กดเพื่อดูรายละเอียด
+          var docid = docID;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Formshowdetaillotto(docid: docid, userID: user.uid)),
+          );
+        },
+        onLongPress: () {
+          //แก้ไข
+          // var docid = document.id;
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => FormUpdatelotto(
+          //             docid: docid,
+          //           )),
+          // );
 
-            // // กดเพื่อลบ
-            confirmDialog(context, docID, lotto.imageurl, user.uid);
+          // // กดเพื่อลบ
+          confirmDialog(context, docID, lotto.imageurl, user.uid);
 
-            // deleteUserLottery(document.id);
-            // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
-            // Navigator.pop(context);
-          },
-        )
-      ;
+          // deleteUserLottery(document.id);
+          // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
+          // Navigator.pop(context);
+        },
+      );
     }
 
     return Scaffold(
@@ -222,8 +255,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   itemBuilder: (BuildContext context, int index) {
                     final lotto = lottos[index];
 
-                    return frameWidget(buildLotto(lotto, userNotifier.docID[index]));
-                    
+                    return frameWidget(
+                        buildLotto(lotto, userNotifier.docID[index]));
                   },
                 ),
               )
@@ -250,7 +283,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               );
             },
             //upsdat
-            
+
             icon: Icon(Icons.feed),
             label: const Text(
               'ดูรายงาน',
