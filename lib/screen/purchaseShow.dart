@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/chart_bar.dart';
+import 'package:lotto/screen/texsrtsada.dart';
 import 'package:provider/provider.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class ShowPurchaseReport extends StatefulWidget {
   final dateuser; // filter สำหรับหาวันที่
@@ -16,23 +17,43 @@ class ShowPurchaseReport extends StatefulWidget {
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateuser;
-  List<ChartData> _chartData;
-  List<ChartData> getChartData() {
-    List<ChartData> chartDataWon = [
-      ChartData("งวด1", 2000),
-      ChartData("งวด2", 1000),
-      ChartData("งวด3", 5000),
-      ChartData("งวด4", 0),
-      ChartData("งวด5", 0),
+  List<charts.Series<TotalDataCharts, String>> _seriesData;
+  _generateData() {
+    var data1 = 
+    [
+      new TotalDataCharts('2021-08-01', 10000),
+      new TotalDataCharts('2021-09-01', 0),
+      new TotalDataCharts('2021-10-01', 2000),
     ];
-    List<ChartData> chartDataLose = [
-      ChartData("งวด1", 1000),
-      ChartData("งวด2", 6000),
-      ChartData("งวด3", 1000),
-      ChartData("งวด4", 400),
-      ChartData("งวด5", 400),
+    var data2 = [
+      new TotalDataCharts('2021-08-01', 2500),
+      new TotalDataCharts('2021-09-01', 1200),
+      new TotalDataCharts('2021-10-01', 80),
     ];
-    return chartDataLose;
+    
+    _seriesData.add(
+      charts.Series(
+        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
+        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        id: 'Win',
+        data: data1,
+        fillPatternFn: (_, __) => charts.FillPatternType.solid,
+        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
+            charts.ColorUtil.fromDartColor(Colors.green),
+      ), 
+    );
+
+    _seriesData.add(
+      charts.Series(
+        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
+        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        id: 'Lose',
+        data: data2,
+        fillPatternFn: (_, __) => charts.FillPatternType.solid,
+        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
+           charts.ColorUtil.fromDartColor(Colors.red),
+      ),
+    );
   }
 
   List<String> allresultdate = [];
@@ -50,7 +71,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   @override
   void initState() {
     loadData();
-    _chartData = getChartData();
+    _seriesData = List<charts.Series<TotalDataCharts, String>>();
+    _generateData();
     super.initState();
   }
 
@@ -309,8 +331,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.width *0.7,
+                    child: charts.BarChart(
+                            _seriesData,
+                            animate: true,
+                            barGroupingType: charts.BarGroupingType.grouped,
+                            animationDuration: Duration(seconds: 5),
+                          ),
                   ),
                 ],
               ),
@@ -379,9 +407,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 }
 
-class ChartData {
-  final String date;
-  final int sales;
-
-  ChartData(this.date, this.sales);
+class TotalDataCharts {
+  String date;
+  int total;
+  TotalDataCharts(this.date, this.total);
 }
