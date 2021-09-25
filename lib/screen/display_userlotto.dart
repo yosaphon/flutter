@@ -25,7 +25,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   TextEditingController _searchController = TextEditingController();
   int selectedindex = 0;
   int selectedindexsecond = 0;
-  List<UserData> lottos;
+  List<UserData> lottos = [];
   String number, query = '';
 
   void initiateSearch(String val) {

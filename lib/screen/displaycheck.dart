@@ -29,23 +29,19 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   List<PrizeData> prizeData = [];
   String dateValue;
 
-  @override
-  void initState() {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
-
-    loadData(prizeNotifier);
-    super.initState();
-  }
-
   Future loadData(PrizeNotifier prizeNotifier) async {
-    await getPrize(prizeNotifier);
-    prizeNotifier.prizeList.forEach((key, value) {
-      date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
-      prizeData.add(value);
-    });
+    //await getPrize(prizeNotifier);
+    try {
+      prizeNotifier.prizeList.forEach((key, value) {
+        date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
+        prizeData.add(value);
+      });
 
-    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
+      dateValue = date.values.first;
+    } on Exception catch (e) {
+      print(e);
+    }
+//เรียกค่าอันสุดท้าย});
   }
 
   getKeyByValue() {
@@ -97,17 +93,17 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           elevation: 0,
         ),
         body: FutureBuilder(
-            future: getPrize(prizeNotifier),
+            future: loadData(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData || snapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
+              if (prizeNotifier.prizeList.isEmpty) {
+                return CircularProgressIndicator();
               } else {
                 return Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                       child: Column(
                     children: <Widget>[
-                      DropdownDate(snapshot.data),
+                      DropdownDate(prizeNotifier.prizeList.values),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(

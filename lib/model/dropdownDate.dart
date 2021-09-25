@@ -4,37 +4,28 @@ import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:provider/provider.dart';
 
 class DropdownDate extends StatefulWidget {
-  final List<PrizeData> prizeData;
+  final prizeData;
   DropdownDate(this.prizeData);
   @override
   _DropdownDateState createState() => _DropdownDateState(this.prizeData);
 }
 
 class _DropdownDateState extends State<DropdownDate> {
-  final List<PrizeData> prizeData;
+  final prizeData;
   _DropdownDateState(this.prizeData);
   Map<String, String> date = {};
   String dateValue;
 
   @override
   void initState() {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
-    //print("prizedata = $prizeNotifier");
-    loadData(prizeNotifier);
+
+    dateValue = prizeData.first.date;
     super.initState();
-  }
-
-  Future loadData(PrizeNotifier prizeNotifier) async {
-    // prizeData.forEach((value) =>
-    //     date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-    dateValue = prizeData.first.date; //เรียกค่าอันสุดท้าย});
-
   }
 
   getKeyByValue(String value) {
     List<String> w = value.split('-');
-    return w[0]+w[1]+w[2];
+    return w[0] + w[1] + w[2];
   }
 
   String numToWord(String n) {
@@ -90,8 +81,7 @@ class _DropdownDateState extends State<DropdownDate> {
               print(prizeNotifier.prizeList[getKeyByValue(dateValue)]);
             });
           },
-          items: prizeData
-              .map<DropdownMenuItem<String>>((dynamic value) {
+          items: prizeData.map<DropdownMenuItem<String>>((dynamic value) {
             return DropdownMenuItem<String>(
               value: value.date,
               child: Text(

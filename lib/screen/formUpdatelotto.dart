@@ -353,8 +353,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "latlng": userlottery.latlng,
                                           });
                                         }
-                                        getUser(userNotifier, user.uid);
+                                        
                                         Navigator.pop(context);
+                                        //getUser(userNotifier, user.uid);
                                       }
                                     },
                                   ),

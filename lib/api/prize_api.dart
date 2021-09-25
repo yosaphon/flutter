@@ -23,5 +23,4 @@ getPrize(PrizeNotifier prizeNotifier) async {
   prizeNotifier.prizeList = _prizeList;
   prizeNotifier.id = _id;
   prizeNotifier.selectedPrize = prizeNotifier.prizeList.values.first;
-  return _listDate;
 }

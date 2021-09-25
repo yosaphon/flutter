@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lotto/api/prize_api.dart';
+
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/prizeBox.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
@@ -39,15 +39,15 @@ class _DisplayScreenState extends State<DisplayScreen> {
       ),
       body: Center(
         child: FutureBuilder(
-            future: getPrize(prizeNotifier),
+            //future: getPrize(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData || snapshot.data == null) {
+              if (prizeNotifier.prizeList.isEmpty) {
                 return CircularProgressIndicator();
-              } else if (snapshot.hasData) {
-                print(snapshot.data);
+              } else if (prizeNotifier.prizeList.isNotEmpty) {
+                //print(snapshot.data);
                 return ListView(
                   children: <Widget>[
-                    DropdownDate(snapshot.data),
+                    DropdownDate(prizeNotifier.prizeList.values),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 30, right: 30, top: 10, bottom: 5),
