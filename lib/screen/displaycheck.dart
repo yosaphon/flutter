@@ -36,9 +36,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
         prizeData.add(value);
       });
-    dateValue = date.values.first;
+      dateValue = date.values.first;
     }
-    
+
 //เรียกค่าอันสุดท้าย});
   }
 
@@ -111,30 +111,6 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                             SizedBox(
                               height: 16,
                             ),
-                            Row(
-                              children: [
-                                Spacer(),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  height: 30,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => QRScanPage()),
-                                      );
-                                    },
-                                    child: Text(
-                                      'scan qr code',
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                                Spacer(),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -151,30 +127,21 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
               FloatingActionButton.extended(
                 heroTag: "btnQRCode",
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    var data = new CheckNumber(
-                        date.keys.firstWhere(
-                            (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                            orElse: () => null),
-                        lotterylist,
-                        null);
-                    data
-                        .getSnapshot()
-                        .then((e) => DialogHelper.exit(context, data.checked));
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QRScanPage()),
+                  );
                 },
                 icon: Icon(Icons.qr_code_2),
                 label: Text(
                   'สแกน',
-                  style: TextStyle(
-                    color: Colors.white, fontSize: 18
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 backgroundColor: Colors.amber,
               ),
               Spacer(),
               FloatingActionButton.extended(
-                heroTag: "btnCheck",
+                heroTag: "btn2",
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     var data = new CheckNumber(
@@ -191,9 +158,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                 icon: Icon(Icons.pin),
                 label: Text(
                   'ตรวจ',
-                  style: TextStyle(
-                    color: Colors.white, fontSize: 18
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 backgroundColor: Color(0xFFF63C4F),
               ),
