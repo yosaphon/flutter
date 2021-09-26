@@ -1,23 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class ShowPurchaseReport extends StatefulWidget {
-  final dateuser; // filter สำหรับหาวันที่
-  const ShowPurchaseReport({this.dateuser});
+  final dateUser; // filter สำหรับหาวันที่
+  const ShowPurchaseReport({this.dateUser});
   @override
-  _ShowPurchaseReportState createState() => _ShowPurchaseReportState(dateuser);
+  _ShowPurchaseReportState createState() => _ShowPurchaseReportState(dateUser);
 }
+
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
-  final dateuser;
+  final dateUser;
   List<charts.Series<TotalDataCharts, String>> _seriesData;
   _generateData() {
-    var dataWon = 
-    [
+    var dataWon = [
       new TotalDataCharts('2021-08-01', 10000),
       new TotalDataCharts('2021-09-01', 0),
       new TotalDataCharts('2021-10-01', 2000),
@@ -31,31 +32,33 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
         id: 'Win',
         data: dataWon,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
             charts.ColorUtil.fromDartColor(Colors.green),
-      ), 
+      ),
     );
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
         id: 'Lose',
         data: dataLose,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-           charts.ColorUtil.fromDartColor(Colors.red),
+            charts.ColorUtil.fromDartColor(Colors.red),
       ),
     );
   }
-  
+
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
-  _ShowPurchaseReportState(this.dateuser);
+  _ShowPurchaseReportState(this.dateUser);
   double totalProfit = 0,
       totalWon = 0,
       totalLose = 0,
@@ -64,6 +67,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   int totalAmount = 0;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
+
+  double sumReward = 0, sumPay = 0;
+
+  int sumAmount = 0;
   @override
   void initState() {
     loadData();
@@ -76,41 +83,50 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
     await getUser(userNotifier, user.uid,
-        start: widget.dateuser[0], end: widget.dateuser[1]);
+        start: widget.dateUser[0], end: widget.dateUser[1]);
     userNotifier.currentUser.forEach((element) {
       allresultdate.add(element.date);
     });
-    userNotifier.currentUser.forEach((element) {
-      listotalWon
-          .add(element.reward == null ? 0.00 : double.parse(element.reward));
 
-      listotalprice.add(element.lotteryprice == null
-          ? 0.00
-          : double.parse(element.lotteryprice));
+    sumAllData() {
+      userNotifier.currentUser.forEach((element) {
+        listotalWon
+            .add(element.reward == null ? 0.00 : double.parse(element.reward));
 
-      listotalAmount
-          .add(element.amount == null ? 0.00 : int.parse(element.amount));
-    });
-    for (var i = 0; i < listotalAmount.length; i++) {
-      //เงินรางวัลที่ถูก
-      if (listotalWon[i] == null) {
-        totalWon += 0.00;
-      } else if (listotalWon[i] != null) {
-        totalWon += listotalWon[i] * double.parse(listotalAmount[i].toString());
-      }
-      //เงินที่ซื้อ
-      if (listotalprice[i] == null) {
-        totalLose += 0.00;
-      } else if (listotalprice[i] != null) {
-        totalLose += listotalprice[i];
-      }
-      //จำนวนทั้งหมด
-      if (listotalAmount[i] == null) {
-        totalAmount += 0;
-      } else if (listotalAmount[i] != null) {
-        totalAmount += listotalAmount[i];
+        listotalprice.add(element.lotteryprice == null
+            ? 0.00
+            : double.parse(element.lotteryprice));
+
+        listotalAmount
+            .add(element.amount == null ? 0.00 : int.parse(element.amount));
+      });
+    }
+
+    List<SumaryData> _sumaryData;
+
+    sumEachData() {
+      for (var item in dateUser) {
+        userNotifier.currentUser.forEach((element) {
+          if (item == element.date) {
+            sumReward +=
+                element.reward == null ? 0.00 : double.parse(element.reward);
+            sumPay += element.lotteryprice == null
+                ? 0.00
+                : double.parse(element.lotteryprice);
+
+            sumAmount += element.amount == null ? 1 : element.amount;
+          }
+        });
+        SumaryData sumaryData = SumaryData(
+          date: item,
+          sumReward: sumReward,
+          sumPay: sumPay,
+          amount: sumAmount,
+        );
+        _sumaryData.add(sumaryData);
       }
     }
+
     totalProfit = totalWon - totalLose;
     for (var i = 0; i <= allresultdate.length - 1; i++) {
       indexrow += ["$i"];
@@ -319,7 +335,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                     padding: const EdgeInsets.all(20.0),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${dateuser[0]} TO ${dateuser[1]}",
+                      "${dateUser[0]} TO ${dateUser[1]}",
                       style: const TextStyle(
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold,
@@ -328,13 +344,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.width *0.7,
+                    height: MediaQuery.of(context).size.width * 0.7,
                     child: charts.BarChart(
-                            _seriesData,
-                            animate: true,
-                            barGroupingType: charts.BarGroupingType.grouped,
-                            animationDuration: Duration(seconds: 5),
-                          ),
+                      _seriesData,
+                      animate: true,
+                      barGroupingType: charts.BarGroupingType.grouped,
+                      animationDuration: Duration(seconds: 5),
+                    ),
                   ),
                 ],
               ),
