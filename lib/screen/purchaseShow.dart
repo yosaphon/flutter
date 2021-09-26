@@ -18,7 +18,6 @@ class ShowPurchaseReport extends StatefulWidget {
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateUser;
-  List<charts.Series<TotalDataCharts, String>> _seriesData;
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
@@ -35,7 +34,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         Provider.of<UserSumaryNotifier>(context, listen: false);
 
     loadData(userSumaryNotifier);
-    _seriesData = List<charts.Series<TotalDataCharts, String>>();
     super.initState();
   }
 
@@ -49,12 +47,11 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     userSumaryNotifier.userSumary.forEach((element) {
       allresultdate.add(element.date);
     });
-
     allresultdate2 = allresultdate.toSet().toList();
     sumAllData(userSumaryNotifier);
     sumEachData(userSumaryNotifier);
     totalProfit += totalReward - totalPay;
-    _generateData();
+    
   }
 
   sumAllData(UserSumaryNotifier userSumaryNotifier) {
@@ -69,9 +66,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       });
     }
   }
-
   List<SumaryData> _sumaryData;
-
   sumEachData(UserSumaryNotifier userSumaryNotifier) {
     if (userSumaryNotifier.userSumary.isNotEmpty) {
       //รวมแต่ละงวด
@@ -186,16 +181,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: MediaQuery.of(context).size.width * 0.7,
-                          child: charts.BarChart(
-                            _seriesData,
-                            animate: true,
-                            barGroupingType: charts.BarGroupingType.grouped,
-                            animationDuration: Duration(seconds: 5),
-                          ),
-                        ),
+                        
                       ],
                     ),
                   )),
@@ -262,55 +248,5 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
-
-  _generateData() {
-    List<TotalDataCharts> dataWon = [
-      // new TotalDataCharts('2021-08-01', 10000),
-      // new TotalDataCharts('2021-09-01', 0),
-      // new TotalDataCharts('2021-10-01', 2000),
-    ];
-    List<TotalDataCharts> dataLose = [
-      // new TotalDataCharts('2021-08-01', 2500),
-      // new TotalDataCharts('2021-09-01', 1200),
-      // new TotalDataCharts('2021-10-01', 80),
-    ];
-    if (_sumaryData != null) {
-      _sumaryData.forEach((element) {
-        dataWon.add(new TotalDataCharts(element.date, element.sumReward));
-        dataLose.add(new TotalDataCharts(element.date, element.sumPay));
-      });
-    }
-
-    //กุจะอัป
-    _seriesData.add(
-      charts.Series(
-        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) =>
-            totalDataCharts.total,
-        id: 'Win',
-        data: dataWon,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-            charts.ColorUtil.fromDartColor(Colors.green),
-      ),
-    );
-    _seriesData.add(
-      charts.Series(
-        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) =>
-            totalDataCharts.total,
-        id: 'Lose',
-        data: dataLose,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-            charts.ColorUtil.fromDartColor(Colors.red),
-      ),
-    );
-  }
 }
 
-class TotalDataCharts {
-  String date;
-  double total;
-  TotalDataCharts(this.date, this.total);
-}
