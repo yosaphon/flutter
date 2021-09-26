@@ -1,7 +1,6 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,7 +28,6 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        // backgroundColor: Colors.transparent,
         backgroundColor: Colors.black.withOpacity(0.1),
         elevation: 0,
       ),
@@ -38,31 +36,7 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ElevatedButton.icon(
-            //   style: ElevatedButton.styleFrom(
-            //       primary: Colors.red[900],
-            //       onPrimary: Colors.black,
-            //       minimumSize: Size(double.infinity, 50)),
-            //   icon: FaIcon(
-            //     FontAwesomeIcons.google,
-
-            //     color: Colors.white,
-            //   ),
-            //   label: Text(" Sign Up with Google"),
-            //   onPressed: () {
-            //     AuthClass().signWithGoogle().then((UserCredential value) {
-            //       final displayName = value.user.displayName;
-            //       print(displayName);
-            //       Navigator.pushAndRemoveUntil(
-            //           context,
-            //           MaterialPageRoute(builder: (context) => MyHomePage()),
-            //           (route) => false);
-            //     });
-            //   },
-            // ),
-            // SizedBox(
-            //   height: 40,
-            // ),
+            
             GoogleAuthButton(
                 style: AuthButtonStyle(
                   borderRadius: 8,
@@ -80,10 +54,6 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
                 ),
                 onPressed: () {
                   AuthClass().signWithGoogle().then((UserCredential value) {
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => MyHomePage()),
-                    //     (route) => false);
                   });
                 }),
             SizedBox(
@@ -105,36 +75,8 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
                 ),
               onPressed: () {
               AuthClass().handleLogin().then((UserCredential value) {
-                // Navigator.pushAndRemoveUntil(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => MyHomePage()),
-                //     (route) => false);
               });
             }),
-
-            // ElevatedButton.icon(
-            //   style: ElevatedButton.styleFrom(
-            //       primary: Colors.blue[900],
-            //       onPrimary: Colors.black,
-            //       minimumSize: Size(double.infinity, 50)),
-            //   icon: FaIcon(
-            //     FontAwesomeIcons.facebook,
-            //     color: Colors.white,
-            //   ),
-            //   label: Text(" Sign Up with Facebook"),
-            //   onPressed: () {
-            //     AuthClass().handleLogin().then((UserCredential value) {
-            //       final displayName = value.user.displayName;
-
-            //       print(displayName);
-
-            //       Navigator.pushAndRemoveUntil(
-            //           context,
-            //           MaterialPageRoute(builder: (context) => MyHomePage()),
-            //           (route) => false);
-            //     });
-            //   },
-            // ),
           ],
         ),
       ),
