@@ -5,7 +5,6 @@ import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/model/preditionlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'dart:math';
-
 import 'package:provider/provider.dart';
 
 class DispalyPredictor extends StatefulWidget {
@@ -19,7 +18,15 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
   String dateValue;
-
+  String userDate;
+  Future loadDataDate(PrizeNotifier prizeNotifier) async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('OutDate').get();
+    documents = snapshot.docs;
+    for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
+      userDate = documents[i].get("date");
+    }
+  }
   @override
   void initState() {
     PrizeNotifier prizeNotifier =
@@ -57,19 +64,42 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
       angle2 = (angle2 + pi) % (2 * pi);
     });
   }
+  String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           "ผลรางวัลฉลากกินแบ่งรัฐบาล",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
@@ -79,139 +109,161 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
         elevation: 0,
       ),
       body: Center(
-        child: StreamBuilder(
+        child:FutureBuilder(
+          future: loadDataDate(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (prizeNotifier.prizeList.isEmpty) {
+          if (prizeNotifier.prizeList.isEmpty || userDate == null) {
             return CircularProgressIndicator();
           } else {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: _flip1,
-                  child: TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0, end: angle1),
-                      duration: Duration(milliseconds: 400),
-                      builder: (BuildContext context, double val, __) {
-                        //here we will change the isBack val so we can change the content of the card
-                        if (val >= (pi / 2)) {
-                          isBack = false;
-                        } else {
-                          isBack = true;
-                        }
-                        return (Transform(
-                          //let's make the card flip by it's center
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.001)
-                            ..rotateY(val),
-                          child: Container(
-                              height: MediaQuery.of(context).size.height / 2.15,
-                              width: MediaQuery.of(context).size.width / 2.15,
-                              child: isBack
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: DecorationImage(
-                                          image: AssetImage("asset/back.png"),
-                                        ),
-                                      ),
-                                    ) //if it's back we will display here
-                                  : Transform(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.identity()
-                                        ..rotateY(
-                                            pi), // it will flip horizontally the container
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          image: DecorationImage(
-                                            image: AssetImage("asset/face.png"),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: lottoerypredition(
-                                              //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                                              prizeNotifier.selectedPrize.data['first'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                                              prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                                              "1"),
-                                        ),
-                                      ),
-                                    ) //else we will display it here,
-                              ),
-                        ));
-                      }),
+            return Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.1,
+                  child: Center(
+                    child: RichText(
+            text: TextSpan(children: <TextSpan>[
+              TextSpan(
+                    text:
+                        'ทำนายรางวัล งวดวันที่ ',
+                    style: TextStyle(fontSize: 16,color: Colors.black, fontFamily: "Mitr")),TextSpan(
+                    text:
+                        numToWord(userDate),
+                    style: TextStyle(fontSize: 20,color: Colors.orange, fontFamily: "Mitr")),TextSpan(
+                    ),
+            ]),
+          ),
+                  ),
                 ),
-                SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  onTap: _flip2,
-                  child: TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0, end: angle2),
-                      duration: Duration(milliseconds: 400),
-                      builder: (BuildContext context, double val, __) {
-                        //here we will change the isBack val so we can change the content of the card
-                        if (val >= (pi / 2)) {
-                          isBack = false;
-                        } else {
-                          isBack = true;
-                        }
-                        return (Transform(
-                          //let's make the card flip by it's center
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.001)
-                            ..rotateY(val),
-                          child: Container(
-                              height: MediaQuery.of(context).size.height / 2.15,
-                              width: MediaQuery.of(context).size.width / 2.15,
-                              child: isBack
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: DecorationImage(
-                                          image: AssetImage("asset/back.png"),
-                                        ),
-                                      ),
-                                    ) //if it's back we will display here
-                                  : Transform(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.identity()
-                                        ..rotateY(
-                                            pi), // it will flip horizontally the container
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          image: DecorationImage(
-                                            image: AssetImage("asset/face.png"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _flip1,
+                      child: TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0, end: angle1),
+                          duration: Duration(milliseconds: 400),
+                          builder: (BuildContext context, double val, __) {
+                            //here we will change the isBack val so we can change the content of the card
+                            if (val >= (pi / 2)) {
+                              isBack = false;
+                            } else {
+                              isBack = true;
+                            }
+                            return (Transform(
+                              //let's make the card flip by it's center
+                              alignment: Alignment.center,
+                              transform: Matrix4.identity()
+                                ..setEntry(3, 2, 0.001)
+                                ..rotateY(val),
+                              child: Container(
+                                  height: MediaQuery.of(context).size.height / 2.15,
+                                  width: MediaQuery.of(context).size.width / 2.15,
+                                  child: isBack
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                              image: AssetImage("asset/back.png"),
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: lottoerypredition(
-                                              //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                                              prizeNotifier.selectedPrize.data['first'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                                              prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                                              prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                                              "2"),
-                                        ),
-                                      ),
-                                    ) //else we will display it here,
-                              ),
-                        ));
-                      }),
-                )
+                                        ) //if it's back we will display here
+                                      : Transform(
+                                          alignment: Alignment.center,
+                                          transform: Matrix4.identity()
+                                            ..rotateY(
+                                                pi), // it will flip horizontally the container
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                image: AssetImage("asset/face.png"),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: lottoerypredition(
+                                                  //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                                                  prizeNotifier.selectedPrize.data['first'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                                                  prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                                                  "1"),
+                                            ),
+                                          ),
+                                        ) //else we will display it here,
+                                  ),
+                            ));
+                          }),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: _flip2,
+                      child: TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0, end: angle2),
+                          duration: Duration(milliseconds: 400),
+                          builder: (BuildContext context, double val, __) {
+                            //here we will change the isBack val so we can change the content of the card
+                            if (val >= (pi / 2)) {
+                              isBack = false;
+                            } else {
+                              isBack = true;
+                            }
+                            return (Transform(
+                              //let's make the card flip by it's center
+                              alignment: Alignment.center,
+                              transform: Matrix4.identity()
+                                ..setEntry(3, 2, 0.001)
+                                ..rotateY(val),
+                              child: Container(
+                                  height: MediaQuery.of(context).size.height / 2.15,
+                                  width: MediaQuery.of(context).size.width / 2.15,
+                                  child: isBack
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                              image: AssetImage("asset/back.png"),
+                                            ),
+                                          ),
+                                        ) //if it's back we will display here
+                                      : Transform(
+                                          alignment: Alignment.center,
+                                          transform: Matrix4.identity()
+                                            ..rotateY(
+                                                pi), // it will flip horizontally the container
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              image: DecorationImage(
+                                                image: AssetImage("asset/face.png"),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: lottoerypredition(
+                                                  //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                                                  prizeNotifier.selectedPrize.data['first'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                                                  prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                                                  prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                                                  "2"),
+                                            ),
+                                          ),
+                                        ) //else we will display it here,
+                                  ),
+                            ));
+                          }),
+                    )
+                  ],
+                ),
               ],
             );
           }

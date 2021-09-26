@@ -31,7 +31,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
         centerTitle: true,
         title: Text(
           "ผลรางวัลฉลากกินแบ่งรัฐบาล",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         shape: RoundedRectangleBorder(),
         // backgroundColor: Colors.transparent,

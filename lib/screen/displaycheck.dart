@@ -82,7 +82,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           centerTitle: true,
           title: Text(
             "ตรวจรางวัล",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
           shape: RoundedRectangleBorder(),
           // backgroundColor: Colors.transparent,

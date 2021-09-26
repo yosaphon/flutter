@@ -99,13 +99,13 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 centerTitle: true,
                 title: Text(
                   "บันทึกสลากผู้ใช้",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
-                backgroundColor: Colors.black.withOpacity(0.1),
+                backgroundColor: Colors.indigo,
                 elevation: 0,
               ),
               body: FutureBuilder(

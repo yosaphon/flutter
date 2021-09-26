@@ -89,7 +89,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   height: 50,
                   fit: BoxFit.fitWidth,
                 )
-            
             : Image.asset(
                 'asset/guraLottery.png',
                 width: 50,
@@ -165,22 +164,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           );
         },
         onLongPress: () {
-          //แก้ไข
-          // var docid = document.id;
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => FormUpdatelotto(
-          //             docid: docid,
-          //           )),
-          // );
-
-          // // กดเพื่อลบ
           confirmDialog(context, docID, lotto.imageurl, user.uid);
-
-          // deleteUserLottery(document.id);
-          // FirebaseFirestore.instance.collection('userlottery').doc(document.id).delete();
-          // Navigator.pop(context);
         },
       );
     }
@@ -201,7 +185,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             ),
             Text(
               user.displayName,
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
@@ -289,8 +273,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         )),
               );
             },
-            //upsdat
-
             icon: Icon(Icons.feed),
             label: const Text(
               'ดูรายงาน',
@@ -361,7 +343,6 @@ class _DisplayScreenState {}
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {
-  //UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
 
   return showDialog<Null>(
       context: context,
@@ -420,10 +401,6 @@ Future<void> deleteImage(String imageFileUrl) async {
 void onSelected(BuildContext context, int item) {
   switch (item) {
     case 0:
-      //  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => Formshowlotto()),
-      //       );
       break;
     case 1:
       AuthClass().signOut();

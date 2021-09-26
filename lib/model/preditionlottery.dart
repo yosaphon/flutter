@@ -86,7 +86,7 @@ class lottoerypredition extends StatelessWidget {
         SizedBox(
           height: 80,
         ),
-        Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
+        // Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
         SizedBox(height: 30,),
                   Text(
                   result,
