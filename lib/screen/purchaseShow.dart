@@ -17,67 +17,22 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateUser;
   List<charts.Series<TotalDataCharts, String>> _seriesData;
-  _generateData() {
-    var dataWon = [
-      new TotalDataCharts('2021-08-01', 10000),
-      new TotalDataCharts('2021-09-01', 0),
-      new TotalDataCharts('2021-10-01', 2000),
-    ];
-    var dataLose = [
-      new TotalDataCharts('2021-08-01', 2500),
-      new TotalDataCharts('2021-09-01', 1200),
-      new TotalDataCharts('2021-10-01', 80),
-    ];
-    //กุจะอัป
-    _seriesData.add(
-      charts.Series(
-        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) =>
-            totalDataCharts.total,
-        id: 'Win',
-        data: dataWon,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-            charts.ColorUtil.fromDartColor(Colors.green),
-      ),
-    );
-    _seriesData.add(
-      charts.Series(
-        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) =>
-            totalDataCharts.total,
-        id: 'Lose',
-        data: dataLose,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-            charts.ColorUtil.fromDartColor(Colors.red),
-      ),
-    );
-  }
-
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
-
   _ShowPurchaseReportState(this.dateUser);
-
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
   int totalAmount = 0;
-
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
-
-  //รวมแต่ละงวด
-  double sumReward = 0, sumPay = 0;
-  int sumAmount = 0;
 
   @override
   void initState() {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
-    loadData(userNotifier);
 
+    loadData(userNotifier);
     _seriesData = List<charts.Series<TotalDataCharts, String>>();
     _generateData();
     super.initState();
@@ -86,17 +41,18 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   Future loadData(UserNotifier userNotifier) async {
     await getUser(userNotifier, user.uid,
         start: widget.dateUser[0], end: widget.dateUser[1]);
+    totalProfit = 0;
+    totalReward = 0;
+    totalPay = 0;
+    totalAmount = 0;
     userNotifier.currentUser.forEach((element) {
       allresultdate.add(element.date);
     });
 
-    totalProfit = totalReward - totalPay;
-    for (var i = 0; i <= allresultdate.length - 1; i++) {
-      indexrow += ["$i"];
-    }
     allresultdate2 = allresultdate.toSet().toList();
     sumAllData(userNotifier);
     sumEachData(userNotifier);
+    totalProfit += totalReward - totalPay;
   }
 
   sumAllData(UserNotifier userNotifier) {
@@ -107,7 +63,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         totalPay += element.lotteryprice == null
             ? 0.00
             : double.parse(element.lotteryprice);
-
         totalAmount += element.amount == null ? 1 : int.parse(element.amount);
       });
     }
@@ -117,6 +72,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   sumEachData(UserNotifier userNotifier) {
     if (userNotifier.currentUser.isNotEmpty) {
+      //รวมแต่ละงวด
+      double sumReward = 0, sumPay = 0;
+      int sumAmount = 0;
       for (var item in dateUser) {
         userNotifier.currentUser.forEach((element) {
           if (item == element.date) {
@@ -161,136 +119,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         backgroundColor: Color(0xFF25D4C2),
         elevation: 0,
       ),
-      // body: ListView.builder(
-      //     itemCount: allresultdate2.length,
-      //     itemBuilder: (BuildContext context, int index) {
-      //       return Card(
-      //         child: Container(
-      //           padding: EdgeInsets.all(10),
-
-      //           child: Column(
-      //             children: [
-      //               Container(
-      //                 decoration: BoxDecoration(
-      //                     borderRadius: BorderRadius.only(
-      //                       topLeft: Radius.circular(5.0),
-      //                       topRight: Radius.circular(5.0),
-      //                     ),
-      //                     color: Color(0xfff6f8fa),
-      //                     border: Border.all(
-      //                       color: Color(0xffd5d8dc),
-      //                       width: 1,
-      //                     )),
-      //                 child: Row(
-      //                   children: [
-      //                     Text(
-      //                       allresultdate2[index],
-      //                       style: TextStyle(fontWeight: FontWeight.w700),
-      //                     )
-      //                   ],
-      //                 ),
-      //               ),
-      //               Table(
-      //                 border: TableBorder.symmetric(),
-      //                 columnWidths: const <int, TableColumnWidth>{
-      //                   0: FlexColumnWidth(3),
-      //                   1: FlexColumnWidth(3),
-      //                   2: FlexColumnWidth(3),
-      //                   3: FlexColumnWidth(3),
-      //                 },
-      //                 defaultVerticalAlignment:
-      //                     TableCellVerticalAlignment.middle,
-      //                 children: <TableRow>[
-      //                   TableRow(
-      //                     children: <Widget>[
-      //                       TableCell(
-      //                         verticalAlignment:
-      //                             TableCellVerticalAlignment.top,
-      //                         child: Container(
-      //                           height: 32,
-      //                           width: 32,
-      //                           child: textSty("Number"),
-      //                         ),
-      //                       ),
-      //                       TableCell(
-      //                         verticalAlignment:
-      //                             TableCellVerticalAlignment.top,
-      //                         child: Container(
-      //                           height: 32,
-      //                           width: 32,
-      //                           child: textSty("Lottery Price"),
-      //                         ),
-      //                       ),
-      //                       TableCell(
-      //                         verticalAlignment:
-      //                             TableCellVerticalAlignment.top,
-      //                         child: Container(
-      //                           height: 32,
-      //                           width: 32,
-      //                           child: textSty("Reward"),
-      //                         ),
-      //                       ),
-      //                       TableCell(
-      //                         verticalAlignment:
-      //                             TableCellVerticalAlignment.top,
-      //                         child: Container(
-      //                           height: 32,
-      //                           width: 32,
-      //                           child: textSty("State"),
-      //                         ),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                   for (var item in indexrow)
-      //                     TableRow(
-
-      //                       children: <Widget>[
-      //                         TableCell(
-
-      //                           verticalAlignment:
-      //                               TableCellVerticalAlignment.top,
-      //                           child: Container(
-      //                             height: 32,
-      //                             width: 32,
-      //                             child: textSty("${userNotifier.currentUser[int.parse(item)].number}(x${userNotifier.currentUser[int.parse(item)].amount})"),
-      //                           ),
-      //                         ),
-      //                         TableCell(
-      //                           verticalAlignment:
-      //                               TableCellVerticalAlignment.top,
-      //                           child: Container(
-      //                             height: 32,
-      //                             width: 32,
-      //                             child: textSty("${userNotifier.currentUser[int.parse(item)].lotteryprice}"),
-      //                           ),
-      //                         ),
-      //                         TableCell(
-      //                           verticalAlignment:
-      //                               TableCellVerticalAlignment.top,
-      //                           child: Container(
-      //                             height: 32,
-      //                             width: 32,
-      //                             child: userNotifier.currentUser[int.parse(item)].reward ==null?textSty("ยังไม่ตรวจ"): textSty("${userNotifier.currentUser[int.parse(item)].reward}"),
-      //                           ),
-      //                         ),
-      //                         TableCell(
-      //                           verticalAlignment:
-      //                               TableCellVerticalAlignment.top,
-      //                           child: Container(
-      //                             height: 32,
-      //                             width: 32,
-      //                             child: userNotifier.currentUser[int.parse(item)].namewin ==null?textSty("ยังไม่ตรวจ"): textSty("${userNotifier.currentUser[int.parse(item)].namewin}"),
-      //                           ),
-      //                         ),
-      //                       ],
-      //                     ),
-      //                 ],
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       );
-      //     })
       body: FutureBuilder<Object>(
           future: loadData(userNotifier),
           builder: (context, snapshot) {
@@ -429,6 +257,43 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             ),
           ],
         ),
+      ),
+    );
+  }
+   _generateData() {
+    var dataWon = [
+      new TotalDataCharts('2021-08-01', 10000),
+      new TotalDataCharts('2021-09-01', 0),
+      new TotalDataCharts('2021-10-01', 2000),
+    ];
+    var dataLose = [
+      new TotalDataCharts('2021-08-01', 2500),
+      new TotalDataCharts('2021-09-01', 1200),
+      new TotalDataCharts('2021-10-01', 80),
+    ];
+    //กุจะอัป
+    _seriesData.add(
+      charts.Series(
+        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
+        id: 'Win',
+        data: dataWon,
+        fillPatternFn: (_, __) => charts.FillPatternType.solid,
+        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
+            charts.ColorUtil.fromDartColor(Colors.green),
+      ),
+    );
+    _seriesData.add(
+      charts.Series(
+        domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
+        id: 'Lose',
+        data: dataLose,
+        fillPatternFn: (_, __) => charts.FillPatternType.solid,
+        fillColorFn: (TotalDataCharts totalDataCharts, _) =>
+            charts.ColorUtil.fromDartColor(Colors.red),
       ),
     );
   }
