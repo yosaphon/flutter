@@ -16,25 +16,23 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
   _PurchaseReportfilterState(this.userdate);
   int selectedindexsecond = 0;
   bool state = false;
-  String start, end;
-  String dateuser = "", dateValue1 = "", dateValue2 = "";
+  String start='', end='';
+  String dateuser, dateValue1, dateValue2;
   List<String> date1 = [], date2 = [];
 
   @override
   void initState() {
     date1 = userdate;
-
-    print(userdate);
+    
     date1.sort();
     start = userdate[0];
-    end = userdate[date1.length - 1];
+    end = userdate[date1.length-1];
     dateValue1 = date1.first;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: AppBar(
@@ -70,7 +68,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                     setState(() {
                       changeIndexsecon(0);
                       start = userdate[0];
-                      end = userdate[date1.length - 1];
+                      end = userdate[date1.length-1];
                     });
                   },
                   child: Row(
@@ -107,8 +105,8 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                   onPressed: () {
                     setState(() {
                       changeIndexsecon(1);
-                      start = userdate[date1.length - 1];
-                      end = userdate[date1.length - 1];
+                      start = userdate[date1.length-1];
+                      end = userdate[date1.length-1];
                     });
                   },
                   child: Row(
@@ -286,7 +284,9 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                                             textAlign: TextAlign.right,
                                           ),
                                         )
-                                      ]),
+                                      ]
+
+                                      ),
                                 ),
                               ),
                             )
@@ -355,7 +355,6 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                 FloatingActionButton.extended(
                   onPressed: () {
                     List<String> datauser = [start, end];
-                    datauser.toSet().toList();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
