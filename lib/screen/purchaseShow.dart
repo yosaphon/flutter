@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lotto/api/userSumary_api.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/SumaryData.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:provider/provider.dart';
@@ -36,29 +37,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     loadData(userSumaryNotifier);
     super.initState();
   }
-  String numToWord(String n) {
-    List<String> month = [
-      "มกราคม",
-      "กุมภาพันธ์",
-      "มีนาคม",
-      "เมษายน",
-      "พฤษภาคม",
-      "มิถุนายน",
-      "กรกฎาคม",
-      "สิงหาคม",
-      "กันยายน",
-      "ตุลาคม",
-      "พฤศจิกายน",
-      "ธันวาคม"
-    ];
-    List<String> w = n.split('-');
 
-    return int.parse(w[2]).toString() +
-        " " +
-        month[int.parse(w[1]) - 1] +
-        " " +
-        (int.parse(w[0]) + 543).toString();
-  }
 
   Future loadData(UserSumaryNotifier userSumaryNotifier) async {
     await getUserSumary(userSumaryNotifier, user.uid,

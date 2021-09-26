@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/purchase_report.dart';
@@ -99,29 +100,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               lotto.number,
               style: TextStyle(color: Colors.indigo),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                "${lotto.date}",
-                style: TextStyle(color: Colors.black, fontSize: 14),
-              ),
-            ),
           ],
         ),
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          RichText(
-              text: TextSpan(children: <TextSpan>[
-            TextSpan(
-                text: "จำนวน ",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-            TextSpan(
-                text: lotto.amount,
-                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
-            TextSpan(
-                text: " ใบ",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
-          ])),
+          Text(
+                "${numToWord(lotto.date)}",
+                style: TextStyle(color: Colors.black, fontSize: 14),),
           RichText(
               text: TextSpan(children: <TextSpan>[
             TextSpan(
@@ -132,6 +117,15 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
             TextSpan(
                 text: " บาท",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                TextSpan(
+                text: "  จำนวน ",
+                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+            TextSpan(
+                text: lotto.amount,
+                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
+            TextSpan(
+                text: " ใบ",
                 style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
           ]))
         ]),
@@ -278,10 +272,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             backgroundColor: Color(0xFF6390E9),
           ),
           SizedBox(
-            height: 15,
+            height: 7,
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 45),
+            padding: const EdgeInsets.only(bottom: 50),
             
             child: FloatingActionButton.extended(
               heroTag: "add",

@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/prize_api.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,9 +25,9 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
+        Provider.of<PrizeNotifier>(context, listen: true);
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
@@ -40,57 +42,99 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
         backgroundColor: Colors.indigo,
         elevation: 0,
       ),
-      body: StreamBuilder(
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+        future: getPrize(prizeNotifier),
+        builder: (context, snapshot) {
           if (prizeNotifier.prizeList.isEmpty) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
-          return ListView(
-            padding:EdgeInsets.only(top: 100,left: 30,right: 30,bottom: 80),
-            children: prizeNotifier.prizeList.values.map((document) {
-              return Container(
-                height: 80,
-                margin: const EdgeInsets.all(5.0),
-                padding: const EdgeInsets.all(3.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 0,
-                            blurRadius:7,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                    color: Colors.white),
-                child: Center(
-                  child: ListTile(
-                    leading: Container(
-                      width: 100,
-                      height: 75,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                'asset/YouTube_full-color_icon.svg.png')),
-                        borderRadius: BorderRadius.all(Radius.circular(13.0)),
-                        color: Colors.redAccent,
-                      ),
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                    child: Text(
+                      "วิดิโอการออกรางวัล",
+                      style: TextStyle(fontSize: 16),
                     ),
-                    title: Text("วันที่ ${document.date} งวดที่ ${document.period[0]},${document.period[1]}" ),
-                    onTap: () async {
-                      if (await canLaunch(document.youtubeUrl)) {
-                        await launch(document.youtubeUrl);
-                      }
-                    },
                   ),
                 ),
-              );
-            }).toList(),
-          );
+                Expanded(
+                  child: ListView(
+                    children: prizeNotifier.prizeList.values.map((document) {
+                      String url = document.youtubeUrl;
+                      String id = url.substring(url.length - 11);
+                      String urlThumnail =
+                          "https://img.youtube.com/vi/" + id + "/0.jpg";
+                      return cardContainer(
+                          url: document.youtubeUrl,
+                          listTile: ListTile(
+                            title: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                RichText(text:TextSpan(children: [TextSpan(text: "วันที่ ",style: TextStyle(fontFamily: "Mitr" ,color: Colors.black ,fontSize: 14)),
+                                TextSpan(text: "${numToWord(document.date)} ",style: TextStyle(fontFamily: "Mitr" ,color: Colors.orange,fontSize: 18)),
+                                ]) ),
+                                document.status != 1? Text("กำลังถ่ายทอดสด" ,style: TextStyle(color: Colors.red)):Text("")
+                              ],
+                            ),
+                            subtitle: Text(
+                                "งวดที่ ${document.period[0]},${document.period[1]}" ,style: TextStyle(color: Colors.indigo),),
+                          ),
+                          image: Image.network('$urlThumnail',height: 150,
+                        fit:BoxFit.cover));
+                    }).toList(),
+                  ),
+                ),
+              ],
+            );
+          }
         },
       ),
     );
   }
+}
+
+Widget cardContainer({image, listTile, url}) {
+  return Container(
+    margin: EdgeInsets.only(left: 20,right: 20),
+    child: Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      child: InkWell(
+        onTap: () async {
+          if (await canLaunch(url)) {
+            await launch(url);
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
+              ),
+              child: image,
+            ),
+            listTile,
+          ],
+        ),
+      ),
+    ),
+    decoration: new BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 0,
+                  blurRadius: 9,
+                  offset: Offset(0, 1), // changes position of shadow
+                ),
+        ],
+      ),
+  );
 }

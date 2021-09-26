@@ -27,29 +27,7 @@ class _DropdownDateState extends State<DropdownDate> {
     return w[0] + w[1] + w[2];
   }
 
-  String numToWord(String n) {
-    List<String> month = [
-      "มกราคม",
-      "กุมภาพันธ์",
-      "มีนาคม",
-      "เมษายน",
-      "พฤษภาคม",
-      "มิถุนายน",
-      "กรกฎาคม",
-      "สิงหาคม",
-      "กันยายน",
-      "ตุลาคม",
-      "พฤศจิกายน",
-      "ธันวาคม"
-    ];
-    List<String> w = n.split('-');
-
-    return int.parse(w[2]).toString() +
-        " " +
-        month[int.parse(w[1]) - 1] +
-        " " +
-        (int.parse(w[0]) + 543).toString();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -108,3 +86,26 @@ class _DropdownDateState extends State<DropdownDate> {
     );
   }
 }
+String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
+  }
