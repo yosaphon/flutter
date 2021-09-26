@@ -34,7 +34,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
     loadData(userNotifier);
     _seriesData = List<charts.Series<TotalDataCharts, String>>();
-    _generateData();
     super.initState();
   }
 
@@ -53,6 +52,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     sumAllData(userNotifier);
     sumEachData(userNotifier);
     totalProfit += totalReward - totalPay;
+    _generateData();
   }
 
   sumAllData(UserNotifier userNotifier) {
@@ -260,17 +260,25 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
-   _generateData() {
-    var dataWon = [
-      new TotalDataCharts('2021-08-01', 10000),
-      new TotalDataCharts('2021-09-01', 0),
-      new TotalDataCharts('2021-10-01', 2000),
+
+  _generateData() {
+    List<TotalDataCharts> dataWon = [
+      // new TotalDataCharts('2021-08-01', 10000),
+      // new TotalDataCharts('2021-09-01', 0),
+      // new TotalDataCharts('2021-10-01', 2000),
     ];
-    var dataLose = [
-      new TotalDataCharts('2021-08-01', 2500),
-      new TotalDataCharts('2021-09-01', 1200),
-      new TotalDataCharts('2021-10-01', 80),
+    List<TotalDataCharts> dataLose = [
+      // new TotalDataCharts('2021-08-01', 2500),
+      // new TotalDataCharts('2021-09-01', 1200),
+      // new TotalDataCharts('2021-10-01', 80),
     ];
+    if (_sumaryData != null) {
+      _sumaryData.forEach((element) {
+        dataWon.add(new TotalDataCharts(element.date, element.sumReward));
+        dataLose.add(new TotalDataCharts(element.date, element.sumPay));
+      });
+    }
+
     //กุจะอัป
     _seriesData.add(
       charts.Series(
@@ -301,6 +309,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
 class TotalDataCharts {
   String date;
-  int total;
+  double total;
   TotalDataCharts(this.date, this.total);
 }

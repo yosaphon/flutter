@@ -16,17 +16,17 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
   _PurchaseReportfilterState(this.userdate);
   int selectedindexsecond = 0;
   bool state = false;
-  String start='', end='';
+  String start = '', end = '';
   String dateuser, dateValue1, dateValue2;
   List<String> date1 = [], date2 = [];
 
   @override
   void initState() {
     date1 = userdate;
-    
+
     date1.sort();
     start = userdate[0];
-    end = userdate[date1.length-1];
+    end = userdate[date1.length - 1];
     dateValue1 = date1.first;
     super.initState();
   }
@@ -68,7 +68,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                     setState(() {
                       changeIndexsecon(0);
                       start = userdate[0];
-                      end = userdate[date1.length-1];
+                      end = userdate[date1.length - 1];
                     });
                   },
                   child: Row(
@@ -284,9 +284,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                                             textAlign: TextAlign.right,
                                           ),
                                         )
-                                      ]
-
-                                      ),
+                                      ]),
                                 ),
                               ),
                             )

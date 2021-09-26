@@ -35,5 +35,5 @@ getUser(UserNotifier userNotifier, dynamic userId,
 
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
-
+  print("api = ${userNotifier.docID}");
 }

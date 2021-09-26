@@ -27,6 +27,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindex = 0;
   int selectedindexsecond = 0;
   List<UserData> lottos = [];
+  List<String>userID = [];
   String number, query = '';
   _DisplayScreenState paddingStyle;
   void initiateSearch(String val) {
@@ -42,9 +43,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   }
 
   Future loadData(userNotifier) async {
-    await getUser(userNotifier, user.uid);
+    if (userNotifier == null) {
+      await getUser(userNotifier, user.uid);
+    }
 
     lottos = userNotifier.currentUser;
+    userID = userNotifier.docID;
   }
 
   @override
@@ -55,6 +59,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    userID = userNotifier.docID;
     //var size = MediaQuery.of(context).size;
 
     void searchLotto(String query) {
@@ -94,11 +99,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               lotto.number,
               style: TextStyle(color: Colors.indigo),
             ),
-            Padding(        
-              padding: const EdgeInsets.only(left:16.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
               child: Text(
                 "${lotto.date}",
-                style: TextStyle(color: Colors.black, fontSize: 14 ),
+                style: TextStyle(color: Colors.black, fontSize: 14),
               ),
             ),
           ],
@@ -149,7 +154,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ),
         onTap: () async {
           //กดเพื่อดูรายละเอียด
-          var docid = docID;
+          String docid = docID;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -253,10 +258,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 child: ListView.builder(
                   itemCount: lottos.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final lotto = lottos[index];
+                    UserData lotto = lottos[index];
+                    
 
-                    return frameWidget(
-                        buildLotto(lotto, userNotifier.docID[index]));
+                    return frameWidget(buildLotto(lotto, userID[index]));
                   },
                 ),
               )
@@ -354,7 +359,7 @@ class _DisplayScreenState {}
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {
-  UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+  //UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
 
   return showDialog<Null>(
       context: context,
