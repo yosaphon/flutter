@@ -43,9 +43,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   }
 
   Future loadData(userNotifier) async {
-    if (userNotifier == null) {
+    
       await getUser(userNotifier, user.uid);
-    }
+    
 
     lottos = userNotifier.currentUser;
     userID = userNotifier.docID;

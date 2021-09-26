@@ -111,7 +111,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
               body: FutureBuilder(
                   future: loadData(prizeNotifier),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (userDate ==null) {
+                    if (userDate == null) {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       return Container(

@@ -18,7 +18,6 @@ class _DropdownDateState extends State<DropdownDate> {
 
   @override
   void initState() {
-
     dateValue = prizeData.first.date;
     super.initState();
   }
@@ -64,14 +63,28 @@ class _DropdownDateState extends State<DropdownDate> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           value: dateValue,
-          icon: const Icon(Icons.arrow_drop_down , color: Colors.amber,),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.amber,
+          ),
           iconSize: 30,
           elevation: 2,
-          style: TextStyle(color: Colors.white, fontSize: 22),
+          style: TextStyle(color: Colors.indigo, fontSize: 22),
           underline: Container(
             height: 2,
-            color: Colors.blue,
+            color: Colors.red,
           ),
+          selectedItemBuilder: (BuildContext context) {
+            return prizeData.map<DropdownMenuItem<String>>((dynamic value) {
+              return DropdownMenuItem<String>(
+                value: value.date,
+                child: Text(
+                  numToWord(value.date),
+                  textAlign: TextAlign.right ,style: TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList();
+          },
           onChanged: (String newValue) {
             setState(() {
               dateValue = newValue;
@@ -86,7 +99,7 @@ class _DropdownDateState extends State<DropdownDate> {
               value: value.date,
               child: Text(
                 numToWord(value.date),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.right,
               ),
             );
           }).toList(),
