@@ -39,17 +39,19 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   File _image;
   final picker = ImagePicker();
+  var x;
   List<DocumentSnapshot> documents;
   String userDate;
   ShowuserGooglemap location = ShowuserGooglemap();
-  Future loaddData() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('outdate')
-        .orderBy("date", descending: true)
-        .get();
+  Future loadData(PrizeNotifier prizeNotifier) async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('OutDate').get();
     documents = snapshot.docs;
-    userDate = documents[3].data();
-    print(userDate);
+    for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
+      x = documents[i].get("date");
+    }
+    //userDate = documents[3].data();
+    print(x);
   }
 
   Future getImage(ImageSource imageSource) async {
@@ -65,7 +67,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
     });
   }
 
-  Future UploadPicture() async {
+  Future uploadPicture() async {
     var uuid = Uuid().v4();
     firebase_storage.FirebaseStorage firebaseStorage =
         firebase_storage.FirebaseStorage.instance;
@@ -109,11 +111,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 backgroundColor: Colors.black.withOpacity(0.1),
                 elevation: 0,
               ),
-              body: StreamBuilder<Object>(
-                  stream: FirebaseFirestore.instance
-                      .collection('OutDate')
-                      // .where("date",isGreaterThan: prizeNotifier.prizeList.values.first.date).limit(1)
-                      .snapshots(),
+              body: FutureBuilder(
+                  future: loadData(prizeNotifier),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData || !snapshot.data.exists) {
                       return CircularProgressIndicator();
@@ -291,7 +290,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                     ),
                                     onPressed: () async {
                                       if (_image != null) {
-                                        await UploadPicture();
+                                        await uploadPicture();
                                       }
 
                                       if (formKey.currentState.validate()) {
