@@ -85,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onChangedTab: onChangedTab,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn2",
         child: Tab(
           text: "ตรวจ",
           // icon: Icon(Icons.qr_code_scanner)
