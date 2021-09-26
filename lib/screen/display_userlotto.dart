@@ -207,12 +207,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
-                  child: Text('Purchase Report',
-                      style: TextStyle(color: Colors.black54)),
-                ),
-                PopupMenuDivider(),
-                PopupMenuItem<int>(
-                  value: 1,
                   child: Row(
                     children: [
                       Icon(Icons.logout),
@@ -401,8 +395,6 @@ Future<void> deleteImage(String imageFileUrl) async {
 void onSelected(BuildContext context, int item) {
   switch (item) {
     case 0:
-      break;
-    case 1:
       AuthClass().signOut();
   }
 }
