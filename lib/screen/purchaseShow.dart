@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lotto/api/userSumary_api.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/SumaryData.dart';
+import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -29,35 +31,35 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   void initState() {
-    UserNotifier userNotifier =
-        Provider.of<UserNotifier>(context, listen: false);
+    UserSumaryNotifier userSumaryNotifier =
+        Provider.of<UserSumaryNotifier>(context, listen: false);
 
-    loadData(userNotifier);
+    loadData(userSumaryNotifier);
     _seriesData = List<charts.Series<TotalDataCharts, String>>();
     super.initState();
   }
 
-  Future loadData(UserNotifier userNotifier) async {
-    await getUser(userNotifier, user.uid,
+  Future loadData(UserSumaryNotifier userSumaryNotifier) async {
+    await getUserSumary(userSumaryNotifier, user.uid,
         start: widget.dateUser[0], end: widget.dateUser[1]);
     totalProfit = 0;
     totalReward = 0;
     totalPay = 0;
     totalAmount = 0;
-    userNotifier.currentUser.forEach((element) {
+    userSumaryNotifier.userSumary.forEach((element) {
       allresultdate.add(element.date);
     });
 
     allresultdate2 = allresultdate.toSet().toList();
-    sumAllData(userNotifier);
-    sumEachData(userNotifier);
+    sumAllData(userSumaryNotifier);
+    sumEachData(userSumaryNotifier);
     totalProfit += totalReward - totalPay;
     _generateData();
   }
 
-  sumAllData(UserNotifier userNotifier) {
-    if (userNotifier.currentUser.isNotEmpty) {
-      userNotifier.currentUser.forEach((element) {
+  sumAllData(UserSumaryNotifier userSumaryNotifier) {
+    if (userSumaryNotifier.userSumary.isNotEmpty) {
+      userSumaryNotifier.userSumary.forEach((element) {
         totalReward +=
             element.reward == null ? 0.00 : double.parse(element.reward);
         totalPay += element.lotteryprice == null
@@ -70,13 +72,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   List<SumaryData> _sumaryData;
 
-  sumEachData(UserNotifier userNotifier) {
-    if (userNotifier.currentUser.isNotEmpty) {
+  sumEachData(UserSumaryNotifier userSumaryNotifier) {
+    if (userSumaryNotifier.userSumary.isNotEmpty) {
       //รวมแต่ละงวด
       double sumReward = 0, sumPay = 0;
       int sumAmount = 0;
       for (var item in dateUser) {
-        userNotifier.currentUser.forEach((element) {
+        userSumaryNotifier.userSumary.forEach((element) {
           if (item == element.date) {
             sumReward +=
                 element.reward == null ? 0.00 : double.parse(element.reward);
@@ -102,7 +104,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    UserSumaryNotifier userSumaryNotifier = Provider.of<UserSumaryNotifier>(context);
 
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -120,7 +122,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         elevation: 0,
       ),
       body: FutureBuilder<Object>(
-          future: loadData(userNotifier),
+          future: loadData(userSumaryNotifier),
           builder: (context, snapshot) {
             return CustomScrollView(
               physics: ClampingScrollPhysics(),

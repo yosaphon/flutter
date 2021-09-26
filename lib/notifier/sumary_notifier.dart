@@ -1,23 +1,25 @@
 import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lotto/model/SumaryData.dart';
+import 'package:lotto/model/UserData.dart';
+
+class UserSumaryNotifier with ChangeNotifier {
+  List<UserData> _userSumary=[];
+
+  List<String> _docID =[];
+
+  UnmodifiableListView<UserData> get userSumary =>
+      UnmodifiableListView(_userSumary);
+
+  UnmodifiableListView<String> get docID => UnmodifiableListView(_docID);
 
 
-class SumaryNotifier with ChangeNotifier {
-  List<SumaryData> _listSumary=[];
 
-
-
-  UnmodifiableListView<SumaryData> get listSumary =>
-      UnmodifiableListView(_listSumary);
-
-
-
-  set listSumary(List<SumaryData> sumaryData) {
-    _listSumary = sumaryData;
+  set userSumary(List<UserData> userData) {
+    _userSumary = userData;
     notifyListeners();
   }
 
+
+ 
 }

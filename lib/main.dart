@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           return UserNotifier();
         }),
         ChangeNotifierProvider(create: (context) {
-          return SumaryNotifier();
+          return UserSumaryNotifier();
         })
       ],
       child: MaterialApp(
