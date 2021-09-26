@@ -66,8 +66,18 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Google Maps'),
-      ),
+          centerTitle: true,
+          title: Text(
+            "เพิ่มตำแหน่ง",
+            style: TextStyle(color: Colors.black87),
+          ),
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        ),
+          backgroundColor: Colors.indigo,
+          elevation: 0,
+        ),
+        
       body: FutureBuilder(
         future: _getLocation(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

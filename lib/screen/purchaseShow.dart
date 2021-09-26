@@ -36,6 +36,29 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     loadData(userSumaryNotifier);
     super.initState();
   }
+  String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
+  }
 
   Future loadData(UserSumaryNotifier userSumaryNotifier) async {
     await getUserSumary(userSumaryNotifier, user.uid,
@@ -173,13 +196,16 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         Container(
                           padding: const EdgeInsets.all(20.0),
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            "${dateUser[0]} TO ${dateUser[1]}",
+                          child:dateUser[0] != dateUser[1]? Text(
+                            "${numToWord(dateUser[0])} ถึง ${numToWord(dateUser[1])}",
                             style: const TextStyle(
-                              fontSize: 22.0,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
+                          ):Text("${numToWord(dateUser[0])}",style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            )),
                         ),
                         
                       ],
