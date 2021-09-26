@@ -83,11 +83,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       return ListTile(
         tileColor: Colors.white54,
         leading: lotto.imageurl != null
-            ? Image.network(
-                lotto.imageurl,
-                width: 100,
-                fit: BoxFit.fitWidth,
-              )
+            ?  Image.network(
+                  lotto.imageurl,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.fitWidth,
+                )
+            
             : Image.asset(
                 'asset/guraLottery.png',
                 width: 50,
