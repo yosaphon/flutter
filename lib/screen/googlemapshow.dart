@@ -30,7 +30,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
   }
 
   List<Marker> myMarker = [];
-  int count=0;
+  int count = 0;
   String positionontap;
   // Marker _marker;
 
@@ -73,7 +73,9 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return GoogleMap(
-              markers: locamark != null && count <1 ? usermark() : Set.from(myMarker),
+              markers: locamark != null && count < 1
+                  ? usermark()
+                  : Set.from(myMarker),
               mapType: MapType.normal,
               onTap: _addMarker,
               onMapCreated: _onMapCreated,
