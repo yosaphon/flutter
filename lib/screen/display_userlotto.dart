@@ -146,10 +146,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Icons.cancel,
                       color: Colors.red,
                     )
-                  : Icon(
-                      Icons.circle,
-                      color: Colors.white54,
-                    ),
+                  : Text("รอ..",style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
           onPressed: () {},
         ),
         onTap: () async {

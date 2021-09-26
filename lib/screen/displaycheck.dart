@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/PrizeData.dart';
@@ -144,28 +145,60 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             }),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 30),
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                var data = new CheckNumber(
-                    date.keys.firstWhere(
-                        (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                        orElse: () => null),
-                    lotterylist,
-                    null);
-                data
-                    .getSnapshot()
-                    .then((e) => DialogHelper.exit(context, data.checked));
-              }
-            },
-            icon: Icon(Icons.pin),
-            label: Text(
-              'ตรวจ',
-              style: TextStyle(
-                color: Colors.white, fontSize: 18
+          child: Row(
+            children: [
+              Spacer(),
+              FloatingActionButton.extended(
+                heroTag: "btnQRCode",
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    var data = new CheckNumber(
+                        date.keys.firstWhere(
+                            (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                            orElse: () => null),
+                        lotterylist,
+                        null);
+                    data
+                        .getSnapshot()
+                        .then((e) => DialogHelper.exit(context, data.checked));
+                  }
+                },
+                icon: Icon(Icons.qr_code_2),
+                label: Text(
+                  'สแกน',
+                  style: TextStyle(
+                    color: Colors.white, fontSize: 18
+                  ),
+                ),
+                backgroundColor: Colors.amber,
               ),
-            ),
-            backgroundColor: Color(0xFFF63C4F),
+              Spacer(),
+              FloatingActionButton.extended(
+                heroTag: "btnCheck",
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    var data = new CheckNumber(
+                        date.keys.firstWhere(
+                            (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                            orElse: () => null),
+                        lotterylist,
+                        null);
+                    data
+                        .getSnapshot()
+                        .then((e) => DialogHelper.exit(context, data.checked));
+                  }
+                },
+                icon: Icon(Icons.pin),
+                label: Text(
+                  'ตรวจ',
+                  style: TextStyle(
+                    color: Colors.white, fontSize: 18
+                  ),
+                ),
+                backgroundColor: Color(0xFFF63C4F),
+              ),
+              Spacer(),
+            ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
