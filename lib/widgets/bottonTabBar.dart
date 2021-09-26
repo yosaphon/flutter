@@ -32,7 +32,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             index: 0,
             icon: Icon(
               Icons.home,
-              size: 30,
+              //size: 28,
             ),
             text: "หน้าหลัก",
           ),
@@ -40,6 +40,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             index: 1,
             icon: Icon(
               FontAwesomeIcons.youtube,
+              //size: 26,
             ),
             text: "ดูออนไลน์",
           ),
@@ -48,15 +49,15 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             index: 2,
             icon: Icon(
               Icons.visibility,
-              size: 30,
+              //size: 27,
             ),
             text: "ทำนาย",
           ),
           buildTabItem(
             index: 3,
             icon: Icon(
-              Icons.account_circle_outlined,
-              size: 30,
+              FontAwesomeIcons.userAlt,
+              //size: 27,
             ),
             text: "ผู้ใช้",
           ),
@@ -74,23 +75,27 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
 
     return IconTheme(
       data: IconThemeData(
-        color: isSelected ? Colors.indigo : Colors.blueGrey,
+        color: isSelected ? Colors.indigo : Color(0xFFB3B7C0),
+        size: isSelected ? 28: 23
       ),
       child: AnimatedContainer(
         width: 52,
         height: 52,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 5),
         curve: Curves.easeIn,
         child: InkWell(
           onTap: () {
             widget.onChangedTab(index);
           }, // button pressed
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              icon, // icon
-              Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.indigo : Colors.blueGrey,),) // text
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 3),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                icon, // icon
+                Text(text,style: TextStyle(fontSize: 10,color: isSelected ? Colors.indigo : Color(0xFFB3B7C0)),), // text
+              ],
+            ),
           ),
         ),
       ),

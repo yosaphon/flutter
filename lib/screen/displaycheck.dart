@@ -142,28 +142,31 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                 );
               }
             }),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              var data = new CheckNumber(
-                  date.keys.firstWhere(
-                      (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                      orElse: () => null),
-                  lotterylist,
-                  null);
-              data
-                  .getSnapshot()
-                  .then((e) => DialogHelper.exit(context, data.checked));
-            }
-          },
-          icon: Icon(Icons.pin),
-          label: const Text(
-            'ตรวจ',
-            style: TextStyle(
-              color: Colors.white,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                var data = new CheckNumber(
+                    date.keys.firstWhere(
+                        (k) => date[k] == dateValue, //หา Keys โดยใช้ value
+                        orElse: () => null),
+                    lotterylist,
+                    null);
+                data
+                    .getSnapshot()
+                    .then((e) => DialogHelper.exit(context, data.checked));
+              }
+            },
+            icon: Icon(Icons.pin),
+            label: Text(
+              'ตรวจ',
+              style: TextStyle(
+                color: Colors.white, fontSize: 18
+              ),
             ),
+            backgroundColor: Color(0xFFF63C4F),
           ),
-          backgroundColor: Color(0xFFF63C4F),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );

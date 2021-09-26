@@ -275,12 +275,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             },
             icon: Icon(Icons.feed),
             label: const Text(
-              'ดูรายงาน',
+              'สรุปผล',
               style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Color(0xFF6390E9),
           ),
           SizedBox(
             height: 15,
@@ -315,7 +315,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
