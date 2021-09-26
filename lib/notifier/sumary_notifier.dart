@@ -1,3 +1,4 @@
+
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,7 @@ class SumaryNotifier with ChangeNotifier {
 
 
 
-  set currentUser(List<SumaryData> sumaryData) {
+  set listSumary(List<SumaryData> sumaryData) {
     _listSumary = sumaryData;
     notifyListeners();
   }

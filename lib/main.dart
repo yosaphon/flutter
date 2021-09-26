@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check_login_user.dart';
 import 'package:lotto/screen/display_predictor.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider(create: (context) {
           return UserNotifier();
+        }),
+        ChangeNotifierProvider(create: (context) {
+          return SumaryNotifier();
         })
       ],
       child: MaterialApp(
@@ -68,12 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     getPrize(prizeNotifier);
-    
+
     return Scaffold(
       extendBody: true,
       body: pages[index],
@@ -82,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
         onChangedTab: onChangedTab,
       ),
       floatingActionButton: FloatingActionButton(
-        
         child: Tab(
           text: "ตรวจ",
           // icon: Icon(Icons.qr_code_scanner)

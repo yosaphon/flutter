@@ -11,59 +11,59 @@ String sumaryDataToJson(SumaryData data) => json.encode(data.toJson());
 class SumaryData {
     SumaryData({
         this.date,
-        this.won,
-        this.pay,
+        this.sumReward,
+        this.sumPay,
         this.amount,
-        this.wonNumber,
-        this.loseNumber,
-        this.wonAmount,
+        this.number,
+        this.checked,
+        this.won,
     });
 
-    DateTime date;
-    String won;
-    String pay;
+    String date;
+    double sumReward;
+    double sumPay;
     int amount;
-    List<WonNumber> wonNumber;
-    List<String> loseNumber;
-    int wonAmount;
+    String number;
+    bool checked;
+    List<Won> won;
 
     factory SumaryData.fromJson(Map<String, dynamic> json) => SumaryData(
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        won: json["won"] == null ? null : json["won"],
-        pay: json["pay"] == null ? null : json["pay"],
+        date: json["date"] == null ? null : json["date"],
+        sumReward: json["sumReward"] == null ? null : json["sumReward"].toDouble(),
+        sumPay: json["sumPay"] == null ? null : json["sumPay"].toDouble(),
         amount: json["amount"] == null ? null : json["amount"],
-        wonNumber: json["wonNumber"] == null ? null : List<WonNumber>.from(json["wonNumber"].map((x) => WonNumber.fromJson(x))),
-        loseNumber: json["loseNumber"] == null ? null : List<String>.from(json["loseNumber"].map((x) => x)),
-        wonAmount: json["wonAmount"] == null ? null : json["wonAmount"],
+        number: json["number"] == null ? null : json["number"],
+        checked: json["checked"] == null ? null : json["checked"],
+        won: json["won"] == null ? null : List<Won>.from(json["won"].map((x) => Won.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "date": date == null ? null : "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-        "won": won == null ? null : won,
-        "pay": pay == null ? null : pay,
+        "date": date == null ? null : date,
+        "sumReward": sumReward == null ? null : sumReward,
+        "sumPay": sumPay == null ? null : sumPay,
         "amount": amount == null ? null : amount,
-        "wonNumber": wonNumber == null ? null : List<dynamic>.from(wonNumber.map((x) => x.toJson())),
-        "loseNumber": loseNumber == null ? null : List<dynamic>.from(loseNumber.map((x) => x)),
-        "wonAmount": wonAmount == null ? null : wonAmount,
+        "number": number == null ? null : number,
+        "checked": checked == null ? null : checked,
+        "won": won == null ? null : List<dynamic>.from(won.map((x) => x.toJson())),
     };
 }
 
-class WonNumber {
-    WonNumber({
+class Won {
+    Won({
         this.name,
-        this.number,
+        this.wonNumber,
     });
 
     String name;
-    List<String> number;
+    String wonNumber;
 
-    factory WonNumber.fromJson(Map<String, dynamic> json) => WonNumber(
+    factory Won.fromJson(Map<String, dynamic> json) => Won(
         name: json["name"] == null ? null : json["name"],
-        number: json["number"] == null ? null : List<String>.from(json["number"].map((x) => x)),
+        wonNumber: json["wonNumber"] == null ? null : json["wonNumber"],
     );
 
     Map<String, dynamic> toJson() => {
         "name": name == null ? null : name,
-        "number": number == null ? null : List<dynamic>.from(number.map((x) => x)),
+        "wonNumber": wonNumber == null ? null : wonNumber,
     };
 }

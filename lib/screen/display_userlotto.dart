@@ -111,7 +111,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 text: "จำนวน ",
                 style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
             TextSpan(
-                text: lotto.amount,
+                text: lotto.amount.toString(),
                 style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
             TextSpan(
                 text: " ใบ",

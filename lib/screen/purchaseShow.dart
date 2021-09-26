@@ -76,7 +76,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
     await getUser(userNotifier, user.uid,
-        start: widget.dateuser[0], end: widget.dateuser[1]);
+        );
     userNotifier.currentUser.forEach((element) {
       allresultdate.add(element.date);
     });
