@@ -27,8 +27,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindex = 0;
   int selectedindexsecond = 0;
   List<UserData> lottos = [];
-  List<String>userID = [];
+  List<String> userID = [];
   String number, query = '';
+  bool stateCheck = false;
   _DisplayScreenState paddingStyle;
   void initiateSearch(String val) {
     setState(() {
@@ -43,9 +44,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   }
 
   Future loadData(userNotifier) async {
-    
-      await getUser(userNotifier, user.uid);
-    
+    await getUser(userNotifier, user.uid);
 
     lottos = userNotifier.currentUser;
     userID = userNotifier.docID;
@@ -83,12 +82,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       return ListTile(
         tileColor: Colors.white54,
         leading: lotto.imageurl != null
-            ?  Image.network(
-                  lotto.imageurl,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.fitWidth,
-                )
+            ? Image.network(
+                lotto.imageurl,
+                width: 50,
+                height: 50,
+                fit: BoxFit.fitWidth,
+              )
             : Image.asset(
                 'asset/guraLottery.png',
                 width: 50,
@@ -197,21 +196,21 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         actions: <Widget>[
           Theme(
             data: Theme.of(context).copyWith(
-              dividerColor: Colors.black54,
-              iconTheme: IconThemeData(color: Colors.black54),
-              textTheme: TextTheme().apply(bodyColor: Colors.black54),
+              dividerColor: Colors.white,
+              iconTheme: IconThemeData(color: Colors.white),
+              textTheme: TextTheme().apply(bodyColor: Colors.white),
             ),
             child: PopupMenuButton<int>(
-              color: Colors.white70,
+              color: Colors.white,
               onSelected: (item) => onSelected(context, item),
               itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Row(
                     children: [
-                      Icon(Icons.logout),
+                      Icon(Icons.logout,color:  Colors.black87,),
                       const SizedBox(width: 8),
-                      Text('Sign Out', style: TextStyle(color: Colors.black54)),
+                      Text('Sign Out', style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
                     ],
                   ),
                 ),
@@ -239,7 +238,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   itemCount: lottos.length,
                   itemBuilder: (BuildContext context, int index) {
                     UserData lotto = lottos[index];
-                    
 
                     return frameWidget(buildLotto(lotto, userID[index]));
                   },
@@ -252,30 +250,32 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       floatingActionButton: Column(
         children: [
           Spacer(),
-          FloatingActionButton.extended(
-            heroTag: "btn1",
-            onPressed: () async {
-              List<String> date1 = [];
-              userNotifier.currentUser.forEach((element) {
-                date1.add(element.date);
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PurchaseReportfilter(
-                          userdate: date1.toSet().toList(),
-                        )),
-              );
-            },
-            icon: Icon(Icons.feed),
-            label: const Text(
-              'ดูรายงาน',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.red,
-          ),
+          userNotifier.currentUser.isNotEmpty
+              ? FloatingActionButton.extended(
+                  heroTag: "btn1",
+                  onPressed: () async {
+                    List<String> date1 = [];
+                    userNotifier.currentUser.forEach((element) {
+                      date1.add(element.date);
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PurchaseReportfilter(
+                                userdate: date1.toSet().toList(),
+                              )),
+                    );
+                  },
+                  icon: Icon(Icons.feed),
+                  label: const Text(
+                    'ดูรายงาน',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Colors.red,
+                )
+              : SizedBox(),
           SizedBox(
             height: 15,
           ),
@@ -337,7 +337,6 @@ class _DisplayScreenState {}
 
 Future<Null> confirmDialog(
     BuildContext context, String documentId, String imageurl, String userID) {
-
   return showDialog<Null>(
       context: context,
       barrierDismissible: false, // user must tap button!
