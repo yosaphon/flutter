@@ -39,19 +39,16 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   File _image;
   final picker = ImagePicker();
-  var x;
-  List<DocumentSnapshot> documents;
   String userDate;
+  List<DocumentSnapshot> documents;
   ShowuserGooglemap location = ShowuserGooglemap();
   Future loadData(PrizeNotifier prizeNotifier) async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('OutDate').get();
     documents = snapshot.docs;
     for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
-      x = documents[i].get("date");
+      userDate = documents[i].get("date");
     }
-    //userDate = documents[3].data();
-    print(x);
   }
 
   Future getImage(ImageSource imageSource) async {
@@ -114,8 +111,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
               body: FutureBuilder(
                   future: loadData(prizeNotifier),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData || !snapshot.data.exists) {
-                      return CircularProgressIndicator();
+                    if (userDate ==null) {
+                      return Center(child: CircularProgressIndicator());
                     } else {
                       return Container(
                         padding: EdgeInsets.all(20),
@@ -302,7 +299,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                           "lotteryprice":
                                               userlottery.lotteryprice,
                                           "imageurl": urlpiture,
-                                          "date": "",
+                                          "date": userDate,
                                           "latlng": userlottery.latlng,
                                           "userid": user.uid,
                                           "state": null,
