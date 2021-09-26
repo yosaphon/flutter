@@ -251,7 +251,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         children: [
           Spacer(),
           FloatingActionButton.extended(
-            heroTag: "btn1",
+            heroTag: "sumary",
             onPressed: () async {
               List<String> date1 = [];
               userNotifier.currentUser.forEach((element) {
@@ -265,7 +265,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         )),
               );
             },
-            icon: Icon(Icons.feed),
+            icon: Padding(
+              padding: const EdgeInsets.only(left: 18),
+              child: Icon(Icons.feed),
+            ),
             label: const Text(
               'สรุปผล',
               style: TextStyle(
@@ -277,33 +280,26 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           SizedBox(
             height: 15,
           ),
-          FloatingActionButton.extended(
-            heroTag: "btn2",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Formshowlotto()),
-              );
-            },
-            icon: Icon(Icons.add),
-            label: const Text(
-              'เพิ่มข้อมูล',
-              style: TextStyle(
-                color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 45),
+            
+            child: FloatingActionButton.extended(
+              heroTag: "add",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Formshowlotto()),
+                );
+              },
+              icon: Icon(Icons.add),
+              label: const Text(
+                'เพิ่มข้อมูล',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Colors.amber,
             ),
-            backgroundColor: Colors.amber,
-          ),
-          FloatingActionButton.extended(
-            heroTag: "btn3",
-            tooltip: 'Increment',
-            elevation: 0,
-            splashColor: Colors.transparent,
-            onPressed: () async {},
-            label: Opacity(
-              opacity: 0,
-            ),
-            backgroundColor: Colors.transparent,
           ),
         ],
       ),

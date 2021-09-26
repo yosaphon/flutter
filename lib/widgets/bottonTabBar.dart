@@ -81,7 +81,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
       child: AnimatedContainer(
         width: 52,
         height: 52,
-        duration: const Duration(seconds: 5),
+        duration: const Duration(seconds: 2),
         curve: Curves.easeIn,
         child: InkWell(
           onTap: () {

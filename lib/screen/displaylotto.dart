@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lotto/api/prize_api.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/prizeBox.dart';
@@ -40,7 +41,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
       ),
       body: Center(
         child: FutureBuilder(
-            //future: getPrize(prizeNotifier),
+            future: getPrize(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (prizeNotifier.prizeList.isEmpty) {
             return CircularProgressIndicator();
@@ -156,37 +157,30 @@ class _DisplayScreenState extends State<DisplayScreen> {
         children: [
           Spacer(),
           
-          FloatingActionButton.extended(
-            heroTag: "btnreadpdf",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => new ShowCheckImage(
-                          date: prizeNotifier.selectedPrize.date,
-                        )),
-              );
-            },
-            icon: Icon(Icons.receipt_long),
-            label: const Text(
-              'ใบตรวจ',
-              style: TextStyle(
-                color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 45),
+            child: FloatingActionButton.extended(
+              heroTag: "showCheckPDF",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new ShowCheckImage(
+                            date: prizeNotifier.selectedPrize.date,
+                          )),
+                );
+              },
+              icon: Icon(Icons.receipt_long),
+              label: const Text(
+                'ใบตรวจ',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Colors.amber,
             ),
-            backgroundColor: Colors.amber,
           ),
-          FloatingActionButton.extended(
-            heroTag: "btn3",
-            tooltip: 'Increment',
-            elevation: 0,
-            splashColor: Colors.transparent,
-            onPressed: () async {},
-            label: Opacity(
-              opacity: 0,
-            ),
-            backgroundColor: Colors.transparent,
-          ),
+        
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
