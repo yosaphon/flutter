@@ -250,7 +250,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       floatingActionButton: Column(
         children: [
           Spacer(),
-<<<<<<< HEAD
           FloatingActionButton.extended(
             heroTag: "btn1",
             onPressed: () async {
@@ -275,34 +274,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             ),
             backgroundColor: Color(0xFF6390E9),
           ),
-=======
-          userNotifier.currentUser.isNotEmpty
-              ? FloatingActionButton.extended(
-                  heroTag: "btn1",
-                  onPressed: () async {
-                    List<String> date1 = [];
-                    userNotifier.currentUser.forEach((element) {
-                      date1.add(element.date);
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PurchaseReportfilter(
-                                userdate: date1.toSet().toList(),
-                              )),
-                    );
-                  },
-                  icon: Icon(Icons.feed),
-                  label: const Text(
-                    'ดูรายงาน',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  backgroundColor: Colors.red,
-                )
-              : SizedBox(),
->>>>>>> 6d4ce41424d3e7d5b3fefac03d16331b2fa0b7b7
           SizedBox(
             height: 15,
           ),
