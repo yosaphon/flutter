@@ -1,23 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class ShowPurchaseReport extends StatefulWidget {
-  final dateuser; // filter สำหรับหาวันที่
-  const ShowPurchaseReport({this.dateuser});
+  final dateUser; // filter สำหรับหาวันที่
+  const ShowPurchaseReport({this.dateUser});
   @override
-  _ShowPurchaseReportState createState() => _ShowPurchaseReportState(dateuser);
+  _ShowPurchaseReportState createState() => _ShowPurchaseReportState(dateUser);
 }
+
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
-  final dateuser;
+  final dateUser;
   List<charts.Series<TotalDataCharts, String>> _seriesData;
   _generateData() {
-    var dataWon = 
-    [
+    var dataWon = [
       new TotalDataCharts('2021-08-01', 10000),
       new TotalDataCharts('2021-09-01', 0),
       new TotalDataCharts('2021-10-01', 2000),
@@ -31,96 +32,78 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
         id: 'Win',
         data: dataWon,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
             charts.ColorUtil.fromDartColor(Colors.green),
-      ), 
+      ),
     );
     _seriesData.add(
       charts.Series(
         domainFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.date,
-        measureFn: (TotalDataCharts totalDataCharts, _) => totalDataCharts.total,
+        measureFn: (TotalDataCharts totalDataCharts, _) =>
+            totalDataCharts.total,
         id: 'Lose',
         data: dataLose,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (TotalDataCharts totalDataCharts, _) =>
-           charts.ColorUtil.fromDartColor(Colors.red),
+            charts.ColorUtil.fromDartColor(Colors.red),
       ),
     );
   }
-  
+
+  int start = 0, end ;
+  String dateuser = "", dateValue1 = "", dateValue2 = "";
+
   List<String> allresultdate = [];
   List<String> allresultdate2 = [];
   List<String> indexrow = [];
-  _ShowPurchaseReportState(this.dateuser);
-  double totalProfit = 0,
-      totalWon = 0,
-      totalLose = 0,
-      totalReward = 0,
-      totalPay = 0;
+  _ShowPurchaseReportState(this.dateUser);
+  double totalProfit = 0, totalReward = 0, totalPay = 0;
   int totalAmount = 0;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
+
   @override
   void initState() {
-    loadData();
+    SumaryNotifier sumaryNotifier =
+        Provider.of<SumaryNotifier>(context, listen: false);
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
+    loadData(userNotifier, sumaryNotifier);
     _seriesData = List<charts.Series<TotalDataCharts, String>>();
     _generateData();
     super.initState();
   }
 
-  void loadData() async {
-    UserNotifier userNotifier =
-        Provider.of<UserNotifier>(context, listen: false);
-    await getUser(userNotifier, user.uid,
-        );
-    userNotifier.currentUser.forEach((element) {
-      allresultdate.add(element.date);
-    });
-    userNotifier.currentUser.forEach((element) {
-      listotalWon
-          .add(element.reward == null ? 0.00 : double.parse(element.reward));
+  Future loadData(
+      UserNotifier userNotifier, SumaryNotifier sumaryNotifier) async {
+    if (sumaryNotifier.listSumary.isEmpty) {
+      await getUser(userNotifier, user.uid, sumaryNotifier: sumaryNotifier);
 
-      listotalprice.add(element.lotteryprice == null
-          ? 0.00
-          : double.parse(element.lotteryprice));
+      print(dateUser);
+      print(dateUser[0].split('-').join(''));
 
-      listotalAmount
-          .add(element.amount == null ? 0.00 : int.parse(element.amount));
-    });
-    for (var i = 0; i < listotalAmount.length; i++) {
-      //เงินรางวัลที่ถูก
-      if (listotalWon[i] == null) {
-        totalWon += 0.00;
-      } else if (listotalWon[i] != null) {
-        totalWon += listotalWon[i] * double.parse(listotalAmount[i].toString());
+      end = sumaryNotifier.listSumary.length;
+      print(end);
+      for (var i = 0; i < end; i++) {
+        totalReward += sumaryNotifier.listSumary[i].sumReward;
+        totalPay += sumaryNotifier.listSumary[i].sumPay;
+        totalAmount += sumaryNotifier.listSumary[i].amount;
       }
-      //เงินที่ซื้อ
-      if (listotalprice[i] == null) {
-        totalLose += 0.00;
-      } else if (listotalprice[i] != null) {
-        totalLose += listotalprice[i];
-      }
-      //จำนวนทั้งหมด
-      if (listotalAmount[i] == null) {
-        totalAmount += 0;
-      } else if (listotalAmount[i] != null) {
-        totalAmount += listotalAmount[i];
-      }
+      totalProfit = totalReward - totalPay;
     }
-    totalProfit = totalWon - totalLose;
-    for (var i = 0; i <= allresultdate.length - 1; i++) {
-      indexrow += ["$i"];
-    }
-    allresultdate2 = allresultdate.toSet().toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    SumaryNotifier sumaryNotifier =
+        Provider.of<SumaryNotifier>(context, listen: false);
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
 
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -267,81 +250,95 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       //         ),
       //       );
       //     })
-      body: CustomScrollView(
-        physics: ClampingScrollPhysics(),
-        slivers: <Widget>[
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            sliver: SliverToBoxAdapter(
-                child: Container(
-              height: MediaQuery.of(context).size.height * 0.25,
-              child: Column(
-                children: <Widget>[
-                  Flexible(
-                    child: Row(
-                      children: <Widget>[
-                        _buildStatCard(
-                            'Total Won', '$totalWon', 'บาท', Colors.orange),
-                        _buildStatCard(
-                            'Total Lose', '$totalLose', 'บาท', Colors.red),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      children: <Widget>[
-                        _buildStatCard('Amount', '${totalAmount.toString()}',
-                            'ใบ', Colors.green),
-                        _buildStatCard(
-                            'Total', '$totalProfit', 'บาท', Colors.lightBlue),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(top: 20.0),
-            sliver: SliverToBoxAdapter(
-                child: Container(
-              height: 350.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "${dateuser[0]} TO ${dateuser[1]}",
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.width *0.7,
-                    child: charts.BarChart(
-                            _seriesData,
-                            animate: true,
-                            barGroupingType: charts.BarGroupingType.grouped,
-                            animationDuration: Duration(seconds: 5),
+      body: FutureBuilder(
+          future: loadData(userNotifier, sumaryNotifier),
+          builder: (context, snapshot) {
+            if (sumaryNotifier.listSumary.isEmpty ||
+                sumaryNotifier.listSumary[start].date == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return CustomScrollView(
+                physics: ClampingScrollPhysics(),
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    sliver: SliverToBoxAdapter(
+                        child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: Column(
+                        children: <Widget>[
+                          Flexible(
+                            child: Row(
+                              children: <Widget>[
+                                _buildStatCard('Total Won', '$totalReward',
+                                    'บาท', Colors.orange),
+                                _buildStatCard('Total Lose', '$totalPay', 'บาท',
+                                    Colors.red),
+                              ],
+                            ),
                           ),
+                          Flexible(
+                            child: Row(
+                              children: <Widget>[
+                                _buildStatCard(
+                                    'Amount',
+                                    '${totalAmount.toString()}',
+                                    'ใบ',
+                                    Colors.green),
+                                _buildStatCard('Total', '$totalProfit', 'บาท',
+                                    Colors.lightBlue),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    sliver: SliverToBoxAdapter(
+                        child: Container(
+                      height: 350.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(20.0),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "${sumaryNotifier.listSumary[start].date} TO ${sumaryNotifier.listSumary[sumaryNotifier.listSumary.length-1].date}",
+                              style: const TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: MediaQuery.of(context).size.width * 0.7,
+                            child: charts.BarChart(
+                              _seriesData,
+                              animate: true,
+                              barGroupingType: charts.BarGroupingType.grouped,
+                              animationDuration: Duration(seconds: 5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
                   ),
                 ],
-              ),
-            )),
-          ),
-        ],
-      ),
+              );
+            }
+          }),
     );
   }
 

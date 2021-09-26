@@ -8,6 +8,7 @@ import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
+import 'package:lotto/screen/purchaseShow.dart';
 import 'package:lotto/screen/purchase_report.dart';
 import 'package:lotto/screen/userlotteryDetail.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
@@ -277,8 +278,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PurchaseReportfilter(
-                          userdate: date1.toSet().toList(),
+                    builder: (context) => ShowPurchaseReport(
+                          dateUser: date1.toSet().toList(),
                         )),
               );
             },

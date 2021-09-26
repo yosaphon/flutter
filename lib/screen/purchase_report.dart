@@ -109,7 +109,7 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                       setState(() {
                         changeIndexsecon(1);
                         start = userdate[date1.length-1];
-                        end = userdate[date1.length-1];
+                        //end = userdate[date1.length-1];
                       });
                     },
                     child: Row(
@@ -357,12 +357,12 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                   Spacer(),
                   FloatingActionButton.extended(
                     onPressed: () {
-                      List<String> datauser = [start, end];
+                      List<String> dataUser = [start, end];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ShowPurchaseReport(dateuser: datauser)),
+                                ShowPurchaseReport(dateUser: dataUser)),
                       );
                     },
                     label: const Text(
