@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:path/path.dart' as Path;
@@ -20,16 +21,16 @@ import 'package:uuid/uuid.dart';
 class FormUpdatelotto extends StatefulWidget {
   final docid;
   int amount;
-  FormUpdatelotto({this.docid,this.amount});
+  FormUpdatelotto({this.docid, this.amount});
   @override
-  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid,amount);
+  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid, amount);
 }
 
 class _FormUpdatelottoState extends State<FormUpdatelotto> {
   final docid;
   int amount;
-  _FormUpdatelottoState(this.docid,this.amount);
-
+  _FormUpdatelottoState(this.docid, this.amount);
+  bool imageStateShow = false;
   final formKey = GlobalKey<FormState>();
 
   Completer<GoogleMapController> _controller = Completer();
@@ -46,6 +47,11 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   File _image;
   final picker = ImagePicker();
   ShowuserGooglemap location = ShowuserGooglemap();
+  GoogleMapController mapController;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   void addAmount() {
     setState(() {
       amount += 1;
@@ -85,7 +91,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
@@ -190,12 +197,13 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 SizedBox(height: 15),
                                 Column(
                                   children: [
-                                     Container(
-                                       alignment: Alignment.topLeft,
-                                       child: Text(
-                                                  "จำนวน",style: TextStyle(fontSize: 20),
-                                                ),
-                                     ),
+                                    Container(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "จำนวน",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
                                     Container(
                                       child: Row(
                                         children: [
@@ -209,16 +217,22 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(7),
-                                                  color: amount >1 ? Colors.blue:Colors.grey),
-                                                  child: Icon(Icons.remove , size: 40,),
+                                                  color: amount > 1
+                                                      ? Colors.blue
+                                                      : Colors.grey),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 40,
+                                              ),
                                             ),
                                           ),
                                           Container(
                                             height: 35,
-                                                width: 60,
+                                            width: 60,
                                             child: Center(
                                               child: Text(
-                                                "$amount",style: TextStyle(fontSize: 20),
+                                                "$amount",
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             ),
                                           ),
@@ -233,7 +247,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                   borderRadius:
                                                       BorderRadius.circular(7),
                                                   color: Colors.blue),
-                                                  child: Icon(Icons.add , size: 40,),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 40,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -268,6 +285,26 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                 SizedBox(
                                   height: 10,
                                 ),
+                                Container(
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (imageStateShow == false) {
+                                              imageStateShow = true;
+                                            } else if (imageStateShow == true) {
+                                              imageStateShow = false;
+                                            }
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            snapshot.data['imageurl'] == null
+                                                ? Text("เพิ่มรูป")
+                                                : Text("แก้ไขรูป"),
+                                            Spacer(),
+                                            Icon(Icons.image)
+                                          ],
+                                        ))),
                                 if (_image != null) ...[
                                   Container(
                                       padding: EdgeInsets.all(10),
@@ -276,16 +313,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                           MediaQuery.of(context).size.height *
                                               0.3,
                                       child: Image.file(_image))
-                                ] else if (snapshot.data['imageurl'] ==
-                                    null) ...[
-                                  Container(
-                                      padding: EdgeInsets.all(10),
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.3,
-                                      child: Image.asset(
-                                          'asset/gallery-187-902099.png'))
+                                ] else if (snapshot.data['imageurl'] == null) ...[
+                                  SizedBox(
+                                    height: 10,
+                                  )
                                 ] else
                                   Container(
                                       padding: EdgeInsets.all(10),
@@ -295,44 +326,50 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                               0.3,
                                       child: Image.network(
                                           snapshot.data['imageurl'])),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            getImage(ImageSource.camera);
-                                          },
-                                          iconSize: 36,
-                                          color: Colors.amber[400],
-                                          icon: Icon(Icons.add_a_photo)),
-                                      IconButton(
-                                          onPressed: () {
-                                            getImage(ImageSource.gallery);
-                                          },
-                                          iconSize: 36,
-                                          color: Colors.green[400],
-                                          icon: Icon(Icons.collections)),
-                                    ],
-                                  ),
-                                ),
+                                imageStateShow == true
+                                    ? Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  getImage(ImageSource.camera);
+                                                },
+                                                iconSize: 36,
+                                                color: Colors.amber[400],
+                                                icon: Icon(Icons.add_a_photo)),
+                                            IconButton(
+                                                onPressed: () {
+                                                  getImage(ImageSource.gallery);
+                                                },
+                                                iconSize: 36,
+                                                color: Colors.green[400],
+                                                icon: Icon(Icons.collections)),
+                                          ],
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 10,
+                                      ),
                                 SizedBox(
                                   height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ))),
-                                    child: snapshot.data["latlng"] ==null? Text(
-                                      "เพิ่มตำแหน่ง",
-                                      style: TextStyle(fontSize: 20),
-                                    ):Text(
-                                      "แก้ไขตำแหน่ง",
-                                      style: TextStyle(fontSize: 20),
+                                    child: Row(
+                                      children: [
+                                        snapshot.data["latlng"] == null
+                                            ? Text(
+                                                "เพิ่มตำแหน่ง",
+                                                style: TextStyle(fontSize: 20),
+                                              )
+                                            : Text(
+                                                "แก้ไขตำแหน่ง",
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                        Spacer(),
+                                        Icon(FontAwesomeIcons.mapMarked)
+                                      ],
                                     ),
                                     onPressed: () async {
                                       _navigateAndDisplaySelection(
@@ -340,6 +377,138 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     },
                                   ),
                                 ),
+                                if (userlottery.latlng != null) ...[
+                                  Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.teal.shade100,
+                                                borderRadius:
+                                                    BorderRadius.circular(18),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      offset: Offset(0, 17),
+                                                      blurRadius: 23,
+                                                      spreadRadius: -13,
+                                                      color: Colors.black38)
+                                                ]),
+                                            child: SizedBox(
+                                                height: 200,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: GoogleMap(
+                                                  mapType: MapType.normal,
+                                                  markers:
+                                                      userlottery.latlng != null
+                                                          ? Set.from([
+                                                              Marker(
+                                                                  markerId:
+                                                                      MarkerId(
+                                                                          'google_plex'),
+                                                                  position: LatLng(
+                                                                      double.parse(userlottery
+                                                                          .latlng
+                                                                          .substring(
+                                                                              1,
+                                                                              18)),
+                                                                      double.parse(userlottery
+                                                                          .latlng
+                                                                          .substring(
+                                                                              20,
+                                                                              userlottery.latlng.length - 1))))
+                                                            ])
+                                                          : null,
+                                                  onMapCreated: _onMapCreated,
+                                                  myLocationEnabled: true,
+                                                  initialCameraPosition: CameraPosition(
+                                                      target: userlottery
+                                                                  .latlng !=
+                                                              null
+                                                          ? LatLng(
+                                                              double.parse(
+                                                                  userlottery
+                                                                      .latlng
+                                                                      .substring(
+                                                                          1, 18)),
+                                                              double.parse(userlottery
+                                                                  .latlng
+                                                                  .substring(
+                                                                      20,
+                                                                      userlottery
+                                                                              .latlng
+                                                                              .length -
+                                                                          1)))
+                                                          : LatLng(13.736717, 100.523186),
+                                                      zoom: 15),
+                                                )),
+                                          )
+                                ] else if (snapshot.data["latlng"] == null) ...[
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ] else
+                                  Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.teal.shade100,
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: Offset(0, 17),
+                                                  blurRadius: 23,
+                                                  spreadRadius: -13,
+                                                  color: Colors.black38)
+                                            ]),
+                                        child: SizedBox(
+                                            height: 200,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: GoogleMap(
+                                              mapType: MapType.normal,
+                                              markers:
+                                                  snapshot.data["latlng"] !=
+                                                          null
+                                                      ? Set.from([
+                                                          Marker(
+                                                              markerId: MarkerId(
+                                                                  'google_plex'),
+                                                              position: LatLng(
+                                                                  double.parse(snapshot
+                                                                      .data[
+                                                                          "latlng"]
+                                                                      .substring(
+                                                                          1, 18)),
+                                                                  double.parse(snapshot
+                                                                      .data[
+                                                                          "latlng"]
+                                                                      .substring(
+                                                                          20,
+                                                                          snapshot.data["latlng"].length -
+                                                                              1))))
+                                                        ])
+                                                      : null,
+                                              onMapCreated: _onMapCreated,
+                                              myLocationEnabled: true,
+                                              initialCameraPosition: CameraPosition(
+                                                  target: snapshot.data["latlng"] !=
+                                                          null
+                                                      ? LatLng(
+                                                          double.parse(snapshot
+                                                              .data['latlng']
+                                                              .substring(
+                                                                  1, 18)),
+                                                          double.parse(snapshot
+                                                              .data['latlng']
+                                                              .substring(
+                                                                  20,
+                                                                  snapshot.data['latlng']
+                                                                          .length -
+                                                                      1)))
+                                                      : LatLng(13.736717, 100.523186),
+                                                  zoom: 15),
+                                            )),
+                                      ),
+                                        
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -376,8 +545,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "number": userlottery.number,
                                           });
                                         }
-                                        if (amount !=
-                                            snapshot.data["amount"]) {
+                                        if (amount != snapshot.data["amount"]) {
                                           await _userltottery
                                               .doc(docid)
                                               .update({
@@ -401,7 +569,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "latlng": userlottery.latlng,
                                           });
                                         }
-                                        
+
                                         Navigator.pop(context);
                                         //getUser(userNotifier, user.uid);
                                       }
@@ -441,6 +609,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
       MaterialPageRoute(
           builder: (context) => ShowuserGooglemap(locamark: locamark)),
     );
-    userlottery.latlng = result;
+    setState(() {
+      userlottery.latlng = result;
+    });
   }
 }

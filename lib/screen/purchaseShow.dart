@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/userSumary_api.dart';
-
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
-
 import 'package:provider/provider.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class ShowPurchaseReport extends StatefulWidget {
   final dateUser; // filter สำหรับหาวันที่
@@ -34,7 +31,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   void initState() {
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
-
     loadData(userSumaryNotifier);
     super.initState();
   }
@@ -86,7 +82,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             sumAmount += element.amount == null ? 1 : int.parse(element.amount);
           }
         });
-
         SumaryData sumaryData = SumaryData(
           date: item,
           sumReward: sumReward,
@@ -98,7 +93,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +120,21 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           return CustomScrollView(
             slivers: <Widget>[
               SliverPadding(
+                padding: const EdgeInsets.only(
+                    top: 20, left: 20, right: 10, bottom: 20),
+                sliver: SliverToBoxAdapter(
+                  child: Container(
+                    child: Text(
+                      "สรุป",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 sliver: SliverToBoxAdapter(
                   child: Container(
@@ -136,9 +145,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           child: Row(
                             children: <Widget>[
                               _buildStatCard('ถูกรางวัล', '฿$totalReward',
-                                  'บาท', Colors.white, Color(0xFFF00000)),
+                                  'บาท', Colors.white),
                               _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
-                                  Colors.white, Color(0xFFF00000)),
+                                  Colors.white),
                             ],
                           ),
                         ),
@@ -149,10 +158,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   'จำนวนสลาก',
                                   '${totalAmount.toString()}',
                                   'ใบ',
-                                  Color(0xFFF00000),
-                                  Colors.black),
-                              _buildStatCard('กำไร', '฿$totalProfit', 'บาท',
-                                  Colors.white, Color(0xFFF00000)),
+                                  Colors.white),
+                              _buildStatCard(
+                                  'กำไร', '฿$totalProfit', 'บาท', Colors.white),
                             ],
                           ),
                         ),
@@ -247,7 +255,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 
   Widget _buildStatCard(
-      String title, String count, String typestring, Color color,Color color2) {
+      String title, String count, String typestring, Color color) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -273,14 +281,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Colors.black87,
+                      color: Colors.black54,
                       fontSize: 12.0,
                     ),
                   ),
                   Text(
                     "($typestring)",
                     style:
-                        const TextStyle(color: Colors.black87, fontSize: 10.0),
+                        const TextStyle(color: Colors.black54, fontSize: 10.0),
                   ),
                 ],
               ),
@@ -289,8 +297,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               padding: const EdgeInsets.only(top: 30),
               child: Text(
                 count,
-                style:  TextStyle(
-                  color: color2,
+                style: TextStyle(
+                  color: Colors.black,
                   fontSize: 20.0,
                 ),
               ),
@@ -320,20 +328,20 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.black87,
+                    color: Colors.black54,
                     fontSize: 12.0,
                   ),
                 ),
                 Text(
                   "($typestring)",
-                  style: const TextStyle(color: Colors.black87, fontSize: 8.0),
+                  style: const TextStyle(color: Colors.black54, fontSize: 8.0),
                 ),
               ],
             ),
             Text(
               count,
               style: const TextStyle(
-                color: Colors.black87,
+                color: Colors.black,
                 fontSize: 16.0,
               ),
             ),
@@ -342,4 +350,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
+
+  
 }
+

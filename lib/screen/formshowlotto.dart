@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_automation/flutter_automation.dart';
@@ -40,8 +41,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
   File _image;
   final picker = ImagePicker();
   String userDate;
+  bool imageStateShow = false;
   int qtyAmount = 1;
   List<DocumentSnapshot> documents;
+  GoogleMapController mapController;
   ShowuserGooglemap location = ShowuserGooglemap();
   Future loadData(PrizeNotifier prizeNotifier) async {
     QuerySnapshot snapshot =
@@ -50,6 +53,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
     for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
       userDate = documents[i].get("date");
     }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
   void addAmount() {
@@ -280,99 +287,160 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   height: 10,
                                 ),
                                 Container(
-                                  padding: EdgeInsets.all(20),
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.3,
-                                  child: _image != null
-                                      ? Image.file(_image)
-                                      : Image.asset(
-                                          'asset/gallery-187-902099.png'),
-                                ),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            getImage(ImageSource.camera);
-                                          },
-                                          iconSize: 36,
-                                          color: Colors.amber[400],
-                                          icon: Icon(Icons.add_a_photo)),
-                                      IconButton(
-                                          onPressed: () {
-                                            getImage(ImageSource.gallery);
-                                          },
-                                          iconSize: 36,
-                                          color: Colors.green[400],
-                                          icon: Icon(Icons.collections)),
-                                    ],
-                                  ),
-                                ),
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (imageStateShow == false) {
+                                              imageStateShow = true;
+                                            } else if (imageStateShow == true) {
+                                              imageStateShow = false;
+                                            }
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text("เพิ่มรูป"),
+                                            Spacer(),
+                                            Icon(Icons.image)
+                                          ],
+                                        ))),
+                                imageStateShow == true
+                                    ? Column(
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(20),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: _image != null
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.3
+                                                : 5,
+                                            child: _image != null
+                                                ? Image.file(_image)
+                                                : SizedBox(),
+                                          ),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                IconButton(
+                                                    onPressed: () {
+                                                      getImage(
+                                                          ImageSource.camera);
+                                                    },
+                                                    iconSize: 36,
+                                                    color: Colors.amber[400],
+                                                    icon: Icon(
+                                                        Icons.add_a_photo)),
+                                                IconButton(
+                                                    onPressed: () {
+                                                      getImage(
+                                                          ImageSource.gallery);
+                                                    },
+                                                    iconSize: 36,
+                                                    color: Colors.green[400],
+                                                    icon: Icon(
+                                                        Icons.collections)),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(
+                                        height: 10,
+                                      ),
                                 SizedBox(
-                                  height: 50,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ))),
-                                    child: Text(
-                                      "เพิ่มตำแหน่ง",
-                                      style: TextStyle(fontSize: 20),
+                                    child: Row(
+                                      children: [
+                                        userlottery.latlng != null ?Text(
+                                          "เพิ่มตำแหน่ง",
+                                          style: TextStyle(fontSize: 20),
+                                        ):Text(
+                                          "แก้ไขตำแหน่ง",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        Spacer(),
+                                        Icon(FontAwesomeIcons.mapMarked)
+                                      ],
                                     ),
                                     onPressed: () async {
                                       _navigateAndDisplaySelection(context);
                                     },
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ))),
-                                    child: Text(
-                                      "บันทึกข้อมูล",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    onPressed: () async {
-                                      if (_image != null) {
-                                        await uploadPicture();
-                                      }
-
-                                      if (formKey.currentState.validate()) {
-                                        formKey.currentState.save();
-                                        await _userltottery.add({
-                                          "username": user.displayName,
-                                          "number": userlottery.number,
-                                          "amount": qtyAmount.toString(),
-                                          "lotteryprice":
-                                              userlottery.lotteryprice,
-                                          "imageurl": urlpiture,
-                                          "date": userDate,
-                                          "latlng": userlottery.latlng,
-                                          "userid": user.uid,
-                                          "state": null,
-                                          "reward": null,
-                                          "namewin": null
-                                        });
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                  ),
-                                ),
+                                userlottery.latlng != null
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.teal.shade100,
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: Offset(0, 17),
+                                                  blurRadius: 23,
+                                                  spreadRadius: -13,
+                                                  color: Colors.black38)
+                                            ]),
+                                        child: SizedBox(
+                                            height: 200,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: GoogleMap(
+                                              mapType: MapType.normal,
+                                              markers:
+                                                  userlottery.latlng != null
+                                                      ? Set.from([
+                                                          Marker(
+                                                              markerId: MarkerId(
+                                                                  'google_plex'),
+                                                              position: LatLng(
+                                                                  double.parse(
+                                                                      userlottery
+                                                                          .latlng
+                                                                          .substring(
+                                                                              1,
+                                                                              18)),
+                                                                  double.parse(userlottery
+                                                                      .latlng
+                                                                      .substring(
+                                                                          20,
+                                                                          userlottery.latlng.length -
+                                                                              1))))
+                                                        ])
+                                                      : null,
+                                              onMapCreated: _onMapCreated,
+                                              myLocationEnabled: true,
+                                              initialCameraPosition: CameraPosition(
+                                                  target: userlottery.latlng !=
+                                                          null
+                                                      ? LatLng(
+                                                          double.parse(
+                                                              userlottery.latlng
+                                                                  .substring(
+                                                                      1, 18)),
+                                                          double.parse(userlottery
+                                                              .latlng
+                                                              .substring(
+                                                                  20,
+                                                                  userlottery
+                                                                          .latlng
+                                                                          .length -
+                                                                      1)))
+                                                      : LatLng(
+                                                          13.736717, 100.523186),
+                                                  zoom: 15),
+                                            )),
+                                      )
+                                    : SizedBox(
+                                        height: 10,
+                                      ),
                               ],
                             ),
                           ),
@@ -380,6 +448,34 @@ class _FormshowlottoState extends State<Formshowlotto> {
                       );
                     }
                   }),
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () async {
+                  if (_image != null) {
+                    await uploadPicture();
+                  }
+                  if (formKey.currentState.validate()) {
+                    formKey.currentState.save();
+                    await _userltottery.add({
+                      "username": user.displayName,
+                      "number": userlottery.number,
+                      "amount": qtyAmount.toString(),
+                      "lotteryprice": userlottery.lotteryprice,
+                      "imageurl": urlpiture,
+                      "date": userDate,
+                      "latlng": userlottery.latlng,
+                      "userid": user.uid,
+                      "state": null,
+                      "reward": null,
+                      "namewin": null
+                    });
+                    Navigator.pop(context);
+                  }
+                },
+                label: Text("บันทึก"),
+                icon: Icon(Icons.save),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
             );
           }
           return Scaffold(
@@ -395,6 +491,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
       context,
       MaterialPageRoute(builder: (context) => ShowuserGooglemap()),
     );
-    userlottery.latlng = result;
+    setState(() {
+      userlottery.latlng = result;
+    });
   }
 }

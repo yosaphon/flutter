@@ -110,7 +110,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
         onPressed: () {
           String location = positionontap.replaceAll('LatLng', "");
 
-          // print(location); // positionontap เป็นค่าตำแหน่ง
+          
           Navigator.pop(context, location);
         },
         label: Text("บันทึกตำแหน่ง"),
