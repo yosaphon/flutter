@@ -167,31 +167,36 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                                         BorderRadius.all(Radius.circular(20))),
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 15,),
-                                        Text(document.title,style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.black87)),
-                                        GridView.count(
-                                          crossAxisCount: 4,
-                                          childAspectRatio: (90 / 45),
-                                          crossAxisSpacing: 1,
-                                          mainAxisSpacing: 1,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          children:
-                                              document.numbers.map<Widget>((n) {
-                                            return  Center(
-                                                child: Text(
-                                                  n,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.indigo),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                            );
-                                          }).toList(),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 20,bottom: 20),
+                                          child: Text(document.title,style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black87)),
                                         ),
-                                        SizedBox(height: 20,)
+                                        
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 20),
+                                          child: GridView.count(
+                                            crossAxisCount: 4,
+                                            childAspectRatio: (90 / 45),
+                                            crossAxisSpacing: 1,
+                                            mainAxisSpacing: 1,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            children:
+                                                document.numbers.map<Widget>((n) {
+                                              return  Center(
+                                                  child: Text(
+                                                    n,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.indigo),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
                                       ],
                                     ),
                               ),

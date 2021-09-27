@@ -148,6 +148,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                       width: MediaQuery.of(context).size.width *
                                           0.6,
                                       child: TextFormField(
+                                        initialValue: "", //ค่าเริ่มต้น
                                         decoration: InputDecoration(
                                             labelText: 'เลขสลาก'),
                                         style: TextStyle(fontSize: 20),
@@ -194,12 +195,13 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                 SizedBox(height: 16),
                                 Column(
                                   children: [
-                                     Container(
-                                       alignment: Alignment.topLeft,
-                                       child: Text(
-                                                  "จำนวน",style: TextStyle(fontSize: 20),
-                                                ),
-                                     ),
+                                    Container(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "จำนวน",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
                                     Container(
                                       child: Row(
                                         children: [
@@ -213,17 +215,22 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(7),
-                                                  color: qtyAmount >1 ? Colors.blue:Colors.grey),
-                                                  child: Icon(Icons.remove , size: 40,),
+                                                  color: qtyAmount > 1
+                                                      ? Colors.blue
+                                                      : Colors.grey),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 40,
+                                              ),
                                             ),
                                           ),
                                           Container(
                                             height: 35,
-                                                width: 60,
+                                            width: 60,
                                             child: Center(
-                                              
                                               child: Text(
-                                                "$qtyAmount",style: TextStyle(fontSize: 20),
+                                                "$qtyAmount",
+                                                style: TextStyle(fontSize: 20),
                                               ),
                                             ),
                                           ),
@@ -238,7 +245,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                   borderRadius:
                                                       BorderRadius.circular(7),
                                                   color: Colors.blue),
-                                                  child: Icon(Icons.add , size: 40,),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 40,
+                                              ),
                                             ),
                                           ),
                                         ],
