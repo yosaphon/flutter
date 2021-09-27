@@ -327,7 +327,10 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30.0),
                                     ))),
-                                    child: Text(
+                                    child: snapshot.data["latlng"] ==null? Text(
+                                      "เพิ่มตำแหน่ง",
+                                      style: TextStyle(fontSize: 20),
+                                    ):Text(
                                       "แก้ไขตำแหน่ง",
                                       style: TextStyle(fontSize: 20),
                                     ),
