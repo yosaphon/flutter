@@ -87,7 +87,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                         children: [
                           ..._getLottery(),
                           SizedBox(
-                            height: 4,
+                            height: 100,
                           ),
                         ],
                       ),
@@ -175,8 +175,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         if (add) {
           // add new text-fields at the top of all friends textfields
           if (lotterylist[index] != null && lotterylist[index].length >= 6) {
-            lotterylist.insert(0, null);
-          } else {}
+            lotterylist.insert(0, '');
+          }
         } else
           lotterylist.removeAt(index);
         setState(() {});
@@ -232,7 +232,15 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
-        border: Border.all(color: Colors.black26),
+         boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 0,
+                  blurRadius: 7,
+                  offset: Offset(0, 4), // changes position of shadow
+                ),
+              ],
+        //border: Border.all(color: Colors.black26),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 42),
       child: TextFormField(
