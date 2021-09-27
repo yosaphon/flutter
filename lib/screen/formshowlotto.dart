@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -36,10 +37,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _userltottery =
       FirebaseFirestore.instance.collection("userlottery");
-
   File _image;
   final picker = ImagePicker();
   String userDate;
+  int qtyAmount = 1;
   List<DocumentSnapshot> documents;
   ShowuserGooglemap location = ShowuserGooglemap();
   Future loadData(PrizeNotifier prizeNotifier) async {
@@ -49,6 +50,20 @@ class _FormshowlottoState extends State<Formshowlotto> {
     for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
       userDate = documents[i].get("date");
     }
+  }
+
+  void addAmount() {
+    setState(() {
+      qtyAmount += 1;
+    });
+  }
+
+  void removeAmount() {
+    setState(() {
+      if (qtyAmount > 1) {
+        qtyAmount -= 1;
+      }
+    });
   }
 
   Future getImage(ImageSource imageSource) async {
@@ -177,22 +192,59 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   ],
                                 ),
                                 SizedBox(height: 16),
-                                TextFormField(
-                                  decoration:
-                                      InputDecoration(labelText: 'จำนวน'),
-                                  style: TextStyle(fontSize: 20),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
+                                Column(
+                                  children: [
+                                     Container(
+                                       alignment: Alignment.topLeft,
+                                       child: Text(
+                                                  "จำนวน",style: TextStyle(fontSize: 20),
+                                                ),
+                                     ),
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              removeAmount();
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: qtyAmount >1 ? Colors.blue:Colors.grey),
+                                                  child: Icon(Icons.remove , size: 40,),
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 35,
+                                                width: 60,
+                                            child: Center(
+                                              
+                                              child: Text(
+                                                "$qtyAmount",style: TextStyle(fontSize: 20),
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              addAmount();
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.blue),
+                                                  child: Icon(Icons.add , size: 40,),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
-                                  validator: MultiValidator([
-                                    RequiredValidator(
-                                        errorText: "กรุณาป้อน จำนวน")
-                                  ]),
-                                  onSaved: (String amount) {
-                                    userlottery.amount = amount;
-                                  },
-                                  keyboardType: TextInputType.number,
                                 ),
                                 TextFormField(
                                   inputFormatters: [
@@ -295,7 +347,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                         await _userltottery.add({
                                           "username": user.displayName,
                                           "number": userlottery.number,
-                                          "amount": userlottery.amount,
+                                          "amount": qtyAmount.toString(),
                                           "lotteryprice":
                                               userlottery.lotteryprice,
                                           "imageurl": urlpiture,

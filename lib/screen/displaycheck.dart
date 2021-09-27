@@ -74,7 +74,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
 
   @override
   Widget build(BuildContext context) {
-    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
+    // PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     return Builder(builder: (context) {
       return Scaffold(
         backgroundColor: Color(0xFFF3FFFE),
@@ -90,18 +90,13 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           backgroundColor: Colors.indigo,
           elevation: 0,
         ),
-        body: FutureBuilder(
-            future: loadData(prizeNotifier),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty || dateValue == null) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return Form(
+        body: 
+                Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                       child: Column(
                     children: <Widget>[
-                      DropdownDate(prizeNotifier.prizeList.values),
+                      // DropdownDate(prizeNotifier.prizeList.values),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -116,9 +111,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                       ),
                     ],
                   )),
-                );
-              }
-            }),
+                ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 30),
           child: Row(

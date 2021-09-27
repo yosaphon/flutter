@@ -373,7 +373,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     FormUpdatelotto(
-                                                      docid: docid,
+                                                      docid: docid,amount:int.parse(snapshot.data["amount"]) ,
                                                     )));
                                         // Navigator.pop(context);
                                       },

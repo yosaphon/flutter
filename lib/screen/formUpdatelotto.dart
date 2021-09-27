@@ -19,14 +19,16 @@ import 'package:uuid/uuid.dart';
 
 class FormUpdatelotto extends StatefulWidget {
   final docid;
-  FormUpdatelotto({this.docid});
+  int amount;
+  FormUpdatelotto({this.docid,this.amount});
   @override
-  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid);
+  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid,amount);
 }
 
 class _FormUpdatelottoState extends State<FormUpdatelotto> {
   final docid;
-  _FormUpdatelottoState(this.docid);
+  int amount;
+  _FormUpdatelottoState(this.docid,this.amount);
 
   final formKey = GlobalKey<FormState>();
 
@@ -44,6 +46,19 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   File _image;
   final picker = ImagePicker();
   ShowuserGooglemap location = ShowuserGooglemap();
+  void addAmount() {
+    setState(() {
+      amount += 1;
+    });
+  }
+
+  void removeAmount() {
+    setState(() {
+      if (amount > 1) {
+        amount -= 1;
+      }
+    });
+  }
 
   Future getImage(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(
@@ -173,23 +188,61 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   ],
                                 ),
                                 SizedBox(height: 15),
-                                TextFormField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
+                                Column(
+                                  children: [
+                                     Container(
+                                       alignment: Alignment.topLeft,
+                                       child: Text(
+                                                  "จำนวน",style: TextStyle(fontSize: 20),
+                                                ),
+                                     ),
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              removeAmount();
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: amount >1 ? Colors.blue:Colors.grey),
+                                                  child: Icon(Icons.remove , size: 40,),
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 35,
+                                                width: 60,
+                                            child: Center(
+                                              child: Text(
+                                                "$amount",style: TextStyle(fontSize: 20),
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              addAmount();
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.blue),
+                                                  child: Icon(Icons.add , size: 40,),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
-                                  decoration:
-                                      InputDecoration(labelText: 'จำนวน'),
-                                  style: TextStyle(fontSize: 20),
-                                  initialValue: snapshot.data['amount'],
-                                  validator: MultiValidator([
-                                    RequiredValidator(
-                                        errorText: "กรุณาป้อน จำนวน")
-                                  ]),
-                                  onSaved: (String amount) {
-                                    userlottery.amount = amount;
-                                  },
-                                  keyboardType: TextInputType.number,
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 TextFormField(
                                   inputFormatters: [
@@ -320,12 +373,12 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "number": userlottery.number,
                                           });
                                         }
-                                        if (userlottery.amount !=
+                                        if (amount !=
                                             snapshot.data["amount"]) {
                                           await _userltottery
                                               .doc(docid)
                                               .update({
-                                            "amount": userlottery.amount,
+                                            "amount": amount.toString(),
                                           });
                                         }
                                         if (userlottery.lotteryprice !=
@@ -335,14 +388,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                               .update({
                                             "lotteryprice":
                                                 userlottery.lotteryprice,
-                                          });
-                                        }
-                                        if (userlottery.date !=
-                                            snapshot.data["date"]) {
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({
-                                            "date": userlottery.date,
                                           });
                                         }
                                         if (userlottery.latlng !=
