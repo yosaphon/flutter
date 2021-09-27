@@ -28,7 +28,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   int totalAmount = 0;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
-  List<SumaryData> _sumaryData;
+  List<SumaryData> _sumaryData = [];
 
   @override
   void initState() {
@@ -86,8 +86,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             sumAmount += element.amount == null ? 1 : int.parse(element.amount);
           }
         });
-        print("จำนวนทั้งหมด= $sumAmount");
-        print("ราคารวมทั้งหมด = $sumPay");
 
         SumaryData sumaryData = SumaryData(
           date: item,
@@ -95,10 +93,34 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           sumPay: sumPay,
           amount: sumAmount,
         );
-          _sumaryData.add(sumaryData);
+        _sumaryData = [];
+        _sumaryData.add(sumaryData);
       }
-      print(_sumaryData);
     }
+  }
+
+  String numToWord(String n) {
+    List<String> month = [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ];
+    List<String> w = n.split('-');
+
+    return int.parse(w[2]).toString() +
+        " " +
+        month[int.parse(w[1]) - 1] +
+        " " +
+        (int.parse(w[0]) + 543).toString();
   }
 
   @override
@@ -113,34 +135,33 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         centerTitle: true,
         title: Text(
           "รายงานการซื้อสลาก",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        backgroundColor: Color(0xFF25D4C2),
+        backgroundColor: Colors.indigo,
         elevation: 0,
       ),
       body: FutureBuilder<Object>(
-          future: loadData(userSumaryNotifier),
-          builder: (context, snapshot) {
-            return CustomScrollView(
-              physics: ClampingScrollPhysics(),
-              slivers: <Widget>[
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  sliver: SliverToBoxAdapter(
-                      child: Container(
+        future: loadData(userSumaryNotifier),
+        builder: (context, snapshot) {
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                sliver: SliverToBoxAdapter(
+                  child: Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     child: Column(
                       children: <Widget>[
                         Flexible(
                           child: Row(
                             children: <Widget>[
-                              _buildStatCard('Total Won', '$totalReward', 'บาท',
-                                  Colors.white70),
-                              _buildStatCard('Total Lose', '$totalPay', 'บาท',
-                                  Colors.white70),
+                              _buildStatCard('รายรับทั้งหมด', '฿$totalReward',
+                                  'บาท', Colors.white),
+                              _buildStatCard('รายจ่ายทั้งหมด', '฿$totalPay',
+                                  'บาท', Colors.white),
                             ],
                           ),
                         ),
@@ -148,175 +169,160 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           child: Row(
                             children: <Widget>[
                               _buildStatCard(
-                                  'Amount',
+                                  'จำนวนสลาก',
                                   '${totalAmount.toString()}',
                                   'ใบ',
-                                  Colors.white70),
-                              _buildStatCard('Total', '$totalProfit', 'บาท',
-                                  Colors.white70),
+                                  Colors.white),
+                              _buildStatCard('กำไร', '฿$totalProfit', 'บาท',
+                                  Colors.white),
                             ],
                           ),
                         ),
                       ],
                     ),
-                  )),
+                  ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                      top: 20.0, left: 8, right: 8, bottom: 5),
-                  sliver: SliverToBoxAdapter(
-                      child: Container(
-                          height: MediaQuery.of(context).size.height * 0.6,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            ),
-                          ),
-                          child: ListView.builder(
-                              itemCount: 2,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(5.0),
-                                                topRight: Radius.circular(5.0),
-                                              ),
-                                              color: Color(0xfff6f8fa),
-                                              border: Border.all(
-                                                color: Color(0xffd5d8dc),
-                                                width: 1,
-                                              )),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                allresultdate2[0],
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Table(
-                                          border: TableBorder.symmetric(),
-                                          columnWidths: const <int,
-                                              TableColumnWidth>{
-                                            0: FlexColumnWidth(4),
-                                            1: FlexColumnWidth(3),
-                                            2: FlexColumnWidth(3),
-                                            3: FlexColumnWidth(3),
-                                          },
-                                          defaultVerticalAlignment:
-                                              TableCellVerticalAlignment.middle,
-                                          children: <TableRow>[
-                                            TableRow(
-                                              children: <Widget>[
-                                                TableCell(
-                                                  verticalAlignment:
-                                                      TableCellVerticalAlignment
-                                                          .top,
-                                                  child: Container(
-                                                    height: 32,
-                                                    width: 32,
-                                                    child: Text("Number"),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  verticalAlignment:
-                                                      TableCellVerticalAlignment
-                                                          .top,
-                                                  child: Container(
-                                                    height: 32,
-                                                    width: 32,
-                                                    child: Text("Price"),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  verticalAlignment:
-                                                      TableCellVerticalAlignment
-                                                          .top,
-                                                  child: Container(
-                                                    height: 32,
-                                                    width: 32,
-                                                    child: Text("Reward"),
-                                                  ),
-                                                ),
-                                                TableCell(
-                                                  verticalAlignment:
-                                                      TableCellVerticalAlignment
-                                                          .top,
-                                                  child: Container(
-                                                    height: 32,
-                                                    width: 32,
-                                                    child: Text("State"),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            for (var item in [1, 2, 3, 4])
-                                              TableRow(
-                                                children: <Widget>[
-                                                  TableCell(
-                                                    verticalAlignment:
-                                                        TableCellVerticalAlignment
-                                                            .top,
-                                                    child: Container(
-                                                      height: 32,
-                                                      width: 32,
-                                                      child:
-                                                          Text("666666(*10)"),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    verticalAlignment:
-                                                        TableCellVerticalAlignment
-                                                            .top,
-                                                    child: Container(
-                                                      height: 32,
-                                                      width: 32,
-                                                      child: Text("10000"),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    verticalAlignment:
-                                                        TableCellVerticalAlignment
-                                                            .top,
-                                                    child: Container(
-                                                      height: 32,
-                                                      width: 32,
-                                                      child: Text("ยังไม่ตรวจ"),
-                                                    ),
-                                                  ),
-                                                  TableCell(
-                                                    verticalAlignment:
-                                                        TableCellVerticalAlignment
-                                                            .top,
-                                                    child: Container(
-                                                      height: 32,
-                                                      width: 32,
-                                                      child: Text("ยังไม่ตรวจ"),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                          ],
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.only(
+                    top: 20.0, left: 8, right: 8, bottom: 5),
+                sliver: SliverToBoxAdapter(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: ListView.builder(
+                      itemCount: _sumaryData.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 4), // changes position of shadow
+                                  ),
+                                ],
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              4), // changes position of shadow
                                         ),
                                       ],
-                                    ),
+                                      color: Colors.white,
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        " ${numToWord(_sumaryData[index].date)}",
+                                        style: TextStyle(fontSize: 20),
+                                      )
+                                    ],
                                   ),
-                                );
-                              }))),
+                                ),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        _builddateCard(
+                                            'รายรับทั้งหมด',
+                                            '฿${_sumaryData[index].sumReward}',
+                                            'บาท',
+                                            Colors.white),
+                                        _builddateCard(
+                                            'รายจ่ายทั้งหมด',
+                                            '฿${_sumaryData[index].sumPay}',
+                                            'บาท',
+                                            Colors.white),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        _builddateCard(
+                                            'จำนวน',
+                                            '${_sumaryData[index].amount}',
+                                            'บาท',
+                                            Colors.white),
+                                        _builddateCard(
+                                            'กำไร',
+                                            '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
+                                            'บาท',
+                                            Colors.white),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Expanded _builddateCard(
+      String title, String count, String typestring, Color color) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 12.0,
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  count,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14.0,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  typestring,
+                  style: const TextStyle(color: Colors.black87, fontSize: 14.0),
                 ),
               ],
-            );
-          }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -346,8 +352,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               title,
               style: const TextStyle(
                 color: Colors.black87,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
+                fontSize: 14.0,
               ),
             ),
             Row(
@@ -357,17 +362,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Spacer(),
                 Text(
                   typestring,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(color: Colors.black87, fontSize: 14.0),
                 ),
               ],
             ),
