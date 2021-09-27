@@ -49,7 +49,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DropdownDate(prizeNotifier.prizeList.values),
+                DropdownDate(prizeData: prizeNotifier.prizeList.values),
                 Expanded(
                   child: ListView(
                     children: <Widget>[ 

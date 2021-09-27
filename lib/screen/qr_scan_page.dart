@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:lotto/helpers/dialog_helper.dart';
+
 import 'package:lotto/model/checkNumber.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -127,9 +127,7 @@ class _QRScanPageState extends State<QRScanPage> {
       int index = (times / 2).ceil();
       print(index);
       var check = new CheckNumber(null, number, index-1);
-      check
-          .getSnapshot()
-          .then((e) => DialogHelper.exit(context, check.checked));
+     
     }
   }
 }

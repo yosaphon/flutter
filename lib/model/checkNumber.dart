@@ -6,7 +6,7 @@ class CheckNumber {
   Map<int, Map<String, dynamic>> checked = {};
   Map<String, dynamic> result = {};
   int key = 0;
-  int index; //งวด
+  int index; //งวดสำหรับแสกน
 
   CheckNumber(this.date, this.userNum, this.index);
 
@@ -16,7 +16,7 @@ class CheckNumber {
           .collection('lottery')
           .doc(date)
           .get();
-      checkPrize(snapshot);
+      //checkPrize(snapshot);
       print(checked);
     } else {
       QuerySnapshot snapshotMany =
@@ -25,7 +25,7 @@ class CheckNumber {
       
       //dynamic snapshotOne = snapshotMany[index];
 
-      checkPrize(snapshotOne);
+     //checkPrize(snapshotOne);
       print(checked);
     }
   }

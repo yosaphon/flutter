@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class DropdownDate extends StatefulWidget {
   final prizeData;
-  DropdownDate(this.prizeData);
+  DropdownDate({this.prizeData});
   @override
   _DropdownDateState createState() => _DropdownDateState(this.prizeData);
 }
@@ -18,7 +18,9 @@ class _DropdownDateState extends State<DropdownDate> {
 
   @override
   void initState() {
-    dateValue = prizeData.first.date;
+    if (prizeData != null ) {
+      dateValue = prizeData.first.date;
+    }
     super.initState();
   }
 
@@ -27,12 +29,11 @@ class _DropdownDateState extends State<DropdownDate> {
     return w[0] + w[1] + w[2];
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+        dateValue = prizeNotifier.selectedPrize.date;
     return Container(
       alignment: AlignmentDirectional.topCenter,
       decoration: BoxDecoration(
@@ -53,12 +54,13 @@ class _DropdownDateState extends State<DropdownDate> {
             color: Colors.red,
           ),
           selectedItemBuilder: (BuildContext context) {
-            return prizeData.map<DropdownMenuItem<String>>((dynamic value) {
+            return prizeNotifier.prizeList.values.map<DropdownMenuItem<String>>((dynamic value) {
               return DropdownMenuItem<String>(
                 value: value.date,
                 child: Text(
                   numToWord(value.date),
-                  textAlign: TextAlign.right ,style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.white),
                 ),
               );
             }).toList();
@@ -72,7 +74,7 @@ class _DropdownDateState extends State<DropdownDate> {
               print(prizeNotifier.prizeList[getKeyByValue(dateValue)]);
             });
           },
-          items: prizeData.map<DropdownMenuItem<String>>((dynamic value) {
+          items: prizeNotifier.prizeList.values.map<DropdownMenuItem<String>>((dynamic value) {
             return DropdownMenuItem<String>(
               value: value.date,
               child: Text(
@@ -86,26 +88,27 @@ class _DropdownDateState extends State<DropdownDate> {
     );
   }
 }
-String numToWord(String n) {
-    List<String> month = [
-      "มกราคม",
-      "กุมภาพันธ์",
-      "มีนาคม",
-      "เมษายน",
-      "พฤษภาคม",
-      "มิถุนายน",
-      "กรกฎาคม",
-      "สิงหาคม",
-      "กันยายน",
-      "ตุลาคม",
-      "พฤศจิกายน",
-      "ธันวาคม"
-    ];
-    List<String> w = n.split('-');
 
-    return int.parse(w[2]).toString() +
-        " " +
-        month[int.parse(w[1]) - 1] +
-        " " +
-        (int.parse(w[0]) + 543).toString();
-  }
+String numToWord(String n) {
+  List<String> month = [
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม"
+  ];
+  List<String> w = n.split('-');
+
+  return int.parse(w[2]).toString() +
+      " " +
+      month[int.parse(w[1]) - 1] +
+      " " +
+      (int.parse(w[0]) + 543).toString();
+}
