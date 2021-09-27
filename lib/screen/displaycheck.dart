@@ -9,7 +9,6 @@ import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
 
-
 class Formqrcodescan extends StatefulWidget {
   @override
   _FormqrcodescanState createState() => _FormqrcodescanState();
@@ -29,6 +28,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   List<PrizeData> prizeData = [];
   String dateValue;
 
+  Widget emtpydata;
+
   Future loadData(PrizeNotifier prizeNotifier) async {
     if (prizeNotifier.prizeList.isNotEmpty) {
       prizeNotifier.prizeList.forEach((key, value) {
@@ -47,10 +48,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             orElse: () => null);
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Builder(builder: (context) {
       return Scaffold(
         backgroundColor: Color(0xFFF3FFFE),
@@ -67,39 +66,35 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           elevation: 0,
         ),
 
-    
-
         body: FutureBuilder(
-            future: null,//loadData(prizeNotifier),
+            future: null, //loadData(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               return Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
+                key: _formKey,
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: <Widget>[
+                    // DropdownDate(prizeNotifier.prizeList.values),
+
+                    DropdownDate(),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
-                    children: <Widget>[
-
-                      // DropdownDate(prizeNotifier.prizeList.values),
-
-                      DropdownDate(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ..._getLottery(),
-                            SizedBox(
-                              height: 16,
-                            ),
-                          ],
-                        ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ..._getLottery(),
+                          SizedBox(
+                            height: 4,
+                          ),
+                        ],
                       ),
-                    ],
-                  )),
-
-                
-
-                );
-              
+                    ),
+                  ],
+                )),
+              );
             }),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 30),
@@ -132,7 +127,6 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                             orElse: () => null),
                         lotterylist,
                         null);
-                
                   }
                 },
                 icon: Icon(Icons.pin),
@@ -156,21 +150,17 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     List<Widget> lotteryTextFilds = [];
     for (int i = 0; i < lotterylist.length; i++) {
       lotteryTextFilds.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Row(
+        padding: const EdgeInsets.symmetric(vertical: 1.0),
+        child: Stack(
           children: [
-            Expanded(
-                child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: LotteryTextFilds(i))),
-            SizedBox(
-              width: 10,
-            ),
+            LotteryTextFilds(i),
             // we need add button at last friends row
-            _addRemoveButton(i == lotterylist.length - 1, i),
+            Padding(
+              padding: const EdgeInsets.only(right: 40, top: 18),
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: _addRemoveButton(i == 0, i)),
+            ),
           ],
         ),
       ));
@@ -184,7 +174,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
       onTap: () {
         if (add) {
           // add new text-fields at the top of all friends textfields
-          lotterylist.insert(0, null);
+          if (lotterylist[index] != null && lotterylist[index].length >= 6) {
+            lotterylist.insert(0, null);
+          } else {}
         } else
           lotterylist.removeAt(index);
         setState(() {});
@@ -193,11 +185,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
-          borderRadius: BorderRadius.circular(30),
+          color: (index > 0) ? Colors.red : Colors.lightGreenAccent,
+          borderRadius: BorderRadius.circular(9),
         ),
         child: Icon(
-          (add) ? Icons.add : Icons.remove,
+          (index > 0) ? FontAwesomeIcons.times : FontAwesomeIcons.plus,
           color: Colors.white,
         ),
       ),
@@ -223,6 +215,7 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
 
   @override
   void dispose() {
+    _lotteryController.clear();
     _lotteryController.dispose();
     super.dispose();
   }
@@ -234,28 +227,37 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
           _FormqrcodescanState.lotterylist[widget.index] ?? '';
     });
 
-    return TextFormField(
-      style: TextStyle(fontSize: 20),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(6),
-      ],
-      controller: _lotteryController,
-      onChanged: (v) => _FormqrcodescanState.lotterylist[widget.index] = v,
-      decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
-          border: OutlineInputBorder(),
-          hintText: 'กรอกเลขสลากของคุณ'),
-      // validator:
-      //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
-      validator: (v) {
-        if (v.isEmpty) {
-          return 'กรุณากรอกเลขสลาก';
-        } else if (v.trim().length < 6 && v.isNotEmpty)
-          return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
-        return null;
-      },
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.black26),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 42),
+      child: TextFormField(
+        style: TextStyle(fontSize: 20),
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          LengthLimitingTextInputFormatter(6),
+        ],
+        controller: _lotteryController,
+        onChanged: (v) => _FormqrcodescanState.lotterylist[widget.index] = v,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
+            border: InputBorder.none,
+            hintText: 'กรอกเลขสลากของคุณ'),
+        // validator:
+        //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
+        validator: (v) {
+          if (v.isEmpty) {
+            return 'กรุณากรอกเลขสลาก';
+          } else if (v.trim().length < 6 && v.isNotEmpty)
+            return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
+          return null;
+        },
+      ),
     );
   }
 }
