@@ -38,7 +38,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     super.initState();
   }
 
-
   Future loadData(UserSumaryNotifier userSumaryNotifier) async {
     await getUserSumary(userSumaryNotifier, user.uid,
         start: widget.dateUser[0], end: widget.dateUser[1]);
@@ -53,7 +52,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     sumAllData(userSumaryNotifier);
     sumEachData(userSumaryNotifier);
     totalProfit += totalReward - totalPay;
-    
   }
 
   sumAllData(UserSumaryNotifier userSumaryNotifier) {
@@ -68,6 +66,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       });
     }
   }
+
   List<SumaryData> _sumaryData;
   sumEachData(UserSumaryNotifier userSumaryNotifier) {
     if (userSumaryNotifier.userSumary.isNotEmpty) {
@@ -101,7 +100,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-    UserSumaryNotifier userSumaryNotifier = Provider.of<UserSumaryNotifier>(context);
+    UserSumaryNotifier userSumaryNotifier =
+        Provider.of<UserSumaryNotifier>(context);
 
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -159,37 +159,329 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   )),
                 ),
                 SliverPadding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(top: 20.0,left: 8,right: 8,bottom: 5),
                   sliver: SliverToBoxAdapter(
                       child: Container(
-                    height: 350.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(20.0),
-                          alignment: Alignment.centerLeft,
-                          child:dateUser[0] != dateUser[1]? Text(
-                            "${numToWord(dateUser[0])} ถึง ${numToWord(dateUser[1])}",
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
                             ),
-                          ):Text("${numToWord(dateUser[0])}",style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        ),
-                        
-                      ],
-                    ),
-                  )),
+                          ),
+                          child: ListView.builder(
+                              itemCount: 5,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(5.0),
+                                                topRight: Radius.circular(5.0),
+                                              ),
+                                              color: Color(0xfff6f8fa),
+                                              border: Border.all(
+                                                color: Color(0xffd5d8dc),
+                                                width: 1,
+                                              )),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                allresultdate2[0],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Table(
+                                          border: TableBorder.symmetric(),
+                                          columnWidths: const <int,
+                                              TableColumnWidth>{
+                                            0: FlexColumnWidth(3),
+                                            1: FlexColumnWidth(3),
+                                            2: FlexColumnWidth(3),
+                                            3: FlexColumnWidth(3),
+                                          },
+                                          defaultVerticalAlignment:
+                                              TableCellVerticalAlignment.middle,
+                                          children: <TableRow>[
+                                            TableRow(
+                                              children: <Widget>[
+                                                TableCell(
+                                                  verticalAlignment:
+                                                      TableCellVerticalAlignment
+                                                          .top,
+                                                  child: Container(
+                                                    height: 32,
+                                                    width: 32,
+                                                    child: Text("Number"),
+                                                  ),
+                                                ),
+                                                TableCell(
+                                                  verticalAlignment:
+                                                      TableCellVerticalAlignment
+                                                          .top,
+                                                  child: Container(
+                                                    height: 32,
+                                                    width: 32,
+                                                    child: Text(
+                                                        "Lottery Price"),
+                                                  ),
+                                                ),
+                                                TableCell(
+                                                  verticalAlignment:
+                                                      TableCellVerticalAlignment
+                                                          .top,
+                                                  child: Container(
+                                                    height: 32,
+                                                    width: 32,
+                                                    child: Text("Reward"),
+                                                  ),
+                                                ),
+                                                TableCell(
+                                                  verticalAlignment:
+                                                      TableCellVerticalAlignment
+                                                          .top,
+                                                  child: Container(
+                                                    height: 32,
+                                                    width: 32,
+                                                    child: Text("State"),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            for (var item in indexrow)
+                                              TableRow(
+                                                children: <Widget>[
+                                                  TableCell(
+                                                    verticalAlignment:
+                                                        TableCellVerticalAlignment
+                                                            .top,
+                                                    child: Container(
+                                                      height: 32,
+                                                      width: 32,
+                                                      child: Text(
+                                                          "aaa"),
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    verticalAlignment:
+                                                        TableCellVerticalAlignment
+                                                            .top,
+                                                    child: Container(
+                                                      height: 32,
+                                                      width: 32,
+                                                      child: Text(
+                                                          "aaa"),
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    verticalAlignment:
+                                                        TableCellVerticalAlignment
+                                                            .top,
+                                                    child: Container(
+                                                      height: 32,
+                                                      width: 32,
+                                                      child: 
+                                                           Text(
+                                                              "ยังไม่ตรวจ")
+                                                          ,
+                                                    ),
+                                                  ),
+                                                  TableCell(
+                                                    verticalAlignment:
+                                                        TableCellVerticalAlignment
+                                                            .top,
+                                                    child: Container(
+                                                      height: 32,
+                                                      width: 32,
+                                                      child: Text(
+                                                              "ยังไม่ตรวจ")
+                                                          ,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              })
+                          // Column(
+                          //   children: <Widget>[
+                          //     Container(
+                          //       padding: const EdgeInsets.all(20.0),
+                          //       alignment: Alignment.centerLeft,
+                          //       child: dateUser[0] != dateUser[1]
+                          //           ? Text(
+                          //               "${numToWord(dateUser[0])} ถึง ${numToWord(dateUser[1])}",
+                          //               style: const TextStyle(
+                          //                 fontSize: 16.0,
+                          //                 fontWeight: FontWeight.bold,
+                          //               ),
+                          //             )
+                          //           : Text("${numToWord(dateUser[0])}",
+                          //               style: const TextStyle(
+                          //                 fontSize: 16.0,
+                          //                 fontWeight: FontWeight.bold,
+                          //               )),
+                          //     ),
+                          //     Expanded(
+                          //       child: Container(
+                          //         height: 500,
+                          //         child: ListView.builder(
+                          //             itemCount: allresultdate2.length,
+                          //             itemBuilder: (BuildContext context, int index) {
+                          //               return Card(
+                          //                 child: Container(
+                          //                   padding: EdgeInsets.all(5),
+                          //                   decoration: BoxDecoration(
+                          //                       borderRadius: BorderRadius.only(
+                          //                         topLeft: Radius.circular(5.0),
+                          //                         topRight: Radius.circular(5.0),
+                          //                       ),
+                          //                       color: Color(0xfff6f8fa),
+                          //                       border: Border.all(
+                          //                         color: Color(0xffd5d8dc),
+                          //                         width: 1,
+                          //                       )),
+                          //                   child: Row(
+                          //                     children: [
+
+                          //                       Table(
+                          //                         border: TableBorder.all(),
+                          //                         columnWidths: const <int,
+                          //                             TableColumnWidth>{
+                          //                           0: FlexColumnWidth(2),
+                          //                           1: FlexColumnWidth(2),
+                          //                           2: FlexColumnWidth(2),
+                          //                           3: FlexColumnWidth(2),
+                          //                         },
+                          //                         defaultVerticalAlignment:
+                          //                             TableCellVerticalAlignment
+                          //                                 .middle,
+                          //                         children: <TableRow>[
+                          //                           TableRow(
+                          //                             children: <Widget>[
+                          //                               TableCell(
+                          //                                 verticalAlignment:
+                          //                                     TableCellVerticalAlignment
+                          //                                         .top,
+                          //                                 child: Container(
+                          //                                   height: 32,
+                          //                                   width: 32,
+                          //                                   child: Text("Number"),
+                          //                                 ),
+                          //                               ),
+                          //                               TableCell(
+                          //                                 verticalAlignment:
+                          //                                     TableCellVerticalAlignment
+                          //                                         .top,
+                          //                                 child: Container(
+                          //                                   height: 32,
+                          //                                   width: 32,
+                          //                                   child:
+                          //                                       Text("Lottery Price"),
+                          //                                 ),
+                          //                               ),
+                          //                               TableCell(
+                          //                                 verticalAlignment:
+                          //                                     TableCellVerticalAlignment
+                          //                                         .top,
+                          //                                 child: Container(
+                          //                                   height: 32,
+                          //                                   width: 32,
+                          //                                   child: Text("Reward"),
+                          //                                 ),
+                          //                               ),
+                          //                               TableCell(
+                          //                                 verticalAlignment:
+                          //                                     TableCellVerticalAlignment
+                          //                                         .top,
+                          //                                 child: Container(
+                          //                                   height: 32,
+                          //                                   width: 32,
+                          //                                   child: Text("State"),
+                          //                                 ),
+                          //                               ),
+                          //                             ],
+                          //                           ),
+                          //                           for (var item in [1, 2, 3])
+                          //                             TableRow(
+                          //                               children: <Widget>[
+                          //                                 TableCell(
+                          //                                   verticalAlignment:
+                          //                                       TableCellVerticalAlignment
+                          //                                           .top,
+                          //                                   child: Container(
+                          //                                     height: 32,
+                          //                                     width: 32,
+                          //                                     child: Text("lll"),
+                          //                                   ),
+                          //                                 ),
+                          //                                 TableCell(
+                          //                                   verticalAlignment:
+                          //                                       TableCellVerticalAlignment
+                          //                                           .top,
+                          //                                   child: Container(
+                          //                                     height: 32,
+                          //                                     width: 32,
+                          //                                     child: Text("aaa"),
+                          //                                   ),
+                          //                                 ),
+                          //                                 TableCell(
+                          //                                   verticalAlignment:
+                          //                                       TableCellVerticalAlignment
+                          //                                           .top,
+                          //                                   child: Container(
+                          //                                     height: 32,
+                          //                                     width: 32,
+                          //                                     child: //userNotifier.currentUser[int.parse(item)].reward ==
+                          //                                         //null
+                          //                                         //  Text("ยังไม่ตรวจ")
+                          //                                         Text("aaaa"),
+                          //                                   ),
+                          //                                 ),
+                          //                                 TableCell(
+                          //                                   verticalAlignment:
+                          //                                       TableCellVerticalAlignment
+                          //                                           .top,
+                          //                                   child: Container(
+                          //                                     height: 32,
+                          //                                     width: 32,
+                          //                                     child: //userNotifier
+                          //                                         // .currentUser[
+                          //                                         //    int.parse(
+                          //                                         //       item)]
+                          //                                         // .namewin ==
+                          //                                         // null
+                          //                                         // ? Text("ยังไม่ตรวจ")
+                          //                                         Text("4444"),
+                          //                                   ),
+                          //                                 ),
+                          //                               ],
+                          //                             ),
+                          //                         ],
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               );
+                          //             }),
+                          //   ),
+                          // ),
+                          //   ],
+                          // ),
+                          )),
                 ),
               ],
             );
@@ -254,4 +546,3 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 }
-
