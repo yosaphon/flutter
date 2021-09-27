@@ -81,7 +81,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             sumPay += element.lotteryprice == null
                 ? 0.00
                 : double.parse(element.lotteryprice);
-
             sumAmount += element.amount == null ? 1 : int.parse(element.amount);
           }
         });
@@ -258,7 +257,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                                 ),
                                               ],
                                             ),
-                                            for (var item in indexrow)
+                                            for (var item in [1,2,3,4])
                                               TableRow(
                                                 children: <Widget>[
                                                   TableCell(
