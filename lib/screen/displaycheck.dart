@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lotto/api/prize_api.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/helpers/dialog_helper.dart';
 import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
-import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
-import 'package:provider/provider.dart';
 
 class Formqrcodescan extends StatefulWidget {
   @override
@@ -29,6 +26,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Map<String, String> date = {};
   List<PrizeData> prizeData = [];
   String dateValue;
+
+  
 
   Future loadData(PrizeNotifier prizeNotifier) async {
     if (prizeNotifier.prizeList.isNotEmpty) {
@@ -72,54 +71,81 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         (int.parse(w[0]) + 543).toString();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
-    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
-    return Builder(builder: (context) {
-      return Scaffold(
-        backgroundColor: Color(0xFFF3FFFE),
-        // extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "ตรวจรางวัล",
-            style: TextStyle(color: Colors.black87),
-          ),
-          shape: RoundedRectangleBorder(),
-          // backgroundColor: Colors.transparent,
-          backgroundColor: Colors.indigo,
-          elevation: 0,
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      // extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "ตรวจรางวัล",
+          style: TextStyle(color: Colors.black),
         ),
-        body: FutureBuilder(
-            future: loadData(prizeNotifier),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty || dateValue == null) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                      child: Column(
-                    children: <Widget>[
-                      DropdownDate(prizeNotifier.prizeList.values),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ..._getLottery(),
-                            SizedBox(
-                              height: 16,
-                            ),
-                          ],
-                        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        ),
+        // backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black.withOpacity(0.1),
+        elevation: 0,
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+            child: Column(
+          children: <Widget>[
+            Container(
+              alignment: AlignmentDirectional.topCenter,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 0.5),
+                  borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.only(top: 10.0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: dateValue,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 30,
+                  elevation: 2,
+                  style: TextStyle(color: Colors.blue, fontSize: 30),
+                  underline: Container(
+                    height: 2,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dateValue = newValue; //รับค่าจาก item ที่เลือก
+                    });
+                  },
+                  items: date.values
+                      .map<DropdownMenuItem<String>>((dynamic value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        textAlign: TextAlign.right,
                       ),
-                    ],
-                  )),
-                );
-              }
-            }),
-        floatingActionButton: Padding(
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ..._getLottery(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )),
+      ),
+      floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 30),
           child: Row(
             children: [
@@ -166,9 +192,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             ],
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
-    });
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
+    );
   }
 
   /// get firends text-fields
@@ -176,13 +201,12 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
     List<Widget> lotteryTextFilds = [];
     for (int i = 0; i < lotterylist.length; i++) {
       lotteryTextFilds.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Row(
           children: [
-            Expanded(
-                child: LotteryTextFilds(i)),
+            Expanded(child: LotteryTextFilds(i)),
             SizedBox(
-              width: 10,
+              width: 16,
             ),
             // we need add button at last friends row
             _addRemoveButton(i == lotterylist.length - 1, i),
@@ -209,7 +233,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         height: 30,
         decoration: BoxDecoration(
           color: (add) ? Colors.green : Colors.red,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Icon(
           (add) ? Icons.add : Icons.remove,
@@ -250,7 +274,7 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
     });
 
     return TextFormField(
-      style: TextStyle(fontSize: 20),
+      style: TextStyle(fontSize: 30),
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -259,15 +283,15 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       controller: _lotteryController,
       onChanged: (v) => _FormqrcodescanState.lotterylist[widget.index] = v,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
           border: OutlineInputBorder(),
           hintText: 'กรอกเลขสลากของคุณ'),
       // validator:
       //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
       validator: (v) {
         if (v.isEmpty) {
-          return 'กรุณากรอกเลขสลาก';
-        } else if (v.trim().length < 6 && v.isNotEmpty)
+           return 'กรุณากรอกเลขสลาก';
+        } else if (v.trim().length < 5 && v.isNotEmpty)
           return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
         return null;
       },
