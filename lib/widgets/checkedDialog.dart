@@ -21,63 +21,11 @@ class CheckedDialog extends StatelessWidget {
   CheckedDialog(this.data, this.context) {
     data.forEach((key, value) {
       Widget result = wonOrNot(value, context);
-      dialogList.add(
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  boxColor2,
-                  boxColor1,
-                ],
-              ),
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Stack(children: [
-              Column(
-                children: [
-                  result,
-                ],
-              ),
-              Footer(
-                backgroundColor: Colors.transparent,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "ตกลง",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        )),
-                    SizedBox(
-                      width: 60,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          convertWidgetToImage();
-                        },
-                        child: Text(
-                          "แชร์",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ))
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-      );
+      dialogList.add(shareAndClose(result, convertWidgetToImage(_key,context),));
     });
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -103,52 +51,118 @@ class CheckedDialog extends StatelessWidget {
       boxColor1 = Colors.blue[800];
       boxColor2 = Colors.blue[200];
       return displayData(value['usernumber'], value['name'], value['date'],
-          "ถูกรางวัล", 20, Colors.amber);
+          true, 20, Colors.amber);
     } else {
       boxColor1 = Colors.grey[600];
       boxColor2 = Colors.grey[400];
       return displayData(value['usernumber'], value['name'], value['date'],
-          "ไม่ถูกรางวัล", 30, Colors.blueGrey[600]);
+          false, 30, Colors.blueGrey[600]);
     }
     // return data;
   }
 
-  Widget displayData(String usernumber, String name, String date, String won,
-      double size, Color color) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, //Center Column contents vertically,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("หมายเลข  "),
-            Text(usernumber,
-                style: TextStyle(fontSize: 24, color: Colors.white)),
-          ],
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Text(
-          won,
-          style: TextStyle(fontSize: size, color: color),
-        ),
-        name.isNotEmpty
-            ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
-            : SizedBox(
-                height: 24,
+ 
+}
+
+Widget displayData(String usernumber, String name, String date, bool status,
+    double size, Color color) {
+  return Column(
+    children: <Widget>[
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.center, //Center Column contents vertically,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("หมายเลข  "),
+          Text(usernumber,
+              style: TextStyle(fontSize: 24, color: Colors.indigo)),
+        ],
+      ),
+      SizedBox(
+        height: 30,
+      ),
+      (status)
+          ? Text(
+              "ถูก",
+              style: TextStyle(fontSize: size, color: color),
+            )
+          : Text(
+              "ไม่ถูกรางวัลใดๆ",
+              style: TextStyle(fontSize: size, color: color),
+            ),
+      name.isNotEmpty
+          ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
+          : SizedBox(
+              height: 24,
+            ),
+      SizedBox(
+        height: 20,
+      ),
+      Text("งวดที่ $date", style: TextStyle(fontSize: 18, color: Colors.black)),
+    ],
+  );
+}
+ Widget shareAndClose(result ,context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.blueAccent,
+                Colors.pink,
+              ],
+            ),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(12))),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Stack(children: [
+            Column(
+              children: [
+                result,
+              ],
+            ),
+            Footer(
+              backgroundColor: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 170),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "ตกลง",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        )),
+                    SizedBox(
+                      width: 60,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          //convertWidgetToImage();
+                        },
+                        child: Text(
+                          "แชร์",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ))
+                  ],
+                ),
               ),
-        SizedBox(
-          height: 20,
+            )
+          ]),
         ),
-        Text("งวดที่ $date",
-            style: TextStyle(fontSize: 18, color: Colors.black)),
-      ],
+      ),
     );
   }
-
-  convertWidgetToImage() async {
+ convertWidgetToImage(_key,context) async {
     try {
       List<String> imagePath = [];
       RenderRepaintBoundary renderRepaintBoundary =
@@ -170,4 +184,3 @@ class CheckedDialog extends StatelessWidget {
       print("Exception while taking screenshot:" + e.toString());
     }
   }
-}

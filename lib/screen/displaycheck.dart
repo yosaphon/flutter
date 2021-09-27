@@ -7,7 +7,9 @@ import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/screen/display_resultChecked.dart';
 import 'package:lotto/screen/qr_scan_page.dart';
+import 'package:provider/provider.dart';
 
 class Formqrcodescan extends StatefulWidget {
   @override
@@ -28,19 +30,17 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   List<PrizeData> prizeData = [];
   String dateValue;
 
-  Widget emtpydata;
+//   Future loadData(PrizeNotifier prizeNotifier) async {
+//     if (prizeNotifier.prizeList.isNotEmpty) {
+//       prizeNotifier.prizeList.forEach((key, value) {
+//         date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
+//         prizeData.add(value);
+//       });
+//       dateValue = date.values.first;
+//     }
 
-  Future loadData(PrizeNotifier prizeNotifier) async {
-    if (prizeNotifier.prizeList.isNotEmpty) {
-      prizeNotifier.prizeList.forEach((key, value) {
-        date[key] = value.date; //เก็บชื่อวัน และ เลขวันเป็น map
-        prizeData.add(value);
-      });
-      dateValue = date.values.first;
-    }
-
-//เรียกค่าอันสุดท้าย});
-  }
+// //เรียกค่าอันสุดท้าย});
+//   }
 
   getKeyByValue() {
     return date.keys
@@ -50,6 +50,8 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
 
   @override
   Widget build(BuildContext context) {
+    PrizeNotifier prizeNotifier =
+        Provider.of<PrizeNotifier>(context, listen: false);
     return Builder(builder: (context) {
       return Scaffold(
         backgroundColor: Color(0xFFF3FFFE),
@@ -118,15 +120,16 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
               ),
               Spacer(),
               FloatingActionButton.extended(
-                heroTag: "btn2",
-                onPressed: () {
+                heroTag: "check",
+                onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    var data = new CheckNumber(
-                        date.keys.firstWhere(
-                            (k) => date[k] == dateValue, //หา Keys โดยใช้ value
-                            orElse: () => null),
-                        lotterylist,
-                        null);
+                    CheckNumber data = new CheckNumber(
+                        userNum: lotterylist, prizeNotifier: prizeNotifier);
+                    print(data.getCheckedData());
+                     Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ShowResultChecked(allResult: data.getCheckedData(),)),
+                  );
                   }
                 },
                 icon: Icon(Icons.pin),
@@ -232,18 +235,19 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
-         boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 7,
-                  offset: Offset(0, 4), // changes position of shadow
-                ),
-              ],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 7,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
         //border: Border.all(color: Colors.black26),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 42),
       child: TextFormField(
+        autofocus: true,
         style: TextStyle(fontSize: 20),
         keyboardType: TextInputType.number,
         inputFormatters: [

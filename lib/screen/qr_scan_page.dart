@@ -126,7 +126,7 @@ class _QRScanPageState extends State<QRScanPage> {
       int times = int.parse(data[1]); //งวด
       int index = (times / 2).ceil();
       print(index);
-      var check = new CheckNumber(null, number, index-1);
+      var check = new CheckNumber(userNum: number,index: index-1);
      
     }
   }

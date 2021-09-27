@@ -1,146 +1,246 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lotto/notifier/prize_notifier.dart';
 
 class CheckNumber {
-  final String date;
   final List<String> userNum;
-  Map<int, Map<String, dynamic>> checked = {};
-  Map<String, dynamic> result = {};
+  final PrizeNotifier prizeNotifier;
+  List<CheckResult> _listCheckResult = [];
+  Map<String, List<CheckResult>> _allNumlistCheckResult = {};
+  CheckResult checkResult;
   int key = 0;
   int index; //งวดสำหรับแสกน
+  List<String> _first = [],
+      _second = [],
+      _third = [],
+      _fourth = [],
+      _fifth = [],
+      _near1st = [],
+      _last2 = [],
+      _last3f = [],
+      _last3b = [];
 
-  CheckNumber(this.date, this.userNum, this.index);
+   CheckNumber({this.userNum, this.index, this.prizeNotifier}) {
+    prizeNotifier.selectedPrize.data.forEach((key, eachPrize) {
+      eachPrize.number.forEach((eachNum) {
+        switch (key) {
+          case "first":
+            _first.add(eachNum.value);
+            break;
+          case "second":
+            _second.add(eachNum.value);
+            break;
+          case "third":
+            _third.add(eachNum.value);
+            break;
+          case "fourth":
+            _fourth.add(eachNum.value);
+            break;
+          case "fifth":
+            _fifth.add(eachNum.value);
+            break;
+          case "near1":
+            _near1st.add(eachNum.value);
+            break;
+          case "last2":
+            _last2.add(eachNum.value);
+            break;
+          case "last3f":
+            _last3f.add(eachNum.value);
+            break;
+          case "last3b":
+            _last3b.add(eachNum.value);
+            break;
+          default:
+            print("ผิดพลาด");
+        }
+      });
+    });
+    print(prizeNotifier.selectedPrize.date);
+    print("_first  = $_first   ");
+    print("_second = $_second   ");
+    print("_third  = $_third   ");
+    print("_fourth = $_fourth   ");
+    print("_fifth  = $_fifth   ");
+    print("_near1st= $_near1st   ");
+    print("_last2  = $_last2   ");
+    print("_last3f = $_last3f   ");
+    print("_last3b = $_last3b   ");
+    print("_usernumber = $userNum");
+    checkPrize();
 
-  Future<Null> getSnapshot() async {
-    if (index == null) {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('lottery')
-          .doc(date)
-          .get();
-      //checkPrize(snapshot);
-      print(checked);
-    } else {
-      QuerySnapshot snapshotMany =
-          await FirebaseFirestore.instance.collection('lottery').get();
-      DocumentSnapshot snapshotOne = snapshotMany.docs[index];
-      
-      //dynamic snapshotOne = snapshotMany[index];
-
-     //checkPrize(snapshotOne);
-      print(checked);
-    }
+    print(_allNumlistCheckResult);
+    _allNumlistCheckResult.forEach((key, element) {
+      print(key);
+      print(element[0].name);
+      print(element[0].reword);
+      print(element[0].status);
+      print(element[0].date);
+      print(element[0].number);
+    
+    });
   }
 
-  checkPrize(snapshot) async {
+  Map<String, List<CheckResult>> getCheckedData() {
+    print("เข้า checkingNumber");
+    //checkPrize();
+    return _allNumlistCheckResult;
+  }
+
+  checkPrize() {
     userNum.forEach((usernumber) {
-      int keyNow = key;
-      checkNormal(snapshot, usernumber); //ตรวจรางวัลปกติ
-      checkFirst3(snapshot, usernumber); //ตรวจรางวัล 3 ตัวหน้า
-      checkLast3(snapshot, usernumber); //ตรวจรางวัล 3 ตัวท้าย
-      checkLast2(snapshot, usernumber); //ตรวจรางวัล 2 ตัวท้าย
-      if (keyNow == key) {
-        //ถ้าไม่มีข้อมูลที่ถูกเลย
-        result = {
-          'date': snapshot['drawdate'],
-          'usernumber': usernumber,
-          'name': '',
-          'number': '',
-          'reword': '',
-          'status': 'false'
-        };
-        checked[key] = result;
-        key++;
+      _listCheckResult = [];
+      checkNormal(usernumber); //ตรวจรางวัลปกติ
+      checkFirst3(usernumber); //ตรวจรางวัล 3 ตัวหน้า
+      checkLast3(usernumber); //ตรวจรางวัล 3 ตัวท้าย
+      checkLast2(usernumber); //ตรวจรางวัล 2 ตัวท้าย
+
+      //ถ้าไม่มีข้อมูลที่ถูกเลย
+      if (_listCheckResult.length < 1) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: '',
+            number: '',
+            reword: '',
+            status: false));
+      }
+      _allNumlistCheckResult[usernumber] = _listCheckResult;
+    });
+  }
+
+  checkNormal(usernumber) {
+    //check first
+    _first.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลที่ 1",
+            number: eachNum,
+            reword: prizeNotifier.selectedPrize.data['first'].price,
+            status: true));
+      }
+    });
+
+    //check second
+    _second.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลที่ 2",
+            number: eachNum,
+            reword: prizeNotifier.selectedPrize.data["second"].price,
+            status: true));
+      }
+    });
+
+    //check third
+    _third.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลที่ 3",
+            number: eachNum,
+            reword: prizeNotifier.selectedPrize.data["third"].price,
+            status: true));
+      }
+    });
+
+    //check fourth
+    _fourth.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลที่ 4",
+            number: eachNum,
+            reword: prizeNotifier.selectedPrize.data["fourth"].price,
+            status: true));
+      }
+    });
+
+    //check fifth
+    _fifth.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลที่ 5",
+            number: eachNum,
+            reword: prizeNotifier.selectedPrize.data["fifth"].price,
+            status: true));
       }
     });
   }
 
-  checkNormal(snapshot, usernumber) {
-    snapshot['result'].forEach((index) {
-      try {
-        //รางวัลอื่นๆ
-        for (final item in index['number']) {
-          //print(usernumber+":"+item);
-          if (usernumber == item) {
-            result = {
-              'date': snapshot['drawdate'],
-              'usernumber': usernumber,
-              'name': index['name'],
-              'number': item,
-              'reword': index['reword'],
-              'status': 'true'
-            };
-            checked[key] = result;
-            key++;
-          }
-        }
-      } catch (e) {
-        //รางวัลที่ 1
-        if (usernumber == index['number']) {
-          result = {
-            'date': snapshot['drawdate'],
-            'usernumber': usernumber,
-            'name': index['name'],
-            'number': index['number'],
-            'reword': index['reword'],
-            'status': 'true'
-          };
-          checked[key] = result;
-          key++;
-        }
-      }
-    });
-  }
-
-  checkFirst3(snapshot, usernumber) {
+  checkFirst3(usernumber) {
     String f3Num = usernumber.substring(0, 3); //ตัดเอาเลข 3 ตัวหน้า
-    for (final item in snapshot['result'][1]['number']) {
+    for (final item in _last3f) {
       if (f3Num == item) {
-        result = {
-          'date': snapshot['drawdate'],
-          'usernumber': usernumber,
-          'name': snapshot['result'][1]['name'],
-          'number': item,
-          'reword': snapshot['result'][1]['reword'],
-          'status': 'true'
-        };
-        checked[key] = result;
-        key++;
-        //print(result);
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลเลข 3 ตัวหน้า",
+            number: item,
+            reword: prizeNotifier.selectedPrize.data["last3f"].price,
+            status: true));
+
+        //print(checkResult);
       }
     }
   }
 
-  checkLast3(snapshot, usernumber) {
-    String text = usernumber.substring(3, 6); //ตัดเอาเลข 3 ตัวหลัง
-    for (final item in snapshot['result'][2]['number']) {
-      if (text == item) {
-        result = {
-          'date': snapshot['drawdate'],
-          'usernumber': usernumber,
-          'name': snapshot['result'][2]['name'],
-          'number': item,
-          'reword': snapshot['result'][2]['reword'],
-          'status': 'true'
-        };
-        checked[key] = result;
-        key++;
+  checkLast3(usernumber) {
+    String last3b = usernumber.substring(3, 6); //ตัดเอาเลข 3 ตัวหลัง
+    for (final item in _last3b) {
+      if (last3b == item) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลเลข 3 ตัวท้าย",
+            number: item,
+            reword: prizeNotifier.selectedPrize.data["last3b"].price,
+            status: true));
       }
     }
   }
 
-  checkLast2(snapshot, usernumber) {
-    String text = usernumber.substring(4, 6); //ตัดเอาเลข 3 ตัวหลัง
-    String number = snapshot['result'][3]['number'];
-    if (text == number) {
-      result = {
-        'date': snapshot['drawdate'],
-        'usernumber': usernumber,
-        'name': snapshot['result'][3]['name'],
-        'number': number,
-        'reword': snapshot['result'][3]['reword'],
-        'status': 'true'
-      };
-      checked[key] = result;
-      key++;
+  checkLast2(usernumber) {
+    String last2 = usernumber.substring(4, 6); //ตัดเอาเลข 3 ตัวหลัง
+    for (final item in _last2) {
+      if (last2 == item) {
+        _listCheckResult.add(new CheckResult(
+            date: prizeNotifier.selectedPrize.date,
+            usernumber: usernumber,
+            name: "รางวัลเลข 2 ตัวท้าย",
+            number: item,
+            reword: prizeNotifier.selectedPrize.data["last2"].price,
+            status: true));
+      }
     }
   }
+}
+
+class CheckResult {
+  CheckResult({
+    this.date,
+    this.usernumber,
+    this.name,
+    this.number,
+    this.reword,
+    this.status,
+  });
+
+  String date;
+  String usernumber;
+  String name;
+  String number;
+  String reword;
+  bool status;
 }
