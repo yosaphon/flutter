@@ -269,7 +269,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 
-  Expanded _buildStatCard(
+  Widget _buildStatCard(
       String title, String count, String typestring, Color color,Color color2) {
     return Expanded(
       child: Container(
@@ -312,8 +312,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               padding: const EdgeInsets.only(top: 30),
               child: Text(
                 count,
-                style: const TextStyle(
-                  color: Colors.amber,
+                style:  TextStyle(
+                  color: color2,
                   fontSize: 20.0,
                 ),
               ),
