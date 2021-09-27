@@ -158,10 +158,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         Flexible(
                           child: Row(
                             children: <Widget>[
-                              _buildStatCard('รายรับทั้งหมด', '฿$totalReward',
-                                  'บาท', Colors.white),
-                              _buildStatCard('รายจ่ายทั้งหมด', '฿$totalPay',
-                                  'บาท', Colors.white),
+                              _buildStatCard('ถูกรางวัล', '฿$totalReward',
+                                  'บาท', Colors.white, Color(0xFFF00000)),
+                              _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
+                                  Colors.white, Color(0xFFF00000)),
                             ],
                           ),
                         ),
@@ -172,9 +172,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   'จำนวนสลาก',
                                   '${totalAmount.toString()}',
                                   'ใบ',
-                                  Colors.white),
+                                  Color(0xFFF00000),
+                                  Colors.black),
                               _buildStatCard('กำไร', '฿$totalProfit', 'บาท',
-                                  Colors.white),
+                                  Colors.white, Color(0xFFF00000)),
                             ],
                           ),
                         ),
@@ -193,84 +194,69 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                       itemCount: _sumaryData.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 0,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 4), // changes position of shadow
-                                  ),
-                                ],
-                                color: Colors.white,
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 0,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              4), // changes position of shadow
-                                        ),
-                                      ],
-                                      color: Colors.white,
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: Row(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 4), // changes position of shadow
+                                ),
+                              ],
+                              color: Colors.white,
+                              shape: BoxShape.rectangle,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      " ${numToWord(_sumaryData[index].date)}",
+                                      style: TextStyle(fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Text(
-                                        " ${numToWord(_sumaryData[index].date)}",
-                                        style: TextStyle(fontSize: 20),
-                                      )
+                                      _builddateCard(
+                                          'ถูกรางวัล',
+                                          '฿${_sumaryData[index].sumReward}',
+                                          'บาท',
+                                          Colors.white),
+                                      _builddateCard(
+                                          'เสียเงิน',
+                                          '฿${_sumaryData[index].sumPay}',
+                                          'บาท',
+                                          Colors.white),
                                     ],
                                   ),
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        _builddateCard(
-                                            'รายรับทั้งหมด',
-                                            '฿${_sumaryData[index].sumReward}',
-                                            'บาท',
-                                            Colors.white),
-                                        _builddateCard(
-                                            'รายจ่ายทั้งหมด',
-                                            '฿${_sumaryData[index].sumPay}',
-                                            'บาท',
-                                            Colors.white),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        _builddateCard(
-                                            'จำนวน',
-                                            '${_sumaryData[index].amount}',
-                                            'บาท',
-                                            Colors.white),
-                                        _builddateCard(
-                                            'กำไร',
-                                            '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                            'บาท',
-                                            Colors.white),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        
+                                  Row(
+                                    children: [
+                                      _builddateCard(
+                                          'จำนวน',
+                                          '${_sumaryData[index].amount}',
+                                          'บาท',
+                                          Colors.white),
+                                      _builddateCard(
+                                          'กำไร',
+                                          '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
+                                          'บาท',
+                                          Colors.white),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -279,6 +265,61 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Expanded _buildStatCard(
+      String title, String count, String typestring, Color color,Color color2) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: Offset(0, 3),
+            ),
+          ],
+          color: color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  Text(
+                    "($typestring)",
+                    style:
+                        const TextStyle(color: Colors.black87, fontSize: 10.0),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Text(
+                count,
+                style: const TextStyle(
+                  color: Colors.amber,
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -297,79 +338,27 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 12.0,
-              ),
-            ),
             Row(
               children: [
                 Text(
-                  count,
+                  title,
                   style: const TextStyle(
                     color: Colors.black87,
-                    fontSize: 14.0,
+                    fontSize: 12.0,
                   ),
                 ),
-                Spacer(),
                 Text(
-                  typestring,
-                  style: const TextStyle(color: Colors.black87, fontSize: 14.0),
+                  "($typestring)",
+                  style: const TextStyle(color: Colors.black87, fontSize: 8.0),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Expanded _buildStatCard(
-      String title, String count, String typestring, Color color) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(5.0),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: Offset(0, 3),
-            ),
-          ],
-          color: color,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
             Text(
-              title,
+              count,
               style: const TextStyle(
                 color: Colors.black87,
-                fontSize: 14.0,
+                fontSize: 16.0,
               ),
-            ),
-            Row(
-              children: [
-                Text(
-                  count,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 16.0,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  typestring,
-                  style: const TextStyle(color: Colors.black87, fontSize: 14.0),
-                ),
-              ],
             ),
           ],
         ),
