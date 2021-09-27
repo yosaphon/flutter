@@ -180,12 +180,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         child: Row(
           children: [
             Expanded(
-                child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: LotteryTextFilds(i))),
+                child: LotteryTextFilds(i)),
             SizedBox(
               width: 10,
             ),
