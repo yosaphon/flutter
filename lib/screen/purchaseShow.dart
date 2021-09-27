@@ -28,6 +28,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   int totalAmount = 0;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
+  List<SumaryData> _sumaryData;
 
   @override
   void initState() {
@@ -49,8 +50,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       allresultdate.add(element.date);
     });
     allresultdate2 = allresultdate.toSet().toList();
-    sumAllData(userSumaryNotifier);
-    sumEachData(userSumaryNotifier);
+    await sumAllData(userSumaryNotifier);
+    await sumEachData(userSumaryNotifier);
     totalProfit += totalReward - totalPay;
   }
 
@@ -67,13 +68,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     }
   }
 
-  List<SumaryData> _sumaryData;
   sumEachData(UserSumaryNotifier userSumaryNotifier) {
+    double sumReward = 0, sumPay = 0;
+    int sumAmount = 0;
     if (userSumaryNotifier.userSumary.isNotEmpty) {
-      //รวมแต่ละงวด
-      double sumReward = 0, sumPay = 0;
-      int sumAmount = 0;
       for (var item in dateUser) {
+        sumReward = 0;
+        sumPay = 0;
+        sumAmount = 0;
         userSumaryNotifier.userSumary.forEach((element) {
           if (item == element.date) {
             sumReward +=
@@ -84,16 +86,18 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             sumAmount += element.amount == null ? 1 : int.parse(element.amount);
           }
         });
+        print("จำนวนทั้งหมด= $sumAmount");
+        print("ราคารวมทั้งหมด = $sumPay");
+
         SumaryData sumaryData = SumaryData(
           date: item,
           sumReward: sumReward,
           sumPay: sumPay,
           amount: sumAmount,
         );
-        if (sumaryData.date.isEmpty) {
           _sumaryData.add(sumaryData);
-        }
       }
+      print(_sumaryData);
     }
   }
 
@@ -134,9 +138,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           child: Row(
                             children: <Widget>[
                               _buildStatCard('Total Won', '$totalReward', 'บาท',
-                                  Colors.orange),
-                              _buildStatCard(
-                                  'Total Lose', '$totalPay', 'บาท', Colors.red),
+                                  Colors.white70),
+                              _buildStatCard('Total Lose', '$totalPay', 'บาท',
+                                  Colors.white70),
                             ],
                           ),
                         ),
@@ -147,9 +151,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   'Amount',
                                   '${totalAmount.toString()}',
                                   'ใบ',
-                                  Colors.green),
+                                  Colors.white70),
                               _buildStatCard('Total', '$totalProfit', 'บาท',
-                                  Colors.lightBlue),
+                                  Colors.white70),
                             ],
                           ),
                         ),
@@ -171,7 +175,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                             ),
                           ),
                           child: ListView.builder(
-                              itemCount: 10,
+                              itemCount: 2,
                               itemBuilder: (BuildContext context, int index) {
                                 return Card(
                                   child: Container(
@@ -204,7 +208,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                           border: TableBorder.symmetric(),
                                           columnWidths: const <int,
                                               TableColumnWidth>{
-                                            0: FlexColumnWidth(3),
+                                            0: FlexColumnWidth(4),
                                             1: FlexColumnWidth(3),
                                             2: FlexColumnWidth(3),
                                             3: FlexColumnWidth(3),
@@ -231,8 +235,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                                   child: Container(
                                                     height: 32,
                                                     width: 32,
-                                                    child:
-                                                        Text("Lottery Price"),
+                                                    child: Text("Price"),
                                                   ),
                                                 ),
                                                 TableCell(
@@ -257,7 +260,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                                 ),
                                               ],
                                             ),
-                                            for (var item in [1,2,3,4])
+                                            for (var item in [1, 2, 3, 4])
                                               TableRow(
                                                 children: <Widget>[
                                                   TableCell(
@@ -267,7 +270,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                                     child: Container(
                                                       height: 32,
                                                       width: 32,
-                                                      child: Text("aaa"),
+                                                      child:
+                                                          Text("666666(*10)"),
                                                     ),
                                                   ),
                                                   TableCell(
@@ -277,7 +281,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                                     child: Container(
                                                       height: 32,
                                                       width: 32,
-                                                      child: Text("aaa"),
+                                                      child: Text("10000"),
                                                     ),
                                                   ),
                                                   TableCell(
@@ -317,7 +321,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 
   Expanded _buildStatCard(
-      String title, String count, String typestring, MaterialColor color) {
+      String title, String count, String typestring, Color color) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -341,7 +345,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             Text(
               title,
               style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black87,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600,
               ),
@@ -351,7 +355,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                 Text(
                   count,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -360,7 +364,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                 Text(
                   typestring,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
