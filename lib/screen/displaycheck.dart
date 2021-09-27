@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/prize_api.dart';
-import 'package:lotto/helpers/dialog_helper.dart';
+
 import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
@@ -48,33 +48,10 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             orElse: () => null);
   }
 
-  String numToWord(String n) {
-    List<String> month = [
-      "มกราคม",
-      "กุมภาพันธ์",
-      "มีนาคม",
-      "เมษายน",
-      "พฤษภาคม",
-      "มิถุนายน",
-      "กรกฎาคม",
-      "สิงหาคม",
-      "กันยายน",
-      "ตุลาคม",
-      "พฤศจิกายน",
-      "ธันวาคม"
-    ];
-    List<String> w = n.split('-');
-
-    return int.parse(w[2]).toString() +
-        " " +
-        month[int.parse(w[1]) - 1] +
-        " " +
-        (int.parse(w[0]) + 543).toString();
-  }
 
   @override
   Widget build(BuildContext context) {
-    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
+    //PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     return Builder(builder: (context) {
       return Scaffold(
         backgroundColor: Color(0xFFF3FFFE),
@@ -91,17 +68,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           elevation: 0,
         ),
         body: FutureBuilder(
-            future: loadData(prizeNotifier),
+            future: null,//loadData(prizeNotifier),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty || dateValue == null) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return Form(
+              return Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                       child: Column(
                     children: <Widget>[
-                      DropdownDate(prizeNotifier.prizeList.values),
+                      DropdownDate(),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -117,7 +91,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     ],
                   )),
                 );
-              }
+              
             }),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 30),
@@ -150,9 +124,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                             orElse: () => null),
                         lotterylist,
                         null);
-                    data
-                        .getSnapshot()
-                        .then((e) => DialogHelper.exit(context, data.checked));
+                
                   }
                 },
                 icon: Icon(Icons.pin),
