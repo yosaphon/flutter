@@ -106,7 +106,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: positionontap != null? FloatingActionButton.extended(
         onPressed: () {
           String location = positionontap.replaceAll('LatLng', "");
 
@@ -115,7 +115,7 @@ class _ShowuserGooglemapState extends State<ShowuserGooglemap> {
         },
         label: Text("บันทึกตำแหน่ง"),
         icon: Icon(Icons.pin_drop),
-      ),
+      ):SizedBox(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
