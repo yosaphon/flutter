@@ -42,7 +42,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   void initState() {
-    
     //loadData();
     super.initState();
   }
@@ -266,8 +265,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ShowPurchaseReport(dateUser: date1.toSet().toList())),
+                    builder: (context) =>ShowPurchaseReport(dateUser:date1.toSet().toList() ,)
+                        //ShowPurchaseReport(dateUser: date1.toSet().toList())
+                        ),
               );
             },
             icon: Padding(

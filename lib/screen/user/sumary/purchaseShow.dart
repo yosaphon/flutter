@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
+import 'package:lotto/screen/user/sumary/purchase_report.dart';
 import 'package:provider/provider.dart';
 
 class ShowPurchaseReport extends StatefulWidget {
@@ -26,9 +27,19 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
   String dropdownValue = "ทั้งหมด",selectedindex="ทั้งหมด";
+  bool state = false;
+  String start = '', end = '';
+  String dateuser, dateValue1, dateValue2;
+  List<String> date1 = [], date2 = [];
 
   @override
   void initState() {
+    date1 = dateUser;
+
+    date1.sort();
+    start = dateUser[0];
+    end = dateUser[date1.length - 1];
+    dateValue1 = date1.first;
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
     loadData(userSumaryNotifier);
@@ -141,15 +152,28 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           fontSize: 18.0,
                         ),
                       ),
-                      Row(
+                      Stack(
                         children: [
-                          Text("แสดง"),
+                          Text("แสดง"), 
                           dorpdownShow(),
-                          if(selectedindex == "ช่วง")...[
-                            Text("เริ่ม"),
-                          // dorpDownSelectDate(dateUser),
+                          if(selectedindex == "ช่วง")...
+                          [
+
+                            Row(
+                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("เริ่ม"),
+                           selectdate1(context),
+                  
                           Text("ถึง"),
-                          // dorpDownSelectDate(dateUser),
+                          state == false
+                      ? IgnorePointer(
+                          child: selectdateFake(context),
+                        )
+                      : selectdate2(context),
+                              ],
+                            ),
+                  
                           ]else ...[
                             SizedBox()
                           ]
@@ -281,7 +305,154 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         ));
   }
 
-  Widget dorpDownSelectDate(List<String> date) {
+  Container selectdateFake(BuildContext context) {
+    return Container(
+                          alignment: AlignmentDirectional.topCenter,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFF2F2F2),
+                              border: Border.all(
+                                  color: Colors.black26, width: 0.5),
+                              borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                menuMaxHeight: 300,
+                                value: "0",
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey,
+                                ),
+                                iconSize: 30,
+                                elevation: 2,
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 15),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.grey,
+                                ),
+                                onChanged: (String newValue) {},
+                                items: [
+                                  DropdownMenuItem<String>(
+                                    value: "0",
+                                    child: Text(
+                                      "YYYY/MM/DD",
+                                      style: TextStyle(fontSize: 11),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  )
+                                ]),
+                          ),
+                        );
+  }
+
+  Container selectdate2(BuildContext context) {
+    return Container(
+                        alignment: AlignmentDirectional.topCenter,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black26, width: 0.5),
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            menuMaxHeight: 300,
+                            value: dateValue2 ?? dateValue1,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.blue,
+                            ),
+                            iconSize: 30,
+                            elevation: 2,
+                            style:
+                                TextStyle(color: Colors.blue, fontSize: 15),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                if (date1.length != dateUser.length) {
+                                  date1 = dateUser;
+                                }
+                                end = newValue;
+                                dateValue2 = newValue;
+                              });
+                            },
+                            items: date2.map<DropdownMenuItem<String>>(
+                                (dynamic value) {
+                              Widget drop = DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  textAlign: TextAlign.right,
+                                ),
+                              );
+
+                              return drop;
+                              // }
+                              // index2++;
+                            }).toList(),
+                          ),
+                        ),
+                      );
+  }
+
+  Container selectdate1(BuildContext context) {
+    return Container(
+                  alignment: AlignmentDirectional.topCenter,
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black26, width: 0.5),
+                      borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      menuMaxHeight: 300,
+                      value: dateValue1,
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.blue,
+                      ),
+                      iconSize: 30,
+                      elevation: 2,
+                      style: TextStyle(color: Colors.blue, fontSize: 15),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.blue,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          state = true;
+                          date2 = [];
+                          start = newValue;
+                          dateValue1 = newValue;
+                          for (var i = 0; i < date1.length; i++) {
+                            if (i >= date1.indexOf(newValue)) {
+                              date2.add(date1[i]);
+                            }
+                          }
+                        });
+                      },
+                      items: date1
+                          .map<DropdownMenuItem<String>>((dynamic value) {
+                        Widget drop = DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            textAlign: TextAlign.right,
+                          ),
+                        );
+
+                        return drop;
+                      }).toList(),
+                    ),
+                  ),
+                );
+  }
+
+  Widget dorpDownSelectDate(List<String> date,dateUser) {
     Container(
       alignment: AlignmentDirectional.topCenter,
       width: MediaQuery.of(context).size.width * 0.3,
