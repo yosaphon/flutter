@@ -163,7 +163,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                     child: RichText(
                                       text: TextSpan(children: <TextSpan>[
                                         TextSpan(
-                                            text: 'บันทึกงวดวันที่ ',
+                                            text: 'งวดวันที่ ',
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.black,
@@ -215,7 +215,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                           padding: const EdgeInsets.only(
                                               top: 20.0, right: 30),
                                           child: TextButton(
-                                            child: Text("QR scan",style: TextStyle(fontSize: 20),),
+                                            child: Text("QR scan",style: TextStyle(fontSize: 20 ,color: Colors.blue[700]),),
                                             onPressed: () => Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
