@@ -71,7 +71,6 @@ Widget displayData(String usernumber, String name, String date, bool status,
   return Column(
     children: <Widget>[
      Container(
-        width: double.infinity,
         child:(status) ? Image.asset('asset/happy.gif'):Image.asset('asset/sad.gif'),
       ),
       Row(

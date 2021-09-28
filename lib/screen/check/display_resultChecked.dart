@@ -9,7 +9,19 @@ class ShowResultChecked extends StatelessWidget {
   GlobalKey _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(
+    return Scaffold(
+      
+      body: Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.blueAccent,
+              Colors.pink,
+            ],
+          ),
+         ),
       child: ListView(
         children: allResult.values.map((document) {
           return Container(
