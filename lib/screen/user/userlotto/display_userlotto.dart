@@ -15,7 +15,7 @@ import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
-import 'add/formshowlotto.dart';
+import '../add/formshowlotto.dart';
 
 class UserprofileLottery extends StatefulWidget {
   @override

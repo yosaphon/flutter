@@ -4,7 +4,7 @@ import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/user/check_login_user.dart';
+import 'package:lotto/screen/user/login/check_login_user.dart';
 import 'package:lotto/screen/predict/display_predictor.dart';
 import 'package:lotto/screen/youtube/display_youtubelive.dart';
 import 'package:lotto/screen/check/displaycheck.dart';
