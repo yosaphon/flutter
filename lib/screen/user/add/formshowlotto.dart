@@ -18,7 +18,9 @@ import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
+import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:lotto/screen/user/add/googlemapshow.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -126,7 +128,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-              extendBodyBehindAppBar: true,
+              extendBodyBehindAppBar: false,
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
@@ -147,334 +149,293 @@ class _FormshowlottoState extends State<Formshowlotto> {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       return Container(
-                        padding: EdgeInsets.all(20),
+                        color: Color(0xFFF3FFFE),
                         child: Form(
                           key: formKey,
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 70,
-                                ),
-                                Center(
-                                  child: RichText(
-                                    text: TextSpan(children: <TextSpan>[
-                                      TextSpan(
-                                          text: 'บันทึกงวดวันที่ ',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                              fontFamily: "Mitr")),
-                                      TextSpan(
-                                          text: numToWord(userDate),
-                                          style: TextStyle(
-                                              fontSize: 22,
-                                              color: Colors.orange,
-                                              fontFamily: "Mitr")),
-                                      TextSpan(),
-                                    ]),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 30, bottom: 20),
+                                  child: Center(
+                                    child: RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'บันทึกงวดวันที่ ',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontFamily: "Mitr")),
+                                        TextSpan(
+                                            text: numToWord(userDate),
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.orange,
+                                                fontFamily: "Mitr")),
+                                      ]),
+                                    ),
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Stack(
                                   children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.6,
-                                      child: TextFormField(
-                                        initialValue: "", //ค่าเริ่มต้น
-                                        decoration: InputDecoration(
-                                            labelText: 'เลขสลาก'),
-                                        style: TextStyle(fontSize: 20),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'[0-9]')),
-                                          LengthLimitingTextInputFormatter(6),
-                                        ],
-                                        validator: MultiValidator([
-                                          MinLengthValidator(6,
-                                              errorText:
-                                                  'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
-                                          RequiredValidator(
-                                              errorText: "กรุณาป้อน เลขสลาก")
-                                        ]),
-                                        onSaved: (String number) {
-                                          userlottery.number = number;
-                                        },
-                                        keyboardType: TextInputType.number,
+                                    frameWidget(
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          initialValue: "", //ค่าเริ่มต้น
+                                          decoration: InputDecoration(
+                                              labelText: 'เลขสลาก'),
+                                          style: TextStyle(fontSize: 20),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                            LengthLimitingTextInputFormatter(6),
+                                          ],
+                                          validator: MultiValidator([
+                                            MinLengthValidator(6,
+                                                errorText:
+                                                    'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
+                                            RequiredValidator(
+                                                errorText: "กรุณาป้อน เลขสลาก")
+                                          ]),
+                                          onSaved: (String number) {
+                                            userlottery.number = number;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 20),
-                                      child: SizedBox(
-                                        height: 40,
-                                        width: 100,
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                          ))),
-                                          child: Text('Qrcode',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          onPressed: () {},
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0, right: 30),
+                                          child: TextButton(
+                                            child: Text("QR scan",style: TextStyle(fontSize: 20),),
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        QRScanPage())),
+                                          ),
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "จำนวน",
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              removeAmount();
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                  color: qtyAmount > 1
-                                                      ? Colors.blue
-                                                      : Colors.grey),
-                                              child: Icon(
-                                                Icons.remove,
-                                                size: 40,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 35,
-                                            width: 60,
-                                            child: Center(
-                                              child: Text(
-                                                "$qtyAmount",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              addAmount();
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                  color: Colors.blue),
-                                              child: Icon(
-                                                Icons.add,
-                                                size: 40,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ),
                                   ],
                                 ),
-                                TextFormField(
-                                  key: Key(price.toString()),
-                                  initialValue: price.toString(),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
-                                  ],
-                                  decoration:
-                                      InputDecoration(labelText: 'ราคา'),
-                                  style: TextStyle(fontSize: 20),
-                                  validator: MultiValidator([
-                                    // RequiredValidator(
-                                    //     errorText: "กรุณาป้อนราคา")
-                                  ]),
-                                  onSaved: (String lotteryprice) {
-                                    if (lotteryprice == null ||
-                                        lotteryprice.isEmpty) {
-                                      lotteryprice = "0";
-                                    }
-                                    userlottery.lotteryprice = lotteryprice;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (imageStateShow == false) {
-                                              imageStateShow = true;
-                                            } else if (imageStateShow == true) {
-                                              imageStateShow = false;
-                                            }
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Text("เพิ่มรูป",style: TextStyle(fontSize: 20),),
-                                            Spacer(),
-                                            Icon(Icons.image)
-                                          ],
-                                        ))),
-                                imageStateShow == true
-                                    ? Column(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(20),
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: _image != null
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.3
-                                                : 5,
-                                            child: _image != null
-                                                ? Image.file(_image)
-                                                : SizedBox(),
-                                          ),
-                                          Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                IconButton(
-                                                    onPressed: () {
-                                                      getImage(
-                                                          ImageSource.camera);
-                                                    },
-                                                    iconSize: 36,
-                                                    color: Colors.amber[400],
-                                                    icon: Icon(
-                                                        Icons.add_a_photo)),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      getImage(
-                                                          ImageSource.gallery);
-                                                    },
-                                                    iconSize: 36,
-                                                    color: Colors.green[400],
-                                                    icon: Icon(
-                                                        Icons.collections)),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : SizedBox(
-                                        height: 10,
-                                      ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
+                                frameWidget(
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        userlottery.latlng != null
-                                            ? Text(
-                                                "เพิ่มตำแหน่ง",
-                                                style: TextStyle(fontSize: 20),
-                                              )
-                                            : Text(
-                                                "แก้ไขตำแหน่ง",
-                                                style: TextStyle(fontSize: 20),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "จำนวน",
+                                                style: TextStyle(fontSize: 18,color: Colors.black54),
                                               ),
-                                        Spacer(),
-                                        Icon(FontAwesomeIcons.mapMarked)
+                                            ),
+                                            Container(
+                                              child: Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeAmount();
+                                                    },
+                                                    child: Container(
+                                                      height: 25,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  30),
+                                                          color: qtyAmount > 1
+                                                              ? Colors.pink[200]
+                                                              : Colors.black12),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(bottom: 10),
+                                                        child: Icon(
+                                                          Icons.remove,color: qtyAmount > 1
+                                                                ? Colors.white
+                                                                : Colors.black38,
+                                                          size: 27,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 35,
+                                                    width: 60,
+                                                    child: Center(
+                                                      child: Text(
+                                                        "$qtyAmount",
+                                                        style:
+                                                            TextStyle(fontSize: 20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      addAmount();
+                                                    },
+                                                    child: Container(
+                                                      height: 25,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  30),
+                                                          color: 
+                                                              Colors.pink[200]
+                                                              ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(bottom: 10),
+                                                        child: Icon(
+                                                          Icons.add,color: 
+                                                                 Colors.white
+                                                                ,
+                                                          size: 27,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width *0.3,
+                                          
+                                          child: TextFormField(cursorWidth: 2,
+                                            key: Key(price.toString()),
+                                            initialValue: price.toString(),
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'[0-9]')),
+                                            ],
+                                            decoration: InputDecoration(
+                                                labelText: 'ราคา'),
+                                            style: TextStyle(fontSize: 20),
+                                            validator: MultiValidator([
+                                              
+                                              // RequiredValidator(
+                                              //     errorText: "กรุณาป้อนราคา")
+                                            ]),
+                                            onSaved: (String lotteryprice) {
+                                              if (lotteryprice == null ||
+                                                  lotteryprice.isEmpty) {
+                                                lotteryprice = "0";
+                                              }
+                                              userlottery.lotteryprice =
+                                                  lotteryprice;
+                                            },
+                                            keyboardType: TextInputType.number,
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    onPressed: () async {
-                                      _navigateAndDisplaySelection(context);
-                                    },
                                   ),
                                 ),
-                                userlottery.latlng != null
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  offset: Offset(0, 17),
-                                                  blurRadius: 23,
-                                                  spreadRadius: -13,
-                                                  color: Colors.black38)
-                                            ]),
-                                        child: SizedBox(
-                                            height: 200,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: GoogleMap(
-                                              mapType: MapType.normal,
-                                              markers:
+                                frameWidget(
+                                  Column(
+                                    children: [
+                                      ElevatedButton(
+                                        clipBehavior: Clip.none,
+                                          style: ElevatedButton.styleFrom(
+                                            
+                                              primary: Colors.white,
+                                              textStyle: TextStyle(
+                                                fontSize: 30,
+                                              color: Colors.cyanAccent) // set the background color
+                                              ),
+                                          onPressed: () {
+                                            setState(() {
+                                              if (imageStateShow == false) {
+                                                imageStateShow = true;
+                                              } else if (imageStateShow ==
+                                                  true) {
+                                                imageStateShow = false;
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "เพิ่มรูป",
+                                                  style:
+                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr"),
+                                                ),
+                                                Spacer(),
+                                                Icon(Icons.image, color: Colors.black,)
+                                              ],
+                                            ),
+                                          )),
+                                      imageStateShow == true
+                                          ? imageShow(context)
+                                          : SizedBox(
+                                              height: 10,
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                frameWidget(
+                                  Column(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.white,
+                                                  textStyle: TextStyle(
+                                                    fontSize: 30,
+                                                  ) // set the background color
+                                                  ),
+                                              child: Row(
+                                                children: [
                                                   userlottery.latlng != null
-                                                      ? Set.from([
-                                                          Marker(
-                                                              markerId: MarkerId(
-                                                                  'google_plex'),
-                                                              position: LatLng(
-                                                                  double.parse(
-                                                                      userlottery
-                                                                          .latlng
-                                                                          .substring(
-                                                                              1,
-                                                                              18)),
-                                                                  double.parse(userlottery
-                                                                      .latlng
-                                                                      .substring(
-                                                                          20,
-                                                                          userlottery.latlng.length -
-                                                                              1))))
-                                                        ])
-                                                      : null,
-                                              onMapCreated: _onMapCreated,
-                                              myLocationEnabled: true,
-                                              initialCameraPosition: CameraPosition(
-                                                  target: userlottery.latlng !=
-                                                          null
-                                                      ? LatLng(
-                                                          double.parse(
-                                                              userlottery.latlng
-                                                                  .substring(
-                                                                      1, 18)),
-                                                          double.parse(userlottery
-                                                              .latlng
-                                                              .substring(
-                                                                  20,
-                                                                  userlottery
-                                                                          .latlng
-                                                                          .length -
-                                                                      1)))
-                                                      : LatLng(
-                                                          13.736717, 100.523186),
-                                                  zoom: 15),
-                                            )),
-                                      )
-                                    : SizedBox(
-                                        height: 10,
+                                                      ? Text(
+                                                          "แก้ไขตำแหน่ง",
+                                                          style: TextStyle(
+                                                              fontSize: 18,color: Colors.black54,fontFamily: "Mitr"),
+                                                        )
+                                                      : Text(
+                                                          "เพิ่มตำแหน่ง",
+                                                          style: TextStyle(
+                                                              fontSize: 18,color: Colors.black54,fontFamily: "Mitr"),
+                                                        ),
+                                                  Spacer(),
+                                                  Icon(FontAwesomeIcons
+                                                      .mapMarked,color: Colors.blueGrey,)
+                                                ],
+                                              ),
+                                              onPressed: () async {
+                                                _navigateAndDisplaySelection(
+                                                    context);
+                                              },
+                                            ),
+                                          ),
+                                          userlottery.latlng != null
+                                              ? googleMapShow(context)
+                                              : SizedBox(
+                                                  height: 10,
+                                                ),
+                                        ],
                                       ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -482,32 +443,20 @@ class _FormshowlottoState extends State<Formshowlotto> {
                       );
                     }
                   }),
-              floatingActionButton: FloatingActionButton.extended(
-                onPressed: () async {
-                  if (_image != null) {
-                    await uploadPicture();
-                  }
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
-                    await _userltottery.add({
-                      "username": user.displayName,
-                      "number": userlottery.number,
-                      "amount": qtyAmount.toString(),
-                      "lotteryprice": userlottery.lotteryprice,
-                      "imageurl": urlpiture,
-                      "date": userDate,
-                      "latlng": userlottery.latlng,
-                      "userid": user.uid,
-                      "state": null,
-                      "won": [
-                        {"name": null, "wonNum": null, "reward": int.parse(null)}
-                      ]
-                    });
-                    Navigator.pop(context);
-                  }
-                },
-                label: Text("บันทึก"),
-                icon: Icon(Icons.save),
+              floatingActionButton: Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: FloatingActionButton.extended(
+                  backgroundColor: Colors.amber,
+                  heroTag: "add",
+                  onPressed: () async {
+                    await addToFirebase(context);
+                  },
+                  label: Text(
+                    "บันทึก",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  icon: Icon(Icons.save),
+                ),
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
@@ -519,6 +468,126 @@ class _FormshowlottoState extends State<Formshowlotto> {
             ),
           );
         });
+  }
+
+  Future<void> addToFirebase(BuildContext context) async {
+    if (_image != null) {
+      await uploadPicture();
+    }
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
+      await _userltottery.add({
+        "username": user.displayName,
+        "number": userlottery.number,
+        "amount": qtyAmount.toString(),
+        "lotteryprice": userlottery.lotteryprice,
+        "imageurl": urlpiture,
+        "date": userDate,
+        "latlng": userlottery.latlng,
+        "userid": user.uid,
+        "state": null,
+        "won": [
+          {"name": null, "wonNum": null, "reward": int.parse(null)}
+        ]
+      });
+      Navigator.pop(context);
+    }
+  }
+
+  Column imageShow(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width,
+          height: _image != null ? MediaQuery.of(context).size.height * 0.3 : 5,
+          child: _image != null ? Image.file(_image) : SizedBox(),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    getImage(ImageSource.camera);
+                  },
+                  iconSize: 36,
+                  color: Colors.blueGrey,
+                  icon: Icon(Icons.add_a_photo)),
+              IconButton(
+                  onPressed: () {
+                    getImage(ImageSource.gallery);
+                  },
+                  iconSize: 36,
+                  color: Colors.lightBlue[400],
+                  icon: Icon(Icons.collections)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container googleMapShow(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.teal.shade100,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+                offset: Offset(0, 17),
+                blurRadius: 23,
+                spreadRadius: -13,
+                color: Colors.black38)
+          ]),
+      child: SizedBox(
+          height: 200,
+          width: MediaQuery.of(context).size.width,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            markers: userlottery.latlng != null
+                ? Set.from([
+                    Marker(
+                        markerId: MarkerId('google_plex'),
+                        position: LatLng(
+                            double.parse(userlottery.latlng.substring(1, 18)),
+                            double.parse(userlottery.latlng
+                                .substring(20, userlottery.latlng.length - 1))))
+                  ])
+                : null,
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            initialCameraPosition: CameraPosition(
+                target: userlottery.latlng != null
+                    ? LatLng(
+                        double.parse(userlottery.latlng.substring(1, 18)),
+                        double.parse(userlottery.latlng
+                            .substring(20, userlottery.latlng.length - 1)))
+                    : LatLng(13.736717, 100.523186),
+                zoom: 15),
+          )),
+    );
+  }
+
+  Container container1(Widget x) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 7,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
+        //border: Border.all(color: Colors.black26),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 42),
+      child: x,
+    );
   }
 
   void _navigateAndDisplaySelection(BuildContext context) async {
