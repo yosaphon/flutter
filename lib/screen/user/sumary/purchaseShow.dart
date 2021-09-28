@@ -123,7 +123,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
     return Scaffold(
         extendBodyBehindAppBar: false,
-        backgroundColor: Color(0xFFF3FFFE),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -140,45 +140,58 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           slivers: <Widget>[
             SliverPadding(
               padding: const EdgeInsets.only(
-                  top: 20, left: 20, right: 10, bottom: 20),
+                  top: 10, left: 20, right: 10, bottom: 5),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "สรุป",
+                        "สรุปผลการซื้อสลากกินแบ่งรัฐบาล",
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 18.0,
+                          fontSize: 20.0,
                         ),
                       ),
                       Stack(
                         children: [
                           Row(
                             children: [
-                              Text("แสดง"),
+                              Text(
+                                "แสดง :",
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.05,
+                              ),
                               dorpdownShow(),
                             ],
                           ),
-                          if (selectedindex == "ช่วง") ...[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("เริ่ม"),
-                                selectdate1(context),
-                                Text("ถึง"),
-                                state == false
-                                    ? IgnorePointer(
-                                        child: selectdateFake(context),
-                                      )
-                                    : selectdate2(context),
-                              ],
+                          if (selectedindex == "เลือกช่วง") ...[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("เริ่ม :",
+                                      style: TextStyle(color: Colors.black54)),
+                                  selectdate1(context),
+                                  Text("ถึง :",
+                                      style: TextStyle(color: Colors.black54)),
+                                  state == false
+                                      ? IgnorePointer(
+                                          child: selectdateFake(context),
+                                        )
+                                      : selectdate2(context),
+                                ],
+                              ),
                             ),
                           ] else ...[
                             SizedBox()
                           ]
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -195,9 +208,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         child: Row(
                           children: <Widget>[
                             _buildStatCard('ถูกรางวัล', '฿$totalReward', 'บาท',
-                                Colors.white),
-                            _buildStatCard(
-                                'เสียเงิน', '฿$totalPay', 'บาท', Colors.white),
+                                Colors.white, Color(0xFF40E0D0)),
+                            _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
+                                Colors.white, Color(0XFFC70039)),
                           ],
                         ),
                       ),
@@ -208,9 +221,19 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                 'จำนวนสลาก',
                                 '${totalAmount.toString()}',
                                 'ใบ',
-                                Colors.white),
-                            _buildStatCard(
-                                'กำไร', '฿$totalProfit', 'บาท', Colors.white),
+                                Colors.white,
+                                Colors.black),
+                            _buildStatCardTotal(
+                                'กำไร',
+                                '฿$totalProfit',
+                                '${totalProfit/100*totalPay}',
+                                'บาท',
+                                Colors.white,
+                                totalReward > totalPay
+                                    ? Color(0xFF40E0D0)
+                                    : totalReward == totalPay
+                                        ? Colors.black
+                                        : Color(0XFFC70039)),
                           ],
                         ),
                       ),
@@ -220,8 +243,19 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               ),
             ),
             SliverPadding(
+                padding: const EdgeInsets.only(left: 20, right: 10),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    "สรุปผลรายงวด",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                )),
+            SliverPadding(
               padding: const EdgeInsets.only(
-                  top: 20.0, left: 10, right: 10, bottom: 5),
+                  top: 5.0, left: 10, right: 10, bottom: 5),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.53,
@@ -259,6 +293,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   ],
                                 ),
                               ),
+                              
                               Column(
                                 children: [
                                   Row(
@@ -267,12 +302,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                           'ถูกรางวัล',
                                           '฿${_sumaryData[index].sumReward}',
                                           'บาท',
-                                          Colors.white),
+                                          Colors.white,
+                                          Color(0xFF40E0D0)),
                                       _builddateCard(
                                           'เสียเงิน',
                                           '฿${_sumaryData[index].sumPay}',
                                           'บาท',
-                                          Colors.white),
+                                          Colors.white,
+                                          Color(0XFFC70039)),
                                     ],
                                   ),
                                   Row(
@@ -281,12 +318,21 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                           'จำนวน',
                                           '${_sumaryData[index].amount}',
                                           'บาท',
-                                          Colors.white),
-                                      _builddateCard(
+                                          Colors.white,
+                                          Colors.black),
+                                      _builddateCardTotal(
                                           'กำไร',
                                           '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
+                                          '${((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / 100) * _sumaryData[index].sumPay}',
                                           'บาท',
-                                          Colors.white),
+                                          Colors.white,
+                                          _sumaryData[index].sumReward >
+                                                  _sumaryData[index].sumPay
+                                              ? Color(0xFF40E0D0)
+                                              : _sumaryData[index].sumReward ==
+                                                      _sumaryData[index].sumPay
+                                                  ? Colors.black
+                                                  : Color(0XFFC70039)),
                                     ],
                                   ),
                                 ],
@@ -304,183 +350,120 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         ));
   }
 
-  Container selectdateFake(BuildContext context) {
-    return Container(
-      alignment: AlignmentDirectional.topCenter,
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: BoxDecoration(
-          color: Color(0xFFF2F2F2),
-          border: Border.all(color: Colors.black26, width: 0.5),
-          borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(top: 10.0),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton(
-            menuMaxHeight: 300,
-            value: "0",
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: Colors.grey,
-            ),
-            iconSize: 30,
-            elevation: 2,
-            style: TextStyle(color: Colors.grey, fontSize: 15),
-            underline: Container(
-              height: 2,
-              color: Colors.grey,
-            ),
-            onChanged: (String newValue) {},
-            items: [
-              DropdownMenuItem<String>(
-                value: "0",
-                child: Text(
-                  "YYYY/MM/DD",
-                  style: TextStyle(fontSize: 11),
-                  textAlign: TextAlign.right,
-                ),
-              )
-            ]),
-      ),
-    );
-  }
-
-  Container selectdate2(BuildContext context) {
-    return Container(
-      alignment: AlignmentDirectional.topCenter,
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black26, width: 0.5),
-          borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(top: 10.0),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton(
+  selectdateFake(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton(
           menuMaxHeight: 300,
-          value: dateValue2 ?? dateValue1,
+          value: "0",
           icon: const Icon(
             Icons.arrow_drop_down,
-            color: Colors.blue,
+            color: Colors.grey,
           ),
           iconSize: 30,
           elevation: 2,
-          style: TextStyle(color: Colors.blue, fontSize: 15),
+          style: TextStyle(color: Colors.grey, fontSize: 15),
           underline: Container(
             height: 2,
-            color: Colors.blue,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              if (date1.length != dateUser.length) {
-                date1 = dateUser;
-              }
-              end = newValue;
-              dateValue2 = newValue;
-            });
-          },
-          items: date2.map<DropdownMenuItem<String>>((dynamic value) {
-            Widget drop = DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                textAlign: TextAlign.right,
-              ),
-            );
-
-            return drop;
-            // }
-            // index2++;
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Container selectdate1(BuildContext context) {
-    return Container(
-      alignment: AlignmentDirectional.topCenter,
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black26, width: 0.5),
-          borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(top: 10.0),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton(
-          menuMaxHeight: 300,
-          value: dateValue1,
-          icon: const Icon(
-            Icons.arrow_drop_down,
-            color: Colors.blue,
-          ),
-          iconSize: 30,
-          elevation: 2,
-          style: TextStyle(color: Colors.blue, fontSize: 15),
-          underline: Container(
-            height: 2,
-            color: Colors.blue,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              state = true;
-              date2 = [];
-              start = newValue;
-              dateValue1 = newValue;
-              for (var i = 0; i < date1.length; i++) {
-                if (i >= date1.indexOf(newValue)) {
-                  date2.add(date1[i]);
-                }
-              }
-            });
-          },
-          items: date1.map<DropdownMenuItem<String>>((dynamic value) {
-            Widget drop = DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                textAlign: TextAlign.right,
-              ),
-            );
-
-            return drop;
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget dorpDownSelectDate(List<String> date, dateUser) {
-    Container(
-      alignment: AlignmentDirectional.topCenter,
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black26, width: 0.5),
-          borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(top: 10.0),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          menuMaxHeight: 300,
-          value: dateUser,
-          icon: const Icon(
-            Icons.arrow_drop_down,
-            color: Colors.blue,
-          ),
-          iconSize: 30,
-          elevation: 2,
-          style: TextStyle(color: Colors.blue, fontSize: 15),
-          underline: Container(
-            height: 2,
-            color: Colors.blue,
+            color: Colors.grey,
           ),
           onChanged: (String newValue) {},
-          items: date.map<DropdownMenuItem<String>>((dynamic value) {
-            Widget drop = DropdownMenuItem<String>(
-              value: value,
+          items: [
+            DropdownMenuItem<String>(
+              value: "0",
               child: Text(
-                value,
+                "YYYY/MM/DD",
+                style: TextStyle(fontSize: 11),
                 textAlign: TextAlign.right,
               ),
-            );
+            )
+          ]),
+    );
+  }
 
-            return drop;
-          }).toList(),
+  selectdate2(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton(
+        menuMaxHeight: 300,
+        value: dateValue2 ?? dateValue1,
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black54,
         ),
+        iconSize: 30,
+        elevation: 2,
+        style: TextStyle(color: Colors.black, fontSize: 15),
+        underline: Container(
+          height: 2,
+          color: Colors.blue,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            if (date1.length != dateUser.length) {
+              date1 = dateUser;
+            }
+            end = newValue;
+            dateValue2 = newValue;
+          });
+        },
+        items: date2.map<DropdownMenuItem<String>>((dynamic value) {
+          Widget drop = DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              numToWord(value),
+              style: TextStyle(fontSize: 14),
+              textAlign: TextAlign.right,
+            ),
+          );
+
+          return drop;
+          // }
+          // index2++;
+        }).toList(),
+      ),
+    );
+  }
+
+  selectdate1(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton(
+        menuMaxHeight: 300,
+        value: dateValue1,
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black54,
+        ),
+        iconSize: 30,
+        elevation: 2,
+        style: TextStyle(color: Colors.black, fontSize: 15),
+        underline: Container(
+          height: 2,
+          color: Colors.blue,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            state = true;
+            date2 = [];
+            start = newValue;
+            dateValue1 = newValue;
+            for (var i = 0; i < date1.length; i++) {
+              if (i >= date1.indexOf(newValue)) {
+                date2.add(date1[i]);
+              }
+            }
+          });
+        },
+        items: date1.map<DropdownMenuItem<String>>((dynamic value) {
+          Widget drop = DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              numToWord(value),
+              style: TextStyle(fontSize: 14),
+              textAlign: TextAlign.right,
+            ),
+          );
+
+          return drop;
+        }).toList(),
       ),
     );
   }
@@ -489,29 +472,35 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: dropdownValue,
-        icon: const Icon(Icons.arrow_drop_down),
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black54,
+        ),
         iconSize: 24,
         elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
+        style: const TextStyle(color: Colors.black),
         onChanged: (String newValue) {
           setState(() {
             dropdownValue = newValue;
             changeIndexsecon(newValue);
           });
         },
-        items: <String>['ทั้งหมด', 'ล่าสุด', 'ช่วง']
+        items: <String>['ทั้งหมด', 'ล่าสุด', 'เลือกช่วง']
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16),
+            ),
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _buildStatCard(
-      String title, String count, String typestring, Color color) {
+  Widget _buildStatCard(String title, String count, String typestring,
+      Color color, Color colorfont) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -550,11 +539,11 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 30, left: 8),
               child: Text(
                 count,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: colorfont,
                   fontSize: 20.0,
                 ),
               ),
@@ -565,8 +554,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 
-  Expanded _builddateCard(
-      String title, String count, String typestring, Color color) {
+  Expanded _builddateCard(String title, String count, String typestring,
+      Color color, Color colorfont) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -596,8 +585,125 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             ),
             Text(
               count,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: colorfont,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatCardTotal(String title, String count, String percen,
+      String typestring, Color color, Color colorfont) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: Offset(0, 3),
+            ),
+          ],
+          color: color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  Text(
+                    "($typestring)",
+                    style:
+                        const TextStyle(color: Colors.black54, fontSize: 10.0),
+                  ),
+                  colorfont == Color(0XFFC70039)? Text(
+                   percen+"➘",
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ):colorfont == Color(0xFF40E0D0) ? Text(
+                   "+"+percen+"➚",
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ):Text(
+                  percen,
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30, left: 8),
+              child: Text(
+                count,
+                style: TextStyle(
+                  color: colorfont,
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded _builddateCardTotal(String title, String count, String percen,
+      String typestring, Color color, Color colorfont) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 12.0,
+                  ),
+                ),
+                Text(
+                  "($typestring)",
+                  style: const TextStyle(color: Colors.black54, fontSize: 8.0),
+                ),
+                colorfont == Color(0XFFC70039)? Text(
+                   percen+"➘",
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ):colorfont == Color(0xFF40E0D0) ? Text(
+                   "+"+percen+"➚",
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ):Text(
+                  percen,
+                  style: TextStyle(color: colorfont, fontSize: 10.0),
+                ),
+              ],
+            ),
+            Text(
+              count,
+              style: TextStyle(
+                color: colorfont,
                 fontSize: 16.0,
               ),
             ),
