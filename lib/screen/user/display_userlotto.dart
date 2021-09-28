@@ -9,13 +9,13 @@ import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
-import 'package:lotto/screen/purchase_report.dart';
-import 'package:lotto/screen/userlotteryDetail.dart';
+import 'package:lotto/screen/user/sumary/purchase_report.dart';
+import 'package:lotto/screen/user/add/userlotteryDetail.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
-import 'formshowlotto.dart';
+import 'add/formshowlotto.dart';
 
 class UserprofileLottery extends StatefulWidget {
   @override

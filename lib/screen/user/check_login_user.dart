@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/displaylogin.dart';
+import 'package:lotto/screen/user/displaylogin.dart';
 import 'package:provider/provider.dart';
 
 import 'display_userlotto.dart';

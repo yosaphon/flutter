@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/purchaseShow.dart';
+import 'package:lotto/screen/user/sumary/purchaseShow.dart';
 import 'package:provider/provider.dart';
 
 class PurchaseReportfilter extends StatefulWidget {

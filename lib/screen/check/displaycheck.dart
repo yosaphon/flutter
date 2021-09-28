@@ -7,8 +7,8 @@ import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'package:lotto/screen/display_resultChecked.dart';
-import 'package:lotto/screen/qr_scan_page.dart';
+import 'package:lotto/screen/check/display_resultChecked.dart';
+import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:provider/provider.dart';
 
 class Formqrcodescan extends StatefulWidget {

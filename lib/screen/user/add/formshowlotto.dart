@@ -17,7 +17,7 @@ import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/googlemapshow.dart';
+import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 

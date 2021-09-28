@@ -5,7 +5,7 @@ import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/prizeBox.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'package:lotto/screen/showCheckImage.dart';
+import 'package:lotto/screen/check/showCheckImage.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:provider/provider.dart';
 
