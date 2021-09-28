@@ -14,6 +14,7 @@ import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
@@ -79,10 +80,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   void addPrice() {
     setState(() {
       price = qtyAmount * 80;
-
     });
-    
-    
   }
 
   Future getImage(ImageSource imageSource) async {
@@ -157,7 +155,26 @@ class _FormshowlottoState extends State<Formshowlotto> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 60,
+                                  height: 70,
+                                ),
+                                Center(
+                                  child: RichText(
+                                    text: TextSpan(children: <TextSpan>[
+                                      TextSpan(
+                                          text: 'บันทึกงวดวันที่ ',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontFamily: "Mitr")),
+                                      TextSpan(
+                                          text: numToWord(userDate),
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              color: Colors.orange,
+                                              fontFamily: "Mitr")),
+                                      TextSpan(),
+                                    ]),
+                                  ),
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -314,7 +331,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                         },
                                         child: Row(
                                           children: [
-                                            Text("เพิ่มรูป"),
+                                            Text("เพิ่มรูป",style: TextStyle(fontSize: 20),),
                                             Spacer(),
                                             Icon(Icons.image)
                                           ],
@@ -483,7 +500,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                       "userid": user.uid,
                       "state": null,
                       "won": [
-                        {"name": null, "wonNum": null,"reward":null}
+                        {"name": null, "wonNum": null, "reward": int.parse(null)}
                       ]
                     });
                     Navigator.pop(context);
