@@ -113,27 +113,37 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             "${numToWord(lotto.date)}",
             style: TextStyle(color: Colors.black, fontSize: 14),
           ),
-          RichText(
-              text: TextSpan(children: <TextSpan>[
-            TextSpan(
-                text: "ราคา ",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-            TextSpan(
-                text: lotto.lotteryprice,
-                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
-            TextSpan(
-                text: " บาท",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-            TextSpan(
-                text: "  จำนวน ",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-            TextSpan(
-                text: lotto.amount,
-                style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
-            TextSpan(
-                text: " ใบ",
-                style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
-          ]))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: "ราคา ",
+                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                TextSpan(
+                    text: lotto.lotteryprice,
+                    style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
+                TextSpan(
+                    text: " บาท",
+                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                
+              ]))
+            ,RichText(
+                  text: TextSpan(children: <TextSpan>[
+               
+                TextSpan(
+                    text: "  จำนวน ",
+                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                TextSpan(
+                    text: lotto.amount,
+                    style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
+                TextSpan(
+                    text: " ใบ",
+                    style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
+              ])),
+            ],
+          )
         ]),
         trailing: IconButton(
           icon: lotto.state == true
