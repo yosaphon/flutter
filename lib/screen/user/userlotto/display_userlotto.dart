@@ -10,6 +10,7 @@ import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
+import 'package:lotto/screen/user/sumary/purchaseShow.dart';
 import 'package:lotto/screen/user/sumary/purchase_report.dart';
 import 'package:lotto/screen/user/add/userlotteryDetail.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
@@ -41,12 +42,14 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   void initState() {
+    
     //loadData();
     super.initState();
   }
 
-  Future loadData(userNotifier,userSumaryNotifier) async {
-    await getUser(userNotifier, user.uid,userSumaryNotifier: userSumaryNotifier);
+  Future loadData(userNotifier, userSumaryNotifier) async {
+    await getUser(userNotifier, user.uid,
+        userSumaryNotifier: userSumaryNotifier);
 
     lottos = userNotifier.currentUser;
     userID = userNotifier.docID;
@@ -60,7 +63,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
-    UserSumaryNotifier userSumaryNotifier = Provider.of<UserSumaryNotifier>(context, listen: false);
+    UserSumaryNotifier userSumaryNotifier =
+        Provider.of<UserSumaryNotifier>(context, listen: false);
     userID = userNotifier.docID;
     //var size = MediaQuery.of(context).size;
 
@@ -107,8 +111,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-                "${numToWord(lotto.date)}",
-                style: TextStyle(color: Colors.black, fontSize: 14),),
+            "${numToWord(lotto.date)}",
+            style: TextStyle(color: Colors.black, fontSize: 14),
+          ),
           RichText(
               text: TextSpan(children: <TextSpan>[
             TextSpan(
@@ -120,7 +125,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             TextSpan(
                 text: " บาท",
                 style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-                TextSpan(
+            TextSpan(
                 text: "  จำนวน ",
                 style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
             TextSpan(
@@ -204,9 +209,14 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                   value: 0,
                   child: Row(
                     children: [
-                      Icon(Icons.logout,color:  Colors.black87,),
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black87,
+                      ),
                       const SizedBox(width: 8),
-                      Text('Sign Out', style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                      Text('Sign Out',
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: "Mitr")),
                     ],
                   ),
                 ),
@@ -217,7 +227,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       ),
       body: FutureBuilder(
         future: (query.isEmpty || userNotifier.currentUser.isEmpty)
-            ? loadData(userNotifier,userSumaryNotifier)
+            ? loadData(userNotifier, userSumaryNotifier)
             : null,
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
@@ -256,9 +266,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PurchaseReportfilter(
-                          userdate: date1.toSet().toList(),
-                        )),
+                    builder: (context) =>
+                        ShowPurchaseReport(dateUser: date1.toSet().toList())),
               );
             },
             icon: Padding(
@@ -278,7 +287,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 50),
-            
             child: FloatingActionButton.extended(
               heroTag: "add",
               onPressed: () {
