@@ -46,6 +46,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       allresultdate.add(element.date);
     });
     allresultdate2 = allresultdate.toSet().toList();
+    print(allresultdate2);
     await sumAllData(userSumaryNotifier);
     await sumEachData(userSumaryNotifier);
     totalProfit += totalReward - totalPay;
@@ -67,8 +68,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   sumEachData(UserSumaryNotifier userSumaryNotifier) {
     double sumReward = 0, sumPay = 0;
     int sumAmount = 0;
+    _sumaryData = [];
     if (userSumaryNotifier.userSumary.isNotEmpty) {
-      for (var item in dateUser) {
+      for (var item in allresultdate2) {
         sumReward = 0;
         sumPay = 0;
         sumAmount = 0;
@@ -88,7 +90,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           sumPay: sumPay,
           amount: sumAmount,
         );
-        _sumaryData = [];
+
         _sumaryData.add(sumaryData);
       }
     }
@@ -171,75 +173,78 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(
-                    top: 20.0, left: 8, right: 8, bottom: 5),
+                    top: 20.0, left: 10, right: 10, bottom: 5),
                 sliver: SliverToBoxAdapter(
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.53,
                     child: ListView.builder(
                       itemCount: _sumaryData.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 0,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 4), // changes position of shadow
-                                ),
-                              ],
-                              color: Colors.white,
-                              shape: BoxShape.rectangle,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      " ${numToWord(_sumaryData[index].date)}",
-                                      style: TextStyle(fontSize: 20),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      _builddateCard(
-                                          'ถูกรางวัล',
-                                          '฿${_sumaryData[index].sumReward}',
-                                          'บาท',
-                                          Colors.white),
-                                      _builddateCard(
-                                          'เสียเงิน',
-                                          '฿${_sumaryData[index].sumPay}',
-                                          'บาท',
-                                          Colors.white),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      _builddateCard(
-                                          'จำนวน',
-                                          '${_sumaryData[index].amount}',
-                                          'บาท',
-                                          Colors.white),
-                                      _builddateCard(
-                                          'กำไร',
-                                          '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                          'บาท',
-                                          Colors.white),
-                                    ],
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 4), // changes position of shadow
                                   ),
                                 ],
-                              )
-                            ],
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        " ${numToWord(_sumaryData[index].date)}",
+                                        style: TextStyle(fontSize: 20),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        _builddateCard(
+                                            'ถูกรางวัล',
+                                            '฿${_sumaryData[index].sumReward}',
+                                            'บาท',
+                                            Colors.white),
+                                        _builddateCard(
+                                            'เสียเงิน',
+                                            '฿${_sumaryData[index].sumPay}',
+                                            'บาท',
+                                            Colors.white),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        _builddateCard(
+                                            'จำนวน',
+                                            '${_sumaryData[index].amount}',
+                                            'บาท',
+                                            Colors.white),
+                                        _builddateCard(
+                                            'กำไร',
+                                            '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
+                                            'บาท',
+                                            Colors.white),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -350,7 +355,4 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
-
-  
 }
-
