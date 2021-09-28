@@ -8,6 +8,9 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
         .collection("userlottery")
         .where('userid', isEqualTo: userId)
         .orderBy('date', descending: true)
+        .orderBy("number")
+        
+
         .get();
   List<UserData> _currentUser = [];
   List<String> _docID = [];

@@ -42,7 +42,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
   final picker = ImagePicker();
   String userDate;
   bool imageStateShow = false;
-  int qtyAmount = 1;
+  int qtyAmount = 1, price = 80;
+
   List<DocumentSnapshot> documents;
   GoogleMapController mapController;
   ShowuserGooglemap location = ShowuserGooglemap();
@@ -62,6 +63,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   void addAmount() {
     setState(() {
       qtyAmount += 1;
+      addPrice();
     });
   }
 
@@ -69,8 +71,18 @@ class _FormshowlottoState extends State<Formshowlotto> {
     setState(() {
       if (qtyAmount > 1) {
         qtyAmount -= 1;
+        addPrice();
       }
     });
+  }
+
+  void addPrice() {
+    setState(() {
+      price = qtyAmount * 80;
+
+    });
+    
+    
   }
 
   Future getImage(ImageSource imageSource) async {
@@ -264,6 +276,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   ],
                                 ),
                                 TextFormField(
+                                  key: Key(price.toString()),
+                                  initialValue: price.toString(),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
                                         RegExp(r'[0-9]')),
@@ -272,11 +286,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                       InputDecoration(labelText: 'ราคา'),
                                   style: TextStyle(fontSize: 20),
                                   validator: MultiValidator([
-                                    RequiredValidator(
-                                        errorText: "กรุณาป้อนราคา")
+                                    // RequiredValidator(
+                                    //     errorText: "กรุณาป้อนราคา")
                                   ]),
                                   onSaved: (String lotteryprice) {
-                                    if (lotteryprice == null) {
+                                    if (lotteryprice == null ||
+                                        lotteryprice.isEmpty) {
                                       lotteryprice = "0";
                                     }
                                     userlottery.lotteryprice = lotteryprice;
@@ -358,13 +373,15 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   child: ElevatedButton(
                                     child: Row(
                                       children: [
-                                        userlottery.latlng != null ?Text(
-                                          "เพิ่มตำแหน่ง",
-                                          style: TextStyle(fontSize: 20),
-                                        ):Text(
-                                          "แก้ไขตำแหน่ง",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
+                                        userlottery.latlng != null
+                                            ? Text(
+                                                "เพิ่มตำแหน่ง",
+                                                style: TextStyle(fontSize: 20),
+                                              )
+                                            : Text(
+                                                "แก้ไขตำแหน่ง",
+                                                style: TextStyle(fontSize: 20),
+                                              ),
                                         Spacer(),
                                         Icon(FontAwesomeIcons.mapMarked)
                                       ],
@@ -465,7 +482,9 @@ class _FormshowlottoState extends State<Formshowlotto> {
                       "latlng": userlottery.latlng,
                       "userid": user.uid,
                       "state": null,
-                      "won":[{"name":null,"wonNum":null}]
+                      "won": [
+                        {"name": null, "wonNum": null}
+                      ]
                     });
                     Navigator.pop(context);
                   }
