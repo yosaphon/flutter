@@ -21,15 +21,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   _ShowPurchaseReportState(this.dateUser);
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
-  int totalAmount;
+  int totalAmount ;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
-  String dropdownValue;
+  String dropdownValue = "ทั้งหมด",selectedindex="ทั้งหมด";
 
   @override
   void initState() {
-    dropdownValue = "ทั้งหมด";
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
     loadData(userSumaryNotifier);
@@ -37,9 +36,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 
   Future loadData(UserSumaryNotifier userSumaryNotifier) async {
-    //await getUserSumary(userSumaryNotifier, user.uid,
-    //   start: widget.dateUser[0], end: widget.dateUser[1]);
-
     totalProfit = 0;
     totalReward = 0;
     totalPay = 0;
@@ -103,180 +99,230 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     }
   }
 
+  void changeIndexsecon(String index) {
+    setState(() {
+      selectedindex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context);
 
     return Scaffold(
-      extendBodyBehindAppBar: false,
-      backgroundColor: Color(0xFFF3FFFE),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "รายงานการซื้อสลาก",
-          style: TextStyle(color: Colors.white),
+        extendBodyBehindAppBar: false,
+        backgroundColor: Color(0xFFF3FFFE),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "รายงานการซื้อสลาก",
+            style: TextStyle(color: Colors.white),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+          ),
+          backgroundColor: Colors.indigo,
+          elevation: 0,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-        ),
-        backgroundColor: Colors.indigo,
-        elevation: 0,
-      ),
-      body: FutureBuilder<Object>(
-        //future: null,//loadData(userSumaryNotifier),
-        builder: (context, snapshot) {
-          return CustomScrollView(
-            slivers: <Widget>[
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                    top: 20, left: 20, right: 10, bottom: 20),
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          "สรุป",
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                          ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                  top: 20, left: 20, right: 10, bottom: 20),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Text(
+                        "สรุป",
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0,
                         ),
-                        Row(
-                          children: [
-                            Text("แสดง"),
-                            dorpdownShow(dropdownValue),
+                      ),
+                      Row(
+                        children: [
+                          Text("แสดง"),
+                          dorpdownShow(),
+                          if(selectedindex == "ช่วง")...[
+                            Text("เริ่ม"),
+                          // dorpDownSelectDate(dateUser),
+                          Text("ถึง"),
+                          // dorpDownSelectDate(dateUser),
+                          ]else ...[
+                            SizedBox()
+                          ]
+                          
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  child: Column(
+                    children: <Widget>[
+                      Flexible(
+                        child: Row(
+                          children: <Widget>[
+                            _buildStatCard('ถูกรางวัล', '฿$totalReward', 'บาท',
+                                Colors.white),
+                            _buildStatCard(
+                                'เสียเงิน', '฿$totalPay', 'บาท', Colors.white),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: <Widget>[
+                            _buildStatCard(
+                                'จำนวนสลาก',
+                                '${totalAmount.toString()}',
+                                'ใบ',
+                                Colors.white),
+                            _buildStatCard(
+                                'กำไร', '฿$totalProfit', 'บาท', Colors.white),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    child: Column(
-                      children: <Widget>[
-                        Flexible(
-                          child: Row(
-                            children: <Widget>[
-                              _buildStatCard('ถูกรางวัล', '฿$totalReward',
-                                  'บาท', Colors.white),
-                              _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
-                                  Colors.white),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          child: Row(
-                            children: <Widget>[
-                              _buildStatCard(
-                                  'จำนวนสลาก',
-                                  '${totalAmount.toString()}',
-                                  'ใบ',
-                                  Colors.white),
-                              _buildStatCard(
-                                  'กำไร', '฿$totalProfit', 'บาท', Colors.white),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                    top: 20.0, left: 10, right: 10, bottom: 5),
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.53,
-                    child: ListView.builder(
-                      itemCount: _sumaryData.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 0,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 4), // changes position of shadow
-                                  ),
-                                ],
-                                color: Colors.white,
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  child: Row(
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                  top: 20.0, left: 10, right: 10, bottom: 5),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.53,
+                  child: ListView.builder(
+                    itemCount: _sumaryData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 4), // changes position of shadow
+                                ),
+                              ],
+                              color: Colors.white,
+                              shape: BoxShape.rectangle,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      " ${numToWord(_sumaryData[index].date)}",
+                                      style: TextStyle(fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Text(
-                                        " ${numToWord(_sumaryData[index].date)}",
-                                        style: TextStyle(fontSize: 20),
-                                      )
+                                      _builddateCard(
+                                          'ถูกรางวัล',
+                                          '฿${_sumaryData[index].sumReward}',
+                                          'บาท',
+                                          Colors.white),
+                                      _builddateCard(
+                                          'เสียเงิน',
+                                          '฿${_sumaryData[index].sumPay}',
+                                          'บาท',
+                                          Colors.white),
                                     ],
                                   ),
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        _builddateCard(
-                                            'ถูกรางวัล',
-                                            '฿${_sumaryData[index].sumReward}',
-                                            'บาท',
-                                            Colors.white),
-                                        _builddateCard(
-                                            'เสียเงิน',
-                                            '฿${_sumaryData[index].sumPay}',
-                                            'บาท',
-                                            Colors.white),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        _builddateCard(
-                                            'จำนวน',
-                                            '${_sumaryData[index].amount}',
-                                            'บาท',
-                                            Colors.white),
-                                        _builddateCard(
-                                            'กำไร',
-                                            '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                            'บาท',
-                                            Colors.white),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                                  Row(
+                                    children: [
+                                      _builddateCard(
+                                          'จำนวน',
+                                          '${_sumaryData[index].amount}',
+                                          'บาท',
+                                          Colors.white),
+                                      _builddateCard(
+                                          'กำไร',
+                                          '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
+                                          'บาท',
+                                          Colors.white),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-            ],
-          );
-        },
+            ),
+          ],
+        ));
+  }
+
+  Widget dorpDownSelectDate(List<String> date) {
+    Container(
+      alignment: AlignmentDirectional.topCenter,
+      width: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black26, width: 0.5),
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.only(top: 10.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          menuMaxHeight: 300,
+          value: dateUser,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.blue,
+          ),
+          iconSize: 30,
+          elevation: 2,
+          style: TextStyle(color: Colors.blue, fontSize: 15),
+          underline: Container(
+            height: 2,
+            color: Colors.blue,
+          ),
+          onChanged: (String newValue) {
+          },
+          items: date.map<DropdownMenuItem<String>>((dynamic value) {
+            Widget drop = DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                textAlign: TextAlign.right,
+              ),
+            );
+
+            return drop;
+          }).toList(),
+        ),
       ),
     );
   }
 
-  Widget dorpdownShow(String dropdownValue) {
+  Widget dorpdownShow() {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: dropdownValue,
@@ -287,6 +333,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         onChanged: (String newValue) {
           setState(() {
             dropdownValue = newValue;
+            changeIndexsecon(newValue);
           });
         },
         items: <String>['ทั้งหมด', 'ล่าสุด', 'ช่วง']
