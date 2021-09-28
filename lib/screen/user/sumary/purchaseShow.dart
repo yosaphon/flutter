@@ -70,7 +70,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     if (userSumaryNotifier.userSumary.isNotEmpty) {
       userSumaryNotifier.userSumary.forEach((element) {
         totalReward +=
-            element.reward == null ? 0.00 : double.parse(element.reward);
+            element.won[0].reward == null ? 0.00 : element.won[0].reward;
         totalPay += element.lotteryprice == null
             ? 0.00
             : double.parse(element.lotteryprice);
@@ -91,7 +91,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         userSumaryNotifier.userSumary.forEach((element) {
           if (item == element.date) {
             sumReward +=
-                element.reward == null ? 0.00 : double.parse(element.reward);
+                element.won[0].reward == null ? 0.00 : element.won[0].reward;
             sumPay += element.lotteryprice == null
                 ? 0.00
                 : double.parse(element.lotteryprice);
