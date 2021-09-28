@@ -105,8 +105,8 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                   onPressed: () {
                     setState(() {
                       changeIndexsecon(1);
-                      start = userdate[date1.length-1];
-                      end = userdate[date1.length-1];
+                      start = userdate[date1.length - 1];
+                      end = userdate[date1.length - 1];
                     });
                   },
                   child: Row(
@@ -352,12 +352,22 @@ class _PurchaseReportfilterState extends State<PurchaseReportfilter> {
                 Spacer(),
                 FloatingActionButton.extended(
                   onPressed: () {
-                    List<String> datauser = [start, end];
+                    List<String> dateSelected = [];
+                    print("วันทั้งหมด $userdate");
+                    print("วันเริ่ม $start :${userdate.indexOf(start)}");
+                    print("วันจบ $end  :${userdate.indexOf(end)}");
+                    for (var i = 0; i <= userdate.indexOf(end); i++) {
+                      if (i>=userdate.indexOf(start)) {
+                        dateSelected.add(userdate[i]);
+                      }
+                    }
+                    print("วันเลือกทั้งหมด $dateSelected");
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ShowPurchaseReport(dateUser: datauser)),
+                              ShowPurchaseReport(dateUser: dateSelected)),
                     );
                   },
                   label: const Text(

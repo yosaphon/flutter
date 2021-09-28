@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lotto/model/UserData.dart';
+import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 
-getUser(UserNotifier userNotifier, dynamic userId) async {
+getUser(UserNotifier userNotifier, dynamic userId,
+    {UserSumaryNotifier userSumaryNotifier}) async {
   QuerySnapshot snapshot;
-    snapshot = await FirebaseFirestore.instance
-        .collection("userlottery")
-        .where('userid', isEqualTo: userId)
-        .orderBy('date', descending: true)
-        .orderBy("number")
-        
-
-        .get();
+  snapshot = await FirebaseFirestore.instance
+      .collection("userlottery")
+      .where('userid', isEqualTo: userId)
+      .orderBy('date', descending: true)
+      .orderBy("number")
+      .get();
   List<UserData> _currentUser = [];
   List<String> _docID = [];
 
@@ -26,4 +26,7 @@ getUser(UserNotifier userNotifier, dynamic userId) async {
 
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
+
+  if(userSumaryNotifier!=null) userSumaryNotifier.userSumary = _currentUser;
+ 
 }

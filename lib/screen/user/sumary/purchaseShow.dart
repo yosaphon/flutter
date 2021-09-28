@@ -22,29 +22,38 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   _ShowPurchaseReportState(this.dateUser);
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
-  int totalAmount = 0;
+  int totalAmount ;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
 
   @override
   void initState() {
-    UserSumaryNotifier userSumaryNotifier =
+     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
     loadData(userSumaryNotifier);
     super.initState();
   }
 
   Future loadData(UserSumaryNotifier userSumaryNotifier) async {
-    await getUserSumary(userSumaryNotifier, user.uid,
-        start: widget.dateUser[0], end: widget.dateUser[1]);
+    //await getUserSumary(userSumaryNotifier, user.uid,
+    //   start: widget.dateUser[0], end: widget.dateUser[1]);
+
     totalProfit = 0;
     totalReward = 0;
     totalPay = 0;
     totalAmount = 0;
-    userSumaryNotifier.userSumary.forEach((element) {
-      allresultdate.add(element.date);
-    });
+    for (String item in dateUser) {
+      
+      userSumaryNotifier.userSumary.forEach((element) {
+        if (item == element.date) {
+        allresultdate.add(element.date);
+      }
+        
+      
+      });
+    }
+
     allresultdate2 = allresultdate.toSet().toList();
     print(allresultdate2);
     await sumAllData(userSumaryNotifier);
@@ -117,7 +126,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         elevation: 0,
       ),
       body: FutureBuilder<Object>(
-        future: loadData(userSumaryNotifier),
+        future: null,//loadData(userSumaryNotifier),
         builder: (context, snapshot) {
           return CustomScrollView(
             slivers: <Widget>[

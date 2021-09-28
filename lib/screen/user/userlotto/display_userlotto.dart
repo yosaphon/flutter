@@ -7,6 +7,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
+import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/user/sumary/purchase_report.dart';
@@ -44,8 +45,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     super.initState();
   }
 
-  Future loadData(userNotifier) async {
-    await getUser(userNotifier, user.uid);
+  Future loadData(userNotifier,userSumaryNotifier) async {
+    await getUser(userNotifier, user.uid,userSumaryNotifier: userSumaryNotifier);
 
     lottos = userNotifier.currentUser;
     userID = userNotifier.docID;
@@ -59,6 +60,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    UserSumaryNotifier userSumaryNotifier = Provider.of<UserSumaryNotifier>(context, listen: false);
     userID = userNotifier.docID;
     //var size = MediaQuery.of(context).size;
 
@@ -215,7 +217,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       ),
       body: FutureBuilder(
         future: (query.isEmpty || userNotifier.currentUser.isEmpty)
-            ? loadData(userNotifier)
+            ? loadData(userNotifier,userSumaryNotifier)
             : null,
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
