@@ -8,7 +8,7 @@ import 'package:lotto/notifier/prize_notifier.dart';
 import 'dart:math';
 import 'package:provider/provider.dart';
 
-import 'display_youtubelive.dart';
+import '../youtube/display_youtubelive.dart';
 
 class DispalyPredictor extends StatefulWidget {
   @override

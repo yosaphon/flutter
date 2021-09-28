@@ -14,7 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
-import 'package:lotto/screen/googlemapshow.dart';
+import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 

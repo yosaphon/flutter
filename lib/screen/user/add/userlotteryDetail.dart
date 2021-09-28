@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:lotto/screen/formUpdatelotto.dart';
+import 'package:lotto/screen/user/add/formUpdatelotto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,8 +11,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/userlottery.dart';
-import 'package:lotto/screen/display_userlotto.dart';
-import 'package:lotto/screen/googlemapshow.dart';
+import 'package:lotto/screen/user/userlotto/display_userlotto.dart';
+import 'package:lotto/screen/user/add/googlemapshow.dart';
 
 
 class Formshowdetaillotto extends StatefulWidget {
