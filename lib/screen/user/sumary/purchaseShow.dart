@@ -22,11 +22,11 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   _ShowPurchaseReportState(this.dateUser);
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
-  int totalAmount ;
+  int totalAmount;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
-  String dropdownValue = "ทั้งหมด",selectedindex="ทั้งหมด";
+  String dropdownValue = "ทั้งหมด", selectedindex = "ทั้งหมด";
   bool state = false;
   String start = '', end = '';
   String dateuser, dateValue1, dateValue2;
@@ -154,30 +154,29 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                       ),
                       Stack(
                         children: [
-                          Text("แสดง"), 
-                          dorpdownShow(),
-                          if(selectedindex == "ช่วง")...
-                          [
-
+                          Row(
+                            children: [
+                              Text("แสดง"),
+                              dorpdownShow(),
+                            ],
+                          ),
+                          if (selectedindex == "ช่วง") ...[
                             Row(
-                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("เริ่ม"),
-                           selectdate1(context),
-                  
-                          Text("ถึง"),
-                          state == false
-                      ? IgnorePointer(
-                          child: selectdateFake(context),
-                        )
-                      : selectdate2(context),
+                                selectdate1(context),
+                                Text("ถึง"),
+                                state == false
+                                    ? IgnorePointer(
+                                        child: selectdateFake(context),
+                                      )
+                                    : selectdate2(context),
                               ],
                             ),
-                  
-                          ]else ...[
+                          ] else ...[
                             SizedBox()
                           ]
-                          
                         ],
                       )
                     ],
@@ -307,152 +306,146 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   Container selectdateFake(BuildContext context) {
     return Container(
-                          alignment: AlignmentDirectional.topCenter,
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          decoration: BoxDecoration(
-                              color: Color(0xFFF2F2F2),
-                              border: Border.all(
-                                  color: Colors.black26, width: 0.5),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                                menuMaxHeight: 300,
-                                value: "0",
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                iconSize: 30,
-                                elevation: 2,
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 15),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.grey,
-                                ),
-                                onChanged: (String newValue) {},
-                                items: [
-                                  DropdownMenuItem<String>(
-                                    value: "0",
-                                    child: Text(
-                                      "YYYY/MM/DD",
-                                      style: TextStyle(fontSize: 11),
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  )
-                                ]),
-                          ),
-                        );
+      alignment: AlignmentDirectional.topCenter,
+      width: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+          color: Color(0xFFF2F2F2),
+          border: Border.all(color: Colors.black26, width: 0.5),
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.only(top: 10.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            menuMaxHeight: 300,
+            value: "0",
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.grey,
+            ),
+            iconSize: 30,
+            elevation: 2,
+            style: TextStyle(color: Colors.grey, fontSize: 15),
+            underline: Container(
+              height: 2,
+              color: Colors.grey,
+            ),
+            onChanged: (String newValue) {},
+            items: [
+              DropdownMenuItem<String>(
+                value: "0",
+                child: Text(
+                  "YYYY/MM/DD",
+                  style: TextStyle(fontSize: 11),
+                  textAlign: TextAlign.right,
+                ),
+              )
+            ]),
+      ),
+    );
   }
 
   Container selectdate2(BuildContext context) {
     return Container(
-                        alignment: AlignmentDirectional.topCenter,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.black26, width: 0.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            menuMaxHeight: 300,
-                            value: dateValue2 ?? dateValue1,
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.blue,
-                            ),
-                            iconSize: 30,
-                            elevation: 2,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 15),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.blue,
-                            ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                if (date1.length != dateUser.length) {
-                                  date1 = dateUser;
-                                }
-                                end = newValue;
-                                dateValue2 = newValue;
-                              });
-                            },
-                            items: date2.map<DropdownMenuItem<String>>(
-                                (dynamic value) {
-                              Widget drop = DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  textAlign: TextAlign.right,
-                                ),
-                              );
+      alignment: AlignmentDirectional.topCenter,
+      width: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black26, width: 0.5),
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.only(top: 10.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          menuMaxHeight: 300,
+          value: dateValue2 ?? dateValue1,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.blue,
+          ),
+          iconSize: 30,
+          elevation: 2,
+          style: TextStyle(color: Colors.blue, fontSize: 15),
+          underline: Container(
+            height: 2,
+            color: Colors.blue,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              if (date1.length != dateUser.length) {
+                date1 = dateUser;
+              }
+              end = newValue;
+              dateValue2 = newValue;
+            });
+          },
+          items: date2.map<DropdownMenuItem<String>>((dynamic value) {
+            Widget drop = DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                textAlign: TextAlign.right,
+              ),
+            );
 
-                              return drop;
-                              // }
-                              // index2++;
-                            }).toList(),
-                          ),
-                        ),
-                      );
+            return drop;
+            // }
+            // index2++;
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   Container selectdate1(BuildContext context) {
     return Container(
-                  alignment: AlignmentDirectional.topCenter,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26, width: 0.5),
-                      borderRadius: BorderRadius.circular(10)),
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      menuMaxHeight: 300,
-                      value: dateValue1,
-                      icon: const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.blue,
-                      ),
-                      iconSize: 30,
-                      elevation: 2,
-                      style: TextStyle(color: Colors.blue, fontSize: 15),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.blue,
-                      ),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          state = true;
-                          date2 = [];
-                          start = newValue;
-                          dateValue1 = newValue;
-                          for (var i = 0; i < date1.length; i++) {
-                            if (i >= date1.indexOf(newValue)) {
-                              date2.add(date1[i]);
-                            }
-                          }
-                        });
-                      },
-                      items: date1
-                          .map<DropdownMenuItem<String>>((dynamic value) {
-                        Widget drop = DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            textAlign: TextAlign.right,
-                          ),
-                        );
+      alignment: AlignmentDirectional.topCenter,
+      width: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black26, width: 0.5),
+          borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.only(top: 10.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          menuMaxHeight: 300,
+          value: dateValue1,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.blue,
+          ),
+          iconSize: 30,
+          elevation: 2,
+          style: TextStyle(color: Colors.blue, fontSize: 15),
+          underline: Container(
+            height: 2,
+            color: Colors.blue,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              state = true;
+              date2 = [];
+              start = newValue;
+              dateValue1 = newValue;
+              for (var i = 0; i < date1.length; i++) {
+                if (i >= date1.indexOf(newValue)) {
+                  date2.add(date1[i]);
+                }
+              }
+            });
+          },
+          items: date1.map<DropdownMenuItem<String>>((dynamic value) {
+            Widget drop = DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                textAlign: TextAlign.right,
+              ),
+            );
 
-                        return drop;
-                      }).toList(),
-                    ),
-                  ),
-                );
+            return drop;
+          }).toList(),
+        ),
+      ),
+    );
   }
 
-  Widget dorpDownSelectDate(List<String> date,dateUser) {
+  Widget dorpDownSelectDate(List<String> date, dateUser) {
     Container(
       alignment: AlignmentDirectional.topCenter,
       width: MediaQuery.of(context).size.width * 0.3,
@@ -475,8 +468,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             height: 2,
             color: Colors.blue,
           ),
-          onChanged: (String newValue) {
-          },
+          onChanged: (String newValue) {},
           items: date.map<DropdownMenuItem<String>>((dynamic value) {
             Widget drop = DropdownMenuItem<String>(
               value: value,
