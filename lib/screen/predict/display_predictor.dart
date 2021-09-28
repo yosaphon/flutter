@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/model/PredictData.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/preditionlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'dart:math';
@@ -65,30 +66,6 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   bool isBack = true;
   double angle1 = 0, angle2 = 0;
 
-
-  String numToWord(String n) {
-    List<String> month = [
-      "มกราคม",
-      "กุมภาพันธ์",
-      "มีนาคม",
-      "เมษายน",
-      "พฤษภาคม",
-      "มิถุนายน",
-      "กรกฎาคม",
-      "สิงหาคม",
-      "กันยายน",
-      "ตุลาคม",
-      "พฤศจิกายน",
-      "ธันวาคม"
-    ];
-    List<String> w = n.split('-');
-
-    return int.parse(w[2]).toString() +
-        " " +
-        month[int.parse(w[1]) - 1] +
-        " " +
-        (int.parse(w[0]) + 543).toString();
-  }
 
   @override
   Widget build(BuildContext context) {
