@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:footer/footer.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui' as ui;
 
@@ -21,11 +23,13 @@ class CheckedDialog extends StatelessWidget {
   CheckedDialog(this.data, this.context) {
     data.forEach((key, value) {
       Widget result = wonOrNot(value, context);
-      dialogList.add(shareAndClose(result, convertWidgetToImage(_key,context),));
+      dialogList.add(shareAndClose(
+        result,
+        convertWidgetToImage(_key, context),
+      ));
     });
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -60,14 +64,16 @@ class CheckedDialog extends StatelessWidget {
     }
     // return data;
   }
-
- 
 }
 
 Widget displayData(String usernumber, String name, String date, bool status,
     double size, Color color) {
   return Column(
     children: <Widget>[
+     Container(
+        width: double.infinity,
+        child:(status) ? Image.asset('asset/happy.gif'):Image.asset('asset/sad.gif'),
+      ),
       Row(
         mainAxisAlignment:
             MainAxisAlignment.center, //Center Column contents vertically,
@@ -77,9 +83,6 @@ Widget displayData(String usernumber, String name, String date, bool status,
           Text(usernumber,
               style: TextStyle(fontSize: 24, color: Colors.indigo)),
         ],
-      ),
-      SizedBox(
-        height: 30,
       ),
       (status)
           ? Text(
@@ -95,92 +98,92 @@ Widget displayData(String usernumber, String name, String date, bool status,
           : SizedBox(
               height: 24,
             ),
-      SizedBox(
-        height: 20,
-      ),
-      Text("งวดที่ $date", style: TextStyle(fontSize: 18, color: Colors.black)),
+      Text("งวดที่ ${ numToWord(date)}" ,
+          style: TextStyle(fontSize: 18, color: Colors.black)),
     ],
   );
 }
- Widget shareAndClose(result ,context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Colors.blueAccent,
-                Colors.pink,
-              ],
-            ),
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(12))),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Stack(children: [
-            Column(
-              children: [
-                result,
-              ],
-            ),
-            Footer(
-              backgroundColor: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 170),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "ตกลง",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        )),
-                    SizedBox(
-                      width: 60,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          //convertWidgetToImage();
-                        },
-                        child: Text(
-                          "แชร์",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ))
-                  ],
-                ),
+
+Widget shareAndClose(result, context) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.blueAccent,
+              Colors.pink,
+            ],
+          ),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.all(Radius.circular(12))),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(children: [
+          Column(
+            children: [
+              result,
+            ],
+          ),
+          Footer(
+            backgroundColor: Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "ตกลง",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      )),
+                  SizedBox(
+                    width: 60,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        //convertWidgetToImage();
+                      },
+                      child: Text(
+                        "แชร์",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ))
+                ],
               ),
-            )
-          ]),
-        ),
+            ),
+          )
+        ]),
       ),
-    );
+    ),
+  );
+}
+
+convertWidgetToImage(_key, context) async {
+  try {
+    List<String> imagePath = [];
+    RenderRepaintBoundary renderRepaintBoundary =
+        _key.currentContext.findRenderObject();
+    ui.Image boxImgae = await renderRepaintBoundary.toImage(pixelRatio: 2);
+    final directory = (await getExternalStorageDirectory()).path;
+    ByteData byteData =
+        await boxImgae.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List uint8list = byteData.buffer.asUint8List();
+    print(uint8list);
+    File imgFile = new File('$directory/dialog.png');
+    imgFile.writeAsBytes(uint8list);
+    imagePath.add(imgFile.path);
+    final RenderBox box = context.findRenderObject();
+    Share.shareFiles(imagePath,
+        subject: 'Share Lottery',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+  } on PlatformException catch (e) {
+    print("Exception while taking screenshot:" + e.toString());
   }
- convertWidgetToImage(_key,context) async {
-    try {
-      List<String> imagePath = [];
-      RenderRepaintBoundary renderRepaintBoundary =
-          _key.currentContext.findRenderObject();
-      ui.Image boxImgae = await renderRepaintBoundary.toImage(pixelRatio: 2);
-      final directory = (await getExternalStorageDirectory()).path;
-      ByteData byteData =
-          await boxImgae.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List uint8list = byteData.buffer.asUint8List();
-      print(uint8list);
-      File imgFile = new File('$directory/dialog.png');
-      imgFile.writeAsBytes(uint8list);
-      imagePath.add(imgFile.path);
-      final RenderBox box = context.findRenderObject();
-      Share.shareFiles(imagePath,
-          subject: 'Share Lottery',
-          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
-    } on PlatformException catch (e) {
-      print("Exception while taking screenshot:" + e.toString());
-    }
-  }
+}
