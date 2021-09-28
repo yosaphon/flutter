@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lotto/api/userSumary_api.dart';
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
@@ -22,14 +21,16 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   _ShowPurchaseReportState(this.dateUser);
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
-  int totalAmount ;
+  int totalAmount;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
+  String dropdownValue;
 
   @override
   void initState() {
-     UserSumaryNotifier userSumaryNotifier =
+    dropdownValue = "ทั้งหมด";
+    UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
     loadData(userSumaryNotifier);
     super.initState();
@@ -44,13 +45,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     totalPay = 0;
     totalAmount = 0;
     for (String item in dateUser) {
-      
       userSumaryNotifier.userSumary.forEach((element) {
         if (item == element.date) {
-        allresultdate.add(element.date);
-      }
-        
-      
+          allresultdate.add(element.date);
+        }
       });
     }
 
@@ -126,7 +124,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         elevation: 0,
       ),
       body: FutureBuilder<Object>(
-        future: null,//loadData(userSumaryNotifier),
+        //future: null,//loadData(userSumaryNotifier),
         builder: (context, snapshot) {
           return CustomScrollView(
             slivers: <Widget>[
@@ -135,12 +133,22 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                     top: 20, left: 20, right: 10, bottom: 20),
                 sliver: SliverToBoxAdapter(
                   child: Container(
-                    child: Text(
-                      "สรุป",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "สรุป",
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text("แสดง"),
+                            dorpdownShow(dropdownValue),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -264,6 +272,30 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget dorpdownShow(String dropdownValue) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: dropdownValue,
+        icon: const Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+          });
+        },
+        items: <String>['ทั้งหมด', 'ล่าสุด', 'ช่วง']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
       ),
     );
   }
