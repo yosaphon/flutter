@@ -50,20 +50,6 @@ class CheckedDialog extends StatelessWidget {
             items: dialogList),
       );
 
-  Widget wonOrNot(Map<String, dynamic> value, BuildContext context) {
-    if (value['status'] == "true") {
-      boxColor1 = Colors.blue[800];
-      boxColor2 = Colors.blue[200];
-      return displayData(value['usernumber'], value['name'], value['date'],
-          true, 20, Colors.amber);
-    } else {
-      boxColor1 = Colors.grey[600];
-      boxColor2 = Colors.grey[400];
-      return displayData(value['usernumber'], value['name'], value['date'],
-          false, 30, Colors.blueGrey[600]);
-    }
-    // return data;
-  }
 }
 
 Widget displayData(String usernumber, String name, String date, bool status,
@@ -175,7 +161,7 @@ convertWidgetToImage(_key, context) async {
         await boxImgae.toByteData(format: ui.ImageByteFormat.png);
     Uint8List uint8list = byteData.buffer.asUint8List();
     print(uint8list);
-    File imgFile = new File('$directory/dialog.png');
+    File imgFile = new File('$directory/resultChecked.png');
     imgFile.writeAsBytes(uint8list);
     imagePath.add(imgFile.path);
     final RenderBox box = context.findRenderObject();

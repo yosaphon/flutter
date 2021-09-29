@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lotto/model/checkNumber.dart';
-import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/widgets/checkedDialog.dart';
 import 'package:provider/provider.dart';
 
@@ -9,41 +8,26 @@ class ShowResultChecked extends StatelessWidget {
   final int length;
 
   ShowResultChecked({key, this.allResult, this.length}) : super(key: key);
-  //GlobalKey _key = GlobalKey();
   GlobalKey _captureKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
       key: _captureKey,
-      child: Scaffold(
-          body: Center(
-        child: Container(
-            padding: EdgeInsets.only(top: 50),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.blueAccent,
-                  Colors.pink,
-                ],
-              ),
-            ),
-            child: PageView.builder(
-                itemCount: length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (contex, int index) {
-                  return showPrizeReward(allResult[index], context);
-                })),
-      )),
+      child: Container(
+        child: PageView.builder(
+          
+            itemCount: length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (contex, int index) {
+              return showPrizeReward(allResult[index], context, _captureKey);
+            }),
+      ),
     );
   }
 
-  Container showPrizeReward(CheckResult document, BuildContext context) {
-    
+  Container showPrizeReward(CheckResult document, BuildContext context, _key) {
     return Container(
-      
         child: Column(children: [
       Container(
         margin: EdgeInsets.only(left: 20, right: 20),
@@ -55,7 +39,8 @@ class ShowResultChecked extends StatelessWidget {
                 shareAndClose(
                     displayData(document.usernumber, document.name,
                         document.date, document.status, 15.3, Colors.amber),
-                    context,_captureKey)
+                    context,
+                    _key)
               ],
             )),
         decoration: new BoxDecoration(

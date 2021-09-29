@@ -9,6 +9,7 @@ import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/screen/check/display_resultChecked.dart';
 import 'package:lotto/screen/check/qr_scan_page.dart';
+import 'package:lotto/screen/check/showResultCheck.dart';
 import 'package:provider/provider.dart';
 
 class Formqrcodescan extends StatefulWidget {
@@ -22,6 +23,7 @@ bool checkFacebookURL = false;
 bool checkYoutubeURL = false;
 List<String> numbers;
 
+
 class _FormqrcodescanState extends State<Formqrcodescan> {
   final _formKey = GlobalKey<FormState>();
   static List<String> lotterylist = [null];
@@ -29,6 +31,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Map<String, String> date = {};
   List<PrizeData> prizeData = [];
   String dateValue;
+  
 
 //   Future loadData(PrizeNotifier prizeNotifier) async {
 //     if (prizeNotifier.prizeList.isNotEmpty) {
@@ -126,11 +129,13 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     CheckNumber data = new CheckNumber(
                         userNum: lotterylist, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
+                    FocusScope.of(context).unfocus();
+                    
                 
 
                      Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ShowResultChecked(allResult: data.getCheckedData(),length: data.getLength())),
+                    MaterialPageRoute(builder: (context) => ShowResultCheck(allResult: data.getCheckedData(),length: data.getLength())),
                   );
                   }
                 },
