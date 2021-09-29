@@ -1,3 +1,4 @@
+import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 
 class CheckNumber {
@@ -7,7 +8,7 @@ class CheckNumber {
   //List<List<CheckResult>> _allNumlistCheckResult = [];
   CheckResult checkResult;
   int _length = 0;
-  int index; //งวดสำหรับแสกน
+  int peroid; //งวดสำหรับแสกน
   List<String> _first = [],
       _second = [],
       _third = [],
@@ -20,8 +21,53 @@ class CheckNumber {
 
   int getLength() => this._length;
 
-  CheckNumber({this.userNum, this.index, this.prizeNotifier}) {
-    prizeNotifier.selectedPrize.data.forEach((key, eachPrize) {
+  CheckNumber({this.userNum, this.peroid, this.prizeNotifier}) {
+    //ตรวจแบบกรอกเลข
+    if (peroid == null) {
+      getDataForCheck(prizeNotifier.selectedPrize);
+      print(prizeNotifier.selectedPrize.date);
+      print("_first  = $_first   ");
+      print("_second = $_second   ");
+      print("_third  = $_third   ");
+      print("_fourth = $_fourth   ");
+      print("_fifth  = $_fifth   ");
+      print("_near1st= $_near1st   ");
+      print("_last2  = $_last2   ");
+      print("_last3f = $_last3f   ");
+      print("_last3b = $_last3b   ");
+      print("_usernumber = $userNum");
+      checkPrize();
+
+      print(_listCheckResult);
+      _listCheckResult.forEach((element) {
+        print(element);
+        print(element.name);
+        print(element.reword);
+        print(element.status);
+        print(element.date);
+        print(element.number);
+      });
+    }
+    //ตรวจแบบแสกน
+    else {
+      print("scan  $peroid $userNum");
+      prizeNotifier.prizeList.values.forEach((element) {
+        if (element.period.contains(peroid)) {
+          getDataForCheck(element);
+        }
+      });
+      checkPrize();
+    }
+  }
+
+  List<CheckResult> getCheckedData() {
+    print("เข้า checkingNumber");
+    //checkPrize();
+    return _listCheckResult;
+  }
+
+  getDataForCheck(PrizeData prizeData) {
+    prizeData.data.forEach((key, eachPrize) {
       eachPrize.number.forEach((eachNum) {
         switch (key) {
           case "first":
@@ -56,34 +102,6 @@ class CheckNumber {
         }
       });
     });
-    print(prizeNotifier.selectedPrize.date);
-    print("_first  = $_first   ");
-    print("_second = $_second   ");
-    print("_third  = $_third   ");
-    print("_fourth = $_fourth   ");
-    print("_fifth  = $_fifth   ");
-    print("_near1st= $_near1st   ");
-    print("_last2  = $_last2   ");
-    print("_last3f = $_last3f   ");
-    print("_last3b = $_last3b   ");
-    print("_usernumber = $userNum");
-    checkPrize();
-
-    print(_listCheckResult);
-    _listCheckResult.forEach((element) {
-      print(element);
-      print(element.name);
-      print(element.reword);
-      print(element.status);
-      print(element.date);
-      print(element.number);
-    });
-  }
-
-  List<CheckResult> getCheckedData() {
-    print("เข้า checkingNumber");
-    //checkPrize();
-    return _listCheckResult;
   }
 
   bool status = false;
@@ -97,7 +115,7 @@ class CheckNumber {
       checkLast2(usernumber); //ตรวจรางวัล 2 ตัวท้าย
 
       //ถ้าไม่มีข้อมูลที่ถูกเลย
-      if (status!=true) {
+      if (status != true) {
         _listCheckResult.add(new CheckResult(
             date: prizeNotifier.selectedPrize.date,
             usernumber: usernumber,
