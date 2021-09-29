@@ -487,7 +487,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
         "userid": user.uid,
         "state": null,
         "won": [
-          {"name": null, "wonNum": null, "reward": int.parse(null)}
+          {"name": null, "wonNum": null, "reward": 0}
         ]
       });
       Navigator.pop(context);
