@@ -21,13 +21,13 @@ class CheckedDialog extends StatelessWidget {
   List<Widget> dialogList = [];
 
   CheckedDialog(this.data, this.context) {
-    data.forEach((key, value) {
-      Widget result = wonOrNot(value, context);
-      dialogList.add(shareAndClose(
-        result,
-        convertWidgetToImage(_key, context),
-      ));
-    });
+    // data.forEach((key, value) {
+    //   Widget result = wonOrNot(value, context);
+    //   dialogList.add(shareAndClose(
+    //     result,
+    //     convertWidgetToImage(_key, context),
+    //   ));
+    // });
   }
 
   @override
@@ -103,7 +103,7 @@ Widget displayData(String usernumber, String name, String date, bool status,
   );
 }
 
-Widget shareAndClose(result, context) {
+Widget shareAndClose(result, context,_key) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -148,7 +148,7 @@ Widget shareAndClose(result, context) {
                   ),
                   TextButton(
                       onPressed: () {
-                        //convertWidgetToImage();
+                        convertWidgetToImage(_key,context);
                       },
                       child: Text(
                         "แชร์",
