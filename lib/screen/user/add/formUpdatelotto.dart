@@ -123,8 +123,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
-                  "อัปเดทข้อมูลสลาก",
-                  style: TextStyle(color: Colors.black),
+                  "แก้ไขข้อมูลสลาก",
+                  style: TextStyle(color: Colors.white),
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius:
@@ -591,68 +591,68 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 50,
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ))),
-                                    child: Text(
-                                      "บันทึกข้อมูล",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    onPressed: () async {
-                                      if (formKey.currentState.validate()) {
-                                        formKey.currentState.save();
-                                        if (_image != null) {
-                                          deleteImage(
-                                              snapshot.data['imageurl']);
-                                          await UploadPicture();
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({"imageurl": urlpiture});
-                                        }
-                                        if (userlottery.number !=
-                                            snapshot.data["number"]) {
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({
-                                            "number": userlottery.number,
-                                          });
-                                        }
-                                        if (amount != snapshot.data["amount"]) {
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({
-                                            "amount": amount.toString(),
-                                          });
-                                        }
-                                        if (userlottery.lotteryprice !=
-                                            snapshot.data["lotteryprice"]) {
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({
-                                            "lotteryprice":
-                                                userlottery.lotteryprice,
-                                          });
-                                        }
-                                        if (userlottery.latlng !=
-                                            snapshot.data["latlng"]) {
-                                          await _userltottery
-                                              .doc(docid)
-                                              .update({
-                                            "latlng": userlottery.latlng,
-                                          });
-                                        }
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10,bottom: 20),
+                                    child: FloatingActionButton.extended(
+                                          heroTag: "Updatedata",
+                                          onPressed: () async {
+                                          if (formKey.currentState.validate()) {
+                                            formKey.currentState.save();
+                                            if (_image != null) {
+                                              deleteImage(
+                                                  snapshot.data['imageurl']);
+                                              await UploadPicture();
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({"imageurl": urlpiture});
+                                            }
+                                            if (userlottery.number !=
+                                                snapshot.data["number"]) {
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({
+                                                "number": userlottery.number,
+                                              });
+                                            }
+                                            if (amount != snapshot.data["amount"]) {
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({
+                                                "amount": amount.toString(),
+                                              });
+                                            }
+                                            if (userlottery.lotteryprice !=
+                                                snapshot.data["lotteryprice"]) {
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({
+                                                "lotteryprice":
+                                                    userlottery.lotteryprice,
+                                              });
+                                            }
+                                            if (userlottery.latlng !=
+                                                snapshot.data["latlng"]) {
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({
+                                                "latlng": userlottery.latlng,
+                                              });
+                                            }
 
-                                        Navigator.pop(context);
-                                        //getUser(userNotifier, user.uid);
-                                      }
-                                    },
+                                            Navigator.pop(context);
+                                            //getUser(userNotifier, user.uid);
+                                          }
+                                        },
+                                          icon: Icon(Icons.edit),
+                                          label: const Text(
+                                            'บันทึกการก้ไข',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.amber,
+                                        ),
                                   ),
                                 ),
                               ],

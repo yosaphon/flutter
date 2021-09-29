@@ -66,7 +66,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                 centerTitle: true,
                 title: Text(
                   "รายละเอียด",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius:
