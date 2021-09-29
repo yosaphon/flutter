@@ -18,17 +18,20 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
+      backgroundColor: Color(0xFFF3FFFE),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           "เข้าสู่ระบบ",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
+
         ),
+        
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
-        backgroundColor: Colors.black.withOpacity(0.1),
+        backgroundColor: Colors.indigo,
         elevation: 0,
       ),
       body: Container(
@@ -36,7 +39,6 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             GoogleAuthButton(
                 style: AuthButtonStyle(
                   borderRadius: 8,

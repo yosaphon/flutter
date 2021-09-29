@@ -107,46 +107,17 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             ),
           ],
         ),
-        subtitle:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "${numToWord(lotto.date)}",
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                  text: TextSpan(children: <TextSpan>[
-                TextSpan(
-                    text: "ราคา ",
-                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-                TextSpan(
-                    text: lotto.lotteryprice,
-                    style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
-                TextSpan(
-                    text: " บาท",
-                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-                
-              ]))
-            ,RichText(
-                  text: TextSpan(children: <TextSpan>[
-               
-                TextSpan(
-                    text: "  จำนวน ",
-                    style: TextStyle(color: Colors.black, fontFamily: "Mitr")),
-                TextSpan(
-                    text: lotto.amount,
-                    style: TextStyle(color: Colors.orange, fontFamily: "Mitr")),
-                TextSpan(
-                    text: " ใบ",
-                    style: TextStyle(color: Colors.black, fontFamily: "Mitr"))
-              ])),
-            ],
-          )
-        ]),
-        trailing: IconButton(
-          icon: lotto.state == true
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(children: [
+              Text(
+                "${numToWord(lotto.date)}",
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.6),
+                child: lotto.state == true
               ? Icon(
                   Icons.check_circle,
                   color: Colors.lightGreenAccent,
@@ -160,7 +131,48 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Icons.hourglass_bottom,
                       color: Color(0xFFB3B7C0),
                     ),
-          onPressed: () {},
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20,bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RichText(
+                        text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: "ราคา ",
+                          style:
+                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                      TextSpan(
+                          text: lotto.lotteryprice,
+                          style: TextStyle(
+                              color: Colors.orange, fontFamily: "Mitr")),
+                      TextSpan(
+                          text: " บาท",
+                          style:
+                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                    ])),
+                    RichText(
+                        text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: "  จำนวน ",
+                          style:
+                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                      TextSpan(
+                          text: lotto.amount,
+                          style: TextStyle(
+                              color: Colors.orange, fontFamily: "Mitr")),
+                      TextSpan(
+                          text: " ใบ",
+                          style:
+                              TextStyle(color: Colors.black, fontFamily: "Mitr"))
+                    ])),
+                    Spacer(),
+                  ],
+                ),
+              ),
+            ]),
+          ],
         ),
         onTap: () async {
           //กดเพื่อดูรายละเอียด
@@ -265,33 +277,37 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       floatingActionButton: Column(
         children: [
           Spacer(),
-          userNotifier.currentUser.isNotEmpty? FloatingActionButton.extended(
-            heroTag: "sumary",
-            onPressed: () async {
-              List<String> date1 = [];
-              userNotifier.currentUser.forEach((element) {
-                date1.add(element.date);
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>ShowPurchaseReport(dateUser:date1.toSet().toList() ,)
-                        //ShowPurchaseReport(dateUser: date1.toSet().toList())
-                        ),
-              );
-            },
-            icon: Padding(
-              padding: const EdgeInsets.only(left: 18),
-              child: Icon(Icons.feed),
-            ),
-            label: const Text(
-              'สรุปผล',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Color(0xFF6390E9),
-          ):SizedBox(),
+          userNotifier.currentUser.isNotEmpty
+              ? FloatingActionButton.extended(
+                  heroTag: "sumary",
+                  onPressed: () async {
+                    List<String> date1 = [];
+                    userNotifier.currentUser.forEach((element) {
+                      date1.add(element.date);
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ShowPurchaseReport(
+                                dateUser: date1.toSet().toList(),
+                              )
+                          //ShowPurchaseReport(dateUser: date1.toSet().toList())
+                          ),
+                    );
+                  },
+                  icon: Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Icon(Icons.feed),
+                  ),
+                  label: const Text(
+                    'สรุปผล',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Color(0xFF6390E9),
+                )
+              : SizedBox(),
           SizedBox(
             height: 7,
           ),

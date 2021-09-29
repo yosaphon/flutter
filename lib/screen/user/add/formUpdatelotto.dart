@@ -120,6 +120,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
               extendBodyBehindAppBar: false,
+              backgroundColor: Color(0xFFF3FFFE),
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
@@ -595,7 +596,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 10,bottom: 20),
                                     child: FloatingActionButton.extended(
-                                          heroTag: "Updatedata",
+                                          heroTag: "add",
                                           onPressed: () async {
                                           if (formKey.currentState.validate()) {
                                             formKey.currentState.save();
