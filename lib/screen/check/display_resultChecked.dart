@@ -16,6 +16,7 @@ class ShowResultChecked extends StatelessWidget {
     return Scaffold(
         body: Center(
           child: Container(
+            padding: EdgeInsets.only(top: 50),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topRight,
