@@ -314,7 +314,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                         ),
                                       ),
                                     ],
-                                    rows: const <DataRow>[
+                                    rows: const <DataRow>[ 
                                       DataRow(
                                         cells: <DataCell>[
                                           DataCell(Text('070456(*1)',style: TextStyle(fontSize: 10))),

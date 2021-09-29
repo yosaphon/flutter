@@ -81,7 +81,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
     Widget buildSearch() => SearchWidget(
           text: query,
-          hintText: 'เลข',
+          hintText: 'ค้นหาเลข',
           onChanged: searchLotto,
         );
     Widget buildLotto(UserData lotto, String docID) {
@@ -265,7 +265,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       floatingActionButton: Column(
         children: [
           Spacer(),
-          FloatingActionButton.extended(
+          userNotifier.currentUser.isNotEmpty? FloatingActionButton.extended(
             heroTag: "sumary",
             onPressed: () async {
               List<String> date1 = [];
@@ -291,7 +291,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               ),
             ),
             backgroundColor: Color(0xFF6390E9),
-          ),
+          ):SizedBox(),
           SizedBox(
             height: 7,
           ),
