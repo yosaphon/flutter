@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/model/SumaryData.dart';
+import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/screen/user/sumary/purchase_report.dart';
@@ -16,13 +17,12 @@ class ShowPurchaseReport extends StatefulWidget {
 class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   final user = FirebaseAuth.instance.currentUser;
   final dateUser;
-  List<String> allresultdate = [];
-  List<String> allresultdate2 = [];
+  List<String> allDateNotUse = [], allresultdate = [], selectedDate = [];
   List<String> indexrow = [];
   _ShowPurchaseReportState(this.dateUser);
   //รวมสุทธิ
   double totalProfit = 0, totalReward = 0, totalPay = 0;
-  int totalAmount;
+  int totalAmount = 0;
   List<double> listotalWon = [], listotalprice = [];
   List<int> listotalAmount = [];
   List<SumaryData> _sumaryData = [];
@@ -31,44 +31,99 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   String start = '', end = '';
   String dateuser, dateValue1, dateValue2;
   List<String> date1 = [], date2 = [];
+  List<UserData> dataAfterSelected = [];
 
   @override
   void initState() {
     date1 = dateUser;
-
+    selectedDate = dateUser;
     date1.sort();
     start = dateUser[0];
     end = dateUser[date1.length - 1];
     dateValue1 = date1.first;
-    UserSumaryNotifier userSumaryNotifier =
-        Provider.of<UserSumaryNotifier>(context, listen: false);
-    loadData(userSumaryNotifier);
+    loadData(selectedDate);
+    //loadData(userSumaryNotifier);
     super.initState();
   }
 
-  Future loadData(UserSumaryNotifier userSumaryNotifier) async {
+  showBySelected(String select) {
+    print(select);
+    switch (select) {
+      case "ทั้งหมด":
+        setState(() {
+          setDataToNull();
+          selectedDate = dateUser;
+          loadData(selectedDate);
+          print("วันที่เลือกมา $selectedDate");
+        });
+        break;
+      case "ล่าสุด":
+        setState(() {
+          setDataToNull();
+          selectedDate.add(dateUser[dateUser.length - 1]);
+          loadData(selectedDate);
+          print("วันที่เลือกมา $selectedDate");
+        });
+        break;
+      default:
+    }
+  }
+
+  void setDataToNull() {
+    dataAfterSelected = [];
+    _sumaryData = [];
+    selectedDate = [];
+    allDateNotUse = [];
+    allresultdate = [];
+  }
+
+  loadDataByRange(start, end) {
+    setDataToNull();
+    if (dropdownValue == "เลือกช่วง") {
+      print("เริ่ม $start ถึง $end");
+      print("เริ่มที่ ${dateUser.indexOf(start)}");
+      print("ถึง ${dateUser.indexOf(end)}");
+      for (var i = 0; i <= dateUser.indexOf(end); i++) {
+        if (i >= dateUser.indexOf(start)) {
+          selectedDate.add(dateUser[i]);
+        }
+      }
+      setState(() {
+        //selectedDate.add(dateUser[dateUser.length - 1]);
+        loadData(selectedDate);
+        print("วันที่เลือกมาในช่วง $selectedDate");
+      });
+    }
+  }
+
+  Future loadData(List<String> selectedDate) async {
+    UserSumaryNotifier userSumaryNotifier =
+        Provider.of<UserSumaryNotifier>(context, listen: false);
     totalProfit = 0;
     totalReward = 0;
     totalPay = 0;
     totalAmount = 0;
-    for (String item in dateUser) {
+    for (String item in selectedDate) {
       userSumaryNotifier.userSumary.forEach((element) {
         if (item == element.date) {
-          allresultdate.add(element.date);
+          dataAfterSelected.add(element);
         }
       });
     }
+    dataAfterSelected.forEach((element) {
+      allDateNotUse.add(element.date);
+    });
 
-    allresultdate2 = allresultdate.toSet().toList();
-    print(allresultdate2);
-    await sumAllData(userSumaryNotifier);
-    await sumEachData(userSumaryNotifier);
+    allresultdate = allDateNotUse.toSet().toList();
+    print("alldate1 $allresultdate");
+    await sumAllData(dataAfterSelected);
+    await sumEachData(dataAfterSelected);
     totalProfit += totalReward - totalPay;
   }
 
-  sumAllData(UserSumaryNotifier userSumaryNotifier) {
-    if (userSumaryNotifier.userSumary.isNotEmpty) {
-      userSumaryNotifier.userSumary.forEach((element) {
+  sumAllData(List<UserData> dataAfterSelected) {
+    if (selectedDate.isNotEmpty) {
+      dataAfterSelected.forEach((element) {
         totalReward +=
             element.won[0].reward == null ? 0.00 : element.won[0].reward;
         totalPay += element.lotteryprice == null
@@ -79,16 +134,18 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     }
   }
 
-  sumEachData(UserSumaryNotifier userSumaryNotifier) {
+  sumEachData(List<UserData> dataAfterSelected) {
     double sumReward = 0, sumPay = 0;
     int sumAmount = 0;
     _sumaryData = [];
-    if (userSumaryNotifier.userSumary.isNotEmpty) {
-      for (var item in allresultdate2) {
+
+    if (dataAfterSelected.isNotEmpty) {
+      for (var item in allresultdate) {
+        //print("งวดที่เลือกมาทั้งหมด ${dataAfterSelected}");
         sumReward = 0;
         sumPay = 0;
         sumAmount = 0;
-        userSumaryNotifier.userSumary.forEach((element) {
+        dataAfterSelected.forEach((element) {
           if (item == element.date) {
             sumReward +=
                 element.won[0].reward == null ? 0.00 : element.won[0].reward;
@@ -98,7 +155,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             sumAmount += element.amount == null ? 1 : int.parse(element.amount);
           }
         });
-        SumaryData sumaryData = SumaryData(
+        SumaryData sumaryData = new SumaryData(
           date: item,
           sumReward: sumReward,
           sumPay: sumPay,
@@ -107,6 +164,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
         _sumaryData.add(sumaryData);
       }
+      _sumaryData.forEach((element) {
+        print("หลังเลือก ${element.date}");
+      });
     }
   }
 
@@ -294,67 +354,85 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                 ),
                               ),
                               Container(
-                                height: MediaQuery.of(context).size.height*0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
                                 child: SingleChildScrollView(
                                   child: DataTable(
                                     columns: const <DataColumn>[
                                       DataColumn(
                                         label: Text(
-                                          'Number',style: TextStyle(fontSize: 14),
+                                          'Number',
+                                          style: TextStyle(fontSize: 14),
                                         ),
                                       ),
                                       DataColumn(
-                                        label: Text(
-                                          'Reward',style: TextStyle(fontSize: 14)
-                                        ),
+                                        label: Text('Reward',
+                                            style: TextStyle(fontSize: 14)),
                                       ),
                                       DataColumn(
-                                        label: Text(
-                                          'Price',style: TextStyle(fontSize: 14)
-                                        ),
+                                        label: Text('Price',
+                                            style: TextStyle(fontSize: 14)),
                                       ),
                                     ],
-                                    rows: const <DataRow>[ 
+                                    rows: const <DataRow>[
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('070456(*1)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลที่1',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('80',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('070456(*1)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลที่1',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('80',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('485215(*2)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('เลขท้ายสองตัว',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('240',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('485215(*2)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('เลขท้ายสองตัว',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('240',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('756885(*2)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('756885(*2)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('756885(*2)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                       DataRow(
                                         cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('756885(*2)',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',
+                                              style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',
+                                              style: TextStyle(fontSize: 10))),
                                         ],
                                       ),
                                     ],
@@ -470,6 +548,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             }
             end = newValue;
             dateValue2 = newValue;
+            loadDataByRange(this.start, this.end);
           });
         },
         items: date2.map<DropdownMenuItem<String>>((dynamic value) {
@@ -550,6 +629,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           setState(() {
             dropdownValue = newValue;
             changeIndexsecon(newValue);
+            showBySelected(newValue);
           });
         },
         items: <String>['ทั้งหมด', 'ล่าสุด', 'เลือกช่วง']
