@@ -4,9 +4,9 @@ class CheckNumber {
   final List<String> userNum;
   final PrizeNotifier prizeNotifier;
   List<CheckResult> _listCheckResult = [];
-  Map<String, List<CheckResult>> _allNumlistCheckResult = {};
+  //List<List<CheckResult>> _allNumlistCheckResult = [];
   CheckResult checkResult;
-  int key = 0;
+  int _length = 0;
   int index; //งวดสำหรับแสกน
   List<String> _first = [],
       _second = [],
@@ -18,7 +18,9 @@ class CheckNumber {
       _last3f = [],
       _last3b = [];
 
-   CheckNumber({this.userNum, this.index, this.prizeNotifier}) {
+  int getLength() => this._length;
+
+  CheckNumber({this.userNum, this.index, this.prizeNotifier}) {
     prizeNotifier.selectedPrize.data.forEach((key, eachPrize) {
       eachPrize.number.forEach((eachNum) {
         switch (key) {
@@ -67,34 +69,35 @@ class CheckNumber {
     print("_usernumber = $userNum");
     checkPrize();
 
-    print(_allNumlistCheckResult);
-    _allNumlistCheckResult.forEach((key, element) {
-      print(key);
-      print(element[0].name);
-      print(element[0].reword);
-      print(element[0].status);
-      print(element[0].date);
-      print(element[0].number);
-    
+    print(_listCheckResult);
+    _listCheckResult.forEach((element) {
+      print(element);
+      print(element.name);
+      print(element.reword);
+      print(element.status);
+      print(element.date);
+      print(element.number);
     });
   }
 
-  Map<String, List<CheckResult>> getCheckedData() {
+  List<CheckResult> getCheckedData() {
     print("เข้า checkingNumber");
     //checkPrize();
-    return _allNumlistCheckResult;
+    return _listCheckResult;
   }
 
+  bool status = false;
   checkPrize() {
     userNum.forEach((usernumber) {
-      _listCheckResult = [];
+      status = false;
+      //_listCheckResult = [];
       checkNormal(usernumber); //ตรวจรางวัลปกติ
       checkFirst3(usernumber); //ตรวจรางวัล 3 ตัวหน้า
       checkLast3(usernumber); //ตรวจรางวัล 3 ตัวท้าย
       checkLast2(usernumber); //ตรวจรางวัล 2 ตัวท้าย
 
       //ถ้าไม่มีข้อมูลที่ถูกเลย
-      if (_listCheckResult.length < 1) {
+      if (status!=true) {
         _listCheckResult.add(new CheckResult(
             date: prizeNotifier.selectedPrize.date,
             usernumber: usernumber,
@@ -102,8 +105,10 @@ class CheckNumber {
             number: '',
             reword: '',
             status: false));
+        _length++;
       }
-      _allNumlistCheckResult[usernumber] = _listCheckResult;
+      //_allNumlistCheckResult.add(_listCheckResult);
+      //_length++;
     });
   }
 
@@ -119,6 +124,8 @@ class CheckNumber {
             number: eachNum,
             reword: prizeNotifier.selectedPrize.data['first'].price,
             status: true));
+        _length++;
+        status = true;
       }
     });
 
@@ -133,6 +140,8 @@ class CheckNumber {
             number: eachNum,
             reword: prizeNotifier.selectedPrize.data["second"].price,
             status: true));
+        _length++;
+        status = true;
       }
     });
 
@@ -147,6 +156,8 @@ class CheckNumber {
             number: eachNum,
             reword: prizeNotifier.selectedPrize.data["third"].price,
             status: true));
+        _length++;
+        status = true;
       }
     });
 
@@ -161,6 +172,8 @@ class CheckNumber {
             number: eachNum,
             reword: prizeNotifier.selectedPrize.data["fourth"].price,
             status: true));
+        _length++;
+        status = true;
       }
     });
 
@@ -175,6 +188,8 @@ class CheckNumber {
             number: eachNum,
             reword: prizeNotifier.selectedPrize.data["fifth"].price,
             status: true));
+        _length++;
+        status = true;
       }
     });
   }
@@ -190,6 +205,8 @@ class CheckNumber {
             number: item,
             reword: prizeNotifier.selectedPrize.data["last3f"].price,
             status: true));
+        _length++;
+        status = true;
 
         //print(checkResult);
       }
@@ -207,6 +224,8 @@ class CheckNumber {
             number: item,
             reword: prizeNotifier.selectedPrize.data["last3b"].price,
             status: true));
+        _length++;
+        status = true;
       }
     }
   }
@@ -222,6 +241,8 @@ class CheckNumber {
             number: item,
             reword: prizeNotifier.selectedPrize.data["last2"].price,
             status: true));
+        _length++;
+        status = true;
       }
     }
   }

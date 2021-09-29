@@ -126,9 +126,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     CheckNumber data = new CheckNumber(
                         userNum: lotterylist, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
+                
+
                      Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ShowResultChecked(allResult: data.getCheckedData(),)),
+                    MaterialPageRoute(builder: (context) => ShowResultChecked(allResult: data.getCheckedData(),length: data.getLength())),
                   );
                   }
                 },
