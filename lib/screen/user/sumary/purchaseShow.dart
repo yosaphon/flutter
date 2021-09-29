@@ -226,7 +226,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                             _buildStatCardTotal(
                                 'กำไร',
                                 '฿$totalProfit',
-                                '${totalProfit/100*totalPay}',
+                                '${totalProfit / 100 * totalPay}',
                                 'บาท',
                                 Colors.white,
                                 totalReward > totalPay
@@ -293,7 +293,74 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   ],
                                 ),
                               ),
-                              
+                              Container(
+                                height: MediaQuery.of(context).size.height*0.2,
+                                child: SingleChildScrollView(
+                                  child: DataTable(
+                                    columns: const <DataColumn>[
+                                      DataColumn(
+                                        label: Text(
+                                          'Number',style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          'Reward',style: TextStyle(fontSize: 14)
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          'Price',style: TextStyle(fontSize: 14)
+                                        ),
+                                      ),
+                                    ],
+                                    rows: const <DataRow>[
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('070456(*1)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลที่1',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('80',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('485215(*2)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('เลขท้ายสองตัว',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('240',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                      DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('756885(*2)',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('รางวัลใกล้เคียง',style: TextStyle(fontSize: 10))),
+                                          DataCell(Text('300',style: TextStyle(fontSize: 10))),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                               Column(
                                 children: [
                                   Row(
@@ -632,16 +699,24 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                     style:
                         const TextStyle(color: Colors.black54, fontSize: 10.0),
                   ),
-                  colorfont == Color(0XFFC70039)? Text(
-                   double.parse(percen).toStringAsFixed(1)+"➘",
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ):colorfont == Color(0xFF40E0D0) ? Text(
-                   "+"+double.parse(percen).toStringAsFixed(1)+"➚",
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ):Text(
-                  percen,
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ),
+                  colorfont == Color(0XFFC70039)
+                      ? Text(
+                          double.parse(percen).toStringAsFixed(1) + "➘",
+                          style: TextStyle(color: colorfont, fontSize: 10.0),
+                        )
+                      : colorfont == Color(0xFF40E0D0)
+                          ? Text(
+                              "+" +
+                                  double.parse(percen).toStringAsFixed(1) +
+                                  "➚",
+                              style:
+                                  TextStyle(color: colorfont, fontSize: 10.0),
+                            )
+                          : Text(
+                              percen,
+                              style:
+                                  TextStyle(color: colorfont, fontSize: 10.0),
+                            ),
                 ],
               ),
             ),
@@ -688,16 +763,20 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   "($typestring)",
                   style: const TextStyle(color: Colors.black54, fontSize: 8.0),
                 ),
-                colorfont == Color(0XFFC70039)? Text(
-                   double.parse(percen).toStringAsFixed(1)+"➘",
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ):colorfont == Color(0xFF40E0D0) ? Text(
-                   "+"+double.parse(percen).toStringAsFixed(1)+"➚",
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ):Text(
-                  percen,
-                  style: TextStyle(color: colorfont, fontSize: 10.0),
-                ),
+                colorfont == Color(0XFFC70039)
+                    ? Text(
+                        double.parse(percen).toStringAsFixed(1) + "➘",
+                        style: TextStyle(color: colorfont, fontSize: 10.0),
+                      )
+                    : colorfont == Color(0xFF40E0D0)
+                        ? Text(
+                            "+" + double.parse(percen).toStringAsFixed(1) + "➚",
+                            style: TextStyle(color: colorfont, fontSize: 10.0),
+                          )
+                        : Text(
+                            percen,
+                            style: TextStyle(color: colorfont, fontSize: 10.0),
+                          ),
               ],
             ),
             Text(
