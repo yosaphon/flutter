@@ -1,3 +1,4 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/model/SumaryData.dart';
@@ -33,7 +34,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   String dateuser, dateValue1, dateValue2;
   List<String> date1 = [], date2 = [];
   List<UserData> dataAfterSelected = [];
-
+  ScrollController _controller = ScrollController();
   @override
   void initState() {
     date1 = dateUser;
@@ -390,26 +391,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   ],
                                 ),
                               ),
-                              Stack(
-                                children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxHeight: 200, //minimum height
-                                      maxWidth: 300,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      child: userDataTable(getListOfUserData(
-                                          _sumaryData[index].date)),
-                                    ),
-                                  ),
-                                  Container(
-                                      width: 300,
-                                      constraints: BoxConstraints(
-                                        maxHeight: 60, //minimum height
-                                      ),
-                                      color: Colors.white,
-                                      child: headerDataTable()),
-                                ],
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: 200, //minimum height
+                                ),
+                                child: userDataTable(
+                                    getListOfUserData(_sumaryData[index].date)),
                               ),
                               Column(
                                 children: [
@@ -468,45 +455,39 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 
   DataTable userDataTable(List<DataInTable> _userData) {
-    return DataTable(
+    return DataTable2(
+      scrollController: _controller,
       columns: const <DataColumn>[
-        DataColumn(
+        DataColumn2(
+          size: ColumnSize.M,
           label: Text(
-            '',
-            style: TextStyle(fontSize: 0),
+            'เลข',
+            style: TextStyle(fontSize: 12),
           ),
         ),
-        DataColumn(
-          label: Text('', style: TextStyle(fontSize: 0)),
+        DataColumn2(
+          size: ColumnSize.L,
+          label: Text('รางวัล', style: TextStyle(fontSize: 12)),
         ),
-        DataColumn(
-          label: Text('', style: TextStyle(fontSize: 0)),
-        ),
-        DataColumn(
-          label: Text('', style: TextStyle(fontSize: 0)),
+        DataColumn2(
+          size: ColumnSize.S,
+          label: Text('ราคา', style: TextStyle(fontSize: 12)),
         ),
       ],
       rows: <DataRow>[
         ..._userData.map((data) {
           return DataRow(
             cells: <DataCell>[
-              DataCell(Center(
-                child: Text("${data.number})",
+              DataCell(
+                
+                Text("${data.number}(x${data.amount})",
                     style: TextStyle(fontSize: 10)),
-              )),
-              DataCell(Center(
-                child: Text("( x${data.amount} )",
+              ),
+              DataCell(
+                Text(data.nameReward.toString(),
                     style: TextStyle(fontSize: 10)),
-              )),
-              DataCell(Container(
-                width: 60,
-                child: Center(
-                  child: Text(data.nameReward.toString(),
-                      style: TextStyle(fontSize: 10),
-                      textAlign: TextAlign.center),
-                ),
-              )),
-              DataCell(Center(child: Text(data.price, style: TextStyle(fontSize: 10)))),
+              ),
+              DataCell(Text(data.price, style: TextStyle(fontSize: 10))),
             ],
           );
         }).toList(),
@@ -516,9 +497,19 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   Widget headerDataTable() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10,left: 30),
+      padding: const EdgeInsets.only(top: 10, left: 30),
       child: Row(
-        children: [ Text("data1"),SizedBox(width: 80,),Text("data2"),SizedBox(width: 50,), Text("data3"),],
+        children: [
+          Text("data1"),
+          SizedBox(
+            width: 80,
+          ),
+          Text("data2"),
+          SizedBox(
+            width: 50,
+          ),
+          Text("data3"),
+        ],
       ),
     );
   }
