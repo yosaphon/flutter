@@ -157,12 +157,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     totalProfit += totalReward - totalPay;
   }
 
-//โหลดข้อมูลทั้งหมด
+//รวมข้อมูล
   sumAllData(List<UserData> dataAfterSelected) {
     if (selectedDate.isNotEmpty) {
       dataAfterSelected.forEach((element) {
-        totalReward +=
-            element.won[0].reward == null ? 0.00 : element.won[0].reward;
+        for (var i = 0; i < element.won.length; i++) {
+          totalReward += element.won[i].reward == null ? 0.00 : element.won[i].reward;
+        }
         totalPay += element.lotteryprice == null
             ? 0.00
             : double.parse(element.lotteryprice);
@@ -221,7 +222,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
     return Scaffold(
         extendBodyBehindAppBar: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFF3FFFE),
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -305,7 +306,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                       Flexible(
                         child: Row(
                           children: <Widget>[
-                            _buildStatCard('ถูกรางวัล', '฿$totalReward', 'บาท',
+                            _buildStatCard('เงินรางวัล', '฿$totalReward', 'บาท',
                                 Colors.white, Color(0xFF40E0D0)),
                             _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
                                 Colors.white, Color(0XFFC70039)),
@@ -324,11 +325,11 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                             _buildStatCardTotal(
                                 'กำไร',
                                 '฿$totalProfit',
-                                '${totalProfit / 100 * totalPay}',
+                                '${(totalProfit / totalPay )* 100}',
                                 'บาท',
                                 Colors.white,
                                 totalReward > totalPay
-                                    ? Color(0xFF40E0D0)
+                                    ? Colors.amber
                                     : totalReward == totalPay
                                         ? Colors.black
                                         : Color(0XFFC70039)),
@@ -403,7 +404,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   Row(
                                     children: [
                                       _builddateCard(
-                                          'ถูกรางวัล',
+                                          'เงินรางวัล',
                                           '฿${_sumaryData[index].sumReward}',
                                           'บาท',
                                           Colors.white,
@@ -427,12 +428,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                       _builddateCardTotal(
                                           'กำไร',
                                           '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                          '${(((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / 100) * _sumaryData[index].sumPay)}',
+                                          '${(((_sumaryData[index].sumReward-_sumaryData[index].sumPay) / _sumaryData[index].sumPay) * 100)}',
                                           'บาท',
                                           Colors.white,
                                           _sumaryData[index].sumReward >
                                                   _sumaryData[index].sumPay
-                                              ? Color(0xFF40E0D0)
+                                              ? Colors.amber
                                               : _sumaryData[index].sumReward ==
                                                       _sumaryData[index].sumPay
                                                   ? Colors.black
@@ -763,7 +764,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
   }
 
   Widget _buildStatCardTotal(String title, String count, String percen,
-      String typestring, Color color, Color colorfont) {
+      String typestring, Color color, Color colorfont,) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
@@ -800,14 +801,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   ),
                   colorfont == Color(0XFFC70039)
                       ? Text(
-                          double.parse(percen).toStringAsFixed(1) + "➘",
+                          double.parse(percen).toStringAsFixed(1) + "%",
                           style: TextStyle(color: colorfont, fontSize: 10.0),
                         )
-                      : colorfont == Color(0xFF40E0D0)
+                      : colorfont == Colors.amber
                           ? Text(
                               "+" +
                                   double.parse(percen).toStringAsFixed(1) +
-                                  "➚",
+                                  "%",
                               style:
                                   TextStyle(color: colorfont, fontSize: 10.0),
                             )
@@ -864,12 +865,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                 ),
                 colorfont == Color(0XFFC70039)
                     ? Text(
-                        double.parse(percen).toStringAsFixed(1) + "➘",
+                        double.parse(percen).toStringAsFixed(1) + "%",
                         style: TextStyle(color: colorfont, fontSize: 10.0),
                       )
-                    : colorfont == Color(0xFF40E0D0)
+                    : colorfont == Colors.amber
                         ? Text(
-                            "+" + double.parse(percen).toStringAsFixed(1) + "➚",
+                            "+" + double.parse(percen).toStringAsFixed(1) + "%",
                             style: TextStyle(color: colorfont, fontSize: 10.0),
                           )
                         : Text(
