@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/user_notifier.dart';
+import 'package:lotto/screen/check/qr_scan_page.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +31,7 @@ class FormUpdatelotto extends StatefulWidget {
 
 class _FormUpdatelottoState extends State<FormUpdatelotto> {
   final docid;
-  int amount;
+  int amount, price;
   _FormUpdatelottoState(this.docid, this.amount);
   bool imageStateShow = false;
   final formKey = GlobalKey<FormState>();
@@ -55,6 +58,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   void addAmount() {
     setState(() {
       amount += 1;
+      addPrice();
     });
   }
 
@@ -62,7 +66,14 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
     setState(() {
       if (amount > 1) {
         amount -= 1;
+        addPrice();
       }
+    });
+  }
+
+  void addPrice() {
+    setState(() {
+      price = amount * 80;
     });
   }
 
@@ -108,7 +119,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-              extendBodyBehindAppBar: true,
+              extendBodyBehindAppBar: false,
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
@@ -119,7 +130,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
-                backgroundColor: Colors.black.withOpacity(0.1),
+                backgroundColor: Colors.indigo,
                 elevation: 0,
               ),
               body: StreamBuilder<DocumentSnapshot>(
@@ -139,173 +150,235 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 60,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  child: Center(
+                                    child: RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'งวดวันที่ ',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontFamily: "Mitr")),
+                                        TextSpan(
+                                            text: numToWord(
+                                                snapshot.data['date']),
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.orange,
+                                                fontFamily: "Mitr")),
+                                      ]),
+                                    ),
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Stack(
                                   children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.6,
-                                      child: TextFormField(
-                                        decoration: InputDecoration(
-                                            labelText: "เลขสลาก"),
-                                        style: TextStyle(fontSize: 20),
-                                        initialValue: snapshot.data['number'],
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'[0-9]')),
-                                          LengthLimitingTextInputFormatter(6),
-                                        ],
-                                        validator: MultiValidator([
-                                          RequiredValidator(
-                                              errorText: "กรุณาป้อน เลขสลาก"),
-                                          MinLengthValidator(6,
-                                              errorText:
-                                                  'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
-                                        ]),
-                                        onSaved: (String number) {
-                                          userlottery.number = number;
-                                        },
-                                        keyboardType: TextInputType.number,
+                                    frameWidget(
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          decoration: InputDecoration(
+                                              labelText: "เลขสลาก"),
+                                          style: TextStyle(fontSize: 20),
+                                          initialValue: snapshot.data['number'],
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                            LengthLimitingTextInputFormatter(6),
+                                          ],
+                                          validator: MultiValidator([
+                                            RequiredValidator(
+                                                errorText: "กรุณาป้อน เลขสลาก"),
+                                            MinLengthValidator(6,
+                                                errorText:
+                                                    'กรุณากรอกเลขสลากให้ครบ 6 หลัก'),
+                                          ]),
+                                          onSaved: (String number) {
+                                            userlottery.number = number;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 20),
-                                      child: SizedBox(
-                                        height: 40,
-                                        width: 100,
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                          ))),
-                                          child: Text('Qrcode',
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0, right: 30),
+                                          child: TextButton(
+                                            child: Text(
+                                              "QR scan",
                                               style: TextStyle(
-                                                  color: Colors.white)),
-                                          onPressed: () {},
+                                                  fontSize: 20,
+                                                  color: Colors.blue[700]),
+                                            ),
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        QRScanPage())),
+                                          ),
                                         ),
                                       ),
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 15),
-                                Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "จำนวน",
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              removeAmount();
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                  color: amount > 1
-                                                      ? Colors.blue
-                                                      : Colors.grey),
-                                              child: Icon(
-                                                Icons.remove,
-                                                size: 40,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 35,
-                                            width: 60,
-                                            child: Center(
-                                              child: Text(
-                                                "$amount",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              addAmount();
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                  color: Colors.blue),
-                                              child: Icon(
-                                                Icons.add,
-                                                size: 40,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                TextFormField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
-                                  ],
-                                  decoration:
-                                      InputDecoration(labelText: 'ราคา'),
-                                  style: TextStyle(fontSize: 20),
-                                  initialValue: snapshot.data['lotteryprice'],
-                                  validator: MultiValidator([
-                                    RequiredValidator(
-                                        errorText: "กรุณาป้อนราคา")
-                                  ]),
-                                  onSaved: (String lotteryprice) {
-                                    if (lotteryprice == null) {
-                                      lotteryprice = "0";
-                                    }
-                                    userlottery.lotteryprice = lotteryprice;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (imageStateShow == false) {
-                                              imageStateShow = true;
-                                            } else if (imageStateShow == true) {
-                                              imageStateShow = false;
-                                            }
-                                          });
-                                        },
-                                        child: Row(
+                                frameWidget(
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
                                           children: [
-                                            snapshot.data['imageurl'] == null
-                                                ? Text("เพิ่มรูป")
-                                                : Text("แก้ไขรูป"),
-                                            Spacer(),
-                                            Icon(Icons.image)
+                                            Container(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "จำนวน",
+                                                style: TextStyle(fontSize: 18,color: Colors.black54),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeAmount();
+                                                    },
+                                                    child: Container(
+                                                      height: 25,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                          color: amount > 1
+                                                              ? Colors.pink[200]
+                                                              : Colors.black12),
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        color: amount > 1
+                                                            ? Colors.white
+                                                            : Colors.black38,
+                                                        size: 27,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 35,
+                                                    width: 60,
+                                                    child: Center(
+                                                      child: Text(
+                                                        "$amount",
+                                                        style: TextStyle(
+                                                            fontSize: 20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      addAmount();
+                                                    },
+                                                    child: Container(
+                                                      height: 25,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                          color:
+                                                              Colors.pink[200]),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 10),
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          color: Colors.white,
+                                                          size: 27,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ],
-                                        ))),
-                                if (_image != null) ...[
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          child: TextFormField(
+                                            key: Key(price.toString()),
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'[0-9]')),
+                                            ],
+                                            decoration: InputDecoration(
+                                                labelText: 'ราคา'),
+                                            style: TextStyle(fontSize: 20),
+                                            initialValue: price == null
+                                                ? snapshot.data['lotteryprice']
+                                                : price.toString(),
+                                            validator: MultiValidator([
+                                              RequiredValidator(
+                                                  errorText: "กรุณาป้อนราคา")
+                                            ]),
+                                            onSaved: (String lotteryprice) {
+                                              if (lotteryprice == null) {
+                                                lotteryprice = "0";
+                                              }
+                                              userlottery.lotteryprice =
+                                                  lotteryprice;
+                                            },
+                                            keyboardType: TextInputType.number,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                    frameWidget( Column(
+                                        children: [
+                                          ElevatedButton(
+                                             clipBehavior: Clip.none,
+                                            style: ElevatedButton.styleFrom(
+                                              
+                                                primary: Colors.white,
+                                                textStyle: TextStyle(
+                                                  fontSize: 30,
+                                                color: Colors.cyanAccent) // set the background color
+                                                ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (imageStateShow == false) {
+                                                    imageStateShow = true;
+                                                  } else if (imageStateShow == true) {
+                                                    imageStateShow = false;
+                                                  }
+                                                });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  snapshot.data['imageurl'] == null
+                                                      ? Text("เพิ่มรูป" ,style:
+                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr"))
+                                                      : Text("แก้ไขรูป",style:
+                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr")),
+                                                  Spacer(),
+                                                  Icon(Icons.image, color: Colors.black,)
+                                                ],
+                                              ),
+                                              ),
+                                              if (_image != null) ...[
                                   Container(
                                       padding: EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
@@ -313,7 +386,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                           MediaQuery.of(context).size.height *
                                               0.3,
                                       child: Image.file(_image))
-                                ] else if (snapshot.data['imageurl'] == null) ...[
+                                ] else if (snapshot.data['imageurl'] ==
+                                    null) ...[
                                   SizedBox(
                                     height: 10,
                                   )
@@ -352,165 +426,170 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                     : SizedBox(
                                         height: 10,
                                       ),
-                                SizedBox(
-                                  height: 40,
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    child: Row(
-                                      children: [
-                                        snapshot.data["latlng"] == null
-                                            ? Text(
-                                                "เพิ่มตำแหน่ง",
-                                                style: TextStyle(fontSize: 20),
-                                              )
-                                            : Text(
-                                                "แก้ไขตำแหน่ง",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                        Spacer(),
-                                        Icon(FontAwesomeIcons.mapMarked)
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                    onPressed: () async {
-                                      _navigateAndDisplaySelection(
-                                          context, snapshot.data["latlng"]);
-                                    },
-                                  ),
-                                ),
-                                if (userlottery.latlng != null) ...[
+                                
+                                frameWidget( Column(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                            primary: Colors.white,
+                                                            textStyle: TextStyle(
+                                                              fontSize: 30,
+                                                            ) // set the background color
+                                                            ),
+                                              child: Row(
+                                                children: [
+                                                  snapshot.data["latlng"] == null
+                                                      ? Text(
+                                                          "เพิ่มตำแหน่ง",
+                                                          style: TextStyle(fontSize: 20,color: Colors.black54,fontFamily: "Mitr"),
+                                                        )
+                                                      : Text(
+                                                          "แก้ไขตำแหน่ง",
+                                                          style: TextStyle(fontSize: 20,color: Colors.black54,fontFamily: "Mitr"),
+                                                        ),
+                                                  Spacer(),
+                                                  Icon(FontAwesomeIcons.mapMarked,color: Colors.blueGrey)
+                                                ],
+                                              ),
+                                              onPressed: () async {
+                                                _navigateAndDisplaySelection(
+                                                    context, snapshot.data["latlng"]);
+                                              },
+                                            ),
+                                          ),
+                                          if (userlottery.latlng != null) ...[
                                   Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.teal.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(18),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      offset: Offset(0, 17),
-                                                      blurRadius: 23,
-                                                      spreadRadius: -13,
-                                                      color: Colors.black38)
-                                                ]),
-                                            child: SizedBox(
-                                                height: 200,
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: GoogleMap(
-                                                  mapType: MapType.normal,
-                                                  markers:
-                                                      userlottery.latlng != null
-                                                          ? Set.from([
-                                                              Marker(
-                                                                  markerId:
-                                                                      MarkerId(
-                                                                          'google_plex'),
-                                                                  position: LatLng(
-                                                                      double.parse(userlottery
-                                                                          .latlng
-                                                                          .substring(
-                                                                              1,
-                                                                              18)),
-                                                                      double.parse(userlottery
-                                                                          .latlng
-                                                                          .substring(
-                                                                              20,
-                                                                              userlottery.latlng.length - 1))))
-                                                            ])
-                                                          : null,
-                                                  onMapCreated: _onMapCreated,
-                                                  myLocationEnabled: true,
-                                                  initialCameraPosition: CameraPosition(
-                                                      target: userlottery
-                                                                  .latlng !=
-                                                              null
-                                                          ? LatLng(
-                                                              double.parse(
-                                                                  userlottery
-                                                                      .latlng
-                                                                      .substring(
-                                                                          1, 18)),
-                                                              double.parse(userlottery
-                                                                  .latlng
+                                    decoration: BoxDecoration(
+                                        color: Colors.teal.shade100,
+                                        borderRadius: BorderRadius.circular(18),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              offset: Offset(0, 17),
+                                              blurRadius: 23,
+                                              spreadRadius: -13,
+                                              color: Colors.black38)
+                                        ]),
+                                    child: SizedBox(
+                                        height: 200,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: GoogleMap(
+                                          mapType: MapType.normal,
+                                          markers: userlottery.latlng != null
+                                              ? Set.from([
+                                                  Marker(
+                                                      markerId: MarkerId(
+                                                          'google_plex'),
+                                                      position: LatLng(
+                                                          double.parse(
+                                                              userlottery.latlng
                                                                   .substring(
-                                                                      20,
-                                                                      userlottery
-                                                                              .latlng
-                                                                              .length -
-                                                                          1)))
-                                                          : LatLng(13.736717, 100.523186),
-                                                      zoom: 15),
-                                                )),
-                                          )
+                                                                      1, 18)),
+                                                          double.parse(userlottery
+                                                              .latlng
+                                                              .substring(
+                                                                  20,
+                                                                  userlottery
+                                                                          .latlng
+                                                                          .length -
+                                                                      1))))
+                                                ])
+                                              : null,
+                                          onMapCreated: _onMapCreated,
+                                          myLocationEnabled: true,
+                                          initialCameraPosition: CameraPosition(
+                                              target: userlottery.latlng != null
+                                                  ? LatLng(
+                                                      double.parse(userlottery
+                                                          .latlng
+                                                          .substring(1, 18)),
+                                                      double.parse(userlottery
+                                                          .latlng
+                                                          .substring(
+                                                              20,
+                                                              userlottery.latlng
+                                                                      .length -
+                                                                  1)))
+                                                  : LatLng(
+                                                      13.736717, 100.523186),
+                                              zoom: 15),
+                                        )),
+                                  )
                                 ] else if (snapshot.data["latlng"] == null) ...[
                                   SizedBox(
                                     height: 10,
                                   )
                                 ] else
                                   Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  offset: Offset(0, 17),
-                                                  blurRadius: 23,
-                                                  spreadRadius: -13,
-                                                  color: Colors.black38)
-                                            ]),
-                                        child: SizedBox(
-                                            height: 200,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: GoogleMap(
-                                              mapType: MapType.normal,
-                                              markers:
-                                                  snapshot.data["latlng"] !=
-                                                          null
-                                                      ? Set.from([
-                                                          Marker(
-                                                              markerId: MarkerId(
-                                                                  'google_plex'),
-                                                              position: LatLng(
-                                                                  double.parse(snapshot
-                                                                      .data[
-                                                                          "latlng"]
-                                                                      .substring(
-                                                                          1, 18)),
-                                                                  double.parse(snapshot
-                                                                      .data[
-                                                                          "latlng"]
-                                                                      .substring(
-                                                                          20,
-                                                                          snapshot.data["latlng"].length -
-                                                                              1))))
-                                                        ])
-                                                      : null,
-                                              onMapCreated: _onMapCreated,
-                                              myLocationEnabled: true,
-                                              initialCameraPosition: CameraPosition(
-                                                  target: snapshot.data["latlng"] !=
-                                                          null
-                                                      ? LatLng(
+                                    decoration: BoxDecoration(
+                                        color: Colors.teal.shade100,
+                                        borderRadius: BorderRadius.circular(18),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              offset: Offset(0, 17),
+                                              blurRadius: 23,
+                                              spreadRadius: -13,
+                                              color: Colors.black38)
+                                        ]),
+                                    child: SizedBox(
+                                        height: 200,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: GoogleMap(
+                                          mapType: MapType.normal,
+                                          markers: snapshot.data["latlng"] !=
+                                                  null
+                                              ? Set.from([
+                                                  Marker(
+                                                      markerId: MarkerId(
+                                                          'google_plex'),
+                                                      position: LatLng(
                                                           double.parse(snapshot
-                                                              .data['latlng']
+                                                              .data["latlng"]
                                                               .substring(
                                                                   1, 18)),
                                                           double.parse(snapshot
-                                                              .data['latlng']
+                                                              .data["latlng"]
                                                               .substring(
                                                                   20,
-                                                                  snapshot.data['latlng']
+                                                                  snapshot
+                                                                          .data[
+                                                                              "latlng"]
                                                                           .length -
-                                                                      1)))
-                                                      : LatLng(13.736717, 100.523186),
-                                                  zoom: 15),
-                                            )),
+                                                                      1))))
+                                                ])
+                                              : null,
+                                          onMapCreated: _onMapCreated,
+                                          myLocationEnabled: true,
+                                          initialCameraPosition: CameraPosition(
+                                              target: snapshot.data["latlng"] !=
+                                                      null
+                                                  ? LatLng(
+                                                      double.parse(snapshot
+                                                          .data['latlng']
+                                                          .substring(1, 18)),
+                                                      double.parse(snapshot
+                                                          .data['latlng']
+                                                          .substring(
+                                                              20,
+                                                              snapshot.data['latlng']
+                                                                      .length -
+                                                                  1)))
+                                                  : LatLng(13.736717, 100.523186),
+                                              zoom: 15),
+                                        )),
+                                  ),
+                                        ],
                                       ),
-                                        
-                                SizedBox(
-                                  height: 10,
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 50,
