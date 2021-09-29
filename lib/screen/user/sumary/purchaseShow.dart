@@ -4,6 +4,7 @@ import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/user/sumary/purchase_report.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +45,39 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     loadData(selectedDate);
     //loadData(userSumaryNotifier);
     super.initState();
+  }
+
+  List<DataInTable> getListOfUserData(String date) {
+    List<DataInTable> _dataInTable = [];
+    UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
+    userNotifier.currentUser.forEach((data) {
+      if (data.date == date) {
+        for (var i = 0; i < data.won.length; i++) {
+          String nameReward;
+          switch (data.state) {
+            case true:
+              nameReward = data.won[i].name.toString();
+              break;
+            case false:
+              nameReward = "ไม่ถูกรางวัล";
+              break;
+
+            default:
+              nameReward = "ยังไม่ตรวจ";
+              break;
+          }
+
+          DataInTable dataInTable = new DataInTable(
+              number: data.number,
+              nameReward: nameReward,
+              amount: data.amount,
+              price: data.lotteryprice);
+          _dataInTable.add(dataInTable);
+        }
+      }
+    });
+    return _dataInTable;
   }
 
   showBySelected(String select) {
@@ -96,6 +130,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     }
   }
 
+//โหลดข้อมมูล
   Future loadData(List<String> selectedDate) async {
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
@@ -121,6 +156,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     totalProfit += totalReward - totalPay;
   }
 
+//โหลดข้อมูลทั้งหมด
   sumAllData(List<UserData> dataAfterSelected) {
     if (selectedDate.isNotEmpty) {
       dataAfterSelected.forEach((element) {
@@ -134,6 +170,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     }
   }
 
+//โหลดข้อมูลตามงวด
   sumEachData(List<UserData> dataAfterSelected) {
     double sumReward = 0, sumPay = 0;
     int sumAmount = 0;
@@ -353,91 +390,26 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                child: SingleChildScrollView(
-                                  child: DataTable(
-                                    columns: const <DataColumn>[
-                                      DataColumn(
-                                        label: Text(
-                                          'Number',
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text('Reward',
-                                            style: TextStyle(fontSize: 14)),
-                                      ),
-                                      DataColumn(
-                                        label: Text('Price',
-                                            style: TextStyle(fontSize: 14)),
-                                      ),
-                                    ],
-                                    rows: const <DataRow>[
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('070456(*1)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลที่1',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('80',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('485215(*2)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('เลขท้ายสองตัว',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('240',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('756885(*2)',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('รางวัลใกล้เคียง',
-                                              style: TextStyle(fontSize: 10))),
-                                          DataCell(Text('300',
-                                              style: TextStyle(fontSize: 10))),
-                                        ],
-                                      ),
-                                    ],
+                              Stack(
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight: 200, //minimum height
+                                      maxWidth: 300,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: userDataTable(getListOfUserData(
+                                          _sumaryData[index].date)),
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                      width: 300,
+                                      constraints: BoxConstraints(
+                                        maxHeight: 60, //minimum height
+                                      ),
+                                      color: Colors.white,
+                                      child: headerDataTable()),
+                                ],
                               ),
                               Column(
                                 children: [
@@ -493,6 +465,62 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
             ),
           ],
         ));
+  }
+
+  DataTable userDataTable(List<DataInTable> _userData) {
+    return DataTable(
+      columns: const <DataColumn>[
+        DataColumn(
+          label: Text(
+            '',
+            style: TextStyle(fontSize: 0),
+          ),
+        ),
+        DataColumn(
+          label: Text('', style: TextStyle(fontSize: 0)),
+        ),
+        DataColumn(
+          label: Text('', style: TextStyle(fontSize: 0)),
+        ),
+        DataColumn(
+          label: Text('', style: TextStyle(fontSize: 0)),
+        ),
+      ],
+      rows: <DataRow>[
+        ..._userData.map((data) {
+          return DataRow(
+            cells: <DataCell>[
+              DataCell(Center(
+                child: Text("${data.number})",
+                    style: TextStyle(fontSize: 10)),
+              )),
+              DataCell(Center(
+                child: Text("( x${data.amount} )",
+                    style: TextStyle(fontSize: 10)),
+              )),
+              DataCell(Container(
+                width: 60,
+                child: Center(
+                  child: Text(data.nameReward.toString(),
+                      style: TextStyle(fontSize: 10),
+                      textAlign: TextAlign.center),
+                ),
+              )),
+              DataCell(Center(child: Text(data.price, style: TextStyle(fontSize: 10)))),
+            ],
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget headerDataTable() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10,left: 30),
+      child: Row(
+        children: [ Text("data1"),SizedBox(width: 80,),Text("data2"),SizedBox(width: 50,), Text("data3"),],
+      ),
+    );
   }
 
   selectdateFake(BuildContext context) {
@@ -871,4 +899,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
       ),
     );
   }
+}
+
+class DataInTable {
+  String number;
+  String amount;
+  String nameReward;
+  String price;
+  DataInTable({this.number, this.amount, this.nameReward, this.price});
 }

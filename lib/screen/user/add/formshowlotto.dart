@@ -185,6 +185,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: TextFormField(
                                           initialValue: "", //ค่าเริ่มต้น
+                                          autofocus: true,
                                           decoration: InputDecoration(
                                               labelText: 'เลขสลาก'),
                                           style: TextStyle(fontSize: 20),
