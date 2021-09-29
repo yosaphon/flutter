@@ -323,7 +323,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                       _builddateCardTotal(
                                           'กำไร',
                                           '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                          '${((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / 100) * _sumaryData[index].sumPay}',
+                                          '${(((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / 100) * _sumaryData[index].sumPay)}',
                                           'บาท',
                                           Colors.white,
                                           _sumaryData[index].sumReward >
@@ -633,10 +633,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         const TextStyle(color: Colors.black54, fontSize: 10.0),
                   ),
                   colorfont == Color(0XFFC70039)? Text(
-                   percen+"➘",
+                   double.parse(percen).toStringAsFixed(1)+"➘",
                   style: TextStyle(color: colorfont, fontSize: 10.0),
                 ):colorfont == Color(0xFF40E0D0) ? Text(
-                   "+"+percen+"➚",
+                   "+"+double.parse(percen).toStringAsFixed(1)+"➚",
                   style: TextStyle(color: colorfont, fontSize: 10.0),
                 ):Text(
                   percen,
@@ -689,10 +689,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   style: const TextStyle(color: Colors.black54, fontSize: 8.0),
                 ),
                 colorfont == Color(0XFFC70039)? Text(
-                   percen+"➘",
+                   double.parse(percen).toStringAsFixed(1)+"➘",
                   style: TextStyle(color: colorfont, fontSize: 10.0),
                 ):colorfont == Color(0xFF40E0D0) ? Text(
-                   "+"+percen+"➚",
+                   "+"+double.parse(percen).toStringAsFixed(1)+"➚",
                   style: TextStyle(color: colorfont, fontSize: 10.0),
                 ):Text(
                   percen,
