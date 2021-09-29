@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:lotto/model/checkNumber.dart';
+import 'package:lotto/screen/check/showResultCheck.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanPage extends StatefulWidget {
@@ -123,11 +124,20 @@ class _QRScanPageState extends State<QRScanPage> {
       String date = '25' + data[0] + data[1] + data[2];
       print(date);
       print(number);
-      int times = int.parse(data[1]); //งวด
-      int index = (times / 2).ceil();
-      print(index);
-      var check = new CheckNumber(userNum: number,index: index-1);
-     
+      // int times = int.parse(data[1]); //งวด
+      // int index = (times / 2).ceil();
+      int peroid = int.parse(data[1]);
+      print(peroid);
+      var check = new CheckNumber(userNum: number, peroid: peroid);
+      print(check.getCheckedData());
+      FocusScope.of(context).unfocus();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ShowResultCheck(
+                allResult: check.getCheckedData(), length: check.getLength())),
+      );
     }
   }
 }
