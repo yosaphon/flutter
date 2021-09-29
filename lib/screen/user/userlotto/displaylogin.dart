@@ -20,66 +20,77 @@ class _SignUpLoginWidget extends State<SignUpLoginWidget> {
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "เข้าสู่ระบบ",
-          style: TextStyle(color: Colors.white),
-
-        ),
-        
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-        ),
-        backgroundColor: Colors.indigo,
-        elevation: 0,
-      ),
       body: Container(
-        padding: EdgeInsets.only(left: 60 ,right: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GoogleAuthButton(
-                style: AuthButtonStyle(
-                  borderRadius: 8,
-                  width: 280,
-                  height: 50,
-                  iconSize: 35,
-                  separator: 10.0,
-                  padding: const EdgeInsets.all(8.0),
-                  textStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.50,
-                  ),
+        padding: EdgeInsets.only(left: 30 ,right: 30),
+        child: Center(
+          child: Container(
+            height: MediaQuery.of(context).size.height*0.3,
+            width: MediaQuery.of(context).size.height*0.5,
+
+             decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 0,
+                  blurRadius: 7,
+                  offset: Offset(0, 4), // changes position of shadow
                 ),
-                onPressed: () {
-                  AuthClass().signWithGoogle().then((UserCredential value) {
-                  });
-                }),
-            SizedBox(
-              height: 40,
-            ),
-            FacebookAuthButton(
-              style: AuthButtonStyle(
-                  borderRadius: 8,
-                  width: 280,
-                  height: 50,
-                  iconSize: 35,
-                  separator: 10.0,
-                  padding: const EdgeInsets.all(8.0),
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.50,
-                  ),
+              ],
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(12))),
+            child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text("เข้าสู่ระบบ",style: TextStyle(color: Colors.indigo,fontSize: 25),),
+                    ),
+                    GoogleAuthButton(
+                        style: AuthButtonStyle(
+                          borderRadius: 8,
+                          width: 250,
+                          height: 40,
+                          iconSize: 35,
+                          separator: 10.0,
+                          padding: const EdgeInsets.all(8.0),
+                          textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.50,
+                          ),
+                        ),
+                        onPressed: () {
+                          AuthClass().signWithGoogle().then((UserCredential value) {
+                          });
+                        }),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("หรือ",style: TextStyle(color: Colors.indigo,fontSize: 16),),
+                    ),
+                    FacebookAuthButton(
+                      style: AuthButtonStyle(
+                          borderRadius: 8,
+                          width: 250,
+                          height: 40,
+                          iconSize: 35,
+                          separator: 10.0,
+                          padding: const EdgeInsets.all(8.0),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.50,
+                          ),
+                        ),
+                      onPressed: () {
+                      AuthClass().handleLogin().then((UserCredential value) {
+                      });
+                    }),
+                  ],
                 ),
-              onPressed: () {
-              AuthClass().handleLogin().then((UserCredential value) {
-              });
-            }),
-          ],
+              
+          ),
         ),
       ),
     );

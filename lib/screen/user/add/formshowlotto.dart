@@ -14,6 +14,7 @@ import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/DropdownUser.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
@@ -160,21 +161,21 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   padding: const EdgeInsets.only(
                                       top: 30, bottom: 20),
                                   child: Center(
-                                    child: RichText(
-                                      text: TextSpan(children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'งวดวันที่ ',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontFamily: "Mitr")),
-                                        TextSpan(
-                                            text: numToWord(userDate),
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                color: Colors.orange,
-                                                fontFamily: "Mitr")),
-                                      ]),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'งวดวันที่ ',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontFamily: "Mitr")),
+                                          ]),
+                                        ),
+                                        DropdownUserDate(),
+                                      ],
                                     ),
                                   ),
                                 ),
