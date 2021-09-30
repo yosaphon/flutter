@@ -51,7 +51,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
   File _image;
   final picker = ImagePicker();
-  String dateValue, usernumberinput = "";
+  String dateValue, usernumberinput;
   ShowuserGooglemap location = ShowuserGooglemap();
   GoogleMapController mapController;
   void _onMapCreated(GoogleMapController controller) {
@@ -655,58 +655,16 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             deleteImage(
                                                 snapshot.data['imageurl']);
                                             await UploadPicture();
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update(
-                                                    {"imageurl": urlpiture});
+                                            await _userltottery.doc(docid).update({"imageurl":  urlpiture,});
                                           }
-                                          if (userlottery.number !=
-                                              snapshot.data["number"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "number": userlottery.number,
-                                            });
-                                          }
-                                          if (checkdatestate = true) {
-                                            if (dateValue !=
-                                                snapshot.data["date"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "date": dateValue,
-                                              });
-                                            }
-                                          }
-
-                                          if (amount !=
-                                              snapshot.data["amount"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "amount": amount.toString(),
-                                            });
-                                          }
-                                          if (userlottery.lotteryprice !=
-                                              snapshot.data["lotteryprice"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "lotteryprice":
-                                                  userlottery.lotteryprice,
-                                            });
-                                          }
-                                          if (userlottery.latlng !=
-                                              snapshot.data["latlng"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "latlng": userlottery.latlng,
-                                            });
-                                          }
-
+                                          await _userltottery.doc(docid).update({
+                                                  "number":userlottery.number !=snapshot.data["number"]? userlottery.number:snapshot.data["number"],
+                                                  "date":dateValue !=snapshot.data["date"]? dateValue:snapshot.data["date"],
+                                                  "amount":amount !=snapshot.data["amount"]? amount.toString():snapshot.data["amount"],
+                                                  "lotteryprice": userlottery.lotteryprice !=snapshot.data["lotteryprice"]? userlottery.lotteryprice:snapshot.data["lotteryprice"],
+                                                  "latlng": userlottery.latlng !=snapshot.data["latlng"]? userlottery.latlng:snapshot.data["latlng"],
+                                          });
                                           Navigator.pop(context);
-                                          //getUser(userNotifier, user.uid);
                                         }
                                       },
                                       icon: Icon(Icons.edit),
