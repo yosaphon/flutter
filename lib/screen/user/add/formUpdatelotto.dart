@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/dropdownDate.dart';
+import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
@@ -35,7 +36,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   _FormUpdatelottoState(this.docid, this.amount);
   bool imageStateShow = false;
   final formKey = GlobalKey<FormState>();
-
+  bool checkdatestate = false;
   Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
@@ -49,6 +50,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
 
   File _image;
   final picker = ImagePicker();
+  String dateValue, usernumberinput = "";
   ShowuserGooglemap location = ShowuserGooglemap();
   GoogleMapController mapController;
   void _onMapCreated(GoogleMapController controller) {
@@ -89,7 +91,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
       }
     });
   }
-TextEditingController _numberController;
+
+  TextEditingController _numberController;
   Future UploadPicture() async {
     var uuid = Uuid().v4();
     firebase_storage.FirebaseStorage firebaseStorage =
@@ -102,6 +105,8 @@ TextEditingController _numberController;
 
   @override
   Widget build(BuildContext context) {
+    PrizeNotifier prizeNotifier =
+        Provider.of<PrizeNotifier>(context, listen: false);
     UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
     return FutureBuilder(
@@ -155,22 +160,21 @@ TextEditingController _numberController;
                                   padding: const EdgeInsets.only(
                                       top: 20, bottom: 20),
                                   child: Center(
-                                    child: RichText(
-                                      text: TextSpan(children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'งวดวันที่ ',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontFamily: "Mitr")),
-                                        TextSpan(
-                                            text: numToWord(
-                                                snapshot.data['date']),
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                color: Colors.orange,
-                                                fontFamily: "Mitr")),
-                                      ]),
+                                    child: Row(
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'งวดวันที่ ',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontFamily: "Mitr")),
+                                          ]),
+                                        ),
+                                        dropDownOutDate(prizeNotifier,
+                                            snapshot.data['date'])
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -223,21 +227,7 @@ TextEditingController _numberController;
                                               Future.delayed(
                                                   const Duration(
                                                       milliseconds: 500), () {
-                                                setState(() async {
-                                                  await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            QRScanPage(
-                                                              wantToCheck:
-                                                                  false,
-                                                            )),
-                                                  );
-                                                  UserNotifier userNotifier =
-                                                      Provider.of(context,listen: false);
-                                                  _numberController.text =
-                                                      userNotifier.qrcodeData.number;
-                                                });
+                                                _getDataAfterScan(context);
                                               });
                                             },
                                           ),
@@ -259,7 +249,9 @@ TextEditingController _numberController;
                                               alignment: Alignment.topLeft,
                                               child: Text(
                                                 "จำนวน",
-                                                style: TextStyle(fontSize: 18,color: Colors.black54),
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black54),
                                               ),
                                             ),
                                             Container(
@@ -365,91 +357,112 @@ TextEditingController _numberController;
                                     ),
                                   ),
                                 ),
-                                    frameWidget( Column(
-                                        children: [
-                                          ElevatedButton(
-                                             clipBehavior: Clip.none,
-                                            style: ElevatedButton.styleFrom(
-                                              
-                                                primary: Colors.white,
-                                                textStyle: TextStyle(
-                                                  fontSize: 30,
-                                                color: Colors.cyanAccent) // set the background color
-                                                ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  if (imageStateShow == false) {
-                                                    imageStateShow = true;
-                                                  } else if (imageStateShow == true) {
-                                                    imageStateShow = false;
-                                                  }
-                                                });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  snapshot.data['imageurl'] == null
-                                                      ? Text("เพิ่มรูป" ,style:
-                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr"))
-                                                      : Text("แก้ไขรูป",style:
-                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr")),
-                                                  Spacer(),
-                                                  Icon(Icons.image, color: Colors.black,)
-                                                ],
-                                              ),
-                                              ),
-                                              if (_image != null) ...[
-                                  Container(
-                                      padding: EdgeInsets.all(10),
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.3,
-                                      child: Image.file(_image))
-                                ] else if (snapshot.data['imageurl'] ==
-                                    null) ...[
-                                  SizedBox(
-                                    height: 10,
-                                  )
-                                ] else
-                                  Container(
-                                      padding: EdgeInsets.all(10),
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.3,
-                                      child: Image.network(
-                                          snapshot.data['imageurl'])),
-                                imageStateShow == true
-                                    ? Container(
+                                frameWidget(
+                                  Column(
+                                    children: [
+                                      ElevatedButton(
+                                        clipBehavior: Clip.none,
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                            textStyle: TextStyle(
+                                                fontSize: 30,
+                                                color: Colors
+                                                    .cyanAccent) // set the background color
+                                            ),
+                                        onPressed: () {
+                                          setState(() {
+                                            if (imageStateShow == false) {
+                                              imageStateShow = true;
+                                            } else if (imageStateShow == true) {
+                                              imageStateShow = false;
+                                            }
+                                          });
+                                        },
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  getImage(ImageSource.camera);
-                                                },
-                                                iconSize: 36,
-                                                color: Colors.amber[400],
-                                                icon: Icon(Icons.add_a_photo)),
-                                            IconButton(
-                                                onPressed: () {
-                                                  getImage(ImageSource.gallery);
-                                                },
-                                                iconSize: 36,
-                                                color: Colors.green[400],
-                                                icon: Icon(Icons.collections)),
+                                            snapshot.data['imageurl'] == null
+                                                ? Text("เพิ่มรูป",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black54,
+                                                        fontFamily: "Mitr"))
+                                                : Text("แก้ไขรูป",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black54,
+                                                        fontFamily: "Mitr")),
+                                            Spacer(),
+                                            Icon(
+                                              Icons.image,
+                                              color: Colors.black,
+                                            )
                                           ],
                                         ),
-                                      )
-                                    : SizedBox(
-                                        height: 10,
                                       ),
-                                        ],
-                                      ),
-                                    ),
-                                
-                                frameWidget( Column(
+                                      if (_image != null) ...[
+                                        Container(
+                                            padding: EdgeInsets.all(10),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.3,
+                                            child: Image.file(_image))
+                                      ] else if (snapshot.data['imageurl'] ==
+                                          null) ...[
+                                        SizedBox(
+                                          height: 10,
+                                        )
+                                      ] else
+                                        Container(
+                                            padding: EdgeInsets.all(10),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.3,
+                                            child: Image.network(
+                                                snapshot.data['imageurl'])),
+                                      imageStateShow == true
+                                          ? Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        getImage(
+                                                            ImageSource.camera);
+                                                      },
+                                                      iconSize: 36,
+                                                      color: Colors.amber[400],
+                                                      icon: Icon(
+                                                          Icons.add_a_photo)),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        getImage(ImageSource
+                                                            .gallery);
+                                                      },
+                                                      iconSize: 36,
+                                                      color: Colors.green[400],
+                                                      icon: Icon(
+                                                          Icons.collections)),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 10,
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                frameWidget(
+                                  Column(
                                     children: [
                                       Column(
                                         children: [
@@ -457,154 +470,171 @@ TextEditingController _numberController;
                                             width: double.infinity,
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                            primary: Colors.white,
-                                                            textStyle: TextStyle(
-                                                              fontSize: 30,
-                                                            ) // set the background color
-                                                            ),
+                                                  primary: Colors.white,
+                                                  textStyle: TextStyle(
+                                                    fontSize: 30,
+                                                  ) // set the background color
+                                                  ),
                                               child: Row(
                                                 children: [
-                                                  snapshot.data["latlng"] == null
+                                                  snapshot.data["latlng"] ==
+                                                          null
                                                       ? Text(
                                                           "เพิ่มตำแหน่ง",
-                                                          style: TextStyle(fontSize: 20,color: Colors.black54,fontFamily: "Mitr"),
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontFamily:
+                                                                  "Mitr"),
                                                         )
                                                       : Text(
                                                           "แก้ไขตำแหน่ง",
-                                                          style: TextStyle(fontSize: 20,color: Colors.black54,fontFamily: "Mitr"),
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontFamily:
+                                                                  "Mitr"),
                                                         ),
                                                   Spacer(),
-                                                  Icon(FontAwesomeIcons.mapMarked,color: Colors.blueGrey)
+                                                  Icon(
+                                                      FontAwesomeIcons
+                                                          .mapMarked,
+                                                      color: Colors.blueGrey)
                                                 ],
                                               ),
                                               onPressed: () async {
                                                 _navigateAndDisplaySelection(
-                                                    context, snapshot.data["latlng"]);
+                                                    context,
+                                                    snapshot.data["latlng"]);
                                               },
                                             ),
                                           ),
                                           if (userlottery.latlng != null) ...[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.teal.shade100,
-                                        borderRadius: BorderRadius.circular(18),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(0, 17),
-                                              blurRadius: 23,
-                                              spreadRadius: -13,
-                                              color: Colors.black38)
-                                        ]),
-                                    child: SizedBox(
-                                        height: 200,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: GoogleMap(
-                                          mapType: MapType.normal,
-                                          markers: userlottery.latlng != null
-                                              ? Set.from([
-                                                  Marker(
-                                                      markerId: MarkerId(
-                                                          'google_plex'),
-                                                      position: LatLng(
-                                                          double.parse(
-                                                              userlottery.latlng
-                                                                  .substring(
-                                                                      1, 18)),
-                                                          double.parse(userlottery
-                                                              .latlng
-                                                              .substring(
-                                                                  20,
-                                                                  userlottery
-                                                                          .latlng
-                                                                          .length -
-                                                                      1))))
-                                                ])
-                                              : null,
-                                          onMapCreated: _onMapCreated,
-                                          myLocationEnabled: true,
-                                          initialCameraPosition: CameraPosition(
-                                              target: userlottery.latlng != null
-                                                  ? LatLng(
-                                                      double.parse(userlottery
-                                                          .latlng
-                                                          .substring(1, 18)),
-                                                      double.parse(userlottery
-                                                          .latlng
-                                                          .substring(
-                                                              20,
-                                                              userlottery.latlng
-                                                                      .length -
-                                                                  1)))
-                                                  : LatLng(
-                                                      13.736717, 100.523186),
-                                              zoom: 15),
-                                        )),
-                                  )
-                                ] else if (snapshot.data["latlng"] == null) ...[
-                                  SizedBox(
-                                    height: 10,
-                                  )
-                                ] else
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.teal.shade100,
-                                        borderRadius: BorderRadius.circular(18),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(0, 17),
-                                              blurRadius: 23,
-                                              spreadRadius: -13,
-                                              color: Colors.black38)
-                                        ]),
-                                    child: SizedBox(
-                                        height: 200,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: GoogleMap(
-                                          mapType: MapType.normal,
-                                          markers: snapshot.data["latlng"] !=
-                                                  null
-                                              ? Set.from([
-                                                  Marker(
-                                                      markerId: MarkerId(
-                                                          'google_plex'),
-                                                      position: LatLng(
-                                                          double.parse(snapshot
-                                                              .data["latlng"]
-                                                              .substring(
-                                                                  1, 18)),
-                                                          double.parse(snapshot
-                                                              .data["latlng"]
-                                                              .substring(
-                                                                  20,
-                                                                  snapshot
-                                                                          .data[
-                                                                              "latlng"]
-                                                                          .length -
-                                                                      1))))
-                                                ])
-                                              : null,
-                                          onMapCreated: _onMapCreated,
-                                          myLocationEnabled: true,
-                                          initialCameraPosition: CameraPosition(
-                                              target: snapshot.data["latlng"] !=
-                                                      null
-                                                  ? LatLng(
-                                                      double.parse(snapshot
-                                                          .data['latlng']
-                                                          .substring(1, 18)),
-                                                      double.parse(snapshot
-                                                          .data['latlng']
-                                                          .substring(
-                                                              20,
-                                                              snapshot.data['latlng']
-                                                                      .length -
-                                                                  1)))
-                                                  : LatLng(13.736717, 100.523186),
-                                              zoom: 15),
-                                        )),
-                                  ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.teal.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        offset: Offset(0, 17),
+                                                        blurRadius: 23,
+                                                        spreadRadius: -13,
+                                                        color: Colors.black38)
+                                                  ]),
+                                              child: SizedBox(
+                                                  height: 200,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: GoogleMap(
+                                                    mapType: MapType.normal,
+                                                    markers:
+                                                        userlottery.latlng !=
+                                                                null
+                                                            ? Set.from([
+                                                                Marker(
+                                                                    markerId:
+                                                                        MarkerId(
+                                                                            'google_plex'),
+                                                                    position: LatLng(
+                                                                        double.parse(userlottery
+                                                                            .latlng
+                                                                            .substring(1,
+                                                                                18)),
+                                                                        double.parse(userlottery
+                                                                            .latlng
+                                                                            .substring(20,
+                                                                                userlottery.latlng.length - 1))))
+                                                              ])
+                                                            : null,
+                                                    onMapCreated: _onMapCreated,
+                                                    myLocationEnabled: true,
+                                                    initialCameraPosition: CameraPosition(
+                                                        target: userlottery.latlng != null
+                                                            ? LatLng(
+                                                                double.parse(userlottery
+                                                                    .latlng
+                                                                    .substring(
+                                                                        1, 18)),
+                                                                double.parse(userlottery
+                                                                    .latlng
+                                                                    .substring(
+                                                                        20,
+                                                                        userlottery.latlng.length -
+                                                                            1)))
+                                                            : LatLng(13.736717,
+                                                                100.523186),
+                                                        zoom: 15),
+                                                  )),
+                                            )
+                                          ] else if (snapshot.data["latlng"] ==
+                                              null) ...[
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ] else
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.teal.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        offset: Offset(0, 17),
+                                                        blurRadius: 23,
+                                                        spreadRadius: -13,
+                                                        color: Colors.black38)
+                                                  ]),
+                                              child: SizedBox(
+                                                  height: 200,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: GoogleMap(
+                                                    mapType: MapType.normal,
+                                                    markers:
+                                                        snapshot.data[
+                                                                    "latlng"] !=
+                                                                null
+                                                            ? Set.from([
+                                                                Marker(
+                                                                    markerId:
+                                                                        MarkerId(
+                                                                            'google_plex'),
+                                                                    position: LatLng(
+                                                                        double.parse(snapshot
+                                                                            .data[
+                                                                                "latlng"]
+                                                                            .substring(1,
+                                                                                18)),
+                                                                        double.parse(snapshot.data["latlng"].substring(
+                                                                            20,
+                                                                            snapshot.data["latlng"].length -
+                                                                                1))))
+                                                              ])
+                                                            : null,
+                                                    onMapCreated: _onMapCreated,
+                                                    myLocationEnabled: true,
+                                                    initialCameraPosition: CameraPosition(
+                                                        target: snapshot.data[
+                                                                    "latlng"] !=
+                                                                null
+                                                            ? LatLng(
+                                                                double.parse(snapshot
+                                                                    .data[
+                                                                        'latlng']
+                                                                    .substring(
+                                                                        1, 18)),
+                                                                double.parse(snapshot
+                                                                    .data['latlng']
+                                                                    .substring(20, snapshot.data['latlng'].length - 1)))
+                                                            : LatLng(13.736717, 100.523186),
+                                                        zoom: 15),
+                                                  )),
+                                            ),
                                         ],
                                       ),
                                     ],
@@ -612,66 +642,80 @@ TextEditingController _numberController;
                                 ),
                                 Center(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 10,bottom: 20),
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 20),
                                     child: FloatingActionButton.extended(
-                                          heroTag: "add",
-                                          onPressed: () async {
-                                          if (formKey.currentState.validate()) {
-                                            formKey.currentState.save();
-                                            if (_image != null) {
-                                              deleteImage(
-                                                  snapshot.data['imageurl']);
-                                              await UploadPicture();
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({"imageurl": urlpiture});
-                                            }
-                                            if (userlottery.number !=
-                                                snapshot.data["number"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "number": userlottery.number,
-                                              });
-                                            }
-                                            if (amount != snapshot.data["amount"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "amount": amount.toString(),
-                                              });
-                                            }
-                                            if (userlottery.lotteryprice !=
-                                                snapshot.data["lotteryprice"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "lotteryprice":
-                                                    userlottery.lotteryprice,
-                                              });
-                                            }
-                                            if (userlottery.latlng !=
-                                                snapshot.data["latlng"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "latlng": userlottery.latlng,
-                                              });
-                                            }
-
-                                            Navigator.pop(context);
-                                            //getUser(userNotifier, user.uid);
+                                      heroTag: "add",
+                                      onPressed: () async {
+                                        if (formKey.currentState.validate()) {
+                                          formKey.currentState.save();
+                                          if (_image != null) {
+                                            deleteImage(
+                                                snapshot.data['imageurl']);
+                                            await UploadPicture();
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update(
+                                                    {"imageurl": urlpiture});
                                           }
-                                        },
-                                          icon: Icon(Icons.edit),
-                                          label: const Text(
-                                            'บันทึกการก้ไข',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          backgroundColor: Colors.amber,
+                                          if (userlottery.number !=
+                                              snapshot.data["number"]) {
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update({
+                                              "number": userlottery.number,
+                                            });
+                                          }
+                                          if (checkdatestate = true) {
+                                            if (dateValue !=
+                                                snapshot.data["date"]) {
+                                              await _userltottery
+                                                  .doc(docid)
+                                                  .update({
+                                                "date": dateValue,
+                                              });
+                                            }
+                                          }
+
+                                          if (amount !=
+                                              snapshot.data["amount"]) {
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update({
+                                              "amount": amount.toString(),
+                                            });
+                                          }
+                                          if (userlottery.lotteryprice !=
+                                              snapshot.data["lotteryprice"]) {
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update({
+                                              "lotteryprice":
+                                                  userlottery.lotteryprice,
+                                            });
+                                          }
+                                          if (userlottery.latlng !=
+                                              snapshot.data["latlng"]) {
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update({
+                                              "latlng": userlottery.latlng,
+                                            });
+                                          }
+
+                                          Navigator.pop(context);
+                                          //getUser(userNotifier, user.uid);
+                                        }
+                                      },
+                                      icon: Icon(Icons.edit),
+                                      label: const Text(
+                                        'บันทึกการก้ไข',
+                                        style: TextStyle(
+                                          color: Colors.white,
                                         ),
+                                      ),
+                                      backgroundColor: Colors.amber,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -689,6 +733,60 @@ TextEditingController _numberController;
             ),
           );
         });
+  }
+
+  Container dropDownOutDate(
+      PrizeNotifier prizeNotifier, String getdatafirebase) {
+    return Container(
+      alignment: AlignmentDirectional.topCenter,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: dateValue == null ? dateValue = getdatafirebase : dateValue,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.amber,
+          ),
+          iconSize: 30,
+          elevation: 2,
+          style: TextStyle(color: Colors.indigo, fontSize: 22),
+          underline: Container(
+            height: 2,
+            color: Colors.red,
+          ),
+          selectedItemBuilder: (BuildContext context) {
+            return prizeNotifier.listOutDate
+                .map<DropdownMenuItem<String>>((dynamic value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  numToWord(value),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
+            }).toList();
+          },
+          onChanged: (String newValue) {
+            setState(() {
+              checkdatestate = true;
+              dateValue = newValue;
+              print(newValue);
+              print(dateValue);
+            });
+          },
+          items: prizeNotifier.listOutDate
+              .map<DropdownMenuItem<String>>((dynamic value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                numToWord(value),
+                textAlign: TextAlign.right,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   Future<void> deleteImage(String imageFileUrl) async {
@@ -709,6 +807,27 @@ TextEditingController _numberController;
     );
     setState(() {
       userlottery.latlng = result;
+    });
+  }
+
+  void _getDataAfterScan(BuildContext context) async {
+    QRCodeData qrCodeData = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QRScanPage(
+                wantToCheck: false,
+              )),
+    );
+    setState(() {
+      usernumberinput = qrCodeData.number;
+      PrizeNotifier prizeNotifier =
+          Provider.of<PrizeNotifier>(context, listen: false);
+
+      print("get ${qrCodeData.peroid}");
+      int times = qrCodeData.peroid; //งวด
+      int index = (times / 2).ceil();
+      index = (index - 1);
+      dateValue = prizeNotifier.listOutDate[index];
     });
   }
 }
