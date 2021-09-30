@@ -69,12 +69,12 @@ class Won {
 
     String name;
     String wonNum;
-    int reward;
+    double reward;
 
     factory Won.fromJson(Map<String, dynamic> json) => Won(
         name: json["name"],
         wonNum: json["wonNum"],
-        reward: json["reward"],
+        reward: json["reward"].toDouble(),
     );
 
     Map<String, dynamic> toJson() => {
