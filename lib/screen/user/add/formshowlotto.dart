@@ -595,16 +595,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
         "won":[]
       });
       String nonsplit = dateValue;
-
-      print(nonsplit.split("-").join());
-      print(user.displayName); //021078
-      print(userlottery.number);
-      print(qtyAmount.toString());
-      print(userlottery.lotteryprice);
-      print(urlpiture);
-      print(dateValue);
-      print(userlottery.latlng);
-      print(user.uid);
       if (prizeNotifier.prizeList.keys.contains(nonsplit.split("-").join())) {
         CheckNumber checkNumber = CheckNumber(
             userNum: [userlottery.number],
