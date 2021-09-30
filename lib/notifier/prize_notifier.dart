@@ -8,6 +8,7 @@ class PrizeNotifier with ChangeNotifier {
   Map<String, PrizeData> _prizeList = {};
   List<String> _id = [];
   PrizeData _selectedPrize;
+  List<String> _listOutDate;
 
   UnmodifiableMapView<String,PrizeData> get prizeList =>UnmodifiableMapView(_prizeList);
   get id =>_id;
@@ -25,6 +26,13 @@ class PrizeNotifier with ChangeNotifier {
 
   set selectedPrize(PrizeData prizesData) {
     _selectedPrize = prizesData;
+    notifyListeners();
+  }
+
+  get listOutDate => _listOutDate;
+
+  set listOutDate(List<String> listOutDate) {
+    _listOutDate = listOutDate;
     notifyListeners();
   }
 }
