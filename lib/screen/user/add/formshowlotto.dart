@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -148,6 +149,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
+              backgroundColor: Color(0xFFF3FFFE),
               extendBodyBehindAppBar: false,
               appBar: AppBar(
                 centerTitle: true,
@@ -169,7 +171,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   return Center(child: CircularProgressIndicator());
                 } else {
                   return Container(
-                    color: Color(0xFFF3FFFE),
+                  
                     child: Form(
                       key: formKey,
                       child: SingleChildScrollView(
@@ -496,38 +498,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.amber,
                   heroTag: "add",
-                  onPressed: () async {
-                    UserData dataForAdd = UserData.fromJson({
-                      "username": user.displayName,
-                      "number": userlottery.number,
-                      "amount": qtyAmount.toString(),
-                      "lotteryprice": userlottery.lotteryprice,
-                      "imageurl": urlpiture,
-                      "date": dateValue,
-                      "latlng": userlottery.latlng,
-                      "userid": user.uid,
-                    });
-                    if (prizeNotifier.prizeList.keys
-                        .contains(dateValue.split("-").join())) {
-                      CheckNumber checkNumber = CheckNumber(
-                          userNum: [userlottery.number],
-                          prizeNotifier: prizeNotifier,
-                          date: dateValue);
-                      List<CheckResult> _checkResult =
-                          checkNumber.getCheckedData();
+                  onPressed: () {
+                    if (formKey.currentState.validate()) {
+                      formKey.currentState.save();
 
-                      for (var i = 0; i < _checkResult.length; i++) {
-                        dataForAdd.state = _checkResult[i].status;
-                        dataForAdd.won.add(new Won(
-                            wonNum: _checkResult[i].number,
-                            name: _checkResult[i].name,
-                            reward: int.parse(_checkResult[i].reword)));
-                      }
-                    } else {
-                      dataForAdd.state = null;
-                      dataForAdd.won.add(new Won(name: null, wonNum: null, reward: 0));
+                      addToFirebase(context, prizeNotifier);
                     }
-                    await addToFirebase(context, dataForAdd);
                   },
                   label: Text(
                     "บันทึก",
@@ -600,13 +576,57 @@ class _FormshowlottoState extends State<Formshowlotto> {
     );
   }
 
-  Future<void> addToFirebase(BuildContext context, data) async {
+  Future<void> addToFirebase(
+      BuildContext context, PrizeNotifier prizeNotifier) async {
     if (_image != null) {
       await uploadPicture();
     }
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      await _userltottery.add(data);
+      UserData dataForAdd = UserData.fromJson({
+        "username": user.displayName,
+        "number": userlottery.number,
+        "amount": qtyAmount.toString(),
+        "lotteryprice": userlottery.lotteryprice,
+        "imageurl": urlpiture,
+        "date": dateValue,
+        "latlng": userlottery.latlng,
+        "userid": user.uid,
+        "won":[]
+      });
+      String nonsplit = dateValue;
+
+      print(nonsplit.split("-").join());
+      print(user.displayName); //021078
+      print(userlottery.number);
+      print(qtyAmount.toString());
+      print(userlottery.lotteryprice);
+      print(urlpiture);
+      print(dateValue);
+      print(userlottery.latlng);
+      print(user.uid);
+      if (prizeNotifier.prizeList.keys.contains(nonsplit.split("-").join())) {
+        CheckNumber checkNumber = CheckNumber(
+            userNum: [userlottery.number],
+            prizeNotifier: prizeNotifier,
+            date: dateValue);
+        List<CheckResult> _checkResult = checkNumber.getCheckedData();
+
+        for (var i = 0; i < _checkResult.length; i++) {
+          dataForAdd.state = _checkResult[i].status;
+          dataForAdd.won.add(new Won(
+              wonNum: _checkResult[i].number,
+              name: _checkResult[i].name,
+              reward: double.parse(_checkResult[i].reword)));
+              print(_checkResult[i].number);
+      print(_checkResult[i].name);
+      print(_checkResult[i].reword.toString());
+        }
+      } else {
+        dataForAdd.state = null;
+        dataForAdd.won.add(new Won(name: null, wonNum: null, reward: 0));
+      }
+      await _userltottery.add(jsonDecode(userDataToJson(dataForAdd)) );
       Navigator.pop(context);
     }
   }
