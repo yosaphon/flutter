@@ -139,7 +139,7 @@ class CheckNumber {
             usernumber: usernumber,
             name: '',
             number: '',
-            reword: '',
+            reword: '0',
             status: false));
         _length++;
       }
