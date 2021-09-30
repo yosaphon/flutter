@@ -147,7 +147,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                                 ? textSty("รอตรวจ",Colors.black)
                                                 : snapshot.data["state"] == true
                                                     ? textSty("ถูกรางวัล",Colors.black)
-                                                    : textSty("ถูกรางวัล",Colors.black)
+                                                    : textSty("ไม่ถูกรางวัล",Colors.black)
                                           ],
                                         ),
                                         Column(

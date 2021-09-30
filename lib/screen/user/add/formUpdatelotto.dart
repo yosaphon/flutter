@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
+import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
@@ -94,7 +96,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   }
 
   TextEditingController _numberController;
-  Future UploadPicture() async {
+  Future uploadPicture() async {
     var uuid = Uuid().v4();
     firebase_storage.FirebaseStorage firebaseStorage =
         firebase_storage.FirebaseStorage.instance;
@@ -150,7 +152,6 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                       return CircularProgressIndicator();
                     } else {
                       return Container(
-                        padding: EdgeInsets.all(20),
                         child: Form(
                           key: formKey,
                           child: SingleChildScrollView(
@@ -162,6 +163,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       top: 20, bottom: 20),
                                   child: Center(
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         RichText(
                                           text: TextSpan(children: <TextSpan>[
@@ -189,7 +192,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                               labelText: "เลขสลาก"),
                                           style: TextStyle(fontSize: 20),
                                           key: Key(usernumberinput),
-                                          initialValue: usernumberinput ==null? snapshot.data['number']:usernumberinput,
+                                          initialValue: usernumberinput == null
+                                              ? snapshot.data['number']
+                                              : usernumberinput,
                                           inputFormatters: [
                                             FilteringTextInputFormatter.allow(
                                                 RegExp(r'[0-9]')),
@@ -654,16 +659,66 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                           if (_image != null) {
                                             deleteImage(
                                                 snapshot.data['imageurl']);
-                                            await UploadPicture();
-                                            await _userltottery.doc(docid).update({"imageurl":  urlpiture,});
+                                            await uploadPicture();
+                                            await _userltottery
+                                                .doc(docid)
+                                                .update({
+                                              "imageurl": urlpiture,
+                                            });
                                           }
-                                          await _userltottery.doc(docid).update({
-                                                  "number":userlottery.number !=snapshot.data["number"]? userlottery.number:snapshot.data["number"],
-                                                  "date":dateValue !=snapshot.data["date"]? dateValue:snapshot.data["date"],
-                                                  "amount":amount !=snapshot.data["amount"]? amount.toString():snapshot.data["amount"],
-                                                  "lotteryprice": userlottery.lotteryprice !=snapshot.data["lotteryprice"]? userlottery.lotteryprice:snapshot.data["lotteryprice"],
-                                                  "latlng": userlottery.latlng !=snapshot.data["latlng"]? userlottery.latlng:snapshot.data["latlng"],
+                                          UserData dataForAdd =UserData.fromJson({
+                                            "number": userlottery.number,
+                                            "date": dateValue,
+                                            "username": user.displayName,
+                                            "userid": user.uid,
+                                            "imageurl": _image != null ?urlpiture:snapshot.data['imageurl'],
+                                            "amount": amount.toString(),
+                                            "lotteryprice":userlottery.lotteryprice,
+                                            "latlng": userlottery.latlng != null? userlottery.latlng:snapshot.data['latlng'],
+                                            "won": []
                                           });
+                                          String nonsplit = dateValue;
+                                          if (prizeNotifier.prizeList.keys
+                                              .contains(
+                                                  nonsplit.split("-").join())) {
+                                            CheckNumber checkNumber =
+                                                CheckNumber(
+                                                    userNum: [
+                                                  userlottery.number
+                                                ],
+                                                    prizeNotifier:
+                                                        prizeNotifier,
+                                                    date: dateValue);
+                                            List<CheckResult> _checkResult =
+                                                checkNumber.getCheckedData();
+
+                                            for (var i = 0;
+                                                i < _checkResult.length;
+                                                i++) {
+                                              dataForAdd.state =
+                                                  _checkResult[i].status;
+                                              dataForAdd.won.add(new Won(
+                                                  wonNum:
+                                                      _checkResult[i].number,
+                                                  name: _checkResult[i].name,
+                                                  reward: double.parse(
+                                                      _checkResult[i].reword)));
+                                              print(_checkResult[i].number);
+                                              print(_checkResult[i].name);
+                                              print(_checkResult[i]
+                                                  .reword
+                                                  .toString());
+                                            }
+                                          } else {
+                                            dataForAdd.state = null;
+                                            dataForAdd.won.add(new Won(
+                                                name: null,
+                                                wonNum: null,
+                                                reward: 0));
+                                          }
+                                          await _userltottery
+                                              .doc(docid)
+                                              .update(jsonDecode(userDataToJson(dataForAdd)));
                                           Navigator.pop(context);
                                         }
                                       },

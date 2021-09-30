@@ -36,10 +36,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
 
- ScrollController _scrollController =
+  ScrollController _scrollController =
       new ScrollController(); // set controller on scrolling
   bool _show = true;
-
 
   void initiateSearch(String val) {
     setState(() {
@@ -53,7 +52,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     handleScroll();
     super.initState();
   }
-    @override
+
+  @override
   void dispose() {
     _scrollController.removeListener(() {});
     super.dispose();
@@ -75,11 +75,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
           ScrollDirection.reverse) {
-          hideFloationButton();
+        hideFloationButton();
       }
       if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
-          showFloationButton();
+        showFloationButton();
       }
     });
   }
@@ -91,7 +91,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     lottos = userNotifier.currentUser;
     userID = userNotifier.docID;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,24 +149,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 style: TextStyle(color: Colors.black, fontSize: 14),
               ),
               Container(
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.6),
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.6),
                 child: lotto.state == true
-              ? Icon(
-                  Icons.check_circle,
-                  color: Colors.lightGreenAccent,
-                )
-              : lotto.state == false
-                  ? Icon(
-                      Icons.cancel,
-                      color: Colors.red,
-                    )
-                  : Icon(
-                      Icons.hourglass_bottom,
-                      color: Color(0xFFB3B7C0),
-                    ),
+                    ? Icon(
+                        Icons.check_circle,
+                        color: Colors.lightGreenAccent,
+                      )
+                    : lotto.state == false
+                        ? Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          )
+                        : Icon(
+                            Icons.hourglass_bottom,
+                            color: Color(0xFFB3B7C0),
+                          ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20,bottom: 5),
+                padding: const EdgeInsets.only(top: 20, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -175,31 +175,31 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         text: TextSpan(children: <TextSpan>[
                       TextSpan(
                           text: "ราคา ",
-                          style:
-                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: "Mitr")),
                       TextSpan(
                           text: lotto.lotteryprice,
                           style: TextStyle(
                               color: Colors.orange, fontFamily: "Mitr")),
                       TextSpan(
                           text: " บาท",
-                          style:
-                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: "Mitr")),
                     ])),
                     RichText(
                         text: TextSpan(children: <TextSpan>[
                       TextSpan(
                           text: "  จำนวน ",
-                          style:
-                              TextStyle(color: Colors.black, fontFamily: "Mitr")),
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: "Mitr")),
                       TextSpan(
                           text: lotto.amount,
                           style: TextStyle(
                               color: Colors.orange, fontFamily: "Mitr")),
                       TextSpan(
                           text: " ใบ",
-                          style:
-                              TextStyle(color: Colors.black, fontFamily: "Mitr"))
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: "Mitr"))
                     ])),
                     Spacer(),
                   ],
@@ -295,14 +295,20 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             children: [
               buildSearch(),
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: lottos.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    UserData lotto = lottos[index];
-
-                    return frameWidget(buildLotto(lotto, userID[index]));
-                  },
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: 3000,
+                    // maxHeight: 200, //minimum height
+                  ),
+                  child: ListView(
+                    controller: _scrollController,
+                    children: [
+                    ...lottos.map((e)  {
+                      UserData lotto = e;
+                      return frameWidget(buildLotto(lotto, e.userid));
+                    }).toList()
+                    ,SizedBox(height: 100,),
+                  ],)
                 ),
               )
             ],
