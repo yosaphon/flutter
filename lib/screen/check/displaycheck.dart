@@ -112,7 +112,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     setState(() {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => QRScanPage(wantToCheck: true,)),
+                        MaterialPageRoute(builder: (context) => QRScanPage(wantToCheck: true,prizeNotifier: prizeNotifier,)),
                       );
                     });
                   });

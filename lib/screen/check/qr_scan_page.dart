@@ -46,36 +46,39 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              "Scan QR CodeScan QR Code",
-              style: TextStyle(color: Colors.black),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-            ),
-            backgroundColor: Colors.white.withOpacity(0.1),
-            elevation: 0,
-            leading: IconButton(
-              color: Colors.black,
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            ),
+  Widget build(BuildContext context) {
+    //PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context,listen: false);
+    return SafeArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Scan QR CodeScan QR Code",
+            style: TextStyle(color: Colors.black),
           ),
-          body: Stack(
-            alignment: Alignment.center,
-            children: [
-              buildQrView(context),
-              Positioned(bottom: 10, child: buildResult()),
-              Positioned(right: 10, child: buildControlButtons()),
-            ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+          ),
+          backgroundColor: Colors.white.withOpacity(0.1),
+          elevation: 0,
+          leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
-      );
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            buildQrView(context),
+            Positioned(bottom: 10, child: buildResult()),
+            Positioned(right: 10, child: buildControlButtons()),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget buildControlButtons() => Container(
       decoration: BoxDecoration(
@@ -147,15 +150,24 @@ class _QRScanPageState extends State<QRScanPage> {
       print(peroid);
       //แสกนแล้วตรวจ
       if (_wantToCheck) {
+        print("แสกนตรวจ");
         var check = new CheckNumber(
-            userNum: [number], peroid: peroid, prizeNotifier: prizeNotifier);
+            userNum: [number],
+            peroid: peroid,
+            prizeNotifier: this.prizeNotifier);
         print(check.getCheckedData());
-        Navigator.pushReplacement(
+        setState(() {
+          if (_popBack != true) {
+            _popBack = true;
+            Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => ShowResultCheck(
                     allResult: check.getCheckedData(),
                     length: check.getLength())));
+          }
+        });
+       
       }
       //แสกนแล้วคืนค่า
       else {
@@ -164,12 +176,11 @@ class _QRScanPageState extends State<QRScanPage> {
         print("หลังแสกน ${qrCodeData.number}");
         //print(userNotifier.qrcodeData.number);
         setState(() {
-          if (_popBack!=true) {
-          _popBack = true;
-          Navigator.pop(context, qrCodeData);
-        }
+          if (_popBack != true) {
+            _popBack = true;
+            Navigator.pop(context, qrCodeData);
+          }
         });
-        
       }
     }
   }

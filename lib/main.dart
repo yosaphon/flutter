@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
+    PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context,listen: false);
     getPrize(prizeNotifier);
 
     return Scaffold(

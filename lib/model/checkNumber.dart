@@ -20,13 +20,16 @@ class CheckNumber {
       _last2 = [],
       _last3f = [],
       _last3b = [];
-
+  PrizeData getSelectedData;
   int getLength() => this._length;
 
-  CheckNumber({@required this.userNum, this.peroid, this.prizeNotifier, this.date}) {
+  CheckNumber(
+      {@required this.userNum, this.peroid, this.prizeNotifier, this.date}) {
     //ตรวจแบบกรอกเลข
-    if (peroid == null) {
-      getDataForCheck(prizeNotifier.selectedPrize);
+    if (peroid == null && date == null) {
+      print("ตรวจแบบกรอกเลข");
+      getSelectedData = prizeNotifier.selectedPrize;
+      getDataForCheck(getSelectedData);
       print(prizeNotifier.selectedPrize.date);
       print("_first  = $_first   ");
       print("_second = $_second   ");
@@ -49,17 +52,28 @@ class CheckNumber {
         print(element.date);
         print(element.number);
       });
+    } else if (peroid != null && date == null) {
+      print("ตรวจแบบใช้งวด // แสกน");
+      print(peroid);
+      var x = prizeNotifier.prizeList.values.where((element) {
+        return element.period.contains(peroid);
+      });
+
+      print("วันที่ได้ ${x.first.date}");
+      getSelectedData = x.first;
+      getDataForCheck(getSelectedData);
+      checkPrize();
     }
     //ตรวจแบบแสกน
     else {
-      print("prizeNotifier check ${prizeNotifier.selectedPrize}");
-      print("scan  $peroid $userNum");
-      // prizeNotifier.prizeList.values.forEach((element) {
-      //   if (element.period.contains(peroid)) {
-      //     getDataForCheck(element);
-      //   }
-      // });
-      // checkPrize();
+      print("ตรวจแบบใช้วันที่");
+      //print("scan  $peroid $userNum");
+      var x = prizeNotifier.prizeList.values.where((element) {
+        return element.date == date;
+      });
+      getSelectedData = x.first;
+      getDataForCheck(getSelectedData);
+      checkPrize();
     }
   }
 
@@ -120,7 +134,7 @@ class CheckNumber {
       //ถ้าไม่มีข้อมูลที่ถูกเลย
       if (status != true) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: '',
             number: '',
@@ -139,11 +153,11 @@ class CheckNumber {
       //print(usernumber+":"+item);
       if (usernumber == eachNum) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลที่ 1",
             number: eachNum,
-            reword: prizeNotifier.selectedPrize.data['first'].price,
+            reword: getSelectedData.data['first'].price,
             status: true));
         _length++;
         status = true;
@@ -155,11 +169,11 @@ class CheckNumber {
       //print(usernumber+":"+item);
       if (usernumber == eachNum) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลที่ 2",
             number: eachNum,
-            reword: prizeNotifier.selectedPrize.data["second"].price,
+            reword: getSelectedData.data["second"].price,
             status: true));
         _length++;
         status = true;
@@ -171,11 +185,11 @@ class CheckNumber {
       //print(usernumber+":"+item);
       if (usernumber == eachNum) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลที่ 3",
             number: eachNum,
-            reword: prizeNotifier.selectedPrize.data["third"].price,
+            reword: getSelectedData.data["third"].price,
             status: true));
         _length++;
         status = true;
@@ -187,11 +201,11 @@ class CheckNumber {
       //print(usernumber+":"+item);
       if (usernumber == eachNum) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลที่ 4",
             number: eachNum,
-            reword: prizeNotifier.selectedPrize.data["fourth"].price,
+            reword: getSelectedData.data["fourth"].price,
             status: true));
         _length++;
         status = true;
@@ -203,11 +217,11 @@ class CheckNumber {
       //print(usernumber+":"+item);
       if (usernumber == eachNum) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลที่ 5",
             number: eachNum,
-            reword: prizeNotifier.selectedPrize.data["fifth"].price,
+            reword: getSelectedData.data["fifth"].price,
             status: true));
         _length++;
         status = true;
@@ -220,11 +234,11 @@ class CheckNumber {
     for (final item in _last3f) {
       if (f3Num == item) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลเลข 3 ตัวหน้า",
             number: item,
-            reword: prizeNotifier.selectedPrize.data["last3f"].price,
+            reword: getSelectedData.data["last3f"].price,
             status: true));
         _length++;
         status = true;
@@ -239,11 +253,11 @@ class CheckNumber {
     for (final item in _last3b) {
       if (last3b == item) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลเลข 3 ตัวท้าย",
             number: item,
-            reword: prizeNotifier.selectedPrize.data["last3b"].price,
+            reword: getSelectedData.data["last3b"].price,
             status: true));
         _length++;
         status = true;
@@ -256,11 +270,11 @@ class CheckNumber {
     for (final item in _last2) {
       if (last2 == item) {
         _listCheckResult.add(new CheckResult(
-            date: prizeNotifier.selectedPrize.date,
+            date: getSelectedData.date,
             usernumber: usernumber,
             name: "รางวัลเลข 2 ตัวท้าย",
             number: item,
-            reword: prizeNotifier.selectedPrize.data["last2"].price,
+            reword: getSelectedData.data["last2"].price,
             status: true));
         _length++;
         status = true;
