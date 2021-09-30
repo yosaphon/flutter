@@ -34,29 +34,29 @@ class UserData {
     List<Won> won;
 
     factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-        username: json["username"] == null ? null : json["username"],
-        number: json["number"] == null ? null : json["number"],
-        amount: json["amount"] == null ? null : json["amount"],
-        lotteryprice: json["lotteryprice"] == null ? null : json["lotteryprice"],
-        imageurl: json["imageurl"] == null ? null : json["imageurl"],
-        date: json["date"] == null ? null : json["date"],
-        latlng: json["latlng"] == null ? null : json["latlng"],
-        userid: json["userid"] == null ? null : json["userid"],
-        state: json["state"] == null ? null : json["state"],
-        won: json["won"] == null ? null : List<Won>.from(json["won"].map((x) => Won.fromJson(x))),
+        username: json["username"],
+        number: json["number"],
+        amount: json["amount"],
+        lotteryprice: json["lotteryprice"],
+        imageurl: json["imageurl"],
+        date: json["date"],
+        latlng: json["latlng"],
+        userid: json["userid"],
+        state: json["state"],
+        won: List<Won>.from(json["won"].map((x) => Won.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "username": username == null ? null : username,
-        "number": number == null ? null : number,
-        "amount": amount == null ? null : amount,
-        "lotteryprice": lotteryprice == null ? null : lotteryprice,
-        "imageurl": imageurl == null ? null : imageurl,
-        "date": date == null ? null : date,
-        "latlng": latlng == null ? null : latlng,
-        "userid": userid == null ? null : userid,
-        "state": state == null ? null : state,
-        "won": won == null ? null : List<dynamic>.from(won.map((x) => x.toJson())),
+        "username": username,
+        "number": number,
+        "amount": amount,
+        "lotteryprice": lotteryprice,
+        "imageurl": imageurl,
+        "date": date,
+        "latlng": latlng,
+        "userid": userid,
+        "state": state,
+        "won": List<dynamic>.from(won.map((x) => x.toJson())),
     };
 }
 
@@ -72,14 +72,14 @@ class Won {
     int reward;
 
     factory Won.fromJson(Map<String, dynamic> json) => Won(
-        name: json["name"] == null ? null : json["name"],
-        wonNum: json["wonNum"] == null ? null : json["wonNum"],
-        reward: json["reward"] == null ? null : json["reward"],
+        name: json["name"],
+        wonNum: json["wonNum"],
+        reward: json["reward"],
     );
 
     Map<String, dynamic> toJson() => {
-        "name": name == null ? null : name,
-        "wonNum": wonNum == null ? null : wonNum,
-        "reward": reward == null ? null : reward,
+        "name": name,
+        "wonNum": wonNum,
+        "reward": reward,
     };
 }
