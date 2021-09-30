@@ -187,7 +187,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                           decoration: InputDecoration(
                                               labelText: "เลขสลาก"),
                                           style: TextStyle(fontSize: 20),
-                                          initialValue: snapshot.data['number'],
+                                          key: Key(usernumberinput),
+                                          initialValue: usernumberinput ==null? snapshot.data['number']:usernumberinput,
                                           inputFormatters: [
                                             FilteringTextInputFormatter.allow(
                                                 RegExp(r'[0-9]')),
