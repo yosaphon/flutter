@@ -66,7 +66,8 @@ class CheckNumber {
     }
     //ตรวจแบบแสกน
     else {
-      print("ตรวจแบบใช้วันที่");
+      print("ตรวจแบบใช้วันที่ // หน้าเพิ่ม");
+      print(userNum);
       //print("scan  $peroid $userNum");
       var x = prizeNotifier.prizeList.values.where((element) {
         return element.date == date;
