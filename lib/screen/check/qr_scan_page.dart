@@ -40,6 +40,12 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => getDateAndNumber(""));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -126,6 +132,7 @@ class _QRScanPageState extends State<QRScanPage> {
     });
   }
 
+  bool _popBack = false;
   getDateAndNumber(String barcode) {
     List<String> data = barcode.split('-');
     print(data);
@@ -153,20 +160,17 @@ class _QRScanPageState extends State<QRScanPage> {
       //แสกนแล้วคืนค่า
       else {
         print("แสกน แต่ไม่ตรวจ");
-        UserNotifier userNotifier =
-            Provider.of<UserNotifier>(context, listen: false);
-        QRCodeData qrCodeData =   QRCodeData(number:number,peroid: peroid);
-
+        QRCodeData qrCodeData = QRCodeData(number: number, peroid: peroid);
+        print("หลังแสกน ${qrCodeData.number}");
         //print(userNotifier.qrcodeData.number);
-        Navigator.pop(context , qrCodeData);
+        setState(() {
+          if (_popBack!=true) {
+          _popBack = true;
+          Navigator.pop(context, qrCodeData);
+        }
+        });
+        
       }
-
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //       builder: (context) => ShowResultCheck(
-      //           allResult: check.getCheckedData(), length: check.getLength())),
-      // );
     }
   }
 }

@@ -13,8 +13,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lotto/api/user_api.dart';
-import 'package:lotto/model/DropdownUser.dart';
+import 'package:lotto/model/PrizeData.dart';
+
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
@@ -56,10 +56,18 @@ class _FormshowlottoState extends State<Formshowlotto> {
   void initState() {
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+
     dateValue = prizeNotifier.listOutDate.last;
     print(prizeNotifier.listOutDate);
     print(dateValue);
     super.initState();
+  }
+
+  String getDateByPeriod(prizeNotifier, peroid) {
+    var date = prizeNotifier.prizeList.values.where((element) {
+      return element.period.contains(24);
+    });
+    return date;
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -184,61 +192,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                 fontFamily: "Mitr")),
                                       ]),
                                     ),
-                                    Container(
-                                      alignment: AlignmentDirectional.topCenter,
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton(
-                                          value: dateValue,
-                                          icon: const Icon(
-                                            Icons.arrow_drop_down,
-                                            color: Colors.amber,
-                                          ),
-                                          iconSize: 30,
-                                          elevation: 2,
-                                          style: TextStyle(
-                                              color: Colors.indigo,
-                                              fontSize: 22),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.red,
-                                          ),
-                                          selectedItemBuilder:
-                                              (BuildContext context) {
-                                            return prizeNotifier.listOutDate
-                                                .map<DropdownMenuItem<String>>(
-                                                    (dynamic value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(
-                                                  numToWord(value),
-                                                  textAlign: TextAlign.right,
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                              );
-                                            }).toList();
-                                          },
-                                          onChanged: (String newValue) {
-                                            setState(() {
-                                              dateValue = newValue;
-                                              print(newValue);
-                                              print(dateValue);
-                                            });
-                                          },
-                                          items: prizeNotifier.listOutDate
-                                              .map<DropdownMenuItem<String>>(
-                                                  (dynamic value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(
-                                                numToWord(value),
-                                                textAlign: TextAlign.right,
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    )
+                                    dropDownOutDate(prizeNotifier)
                                   ],
                                 ),
                               ),
@@ -260,6 +214,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                             RegExp(r'[0-9]')),
                                         LengthLimitingTextInputFormatter(6),
                                       ],
+                                      key: Key(usernumberinput),
                                       controller: _numberController,
                                       validator: MultiValidator([
                                         MinLengthValidator(6,
@@ -562,6 +517,58 @@ class _FormshowlottoState extends State<Formshowlotto> {
         });
   }
 
+  Container dropDownOutDate(PrizeNotifier prizeNotifier) {
+    return Container(
+      alignment: AlignmentDirectional.topCenter,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: dateValue,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.amber,
+          ),
+          iconSize: 30,
+          elevation: 2,
+          style: TextStyle(color: Colors.indigo, fontSize: 22),
+          underline: Container(
+            height: 2,
+            color: Colors.red,
+          ),
+          selectedItemBuilder: (BuildContext context) {
+            return prizeNotifier.listOutDate
+                .map<DropdownMenuItem<String>>((dynamic value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  numToWord(value),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
+            }).toList();
+          },
+          onChanged: (String newValue) {
+            setState(() {
+              dateValue = newValue;
+              print(newValue);
+              print(dateValue);
+            });
+          },
+          items: prizeNotifier.listOutDate
+              .map<DropdownMenuItem<String>>((dynamic value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                numToWord(value),
+                textAlign: TextAlign.right,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
   Future<void> addToFirebase(BuildContext context) async {
     if (_image != null) {
       await uploadPicture();
@@ -702,7 +709,15 @@ class _FormshowlottoState extends State<Formshowlotto> {
     );
     setState(() {
       usernumberinput = qrCodeData.number;
-      dateValue = qrCodeData.peroid.toString();
+      PrizeNotifier prizeNotifier =
+          Provider.of<PrizeNotifier>(context, listen: false);
+
+      print("get ${qrCodeData.peroid}");
+      int times = qrCodeData.peroid; //งวด
+      int index = (times / 2).ceil();
+      index = (index - 1);
+      dateValue = prizeNotifier.listOutDate[index];
+
     });
   }
 }
