@@ -89,7 +89,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
       }
     });
   }
-
+TextEditingController _numberController;
   Future UploadPicture() async {
     var uuid = Uuid().v4();
     firebase_storage.FirebaseStorage firebaseStorage =
@@ -189,6 +189,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                 RegExp(r'[0-9]')),
                                             LengthLimitingTextInputFormatter(6),
                                           ],
+                                          controller: _numberController,
                                           validator: MultiValidator([
                                             RequiredValidator(
                                                 errorText: "กรุณาป้อน เลขสลาก"),
@@ -217,11 +218,28 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                   fontSize: 20,
                                                   color: Colors.blue[700]),
                                             ),
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        QRScanPage())),
+                                            onPressed: () async {
+                                              FocusScope.of(context).unfocus();
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 500), () {
+                                                setState(() async {
+                                                  await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            QRScanPage(
+                                                              wantToCheck:
+                                                                  false,
+                                                            )),
+                                                  );
+                                                  UserNotifier userNotifier =
+                                                      Provider.of(context,listen: false);
+                                                  _numberController.text =
+                                                      userNotifier.qrcodeData.number;
+                                                });
+                                              });
+                                            },
                                           ),
                                         ),
                                       ),

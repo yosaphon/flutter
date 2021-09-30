@@ -23,7 +23,6 @@ bool checkFacebookURL = false;
 bool checkYoutubeURL = false;
 List<String> numbers;
 
-
 class _FormqrcodescanState extends State<Formqrcodescan> {
   final _formKey = GlobalKey<FormState>();
   static List<String> lotterylist = [null];
@@ -31,7 +30,6 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Map<String, String> date = {};
   List<PrizeData> prizeData = [];
   String dateValue;
-  
 
 //   Future loadData(PrizeNotifier prizeNotifier) async {
 //     if (prizeNotifier.prizeList.isNotEmpty) {
@@ -109,10 +107,15 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
               FloatingActionButton.extended(
                 heroTag: "btnQRCode",
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => QRScanPage()),
-                  );
+                  FocusScope.of(context).unfocus();
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => QRScanPage(wantToCheck: true,)),
+                      );
+                    });
+                  });
                 },
                 icon: Icon(Icons.qr_code_2),
                 label: Text(
@@ -130,13 +133,14 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                         userNum: lotterylist, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
                     FocusScope.of(context).unfocus();
-                    
-                
 
-                     Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ShowResultCheck(allResult: data.getCheckedData(),length: data.getLength())),
-                  );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ShowResultCheck(
+                              allResult: data.getCheckedData(),
+                              length: data.getLength())),
+                    );
                   }
                 },
                 icon: Icon(Icons.pin),

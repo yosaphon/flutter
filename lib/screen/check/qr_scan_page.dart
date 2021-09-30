@@ -2,15 +2,25 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:lotto/model/checkNumber.dart';
+import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/showResultCheck.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanPage extends StatefulWidget {
+  final bool wantToCheck;
+  final PrizeNotifier prizeNotifier;
+  QRScanPage({@required this.wantToCheck, this.prizeNotifier});
   @override
-  _QRScanPageState createState() => _QRScanPageState();
+  _QRScanPageState createState() =>
+      _QRScanPageState(wantToCheck, prizeNotifier);
 }
 
 class _QRScanPageState extends State<QRScanPage> {
+  final bool _wantToCheck;
+  final PrizeNotifier prizeNotifier;
+  _QRScanPageState(this._wantToCheck, this.prizeNotifier);
   final qrkey = GlobalKey(debugLabel: 'QR');
 
   Barcode barcode;
@@ -120,7 +130,7 @@ class _QRScanPageState extends State<QRScanPage> {
     List<String> data = barcode.split('-');
     print(data);
     if (data.length == 4) {
-      List<String> number = [data[3]];
+      String number = data[3];
       String date = '25' + data[0] + data[1] + data[2];
       print(date);
       print(number);
@@ -128,16 +138,42 @@ class _QRScanPageState extends State<QRScanPage> {
       // int index = (times / 2).ceil();
       int peroid = int.parse(data[1]);
       print(peroid);
-      var check = new CheckNumber(userNum: number, peroid: peroid);
-      print(check.getCheckedData());
-      FocusScope.of(context).unfocus();
+      //แสกนแล้วตรวจ
+      if (_wantToCheck) {
+        var check = new CheckNumber(
+            userNum: [number], peroid: peroid, prizeNotifier: prizeNotifier);
+        print(check.getCheckedData());
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ShowResultCheck(
+                    allResult: check.getCheckedData(),
+                    length: check.getLength())));
+      }
+      //แสกนแล้วคืนค่า
+      else {
+        print("แสกน แต่ไม่ตรวจ");
+        UserNotifier userNotifier =
+            Provider.of<UserNotifier>(context, listen: false);
+        QRCodeData qrCodeData =   QRCodeData(number:number,peroid: peroid);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ShowResultCheck(
-                allResult: check.getCheckedData(), length: check.getLength())),
-      );
+        //print(userNotifier.qrcodeData.number);
+        Navigator.pop(context , qrCodeData);
+      }
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => ShowResultCheck(
+      //           allResult: check.getCheckedData(), length: check.getLength())),
+      // );
     }
   }
+}
+
+class QRCodeData {
+  String number;
+  int peroid;
+
+  QRCodeData({this.number, this.peroid});
 }

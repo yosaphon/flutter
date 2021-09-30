@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 
 class CheckNumber {
   final List<String> userNum;
   final PrizeNotifier prizeNotifier;
+  final String date;
   List<CheckResult> _listCheckResult = [];
   //List<List<CheckResult>> _allNumlistCheckResult = [];
   CheckResult checkResult;
@@ -21,7 +23,7 @@ class CheckNumber {
 
   int getLength() => this._length;
 
-  CheckNumber({this.userNum, this.peroid, this.prizeNotifier}) {
+  CheckNumber({@required this.userNum, this.peroid, this.prizeNotifier, this.date}) {
     //ตรวจแบบกรอกเลข
     if (peroid == null) {
       getDataForCheck(prizeNotifier.selectedPrize);
@@ -50,13 +52,14 @@ class CheckNumber {
     }
     //ตรวจแบบแสกน
     else {
+      print("prizeNotifier check ${prizeNotifier.selectedPrize}");
       print("scan  $peroid $userNum");
-      prizeNotifier.prizeList.values.forEach((element) {
-        if (element.period.contains(peroid)) {
-          getDataForCheck(element);
-        }
-      });
-      checkPrize();
+      // prizeNotifier.prizeList.values.forEach((element) {
+      //   if (element.period.contains(peroid)) {
+      //     getDataForCheck(element);
+      //   }
+      // });
+      // checkPrize();
     }
   }
 

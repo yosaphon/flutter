@@ -110,10 +110,18 @@ class _FormshowlottoState extends State<Formshowlotto> {
     print('url = $urlpiture');
   }
 
+  TextEditingController _numberController;
+
   @override
   Widget build(BuildContext context) {
+    //_numberController.text = "";
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+    UserNotifier userNotifier = Provider.of(context, listen: false);
+    // _numberController.text =
+    //     "999999";
+
+    //userNotifier.qrcodeData.number;
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
@@ -162,7 +170,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                       top: 30, bottom: 20),
                                   child: Center(
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         RichText(
                                           text: TextSpan(children: <TextSpan>[
@@ -195,6 +204,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                 RegExp(r'[0-9]')),
                                             LengthLimitingTextInputFormatter(6),
                                           ],
+                                          controller: _numberController,
                                           validator: MultiValidator([
                                             MinLengthValidator(6,
                                                 errorText:
@@ -217,12 +227,20 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                           padding: const EdgeInsets.only(
                                               top: 20.0, right: 30),
                                           child: TextButton(
-                                            child: Text("QR scan",style: TextStyle(fontSize: 20 ,color: Colors.blue[700]),),
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        QRScanPage())),
+                                            child: Text(
+                                              "QR scan",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.blue[700]),
+                                            ),
+                                            onPressed: () async {
+                                              FocusScope.of(context).unfocus();
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 500), () {
+                                                _getDataAfterScan(context);
+                                              });
+                                            },
                                           ),
                                         ),
                                       ),
@@ -233,16 +251,20 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               alignment: Alignment.topLeft,
                                               child: Text(
                                                 "จำนวน",
-                                                style: TextStyle(fontSize: 18,color: Colors.black54),
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black54),
                                               ),
                                             ),
                                             Container(
@@ -257,17 +279,21 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                       width: 40,
                                                       decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  30),
+                                                              BorderRadius
+                                                                  .circular(30),
                                                           color: qtyAmount > 1
                                                               ? Colors.pink[200]
                                                               : Colors.black12),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(bottom: 10),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 10),
                                                         child: Icon(
-                                                          Icons.remove,color: qtyAmount > 1
-                                                                ? Colors.white
-                                                                : Colors.black38,
+                                                          Icons.remove,
+                                                          color: qtyAmount > 1
+                                                              ? Colors.white
+                                                              : Colors.black38,
                                                           size: 27,
                                                         ),
                                                       ),
@@ -279,8 +305,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                     child: Center(
                                                       child: Text(
                                                         "$qtyAmount",
-                                                        style:
-                                                            TextStyle(fontSize: 20),
+                                                        style: TextStyle(
+                                                            fontSize: 20),
                                                       ),
                                                     ),
                                                   ),
@@ -293,17 +319,18 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                       width: 40,
                                                       decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  30),
-                                                          color: 
-                                                              Colors.pink[200]
-                                                              ),
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                          color:
+                                                              Colors.pink[200]),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(bottom: 10),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 10),
                                                         child: Icon(
-                                                          Icons.add,color: 
-                                                                 Colors.white
-                                                                ,
+                                                          Icons.add,
+                                                          color: Colors.white,
                                                           size: 27,
                                                         ),
                                                       ),
@@ -315,9 +342,12 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: MediaQuery.of(context).size.width *0.3,
-                                          
-                                          child: TextFormField(cursorWidth: 2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          child: TextFormField(
+                                            cursorWidth: 2,
                                             key: Key(price.toString()),
                                             initialValue: price.toString(),
                                             inputFormatters: [
@@ -328,7 +358,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                 labelText: 'ราคา'),
                                             style: TextStyle(fontSize: 20),
                                             validator: MultiValidator([
-                                              
                                               // RequiredValidator(
                                               //     errorText: "กรุณาป้อนราคา")
                                             ]),
@@ -351,13 +380,13 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                   Column(
                                     children: [
                                       ElevatedButton(
-                                        clipBehavior: Clip.none,
+                                          clipBehavior: Clip.none,
                                           style: ElevatedButton.styleFrom(
-                                            
                                               primary: Colors.white,
                                               textStyle: TextStyle(
-                                                fontSize: 30,
-                                              color: Colors.cyanAccent) // set the background color
+                                                  fontSize: 30,
+                                                  color: Colors
+                                                      .cyanAccent) // set the background color
                                               ),
                                           onPressed: () {
                                             setState(() {
@@ -374,11 +403,16 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                               children: [
                                                 Text(
                                                   "เพิ่มรูป",
-                                                  style:
-                                                      TextStyle(fontSize: 18,color: Colors.black54 ,fontFamily: "Mitr"),
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.black54,
+                                                      fontFamily: "Mitr"),
                                                 ),
                                                 Spacer(),
-                                                Icon(Icons.image, color: Colors.black,)
+                                                Icon(
+                                                  Icons.image,
+                                                  color: Colors.black,
+                                                )
                                               ],
                                             ),
                                           )),
@@ -410,16 +444,26 @@ class _FormshowlottoState extends State<Formshowlotto> {
                                                       ? Text(
                                                           "แก้ไขตำแหน่ง",
                                                           style: TextStyle(
-                                                              fontSize: 18,color: Colors.black54,fontFamily: "Mitr"),
+                                                              fontSize: 18,
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontFamily:
+                                                                  "Mitr"),
                                                         )
                                                       : Text(
                                                           "เพิ่มตำแหน่ง",
                                                           style: TextStyle(
-                                                              fontSize: 18,color: Colors.black54,fontFamily: "Mitr"),
+                                                              fontSize: 18,
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontFamily:
+                                                                  "Mitr"),
                                                         ),
                                                   Spacer(),
-                                                  Icon(FontAwesomeIcons
-                                                      .mapMarked,color: Colors.blueGrey,)
+                                                  Icon(
+                                                    FontAwesomeIcons.mapMarked,
+                                                    color: Colors.blueGrey,
+                                                  )
                                                 ],
                                               ),
                                               onPressed: () async {
@@ -599,6 +643,19 @@ class _FormshowlottoState extends State<Formshowlotto> {
     );
     setState(() {
       userlottery.latlng = result;
+    });
+  }
+
+  void _getDataAfterScan(BuildContext context) async {
+    QRCodeData qrCodeData = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QRScanPage(
+                wantToCheck: false,
+              )),
+    );
+    setState(() {
+      _numberController.text = qrCodeData.number;
     });
   }
 }
