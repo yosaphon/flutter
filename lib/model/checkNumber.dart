@@ -228,6 +228,20 @@ class CheckNumber {
         status = true;
       }
     });
+    _near1st.forEach((eachNum) {
+      //print(usernumber+":"+item);
+      if (usernumber == eachNum) {
+        _listCheckResult.add(new CheckResult(
+            date: getSelectedData.date,
+            usernumber: usernumber,
+            name: "รางวัลใกล้เคียงรางวัลที่ 1",
+            number: eachNum,
+            reword: getSelectedData.data["near1"].price,
+            status: true));
+        _length++;
+        status = true;
+      }
+    });
   }
 
   checkFirst3(usernumber) {
