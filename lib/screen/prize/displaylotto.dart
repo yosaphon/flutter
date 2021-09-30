@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:lotto/api/prize_api.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
@@ -15,6 +16,49 @@ class DisplayScreen extends StatefulWidget {
 }
 
 class _DisplayScreenState extends State<DisplayScreen> {
+ ScrollController _scrollController =
+      new ScrollController(); // set controller on scrolling
+  bool _show = true;
+
+  @override
+  void initState() {
+    super.initState();
+    handleScroll();
+  }
+
+ @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    super.dispose();
+  }
+
+  void showFloationButton() {
+    setState(() {
+      _show = true;
+    });
+  }
+
+  void hideFloationButton() {
+    setState(() {
+      _show = false;
+    });
+  }
+
+  void handleScroll() async {
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+          hideFloationButton();
+      }
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+          showFloationButton();
+      }
+    });
+  }
+
+
+
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
   List<DocumentSnapshot> documents;
@@ -52,6 +96,7 @@ class _DisplayScreenState extends State<DisplayScreen> {
                 DropdownDate(prizeData: prizeNotifier.prizeList.values),
                 Expanded(
                   child: ListView(
+                    controller: _scrollController,
                     children: <Widget>[ 
                       frameWidget(
                         PrizeBox(
@@ -152,35 +197,38 @@ class _DisplayScreenState extends State<DisplayScreen> {
           }
         }),
       ),
-      floatingActionButton: Column(
-        children: [
-          Spacer(),
-          
-          Padding(
-            padding: const EdgeInsets.only(bottom: 45),
-            child: FloatingActionButton.extended(
-              heroTag: "showCheckPDF",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => new ShowCheckImage(
-                            date: prizeNotifier.selectedPrize.date,
-                          )),
-                );
-              },
-              icon: Icon(Icons.receipt_long),
-              label: const Text(
-                'ใบตรวจ',
-                style: TextStyle(
-                  color: Colors.white,
+      floatingActionButton: Visibility(
+        visible: _show,
+        child: Column(
+          children: [
+            Spacer(),
+            
+            Padding(
+              padding: const EdgeInsets.only(bottom: 45),
+              child: FloatingActionButton.extended(
+                heroTag: "showCheckPDF",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => new ShowCheckImage(
+                              date: prizeNotifier.selectedPrize.date,
+                            )),
+                  );
+                },
+                icon: Icon(Icons.receipt_long),
+                label: const Text(
+                  'ใบตรวจ',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
+                backgroundColor: Colors.amber,
               ),
-              backgroundColor: Colors.amber,
             ),
-          ),
-        
-        ],
+          
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

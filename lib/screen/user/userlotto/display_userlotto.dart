@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
@@ -34,6 +35,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   String number, query = '';
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
+
+ ScrollController _scrollController =
+      new ScrollController(); // set controller on scrolling
+  bool _show = true;
+
+
   void initiateSearch(String val) {
     setState(() {
       number = val.toLowerCase().trim();
@@ -43,7 +50,38 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   void initState() {
     //loadData();
+    handleScroll();
     super.initState();
+  }
+    @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    super.dispose();
+  }
+
+  void showFloationButton() {
+    setState(() {
+      _show = true;
+    });
+  }
+
+  void hideFloationButton() {
+    setState(() {
+      _show = false;
+    });
+  }
+
+  void handleScroll() async {
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+          hideFloationButton();
+      }
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+          showFloationButton();
+      }
+    });
   }
 
   Future loadData(userNotifier, userSumaryNotifier) async {
@@ -54,10 +92,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     userID = userNotifier.docID;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,6 +296,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               buildSearch(),
               Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: lottos.length,
                   itemBuilder: (BuildContext context, int index) {
                     UserData lotto = lottos[index];
@@ -274,64 +309,67 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           );
         },
       ),
-      floatingActionButton: Column(
-        children: [
-          Spacer(),
-          userNotifier.currentUser.isNotEmpty
-              ? FloatingActionButton.extended(
-                  heroTag: "sumary",
-                  onPressed: () async {
-                    List<String> date1 = [];
-                    userNotifier.currentUser.forEach((element) {
-                      date1.add(element.date);
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShowPurchaseReport(
-                                dateUser: date1.toSet().toList(),
-                              )
-                          //ShowPurchaseReport(dateUser: date1.toSet().toList())
-                          ),
-                    );
-                  },
-                  icon: Padding(
-                    padding: const EdgeInsets.only(left: 18),
-                    child: Icon(Icons.feed),
-                  ),
-                  label: const Text(
-                    'สรุปผล',
-                    style: TextStyle(
-                      color: Colors.white,
+      floatingActionButton: Visibility(
+        visible: _show,
+        child: Column(
+          children: [
+            Spacer(),
+            userNotifier.currentUser.isNotEmpty
+                ? FloatingActionButton.extended(
+                    heroTag: "sumary",
+                    onPressed: () async {
+                      List<String> date1 = [];
+                      userNotifier.currentUser.forEach((element) {
+                        date1.add(element.date);
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShowPurchaseReport(
+                                  dateUser: date1.toSet().toList(),
+                                )
+                            //ShowPurchaseReport(dateUser: date1.toSet().toList())
+                            ),
+                      );
+                    },
+                    icon: Padding(
+                      padding: const EdgeInsets.only(left: 18),
+                      child: Icon(Icons.feed),
                     ),
-                  ),
-                  backgroundColor: Color(0xFF6390E9),
-                )
-              : SizedBox(),
-          SizedBox(
-            height: 7,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: FloatingActionButton.extended(
-              heroTag: "add",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Formshowlotto()),
-                );
-              },
-              icon: Icon(Icons.add),
-              label: const Text(
-                'เพิ่มข้อมูล',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              backgroundColor: Colors.amber,
+                    label: const Text(
+                      'สรุปผล',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: Color(0xFF6390E9),
+                  )
+                : SizedBox(),
+            SizedBox(
+              height: 7,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: FloatingActionButton.extended(
+                heroTag: "add",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Formshowlotto()),
+                  );
+                },
+                icon: Icon(Icons.add),
+                label: const Text(
+                  'เพิ่มข้อมูล',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Colors.amber,
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
