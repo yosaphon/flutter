@@ -651,60 +651,20 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                       onPressed: () async {
                                         if (formKey.currentState.validate()) {
                                           formKey.currentState.save();
-                                          if (_image != null) {
                                             deleteImage(
                                                 snapshot.data['imageurl']);
                                             await UploadPicture();
                                             await _userltottery
                                                 .doc(docid)
-                                                .update(
-                                                    {"imageurl": urlpiture});
-                                          }
-                                          if (userlottery.number !=
-                                              snapshot.data["number"]) {
-                                            await _userltottery
-                                                .doc(docid)
                                                 .update({
-                                              "number": userlottery.number,
-                                            });
-                                          }
-                                          if (checkdatestate = true) {
-                                            if (dateValue !=
-                                                snapshot.data["date"]) {
-                                              await _userltottery
-                                                  .doc(docid)
-                                                  .update({
-                                                "date": dateValue,
-                                              });
-                                            }
-                                          }
-
-                                          if (amount !=
-                                              snapshot.data["amount"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "amount": amount.toString(),
-                                            });
-                                          }
-                                          if (userlottery.lotteryprice !=
-                                              snapshot.data["lotteryprice"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "lotteryprice":
-                                                  userlottery.lotteryprice,
-                                            });
-                                          }
-                                          if (userlottery.latlng !=
-                                              snapshot.data["latlng"]) {
-                                            await _userltottery
-                                                .doc(docid)
-                                                .update({
-                                              "latlng": userlottery.latlng,
-                                            });
-                                          }
-
+                                                  "imageurl": urlpiture,
+                                                  "number": userlottery.number,
+                                                  "date": dateValue,
+                                                  "amount": amount.toString(),
+                                                  "lotteryprice":userlottery.lotteryprice,
+                                                  "latlng": userlottery.latlng,
+                                                    });
+                                          
                                           Navigator.pop(context);
                                           //getUser(userNotifier, user.uid);
                                         }
