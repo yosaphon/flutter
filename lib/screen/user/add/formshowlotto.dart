@@ -14,6 +14,8 @@ import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lotto/model/PrizeData.dart';
+import 'package:lotto/model/UserData.dart';
+import 'package:lotto/model/checkNumber.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/userlottery.dart';
@@ -36,7 +38,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
-  Userlottery userlottery = Userlottery();
+  UserData userlottery = UserData();
   final user = FirebaseAuth.instance.currentUser;
   // เตรียม firebase
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -44,7 +46,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
       FirebaseFirestore.instance.collection("userlottery");
   File _image;
   final picker = ImagePicker();
-  String userDate;
   bool imageStateShow = false;
   int qtyAmount = 1, price = 80;
   String dateValue, usernumberinput = "";
@@ -496,7 +497,37 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   backgroundColor: Colors.amber,
                   heroTag: "add",
                   onPressed: () async {
-                    await addToFirebase(context);
+                    UserData dataForAdd = UserData.fromJson({
+                      "username": user.displayName,
+                      "number": userlottery.number,
+                      "amount": qtyAmount.toString(),
+                      "lotteryprice": userlottery.lotteryprice,
+                      "imageurl": urlpiture,
+                      "date": dateValue,
+                      "latlng": userlottery.latlng,
+                      "userid": user.uid,
+                    });
+                    if (prizeNotifier.prizeList.keys
+                        .contains(dateValue.split("-").join())) {
+                      CheckNumber checkNumber = CheckNumber(
+                          userNum: [userlottery.number],
+                          prizeNotifier: prizeNotifier,
+                          date: dateValue);
+                      List<CheckResult> _checkResult =
+                          checkNumber.getCheckedData();
+
+                      for (var i = 0; i < _checkResult.length; i++) {
+                        dataForAdd.state = _checkResult[i].status;
+                        dataForAdd.won.add(new Won(
+                            wonNum: _checkResult[i].number,
+                            name: _checkResult[i].name,
+                            reward: int.parse(_checkResult[i].reword)));
+                      }
+                    } else {
+                      dataForAdd.state = null;
+                      dataForAdd.won.add(new Won(name: null, wonNum: null, reward: 0));
+                    }
+                    await addToFirebase(context, dataForAdd);
                   },
                   label: Text(
                     "บันทึก",
@@ -569,26 +600,13 @@ class _FormshowlottoState extends State<Formshowlotto> {
     );
   }
 
-  Future<void> addToFirebase(BuildContext context) async {
+  Future<void> addToFirebase(BuildContext context, data) async {
     if (_image != null) {
       await uploadPicture();
     }
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      await _userltottery.add({
-        "username": user.displayName,
-        "number": userlottery.number,
-        "amount": qtyAmount.toString(),
-        "lotteryprice": userlottery.lotteryprice,
-        "imageurl": urlpiture,
-        "date": userDate,
-        "latlng": userlottery.latlng,
-        "userid": user.uid,
-        "state": null,
-        "won": [
-          {"name": null, "wonNum": null, "reward": 0}
-        ]
-      });
+      await _userltottery.add(data);
       Navigator.pop(context);
     }
   }
@@ -717,7 +735,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
       int index = (times / 2).ceil();
       index = (index - 1);
       dateValue = prizeNotifier.listOutDate[index];
-
     });
   }
 }

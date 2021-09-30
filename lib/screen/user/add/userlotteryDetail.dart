@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/screen/user/add/formUpdatelotto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +38,7 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
   Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
-  Userlottery userlottery = Userlottery();
+  UserData userlottery = UserData();
   final user = FirebaseAuth.instance.currentUser;
   List<DocumentSnapshot> documents;
   // เตรียม firebase

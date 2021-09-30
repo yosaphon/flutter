@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
+import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
@@ -40,7 +41,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
-  Userlottery userlottery = Userlottery();
+  UserData userlottery = UserData();
   final user = FirebaseAuth.instance.currentUser;
   List<DocumentSnapshot> documents;
   // เตรียม firebase
