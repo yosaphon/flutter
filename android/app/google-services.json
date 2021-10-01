@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:372493555466:android:bc253d1aa4f1fd1b1accf3",
+        "mobilesdk_app_id": "1:372493555466:android:c0466bda7a1c54f21accf3",
         "android_client_info": {
-          "package_name": "com.projectend.lotterycheck"
+          "package_name": "com.nickth.notification_test1"
         }
       },
       "oauth_client": [
@@ -37,12 +37,28 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:372493555466:android:c0466bda7a1c54f21accf3",
+        "mobilesdk_app_id": "1:372493555466:android:e170807fbc14b2e71accf3",
         "android_client_info": {
-          "package_name": "com.nickth.notification_test1"
+          "package_name": "com.projectend.lotterycheck"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "372493555466-10702ohp570914ocg5q8lfmgo123u6v9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.projectend.lotterycheck",
+            "certificate_hash": "d53bffd5f8af81d68683e6d384254d85e4317945"
+          }
+        },
+        {
+          "client_id": "372493555466-f5v8fpl7ecao5o5o0ojmp7cdnkm4kak5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.projectend.lotterycheck",
+            "certificate_hash": "aeedb5f84821c7711d5bf14e77f51b98a3288908"
+          }
+        },
         {
           "client_id": "372493555466-iflqma5ar256bg6h0jr6mvujfdmhrh4n.apps.googleusercontent.com",
           "client_type": 3
