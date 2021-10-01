@@ -293,7 +293,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
-              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม"),
+              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม" ,style: TextStyle(fontSize: 18)),
             );
           }
           return Column(

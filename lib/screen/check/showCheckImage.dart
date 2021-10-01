@@ -53,7 +53,11 @@ class ShowCheckImage extends StatelessWidget {
           ),
           placeholder: (context, url) => CircularProgressIndicator(),
           errorWidget: (context, url, error) => Row(
-            children: [Icon(Icons.error), Text("เกิดข้อผิดพลาด")],
+            children: [Column(
+              children: [
+                Icon(Icons.error),
+              ],
+            ), Text("เกิดข้อผิดพลาด")],
           ),
         ),
       ),
