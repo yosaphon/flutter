@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lotto/model/PredictData.dart';
 import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 
@@ -36,4 +37,16 @@ getPrize(PrizeNotifier prizeNotifier) async {
   }
   documents = snapshotOutDate.docs;
   prizeNotifier.listOutDate = _listOutDate;
+
+  PredictData _predictData;
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('predictData')
+      .orderBy('date', descending: true)
+      .limit(1)
+      .get();
+  snapshot.docs.forEach((element) {
+    _predictData = PredictData.fromJson(element.data());
+  });
+
+  prizeNotifier.predictData = _predictData;
 }

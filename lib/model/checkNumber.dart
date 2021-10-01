@@ -22,6 +22,7 @@ class CheckNumber {
       _last3b = [];
   PrizeData getSelectedData;
   int getLength() => this._length;
+  bool complete = true;
 
   CheckNumber(
       {@required this.userNum, this.peroid, this.prizeNotifier, this.date}) {
@@ -74,14 +75,31 @@ class CheckNumber {
       });
       getSelectedData = x.first;
       getDataForCheck(getSelectedData);
-      checkPrize();
+      if (_first[0] == "" || _first[0] == null) {
+        complete = false;
+      } else {
+        checkPrize();
+      }
     }
   }
 
   List<CheckResult> getCheckedData() {
     print("เข้า checkingNumber");
     //checkPrize();
-    return _listCheckResult;
+    if (complete == true) {
+      return _listCheckResult;
+    } else {
+      _listCheckResult = [];
+      _listCheckResult.add(new CheckResult(
+          date: getSelectedData.date,
+          usernumber: "",
+          name: '',
+          number: '',
+          reword: '0',
+          status: null));
+
+      return _listCheckResult;
+    }
   }
 
   getDataForCheck(PrizeData prizeData) {

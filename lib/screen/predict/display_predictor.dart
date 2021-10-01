@@ -19,33 +19,15 @@ class DispalyPredictor extends StatefulWidget {
 class _DispalyPredictorState extends State<DispalyPredictor> {
   //สร้าง List ไว้เก็บ Lottery
   var snapshot;
-  PredictData predictData;
+
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
   String dateValue;
   String userDate, newdate;
-  Future loadDataDate(PrizeNotifier prizeNotifier) async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('OutDate').get();
-    documents = snapshot.docs;
-    for (var i = 0; i <= prizeNotifier.prizeList.values.length; i++) {
-      userDate = documents[i].get("date");
-    }
 
-    newdate = userDate.split("-").join("");
-    var snapshot2 = await FirebaseFirestore.instance
-        .collection('predictData')
-        .doc(newdate)
-        .get();
-    predictData = PredictData.fromJson(snapshot2.data());
-  }
 
   @override
   void initState() {
-    PrizeNotifier prizeNotifier =
-        Provider.of<PrizeNotifier>(context, listen: false);
-
-    loadData(prizeNotifier);
     super.initState();
   }
 
@@ -55,13 +37,6 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
             orElse: () => null);
   }
 
-  Future loadData(PrizeNotifier prizeNotifier) async {
-    await getPrize(prizeNotifier);
-    prizeNotifier.prizeList.forEach((key, value) =>
-        date[key] = value.date); //เก็บชื่อวัน และ เลขวันเป็น map
-    dateValue = date.values.first; //เรียกค่าอันสุดท้าย});
-    prizeNotifier.selectedPrize = prizeNotifier.prizeList[getKeyByValue()];
-  }
 
   bool isBack = true;
   double angle1 = 0, angle2 = 0;
@@ -88,13 +63,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
         elevation: 0,
       ),
       body: Center(
-        child: FutureBuilder(
-            future: loadDataDate(prizeNotifier),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (prizeNotifier.prizeList.isEmpty || userDate == null || predictData==null) {
-                return CircularProgressIndicator();
-              } else {
-                return Column(
+        child: Column(
                   children: [
                     Container(
                       height: MediaQuery.of(context).size.height * 0.1,
@@ -108,7 +77,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                                     color: Colors.black,
                                     fontFamily: "Mitr")),
                             TextSpan(
-                                text: numToWord(userDate),
+                                text: numToWord(prizeNotifier.predictData.date),
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.orange,
@@ -122,7 +91,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 30),
                         child: ListView(
-                          children: predictData.data.map((document) {
+                          children: prizeNotifier.predictData.data.map<Widget>((document) {
                             return Padding(
                               padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 5, bottom: 5),
@@ -184,9 +153,8 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                     ),
                     
                   ],
-                );
-              }
-            }),
+                )
+              
       ),
     );
   }

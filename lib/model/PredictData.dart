@@ -14,16 +14,16 @@ class PredictData {
         this.data,
     });
 
-    DateTime date;
+    String date;
     List<Datum> data;
 
     factory PredictData.fromJson(Map<String, dynamic> json) => PredictData(
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: json["date"] == null ? null : json["date"],
         data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "date": date == null ? null : "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+        "date": date == null ? null : date,
         "data": data == null ? null : List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }

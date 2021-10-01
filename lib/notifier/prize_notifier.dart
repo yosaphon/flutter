@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lotto/model/PredictData.dart';
 import 'package:lotto/model/PrizeData.dart';
 
 class PrizeNotifier with ChangeNotifier {
@@ -10,8 +11,9 @@ class PrizeNotifier with ChangeNotifier {
   PrizeData _selectedPrize;
   List<String> _listOutDate;
 
-  UnmodifiableMapView<String,PrizeData> get prizeList =>UnmodifiableMapView(_prizeList);
-  get id =>_id;
+  UnmodifiableMapView<String, PrizeData> get prizeList =>
+      UnmodifiableMapView(_prizeList);
+  get id => _id;
 
   PrizeData get selectedPrize => _selectedPrize;
 
@@ -19,6 +21,7 @@ class PrizeNotifier with ChangeNotifier {
     _prizeList = prizeList;
     notifyListeners();
   }
+
   set id(List<String> id) {
     _id = id;
     notifyListeners();
@@ -33,6 +36,14 @@ class PrizeNotifier with ChangeNotifier {
 
   set listOutDate(List<String> listOutDate) {
     _listOutDate = listOutDate;
+    notifyListeners();
+  }
+
+  PredictData _predictData;
+  get predictData => _predictData;
+
+  set predictData(PredictData predictData) {
+    _predictData = predictData;
     notifyListeners();
   }
 }
