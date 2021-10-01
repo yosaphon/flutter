@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
@@ -20,23 +20,23 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:lotto/model/userlottery.dart';
 import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class FormUpdatelotto extends StatefulWidget {
-  final docID;
+  final docid;
   int amount;
-  FormUpdatelotto({this.docID, this.amount});
+  FormUpdatelotto({this.docid, this.amount});
   @override
-  _FormUpdatelottoState createState() => _FormUpdatelottoState(docID, amount);
+  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid, amount);
 }
 
 class _FormUpdatelottoState extends State<FormUpdatelotto> {
-  final docID;
+  final docid;
   int amount, price;
-  _FormUpdatelottoState(this.docID, this.amount);
+  _FormUpdatelottoState(this.docid, this.amount);
   bool imageStateShow = false;
   final formKey = GlobalKey<FormState>();
   bool checkdatestate = false;
@@ -145,7 +145,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
               body: StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('userlottery')
-                      .doc(docID)
+                      .doc(docid)
                       .snapshots(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData || !snapshot.data.exists) {
@@ -657,24 +657,29 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                         if (formKey.currentState.validate()) {
                                           formKey.currentState.save();
                                           if (_image != null) {
-                                            deleteImage(
-                                                snapshot.data['imageurl']);
+                                            if (snapshot.data['imageurl'] !=
+                                                null) {
+                                              deleteImage(
+                                                  snapshot.data['imageurl']);
+                                            }
+
                                             await uploadPicture();
-                                            await _userltottery
-                                                .doc(docID)
-                                                .update({
-                                              "imageurl": urlpiture,
-                                            });
                                           }
-                                          UserData dataForAdd =UserData.fromJson({
+                                          UserData dataForAdd =
+                                              UserData.fromJson({
                                             "number": userlottery.number,
                                             "date": dateValue,
                                             "username": user.displayName,
                                             "userid": user.uid,
-                                            "imageurl": _image != null ?urlpiture:snapshot.data['imageurl'],
+                                            "imageurl": _image != null
+                                                ? urlpiture
+                                                : snapshot.data['imageurl'],
                                             "amount": amount.toString(),
-                                            "lotteryprice":userlottery.lotteryprice,
-                                            "latlng": userlottery.latlng != null? userlottery.latlng:snapshot.data['latlng'],
+                                            "lotteryprice":
+                                                userlottery.lotteryprice,
+                                            "latlng": userlottery.latlng != null
+                                                ? userlottery.latlng
+                                                : snapshot.data['latlng'],
                                             "won": []
                                           });
                                           String nonsplit = dateValue;
@@ -716,9 +721,9 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                 wonNum: null,
                                                 reward: 0));
                                           }
-                                          await _userltottery
-                                              .doc(docID)
-                                              .update(jsonDecode(userDataToJson(dataForAdd)));
+                                          await _userltottery.doc(docid).update(
+                                              jsonDecode(
+                                                  userDataToJson(dataForAdd)));
                                           Navigator.pop(context);
                                         }
                                       },

@@ -221,7 +221,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             MaterialPageRoute(
                 builder: (context) => Formshowdetaillotto(
                     userID: userNotifier.keyCurrentUser[docid].userid,
-                    docID: docid)),
+                    docid: docid)),
           );
         },
         onLongPress: () {
