@@ -46,7 +46,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
-              android:value="AIzaSyBgWtuZB-6bFc5cJVv524YARzS2vddsUqY"
+              android:value="AIzaSyAxSjHI3AKw0Nm4K7F91-5-S9c1Hwj7dIA"
               />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/> 
         <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" /> 
