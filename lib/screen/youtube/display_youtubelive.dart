@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto/api/prize_api.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'package:lotto/widgets/paddingStyle.dart';
+
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

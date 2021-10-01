@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/widgets/checkedDialog.dart';
-import 'package:provider/provider.dart';
+
 
 class ShowResultChecked extends StatelessWidget {
   final List<CheckResult> allResult;

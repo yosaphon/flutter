@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
@@ -12,7 +10,7 @@ import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/user/sumary/purchaseShow.dart';
-import 'package:lotto/screen/user/sumary/purchase_report.dart';
+
 import 'package:lotto/screen/user/add/userlotteryDetail.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
@@ -27,7 +25,6 @@ class UserprofileLottery extends StatefulWidget {
 
 class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
-  TextEditingController _searchController = TextEditingController();
   int selectedindex = 0;
   int selectedindexsecond = 0;
   List<UserData> lottos = [];

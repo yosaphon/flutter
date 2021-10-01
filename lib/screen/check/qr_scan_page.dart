@@ -1,11 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/showResultCheck.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanPage extends StatefulWidget {
@@ -123,7 +120,7 @@ class _QRScanPageState extends State<QRScanPage> {
             borderWidth: 10,
             borderLength: 20,
             borderRadius: 10,
-            borderColor: Theme.of(context).accentColor,
+            borderColor: Theme.of(context).colorScheme.secondary,
             cutOutSize: MediaQuery.of(context).size.width * 0.5),
       );
   void onQRViewCreated(QRViewController controller) {

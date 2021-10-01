@@ -12,9 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:lotto/model/userlottery.dart';
+
 import 'package:lotto/screen/user/userlotto/display_userlotto.dart';
-import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 
 class Formshowdetaillotto extends StatefulWidget {
@@ -35,7 +34,6 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
 
   final formKey = GlobalKey<FormState>();
 
-  Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
   UserData userlottery = UserData();
@@ -398,13 +396,4 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
     );
   }
 
-  void _navigateAndDisplaySelection(
-      BuildContext context, String locamark) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ShowuserGooglemap(locamark: locamark)),
-    );
-    userlottery.latlng = result;
-  }
 }
