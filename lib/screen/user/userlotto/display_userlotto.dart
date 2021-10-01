@@ -31,7 +31,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   int selectedindex = 0;
   int selectedindexsecond = 0;
   List<UserData> lottos = [];
-  List<String> userID = [];
+  List<String> docID = [];
   String number, query = '';
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
@@ -84,12 +84,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     });
   }
 
-  Future loadData(userNotifier, userSumaryNotifier) async {
+  Future loadData(
+      UserNotifier userNotifier, UserSumaryNotifier userSumaryNotifier) async {
     await getUser(userNotifier, user.uid,
         userSumaryNotifier: userSumaryNotifier);
 
-    lottos = userNotifier.currentUser;
-    userID = userNotifier.docID;
+    lottos = userNotifier.keyCurrentUser.values.toList();
+    docID = userNotifier.keyCurrentUser.keys.toList();
   }
 
   @override
@@ -97,7 +98,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
-    userID = userNotifier.docID;
+    docID = userNotifier.keyCurrentUser.keys.toList();
     //var size = MediaQuery.of(context).size;
 
     void searchLotto(String query) {
@@ -117,6 +118,10 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           hintText: 'ค้นหาเลข',
           onChanged: searchLotto,
         );
+    String getKeyByValue(Map<String,UserData> curr, UserData userData) {
+      return curr.keys.firstWhere((k) => curr[k] == userData, orElse: () => null);
+    }
+
     Widget buildLotto(UserData lotto, String docID) {
       return ListTile(
         tileColor: Colors.white54,
@@ -214,8 +219,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    Formshowdetaillotto(docid: docid, userID: user.uid)),
+                builder: (context) => Formshowdetaillotto(
+                    userID: userNotifier.keyCurrentUser[docid].userid,
+                    docID: docid)),
           );
         },
         onLongPress: () {
@@ -296,20 +302,22 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               buildSearch(),
               Expanded(
                 child: Container(
-                  constraints: BoxConstraints(
-                    minHeight: 3000,
-                    // maxHeight: 200, //minimum height
-                  ),
-                  child: ListView(
-                    controller: _scrollController,
-                    children: [
-                    ...lottos.map((e)  {
-                      UserData lotto = e;
-                      return frameWidget(buildLotto(lotto, e.userid));
-                    }).toList()
-                    ,SizedBox(height: 100,),
-                  ],)
-                ),
+                    constraints: BoxConstraints(
+                      minHeight: 3000,
+                      // maxHeight: 200, //minimum height
+                    ),
+                    child: ListView(
+                      controller: _scrollController,
+                      children: [
+                        ...lottos.map((e) {
+                          UserData lotto = e;
+                          return frameWidget(buildLotto(lotto, getKeyByValue(userNotifier.keyCurrentUser,e)));
+                        }).toList(),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
+                    )),
               )
             ],
           );

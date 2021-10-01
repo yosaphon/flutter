@@ -6,6 +6,10 @@ import 'package:lotto/notifier/user_notifier.dart';
 getUser(UserNotifier userNotifier, dynamic userId,
     {UserSumaryNotifier userSumaryNotifier}) async {
   QuerySnapshot snapshot;
+
+  Map<String,UserData> _keyCurrentUser = {};
+
+
   snapshot = await FirebaseFirestore.instance
       .collection("userlottery")
       .where('userid', isEqualTo: userId)
@@ -21,11 +25,13 @@ getUser(UserNotifier userNotifier, dynamic userId,
   documents.forEach((data) {
     UserData userData = UserData.fromJson(data.data());
     _currentUser.add(userData);
+    _keyCurrentUser[data.id] = userData;
     _docID.add(data.id);
   });
-
+ 
   userNotifier.currentUser = _currentUser;
   userNotifier.docID = _docID;
+   userNotifier.keyCurrentUser = _keyCurrentUser;
 
   if(userSumaryNotifier!=null) userSumaryNotifier.userSumary = _currentUser;
  

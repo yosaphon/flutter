@@ -171,7 +171,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   return Center(child: CircularProgressIndicator());
                 } else {
                   return Container(
-                  
                     child: Form(
                       key: formKey,
                       child: SingleChildScrollView(
@@ -499,11 +498,16 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   backgroundColor: Colors.amber,
                   heroTag: "add",
                   onPressed: () {
-                    if (formKey.currentState.validate()) {
-                      formKey.currentState.save();
+                    FocusScope.of(context).unfocus();
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      setState(() {
+                        if (formKey.currentState.validate()) {
+                          formKey.currentState.save();
 
-                      addToFirebase(context, prizeNotifier);
-                    }
+                          addToFirebase(context, prizeNotifier);
+                        }
+                      });
+                    });
                   },
                   label: Text(
                     "บันทึก",
@@ -592,7 +596,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
         "date": dateValue,
         "latlng": userlottery.latlng,
         "userid": user.uid,
-        "won":[]
+        "won": []
       });
       String nonsplit = dateValue;
       if (prizeNotifier.prizeList.keys.contains(nonsplit.split("-").join())) {
@@ -608,15 +612,15 @@ class _FormshowlottoState extends State<Formshowlotto> {
               wonNum: _checkResult[i].number,
               name: _checkResult[i].name,
               reward: double.parse(_checkResult[i].reword)));
-              print(_checkResult[i].number);
-      print(_checkResult[i].name);
-      print(_checkResult[i].reword.toString());
+          print(_checkResult[i].number);
+          print(_checkResult[i].name);
+          print(_checkResult[i].reword.toString());
         }
       } else {
         dataForAdd.state = null;
         dataForAdd.won.add(new Won(name: null, wonNum: null, reward: 0));
       }
-      await _userltottery.add(jsonDecode(userDataToJson(dataForAdd)) );
+      await _userltottery.add(jsonDecode(userDataToJson(dataForAdd)));
       Navigator.pop(context);
     }
   }

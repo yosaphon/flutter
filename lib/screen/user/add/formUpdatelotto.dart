@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lotto/api/user_api.dart';
+
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
@@ -20,23 +20,23 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lotto/model/userlottery.dart';
+
 import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class FormUpdatelotto extends StatefulWidget {
-  final docid;
+  final docID;
   int amount;
-  FormUpdatelotto({this.docid, this.amount});
+  FormUpdatelotto({this.docID, this.amount});
   @override
-  _FormUpdatelottoState createState() => _FormUpdatelottoState(docid, amount);
+  _FormUpdatelottoState createState() => _FormUpdatelottoState(docID, amount);
 }
 
 class _FormUpdatelottoState extends State<FormUpdatelotto> {
-  final docid;
+  final docID;
   int amount, price;
-  _FormUpdatelottoState(this.docid, this.amount);
+  _FormUpdatelottoState(this.docID, this.amount);
   bool imageStateShow = false;
   final formKey = GlobalKey<FormState>();
   bool checkdatestate = false;
@@ -145,7 +145,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
               body: StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('userlottery')
-                      .doc(docid)
+                      .doc(docID)
                       .snapshots(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData || !snapshot.data.exists) {
@@ -661,7 +661,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                 snapshot.data['imageurl']);
                                             await uploadPicture();
                                             await _userltottery
-                                                .doc(docid)
+                                                .doc(docID)
                                                 .update({
                                               "imageurl": urlpiture,
                                             });
@@ -717,7 +717,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                                 reward: 0));
                                           }
                                           await _userltottery
-                                              .doc(docid)
+                                              .doc(docID)
                                               .update(jsonDecode(userDataToJson(dataForAdd)));
                                           Navigator.pop(context);
                                         }
