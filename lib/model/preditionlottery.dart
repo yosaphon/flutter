@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class lottoerypredition extends StatelessWidget {
+class Lottoerypredition extends StatelessWidget {
   
   dynamic number1, number2, numberfornt3f,numberfornt3s, numberblack3f, numberblack3s; //ตัวเลข 1 ตัว
   // List<dynamic> mNum = []; //ตัวเลขหลายตัว
@@ -8,7 +8,7 @@ class lottoerypredition extends StatelessWidget {
   String type, r1str, p1str, r2str, p2str, result;
   int r1, o1, p1, r2, o2, p2;
 
-  lottoerypredition(this.number1, this.number2, this.numberfornt3f, this.numberfornt3s,
+  Lottoerypredition(this.number1, this.number2, this.numberfornt3f, this.numberfornt3s,
       this.numberblack3f,
       this.numberblack3s, this.type) {
     if (type == "1") {

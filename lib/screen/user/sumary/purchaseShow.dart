@@ -6,7 +6,6 @@ import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
-import 'package:lotto/screen/user/sumary/purchase_report.dart';
 import 'package:provider/provider.dart';
 
 class ShowPurchaseReport extends StatefulWidget {
@@ -217,8 +216,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-    UserSumaryNotifier userSumaryNotifier =
-        Provider.of<UserSumaryNotifier>(context);
+
 
     return Scaffold(
         extendBodyBehindAppBar: false,

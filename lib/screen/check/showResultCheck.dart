@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/screen/check/display_resultChecked.dart';
-import 'package:lotto/screen/prize/displaylotto.dart';
 
 class ShowResultCheck extends StatelessWidget {
   final List<CheckResult> allResult;
   final int length;
 
   ShowResultCheck({key, this.allResult, this.length}) : super(key: key);
-  GlobalKey _captureKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {

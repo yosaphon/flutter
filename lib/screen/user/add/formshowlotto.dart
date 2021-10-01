@@ -9,19 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_automation/flutter_automation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lotto/model/PrizeData.dart';
+
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/checkNumber.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
-import 'package:lotto/model/userlottery.dart';
+
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
@@ -36,7 +33,6 @@ class Formshowlotto extends StatefulWidget {
 
 class _FormshowlottoState extends State<Formshowlotto> {
   final formKey = GlobalKey<FormState>();
-  Completer<GoogleMapController> _controller = Completer();
   var convertedImage;
   String urlpiture;
   UserData userlottery = UserData();
@@ -99,7 +95,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   }
 
   Future getImage(ImageSource imageSource) async {
-    final pickedFile = await picker.getImage(
+    final pickedFile = await picker.pickImage(
         source: imageSource, maxHeight: 1024, maxWidth: 1024, imageQuality: 70);
 
     setState(() {
@@ -113,8 +109,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
 
   Future uploadPicture() async {
     var uuid = Uuid().v4();
-    firebase_storage.FirebaseStorage firebaseStorage =
-        firebase_storage.FirebaseStorage.instance;
+
     firebase_storage.Reference reference =
         firebase_storage.FirebaseStorage.instance.ref().child('userimg/$uuid');
     firebase_storage.UploadTask uploadTask = reference.putFile(_image);
@@ -129,7 +124,6 @@ class _FormshowlottoState extends State<Formshowlotto> {
     //_numberController.text = "";
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
-    UserNotifier userNotifier = Provider.of(context, listen: false);
     // _numberController.text =
     //     "999999";
 

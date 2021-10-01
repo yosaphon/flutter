@@ -1,15 +1,14 @@
-import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lotto/api/prize_api.dart';
-import 'package:lotto/model/PredictData.dart';
+
 import 'package:lotto/model/dropdownDate.dart';
-import 'package:lotto/model/preditionlottery.dart';
+
 import 'package:lotto/notifier/prize_notifier.dart';
-import 'dart:math';
+
 import 'package:provider/provider.dart';
 
-import '../youtube/display_youtubelive.dart';
+
 
 class DispalyPredictor extends StatefulWidget {
   @override
