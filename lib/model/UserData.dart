@@ -20,6 +20,7 @@ class UserData {
         this.userid,
         this.state,
         this.won,
+        this.token,
     });
 
     String username;
@@ -32,54 +33,57 @@ class UserData {
     String userid;
     bool state;
     List<Won> won;
+    String token;
 
     factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-        username: json["username"],
-        number: json["number"],
-        amount: json["amount"],
-        lotteryprice: json["lotteryprice"],
-        imageurl: json["imageurl"],
-        date: json["date"],
-        latlng: json["latlng"],
-        userid: json["userid"],
-        state: json["state"],
-        won: List<Won>.from(json["won"].map((x) => Won.fromJson(x))),
+        username: json["username"] == null ? null : json["username"],
+        number: json["number"] == null ? null : json["number"],
+        amount: json["amount"] == null ? null : json["amount"],
+        lotteryprice: json["lotteryprice"] == null ? null : json["lotteryprice"],
+        imageurl: json["imageurl"] == null ? null : json["imageurl"],
+        date: json["date"] == null ? null : json["date"],
+        latlng: json["latlng"] == null ? null : json["latlng"],
+        userid: json["userid"] == null ? null : json["userid"],
+        state: json["state"] == null ? null : json["state"],
+        won: json["won"] == null ? null : List<Won>.from(json["won"].map((x) => Won.fromJson(x))),
+        token: json["token"] == null ? null : json["token"],
     );
 
     Map<String, dynamic> toJson() => {
-        "username": username,
-        "number": number,
-        "amount": amount,
-        "lotteryprice": lotteryprice,
-        "imageurl": imageurl,
-        "date": date,
-        "latlng": latlng,
-        "userid": userid,
-        "state": state,
-        "won": List<dynamic>.from(won.map((x) => x.toJson())),
+        "username": username == null ? null : username,
+        "number": number == null ? null : number,
+        "amount": amount == null ? null : amount,
+        "lotteryprice": lotteryprice == null ? null : lotteryprice,
+        "imageurl": imageurl == null ? null : imageurl,
+        "date": date == null ? null : date,
+        "latlng": latlng == null ? null : latlng,
+        "userid": userid == null ? null : userid,
+        "state": state == null ? null : state,
+        "won": won == null ? null : List<dynamic>.from(won.map((x) => x.toJson())),
+        "token": token == null ? null : token,
     };
 }
 
 class Won {
     Won({
         this.name,
-        this.wonNum,
         this.reward,
+        this.wonNum,
     });
 
     String name;
-    String wonNum;
     double reward;
+    String wonNum;
 
     factory Won.fromJson(Map<String, dynamic> json) => Won(
-        name: json["name"],
-        wonNum: json["wonNum"],
-        reward: json["reward"].toDouble(),
+        name: json["name"] == null ? null : json["name"],
+        reward: json["reward"] == null ? null : json["reward"].toDouble(),
+        wonNum: json["wonNum"] == null ? null : json["wonNum"],
     );
 
     Map<String, dynamic> toJson() => {
-        "name": name,
-        "wonNum": wonNum,
-        "reward": reward,
+        "name": name == null ? null : name,
+        "reward": reward == null ? null : reward,
+        "wonNum": wonNum == null ? null : wonNum,
     };
 }
