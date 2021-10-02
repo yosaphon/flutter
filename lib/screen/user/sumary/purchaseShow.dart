@@ -45,7 +45,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     end = dateUser[date1.length - 1];
     dateValue1 = date1.first;
     loadData(selectedDate);
-    //loadData(userSumaryNotifier);
     super.initState();
   }
 
@@ -219,6 +218,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
+     UserSumaryNotifier userSumaryNotifier =Provider.of<UserSumaryNotifier>(context);
     return Scaffold(
         extendBodyBehindAppBar: false,
         backgroundColor: Color(0xFFF3FFFE),

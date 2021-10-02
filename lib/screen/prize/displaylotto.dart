@@ -62,6 +62,13 @@ class _DisplayScreenState extends State<DisplayScreen> {
   List<DocumentSnapshot> documents;
   Map<String, String> date = {};
 
+  Future<void> _refreshProducts(
+      BuildContext context, PrizeNotifier prizeNotifier) async {
+    await getPrize(prizeNotifier);
+
+    await Future.delayed(Duration(milliseconds: 1000));
+    prizeNotifier.selectedPrize = prizeNotifier.prizeList.values.first;
+  }
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
@@ -97,110 +104,117 @@ class _DisplayScreenState extends State<DisplayScreen> {
           elevation: 0,
         ),
         body: Center(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DropdownDate(prizeData: prizeNotifier.prizeList.values),
-            Expanded(
-              child: ListView(
-                controller: _scrollController,
-                children: <Widget>[
-                  frameWidget(
-                    PrizeBox(
-                        //รางวัลที่ 1
-                        "รางวัลที่ 1",
-                        prizeNotifier.selectedPrize.data['first'].price,
-                        prizeNotifier.selectedPrize.data['first'].number,
-                        35,
-                        2.2,
-                        1),
-                  ),
-                  frameWidget(
-                    Row(
-                      //รางวัลเลขหน้า 3, เลขท้าย 3
-                      children: <Widget>[
-                        Expanded(
-                          child: PrizeBox(
-                              "เลขหน้า 3 ตัว",
-                              prizeNotifier.selectedPrize.data['last3f'].price,
-                              prizeNotifier.selectedPrize.data['last3f'].number,
-                              22,
-                              4,
-                              2),
-                        ),
-                        Expanded(
-                          child: PrizeBox(
-                              "เลขท้าย 3 ตัว",
-                              prizeNotifier.selectedPrize.data['last3b'].price,
-                              prizeNotifier.selectedPrize.data['last3b'].number,
-                              22,
-                              4,
-                              2),
-                        ),
-                      ],
+            child: RefreshIndicator(
+          onRefresh: () => _refreshProducts(context, prizeNotifier),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DropdownDate(prizeData: prizeNotifier.prizeList.values),
+              Expanded(
+                child: ListView(
+                  controller: _scrollController,
+                  children: <Widget>[
+                    frameWidget(
+                      PrizeBox(
+                          //รางวัลที่ 1
+                          "รางวัลที่ 1",
+                          prizeNotifier.selectedPrize.data['first'].price,
+                          prizeNotifier.selectedPrize.data['first'].number,
+                          35,
+                          2.2,
+                          1),
                     ),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "เลขท้าย 2 ตัว",
-                        prizeNotifier.selectedPrize.data['last2'].price,
-                        prizeNotifier.selectedPrize.data['last2'].number,
-                        30,
-                        2,
-                        1),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "รางวัลใกล้เคียง",
-                        prizeNotifier.selectedPrize.data['near1'].price,
-                        prizeNotifier.selectedPrize.data['near1'].number,
-                        24,
-                        3,
-                        2),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "รางวัลที่ 2",
-                        prizeNotifier.selectedPrize.data['second'].price,
-                        prizeNotifier.selectedPrize.data['second'].number,
-                        18,
-                        3,
-                        3),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "รางวัลที่ 3",
-                        prizeNotifier.selectedPrize.data['third'].price,
-                        prizeNotifier.selectedPrize.data['third'].number,
-                        16,
-                        4,
-                        4),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "รางวัลที่ 4",
-                        prizeNotifier.selectedPrize.data['fourth'].price,
-                        prizeNotifier.selectedPrize.data['fourth'].number,
-                        16,
-                        4,
-                        4),
-                  ),
-                  frameWidget(
-                    PrizeBox(
-                        "รางวัลที่ 5",
-                        prizeNotifier.selectedPrize.data['fifth'].price,
-                        prizeNotifier.selectedPrize.data['fifth'].number,
-                        16,
-                        4,
-                        4),
-                  ),
-                  SizedBox(
-                    height: 100,
-                  )
-                ],
+                    frameWidget(
+                      Row(
+                        //รางวัลเลขหน้า 3, เลขท้าย 3
+                        children: <Widget>[
+                          Expanded(
+                            child: PrizeBox(
+                                "เลขหน้า 3 ตัว",
+                                prizeNotifier
+                                    .selectedPrize.data['last3f'].price,
+                                prizeNotifier
+                                    .selectedPrize.data['last3f'].number,
+                                22,
+                                4,
+                                2),
+                          ),
+                          Expanded(
+                            child: PrizeBox(
+                                "เลขท้าย 3 ตัว",
+                                prizeNotifier
+                                    .selectedPrize.data['last3b'].price,
+                                prizeNotifier
+                                    .selectedPrize.data['last3b'].number,
+                                22,
+                                4,
+                                2),
+                          ),
+                        ],
+                      ),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "เลขท้าย 2 ตัว",
+                          prizeNotifier.selectedPrize.data['last2'].price,
+                          prizeNotifier.selectedPrize.data['last2'].number,
+                          30,
+                          2,
+                          1),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "รางวัลใกล้เคียง",
+                          prizeNotifier.selectedPrize.data['near1'].price,
+                          prizeNotifier.selectedPrize.data['near1'].number,
+                          24,
+                          3,
+                          2),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "รางวัลที่ 2",
+                          prizeNotifier.selectedPrize.data['second'].price,
+                          prizeNotifier.selectedPrize.data['second'].number,
+                          18,
+                          3,
+                          3),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "รางวัลที่ 3",
+                          prizeNotifier.selectedPrize.data['third'].price,
+                          prizeNotifier.selectedPrize.data['third'].number,
+                          16,
+                          4,
+                          4),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "รางวัลที่ 4",
+                          prizeNotifier.selectedPrize.data['fourth'].price,
+                          prizeNotifier.selectedPrize.data['fourth'].number,
+                          16,
+                          4,
+                          4),
+                    ),
+                    frameWidget(
+                      PrizeBox(
+                          "รางวัลที่ 5",
+                          prizeNotifier.selectedPrize.data['fifth'].price,
+                          prizeNotifier.selectedPrize.data['fifth'].number,
+                          16,
+                          4,
+                          4),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         )),
         floatingActionButton: Visibility(
           visible: _show,
