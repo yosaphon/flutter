@@ -70,6 +70,9 @@ Widget displayData(String usernumber, String name, String date, bool status,Stri
               style: TextStyle(fontSize: 24, color: Colors.indigo)),
         ],
       ),
+      name.isNotEmpty
+      ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
+          : SizedBox(),
       status ==true
           ? Text(
               "ถูกรางวัล ${NumberFormat("#,###").format(int.parse(reward.replaceAll('.00', '')))} บาท",
@@ -80,11 +83,11 @@ Widget displayData(String usernumber, String name, String date, bool status,Stri
               style: TextStyle(fontSize: size, color: color),
             ),
 
-      name.isNotEmpty
-          ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
-          : SizedBox(
-              height: 24,
-            ),
+      // name.isNotEmpty
+      //     ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
+      //     : SizedBox(
+      //         height: 24,
+      //       ),
       Text("งวดที่ ${ numToWord(date)}" ,
           style: TextStyle(fontSize: 18, color: Colors.black)),
     ],
