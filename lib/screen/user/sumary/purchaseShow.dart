@@ -306,6 +306,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           children: <Widget>[
                             _buildStatCard('เงินรางวัล', '฿$totalReward', 'บาท',
                                 Colors.white, Color(0xFF40E0D0)),
+                                
                             _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
                                 Colors.white, Color(0XFFC70039)),
                           ],

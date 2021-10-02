@@ -38,9 +38,9 @@ class ShowResultChecked extends StatelessWidget {
               children: [
                 shareAndClose(
                     displayData(document.usernumber, document.name,
-                        document.date, document.status, 15.3, Colors.amber),
+                        document.date, document.status, document.reword,15.3, Colors.amber),
                     context,
-                    _key)
+                    _key,document.status)
               ],
             )),
         decoration: new BoxDecoration(

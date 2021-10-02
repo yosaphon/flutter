@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:footer/footer.dart';
+import 'package:intl/intl.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui' as ui;
@@ -52,7 +53,7 @@ class CheckedDialog extends StatelessWidget {
 
 }
 
-Widget displayData(String usernumber, String name, String date, bool status,
+Widget displayData(String usernumber, String name, String date, bool status,String reward,
     double size, Color color) {
   return Column(
     children: <Widget>[
@@ -69,15 +70,16 @@ Widget displayData(String usernumber, String name, String date, bool status,
               style: TextStyle(fontSize: 24, color: Colors.indigo)),
         ],
       ),
-      (status)
+      status ==true
           ? Text(
-              "ถูก",
+              "ถูกรางวัล ${NumberFormat("#,###").format(int.parse(reward.replaceAll('.00', '')))} บาท",
               style: TextStyle(fontSize: size, color: color),
             )
           : Text(
               "ไม่ถูกรางวัลใดๆ",
               style: TextStyle(fontSize: size, color: color),
             ),
+
       name.isNotEmpty
           ? Text(name, style: TextStyle(fontSize: 30, color: Colors.red[400]))
           : SizedBox(
@@ -89,7 +91,7 @@ Widget displayData(String usernumber, String name, String date, bool status,
   );
 }
 
-Widget shareAndClose(result, context,_key) {
+Widget shareAndClose(result, context,_key,bool status) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -98,9 +100,9 @@ Widget shareAndClose(result, context,_key) {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            colors: [
-              Colors.blueAccent,
-              Colors.pink,
+             colors: [
+              status == true? Colors.blueAccent:Colors.grey,
+              status == true? Colors.pink:Color(0xff455566),
             ],
           ),
           shape: BoxShape.rectangle,
