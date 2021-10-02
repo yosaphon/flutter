@@ -6,6 +6,7 @@ import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:path/path.dart' as Path;
@@ -104,6 +105,8 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+        UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
@@ -669,6 +672,7 @@ class _FormUpdatelottoState extends State<FormUpdatelotto> {
                                             "amount": amount.toString(),
                                             "lotteryprice":
                                                 userlottery.lotteryprice,
+                                                "token" : userNotifier.token,
                                             "latlng": userlottery.latlng != null
                                                 ? userlottery.latlng
                                                 : snapshot.data['latlng'],

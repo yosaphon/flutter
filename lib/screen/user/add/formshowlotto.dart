@@ -19,6 +19,7 @@ import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/model/dropdownDate.dart';
 
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/notifier/user_notifier.dart';
 import 'package:lotto/screen/check/qr_scan_page.dart';
 import 'package:lotto/screen/user/add/googlemapshow.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
@@ -124,6 +125,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
     //_numberController.text = "";
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
+        UserNotifier userNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
     // _numberController.text =
     //     "999999";
 
@@ -498,7 +501,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         if (formKey.currentState.validate()) {
                           formKey.currentState.save();
 
-                          addToFirebase(context, prizeNotifier);
+                          addToFirebase(context, prizeNotifier,userNotifier);
                         }
                       });
                     });
@@ -575,7 +578,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
   }
 
   Future<void> addToFirebase(
-      BuildContext context, PrizeNotifier prizeNotifier) async {
+      BuildContext context, PrizeNotifier prizeNotifier, UserNotifier userNotifier) async {
     if (_image != null) {
       await uploadPicture();
     }
@@ -590,6 +593,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
         "date": dateValue,
         "latlng": userlottery.latlng,
         "userid": user.uid,
+        "token" : userNotifier.token,
         "won": []
       });
       String nonsplit = dateValue;

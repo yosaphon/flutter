@@ -8,16 +8,17 @@ class UserNotifier with ChangeNotifier {
   List<UserData> _currentUser = [];
   UserData _selectedData;
   List<String> _docID = [];
-  Map<String,UserData> _keyCurrentUser = {};
-
-  QRCodeData _qrcodeData ;
+  Map<String, UserData> _keyCurrentUser = {};
+  String _token;
+  QRCodeData _qrcodeData;
 
   UnmodifiableListView<UserData> get currentUser =>
       UnmodifiableListView(_currentUser);
 
   UnmodifiableListView<String> get docID => UnmodifiableListView(_docID);
 
-  UnmodifiableMapView<String,UserData> get keyCurrentUser => UnmodifiableMapView(_keyCurrentUser);
+  UnmodifiableMapView<String, UserData> get keyCurrentUser =>
+      UnmodifiableMapView(_keyCurrentUser);
 
   get selectedData => _selectedData;
 
@@ -32,7 +33,8 @@ class UserNotifier with ChangeNotifier {
     _currentUser = userData;
     notifyListeners();
   }
-  set keyCurrentUser(Map<String,UserData> keyCurrentUser) {
+
+  set keyCurrentUser(Map<String, UserData> keyCurrentUser) {
     _keyCurrentUser = keyCurrentUser;
     notifyListeners();
   }
@@ -44,6 +46,12 @@ class UserNotifier with ChangeNotifier {
 
   set selectedData(UserData userData) {
     _selectedData = userData;
+    notifyListeners();
+  }
+  get token => _token;
+
+  set token(String token) {
+    _token = token;
     notifyListeners();
   }
 }
