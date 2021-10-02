@@ -1,11 +1,13 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
+import 'package:lotto/screen/user/sumary/purchase_report.dart';
 import 'package:provider/provider.dart';
 
 class ShowPurchaseReport extends StatefulWidget {
@@ -161,7 +163,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     if (selectedDate.isNotEmpty) {
       dataAfterSelected.forEach((element) {
         for (var i = 0; i < element.won.length; i++) {
-          totalReward += element.won[i].reward == null ? 0.00 : element.won[i].reward;
+          totalReward +=
+              element.won[i].reward == null ? 0.00 : element.won[i].reward;
         }
         totalPay += element.lotteryprice == null
             ? 0.00
@@ -216,8 +219,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         extendBodyBehindAppBar: false,
         backgroundColor: Color(0xFFF3FFFE),
@@ -304,11 +305,18 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                       Flexible(
                         child: Row(
                           children: <Widget>[
-                            _buildStatCard('เงินรางวัล', '฿$totalReward', 'บาท',
-                                Colors.white, Color(0xFF40E0D0)),
-                                
-                            _buildStatCard('เสียเงิน', '฿$totalPay', 'บาท',
-                                Colors.white, Color(0XFFC70039)),
+                            _buildStatCard(
+                                'เงินรางวัล',
+                                '฿${NumberFormat("#,###").format(totalReward)}',
+                                'บาท',
+                                Colors.white,
+                                Color(0xFF40E0D0)),
+                            _buildStatCard(
+                                'เสียเงิน',
+                                '฿${NumberFormat("#,###").format(totalPay)}',
+                                'บาท',
+                                Colors.white,
+                                Color(0XFFC70039)),
                           ],
                         ),
                       ),
@@ -317,14 +325,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                           children: <Widget>[
                             _buildStatCard(
                                 'จำนวนสลาก',
-                                '${totalAmount.toString()}',
+                                '${NumberFormat("#,###").format(totalAmount)}',
                                 'ใบ',
                                 Colors.white,
                                 Colors.black),
                             _buildStatCardTotal(
                                 'กำไร',
-                                '฿$totalProfit',
-                                '${(totalProfit / totalPay )* 100}',
+                                '฿${NumberFormat("#,###").format(totalProfit)}',
+                                '${(totalProfit / totalPay) * 100}',
                                 'บาท',
                                 Colors.white,
                                 totalReward > totalPay
@@ -404,13 +412,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                     children: [
                                       _builddateCard(
                                           'เงินรางวัล',
-                                          '฿${_sumaryData[index].sumReward}',
+                                          '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward)}',
                                           'บาท',
                                           Colors.white,
                                           Color(0xFF40E0D0)),
                                       _builddateCard(
                                           'เสียเงิน',
-                                          '฿${_sumaryData[index].sumPay}',
+                                          '฿${NumberFormat("#,###").format(_sumaryData[index].sumPay)}',
                                           'บาท',
                                           Colors.white,
                                           Color(0XFFC70039)),
@@ -420,14 +428,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                     children: [
                                       _builddateCard(
                                           'จำนวน',
-                                          '${_sumaryData[index].amount}',
+                                          '${NumberFormat("#,###").format(_sumaryData[index].amount)}',
                                           'บาท',
                                           Colors.white,
                                           Colors.black),
                                       _builddateCardTotal(
                                           'กำไร',
-                                          '฿${_sumaryData[index].sumReward - _sumaryData[index].sumPay}',
-                                          '${(((_sumaryData[index].sumReward-_sumaryData[index].sumPay) / _sumaryData[index].sumPay) * 100)}',
+                                          '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward - _sumaryData[index].sumPay)}',
+                                          '${(((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / _sumaryData[index].sumPay) * 100)}',
                                           'บาท',
                                           Colors.white,
                                           _sumaryData[index].sumReward >
@@ -479,7 +487,6 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           return DataRow(
             cells: <DataCell>[
               DataCell(
-                
                 Text("${data.number}(x${data.amount})",
                     style: TextStyle(fontSize: 10)),
               ),
@@ -762,8 +769,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 
-  Widget _buildStatCardTotal(String title, String count, String percen,
-      String typestring, Color color, Color colorfont,) {
+  Widget _buildStatCardTotal(
+    String title,
+    String count,
+    String percen,
+    String typestring,
+    Color color,
+    Color colorfont,
+  ) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
