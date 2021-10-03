@@ -269,7 +269,7 @@ class CheckNumber {
         _listCheckResult.add(new CheckResult(
             date: getSelectedData.date,
             usernumber: usernumber,
-            name: "รางวัลเลข 3 ตัวหน้า",
+            name: "รางวัลเลขหน้า 3 ตัว",
             number: item,
             reword: getSelectedData.data["last3f"].price,
             status: true));
@@ -288,7 +288,7 @@ class CheckNumber {
         _listCheckResult.add(new CheckResult(
             date: getSelectedData.date,
             usernumber: usernumber,
-            name: "รางวัลเลข 3 ตัวท้าย",
+            name: "รางวัลเลขท้าย 3 ตัว",
             number: item,
             reword: getSelectedData.data["last3b"].price,
             status: true));
@@ -305,7 +305,7 @@ class CheckNumber {
         _listCheckResult.add(new CheckResult(
             date: getSelectedData.date,
             usernumber: usernumber,
-            name: "รางวัลเลข 2 ตัวท้าย",
+            name: "รางวัลเลขท้าย 2 ตัว",
             number: item,
             reword: getSelectedData.data["last2"].price,
             status: true));
