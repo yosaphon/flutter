@@ -65,9 +65,9 @@ class MyApp extends StatelessWidget {
         })
       ],
       child: MaterialApp(
-        title: 'Lottery',
+        title: 'Lottery Checky',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.indigo,
           fontFamily: 'Mitr',
         ),
         home: MyHomePage(title: 'Lottery app'),

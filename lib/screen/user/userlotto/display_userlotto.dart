@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lotto/api/user_api.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
@@ -90,6 +91,18 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
     lottos = userNotifier.keyCurrentUser.values.toList();
     docID = userNotifier.keyCurrentUser.keys.toList();
+  }
+
+  void changeIndexfirst(int index) {
+    setState(() {
+      selectedindex = index;
+    });
+  }
+
+  void changeIndexsecon(int index) {
+    setState(() {
+      selectedindexsecond = index;
+    });
   }
 
   @override
@@ -271,17 +284,19 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        color: Colors.black87,
-                      ),
-                      const SizedBox(width: 8),
-                      Text('Sign Out',
-                          style: TextStyle(
-                              color: Colors.black, fontFamily: "Mitr")),
-                    ],
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.logout,
+                          color: Colors.black87,
+                        ),
+                        const SizedBox(width: 8),
+                        Text('Sign Out',
+                            style: TextStyle(
+                                color: Colors.black, fontFamily: "Mitr")),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -309,21 +324,31 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       constraints: BoxConstraints(maxWidth: 330),
                       child: buildSearch()),
                   Container(
+                      constraints: BoxConstraints(maxHeight: 42),
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
+                              color: Colors.grey.withOpacity(0.4),
                               spreadRadius: 0,
-                              blurRadius: 7,
+                              blurRadius: 4,
                               offset:
-                                  Offset(0, 4), // changes position of shadow
+                                  Offset(0, 3), // changes position of shadow
                             ),
                           ],
-                          color: Colors.white,
+                          color: Colors.amberAccent,
                           shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
-                      margin: EdgeInsets.only(top: 18, left: 330),
-                      child: Center(child: null))
+                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                      margin: EdgeInsets.only(top: 16, left: 330, right: 20),
+                      child: TextButton(
+                        child: Icon(
+                          FontAwesomeIcons.alignJustify,
+                          color: Colors.black87,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          _lotteryEditModalBottomSheet(context);
+                        },
+                      )) //_lotteryEditModalBottomSheet(context)))
                 ],
               ),
               Expanded(
@@ -416,16 +441,165 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     );
   }
 
-  void changeIndexfirst(int index) {
-    setState(() {
-      selectedindex = index;
-    });
+  void _lotteryEditModalBottomSheet(context) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft:Radius.circular(20),topRight: Radius.circular(20)),
+        ),
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter mystate) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.indigo,
+                            size: 25,
+                          ))
+                    ],
+                  ),
+                  textcutom("สถานะ"),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Wrap(
+                    children: [
+                      filterOption(mystate, "ทั้งหมด", 0),
+                      filterOption(mystate, "ถูกรางวัล", 1),
+                      filterOption(mystate, "ถูกรางวัล", 2),
+                    ],
+                  ),
+                  textcutom("รางวัล"),
+                  Wrap(
+                    children: [
+                      filterOptionByReward(mystate, "ทั้งหมด", 0),
+                      filterOptionByReward(mystate, "เลขท้ายสองตัว", 1),
+                      filterOptionByReward(mystate, "เลขหน้าสามตัว", 2),
+                      filterOptionByReward(mystate, "เลขท้ายสามตัว", 3),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 9,
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(0);
+                            changeIndexfirst(0);
+                          });
+                        },
+                        label: const Text(
+                          'ล้าง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {},
+                        label: const Text(
+                          'ตกลง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
   }
 
-  void changeIndexsecon(int index) {
-    setState(() {
-      selectedindexsecond = index;
-    });
+  OutlinedButton filterOptionByReward(StateSetter mystate, String name, int i) {
+    return OutlinedButton(
+      onPressed: () {
+        mystate(() {
+          changeIndexsecon(i);
+        });
+      },
+      child: Container(
+        width: 120,
+        child: Row(
+          children: [
+            Icon(
+              Icons.check_circle_outline_outlined,
+              color: selectedindexsecond == i ? Colors.blue : Colors.white10,
+              size: 20,
+            ),
+            Text(
+              name,
+              style: TextStyle(
+                  color:
+                      selectedindexsecond == i ? Colors.blue : Colors.blueGrey),
+            ),
+          ],
+        ),
+      ),
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        side: BorderSide(
+            width: 2,
+            color: selectedindexsecond == i ? Colors.blue : Colors.blueGrey),
+      ),
+    );
+  }
+
+  OutlinedButton filterOption(StateSetter mystate, String name, int i) {
+    return OutlinedButton(
+      onPressed: () {
+        mystate(() {
+          changeIndexfirst(i);
+        });
+      },
+      child: Container(
+        width: 120,
+        child: Row(
+          children: [
+            Icon(
+              Icons.check_circle_outline_outlined,
+              color: selectedindex == i ? Colors.blue : Colors.white10,
+              size: 20,
+            ),
+            Text(
+              name,
+              style: TextStyle(
+                  color: selectedindex == i ? Colors.blue : Colors.blueGrey),
+            ),
+          ],
+        ),
+      ),
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        side: BorderSide(
+            width: 2,
+            color: selectedindex == i ? Colors.blue : Colors.blueGrey),
+      ),
+    );
   }
 
   Widget textcutom(String data) {

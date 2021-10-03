@@ -34,7 +34,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             color: Colors.white,
             border: Border.all(color: Colors.black26),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: TextField(
             controller: controller,
             // กรอกได้เฉพาะตัวเลย กับ ยาวสุก 6
