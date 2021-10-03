@@ -274,10 +274,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("เริ่ม :",
-                                      style: TextStyle(color: Colors.black54)),
+                                      style: TextStyle(color: Colors.orange)),
                                   selectdate1(context),
                                   Text("ถึง :",
-                                      style: TextStyle(color: Colors.black54)),
+                                      style: TextStyle(color: Colors.orange)),
                                   state == false
                                       ? IgnorePointer(
                                           child: selectdateFake(context),
