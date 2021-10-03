@@ -85,8 +85,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                           ]),
                         ),
                       ),
-                    ),
-                    Expanded(
+                    ),prizeNotifier.predictData.data[0].title != ""?Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 30),
                         child: ListView(
@@ -149,7 +148,8 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                           }).toList(),
                         ),
                       ),
-                    ),
+                    )
+                    :Text("รอผลทำนาย")
                     
                   ],
                 )
