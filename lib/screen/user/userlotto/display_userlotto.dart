@@ -25,9 +25,11 @@ class UserprofileLottery extends StatefulWidget {
 
 class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
-  List<UserData> lottos = [], filter = [];
+  int selectedindex = 0;
+  int selectedindexsecond = 0;
+  List<UserData> lottos = [];
   List<String> docID = [];
-  String number, query = '', typer1 = 'all', typer2 = 'all';
+  String number, query = '';
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
 
@@ -83,7 +85,6 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       UserNotifier userNotifier, UserSumaryNotifier userSumaryNotifier) async {
     await getUser(userNotifier, user.uid,
         userSumaryNotifier: userSumaryNotifier);
-    print("โหลด" + typer1);
 
     lottos = userNotifier.keyCurrentUser.values.toList();
     docID = userNotifier.keyCurrentUser.keys.toList();
@@ -98,9 +99,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     //var size = MediaQuery.of(context).size;
 
     void searchLotto(String query) {
-      var lottos = userNotifier.currentUser.where((lotto) {
-        final last2 = lotto.number.substring(4, 6);
-        return last2.contains(query);
+      final lottos = userNotifier.currentUser.where((lotto) {
+        final lNumber = lotto.number;
+        return lNumber.contains(query);
       }).toList();
 
       setState(() {
@@ -114,9 +115,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           hintText: 'ค้นหาเลข',
           onChanged: searchLotto,
         );
-    String getKeyByValue(Map<String, UserData> curr, UserData userData) {
-      return curr.keys
-          .firstWhere((k) => curr[k] == userData, orElse: () => null);
+    String getKeyByValue(Map<String,UserData> curr, UserData userData) {
+      return curr.keys.firstWhere((k) => curr[k] == userData, orElse: () => null);
     }
 
     Widget buildLotto(UserData lotto, String docID) {
@@ -284,21 +284,19 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ],
       ),
       body: FutureBuilder(
-        future: ((query.isEmpty || userNotifier.currentUser.isEmpty) &&
-                typer1 == "all")
+        future: (query.isEmpty || userNotifier.currentUser.isEmpty)
             ? loadData(userNotifier, userSumaryNotifier)
             : null,
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
-              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม",
-                  style: TextStyle(fontSize: 18)),
+              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม" ,style: TextStyle(fontSize: 18)),
             );
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                 buildSearch(),
+              buildSearch(),
               Expanded(
                 child: Container(
                     constraints: BoxConstraints(
@@ -310,8 +308,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       children: [
                         ...lottos.map((e) {
                           UserData lotto = e;
-                          return frameWidget(buildLotto(lotto,
-                              getKeyByValue(userNotifier.keyCurrentUser, e)));
+                          return frameWidget(buildLotto(lotto, getKeyByValue(userNotifier.keyCurrentUser,e)));
                         }).toList(),
                         SizedBox(
                           height: 100,
@@ -386,6 +383,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
+  }
+
+  void changeIndexfirst(int index) {
+    setState(() {
+      selectedindex = index;
+    });
+  }
+
+  void changeIndexsecon(int index) {
+    setState(() {
+      selectedindexsecond = index;
+    });
+  }
+
+  Widget textcutom(String data) {
+    return Text(
+      data,
+      style: TextStyle(color: Colors.blue, fontSize: 20),
     );
   }
 }
