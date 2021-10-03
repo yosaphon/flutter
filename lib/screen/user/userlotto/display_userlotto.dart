@@ -27,9 +27,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
   int selectedindex = 0;
   int selectedindexsecond = 0;
-  List<UserData> lottos = [];
+  List<UserData> lottos = [],filter = [];
   List<String> docID = [];
-  String number, query = '';
+  String number, query = '', typer1 = 'all', typer2 = 'all';
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
 
@@ -85,7 +85,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
       UserNotifier userNotifier, UserSumaryNotifier userSumaryNotifier) async {
     await getUser(userNotifier, user.uid,
         userSumaryNotifier: userSumaryNotifier);
-
+        print("โหลด"+typer1);
     lottos = userNotifier.keyCurrentUser.values.toList();
     docID = userNotifier.keyCurrentUser.keys.toList();
   }
@@ -99,10 +99,76 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     //var size = MediaQuery.of(context).size;
 
     void searchLotto(String query) {
-      final lottos = userNotifier.currentUser.where((lotto) {
-        final lNumber = lotto.number;
-        return lNumber.contains(query);
-      }).toList();
+      var lottos;
+      if (typer1 == 'all' && typer2 == 'last2') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last2 = lotto.number.substring(4, 6);
+          return last2.contains(query);
+        }).toList();
+      } else if (typer1 == 'all' && typer2 == 'last3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last3 = lotto.number.substring(3, 6);
+          return last3.contains(query);
+        }).toList();
+      } else if (typer1 == 'all' && typer2 == 'first3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final first3 = lotto.number.substring(0, 3);
+          return first3.contains(query);
+        }).toList();
+      } else if (typer1 == 'true' && typer2 == 'all') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final lNumber = lotto.number;
+          final state = lotto.state;
+          return state == true && lNumber.contains(query);
+        }).toList();
+      } else if (typer1 == 'true' && typer2 == 'last2') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last2 = lotto.number.substring(4, 6);
+          final state = lotto.state;
+          return state == true && last2.contains(query);
+        }).toList();
+      } else if (typer1 == 'true' && typer2 == 'last3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last3 = lotto.number.substring(3, 6);
+          final state = lotto.state;
+          return state == true && last3.contains(query);
+        }).toList();
+      } else if (typer1 == 'true' && typer2 == 'first3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final first3 = lotto.number.substring(0, 3);
+          final state = lotto.state;
+          return state == true && first3.contains(query);
+        }).toList();
+      } else if (typer1 == 'false' && typer2 == 'all') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final lNumber = lotto.number;
+          final state = lotto.state;
+          return state == false && lNumber.contains(query);
+        }).toList();
+      } else if (typer1 == 'false' && typer2 == 'last2') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last2 = lotto.number.substring(4, 6);
+          final state = lotto.state;
+          return state == false && last2.contains(query);
+        }).toList();
+      } else if (typer1 == 'false' && typer2 == 'last3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final last3 = lotto.number.substring(3, 6);
+          final state = lotto.state;
+          return state == false && last3.contains(query);
+        }).toList();
+      } else if (typer1 == 'false' && typer2 == 'first3') {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final first3 = lotto.number.substring(0, 3);
+          final state = lotto.state;
+          return state == false && first3.contains(query);
+        }).toList();
+      } else {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final lNumber = lotto.number;
+          return lNumber.contains(query);
+        }).toList();
+      }
 
       setState(() {
         this.query = query;
@@ -115,8 +181,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           hintText: 'ค้นหาเลข',
           onChanged: searchLotto,
         );
-    String getKeyByValue(Map<String,UserData> curr, UserData userData) {
-      return curr.keys.firstWhere((k) => curr[k] == userData, orElse: () => null);
+    String getKeyByValue(Map<String, UserData> curr, UserData userData) {
+      return curr.keys
+          .firstWhere((k) => curr[k] == userData, orElse: () => null);
     }
 
     Widget buildLotto(UserData lotto, String docID) {
@@ -284,19 +351,28 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ],
       ),
       body: FutureBuilder(
-        future: (query.isEmpty || userNotifier.currentUser.isEmpty)
+        future: (query.isEmpty ||
+                userNotifier.currentUser.isEmpty)
             ? loadData(userNotifier, userSumaryNotifier)
             : null,
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
-              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม" ,style: TextStyle(fontSize: 18)),
+              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม",
+                  style: TextStyle(fontSize: 18)),
             );
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSearch(),
+              Row(children: [
+                Container(width: 300, child: buildSearch()),
+                IconButton(
+                    onPressed: () {
+                      _lotteryEditModalBottomSheet(context);
+                    },
+                    icon: Icon(Icons.filter_1_sharp))
+              ]),
               Expanded(
                 child: Container(
                     constraints: BoxConstraints(
@@ -308,7 +384,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       children: [
                         ...lottos.map((e) {
                           UserData lotto = e;
-                          return frameWidget(buildLotto(lotto, getKeyByValue(userNotifier.keyCurrentUser,e)));
+                          return frameWidget(buildLotto(lotto,
+                              getKeyByValue(userNotifier.keyCurrentUser, e)));
                         }).toList(),
                         SizedBox(
                           height: 100,
@@ -396,6 +473,439 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     setState(() {
       selectedindexsecond = index;
     });
+  }
+
+  Widget _lotteryEditModalBottomSheet(context) {
+    // UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    // void _lotteryEditModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter mystate) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.blue,
+                            size: 25,
+                          ))
+                    ],
+                  ),
+                  textcutom("ประเภท"),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Wrap(
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexfirst(0);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindex == 0
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "ทั้งหมด",
+                                style: TextStyle(
+                                    color: selectedindex == 0
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 0
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexfirst(1);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindex == 1
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "ถูกรางวัล",
+                                style: TextStyle(
+                                    color: selectedindex == 1
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 1
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+
+                      // customRadio("ไม่ถูกรางวัล", 2),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexfirst(2);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindex == 2
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "ไม่ถูกรางวัล",
+                                style: TextStyle(
+                                    color: selectedindex == 2
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindex == 2
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(0);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindexsecond == 0
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "ทั้งหมด",
+                                style: TextStyle(
+                                    color: selectedindexsecond == 0
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 0
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(1);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindexsecond == 1
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "เลขท้ายสองตัว",
+                                style: TextStyle(
+                                    color: selectedindexsecond == 1
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 1
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(2);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindexsecond == 2
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "เลขหน้าสามตัว",
+                                style: TextStyle(
+                                    color: selectedindexsecond == 2
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 2
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(3);
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_outlined,
+                                color: selectedindexsecond == 3
+                                    ? Colors.blue
+                                    : Colors.white10,
+                                size: 20,
+                              ),
+                              Text(
+                                "เลขท้ายสามตัว",
+                                style: TextStyle(
+                                    color: selectedindexsecond == 3
+                                        ? Colors.blue
+                                        : Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          side: BorderSide(
+                              width: 2,
+                              color: selectedindexsecond == 3
+                                  ? Colors.blue
+                                  : Colors.blueGrey),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 9,
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          mystate(() {
+                            changeIndexsecon(0);
+                            changeIndexfirst(0);
+                          });
+                        },
+                        label: const Text(
+                          'ล้าง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          setState(() {
+                            // typer1 = "last2";
+                            // if (selectedindex == 0 &&
+                            //     selectedindexsecond == 0) {
+                            //   typer1 = "all";
+                            //   typer2 = "all";
+                            // } else if (selectedindex == 0 &&
+                            //     selectedindexsecond == 1) {
+                            //   typer1 = "all";
+                            //   typer2 = "last2";
+                            // } else if (selectedindex == 0 &&
+                            //     selectedindexsecond == 2) {
+                            //   typer1 = "all";
+                            //   typer2 = "first3";
+                            // } else if (selectedindex == 0 &&
+                            //     selectedindexsecond == 3) {
+                            //   typer1 = "all";
+                            //   typer2 = "last3";
+                            // } else if (selectedindex == 1 &&
+                            //     selectedindexsecond == 0) {
+                            //   typer1 = "true";
+                            //   typer2 = "all";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == true;
+                            // }).toList();
+                            // } else if (selectedindex == 1 &&
+                            //     selectedindexsecond == 1) {
+                            //   typer1 = "true";
+                            //   typer2 = "last2";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == true;
+                            // }).toList();
+                            // } else if (selectedindex == 1 &&
+                            //     selectedindexsecond == 2) {
+                            //   typer1 = "true";
+                            //   typer2 = "first3";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == true;
+                            // }).toList();
+                            // } else if (selectedindex == 1 &&
+                            //     selectedindexsecond == 3) {
+                            //   typer1 = "true";
+                            //   typer2 = "last3";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == true;
+                            // }).toList();
+                            // } else if (selectedindex == 2 &&
+                            //     selectedindexsecond == 0) {
+                            //   typer1 = "false";
+                            //   typer2 = "all";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == false;
+                            // }).toList();
+                            // } else if (selectedindex == 2 &&
+                            //     selectedindexsecond == 1) {
+                            //   typer1 = "false";
+                            //   typer2 = "last2";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == false;
+                            // }).toList();
+                            // } else if (selectedindex == 2 &&
+                            //     selectedindexsecond == 2) {
+                            //   typer1 = "false";
+                            //   typer2 = "first3";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == false;
+                            // }).toList();
+                            // } else if (selectedindex == 2 &&
+                            //     selectedindexsecond == 3) {
+                            //   typer1 = "false";
+                            //   typer2 = "last3";
+                            //   filter = lottos.where((lotto) {
+                            //   final state = lotto.state;
+                            //   return state == false;
+                            // }).toList();
+                            // }
+                            
+                            // this.lottos = filter;
+                            Navigator.pop(context);
+                          });
+                        },
+                        label: const Text(
+                          'ตกลง',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                      ),
+                      Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
   }
 
   Widget textcutom(String data) {
