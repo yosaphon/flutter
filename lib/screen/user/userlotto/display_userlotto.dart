@@ -27,8 +27,8 @@ class UserprofileLottery extends StatefulWidget {
 
 class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
-  int selectedindex = 0;
-  int selectedindexsecond = 0;
+  int selectedStatus = 0;
+  int selectedReward = 0;
   List<UserData> lottos = [];
   List<String> docID = [];
   String number, query = '';
@@ -95,13 +95,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   void changeIndexfirst(int index) {
     setState(() {
-      selectedindex = index;
+      selectedStatus = index;
     });
   }
 
   void changeIndexsecon(int index) {
     setState(() {
-      selectedindexsecond = index;
+      selectedReward = index;
     });
   }
 
@@ -114,7 +114,28 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
     void searchLotto(String query) {
       var lottos;
-      if (filterSelect == "true") {
+      // if(selectedReward == 0 && selectedStatus == 0){
+
+      // }
+      // else
+      if (selectedReward == 1) {
+        lottos = userNotifier.currentUser.where((lotto) {
+          var last2 = lotto.number.substring(4, 6);
+          //final lNumber = lotto.number;
+          return last2.contains(query);
+        }).toList();
+      } else if (selectedReward == 2) {
+        lottos = userNotifier.currentUser.where((lotto) {
+          var first3 = lotto.number.substring(0, 3);
+          //final lNumber = lotto.number;
+          return first3.contains(query);
+        }).toList();
+      } else if (selectedReward == 3) {
+        lottos = userNotifier.currentUser.where((lotto) {
+          var last3 = lotto.number.substring(3, 6);
+          //final lNumber = lotto.number;
+          return last3.contains(query);
+        }).toList();
       } else {
         lottos = userNotifier.currentUser.where((lotto) {
           final lNumber = lotto.number;
@@ -305,7 +326,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ],
       ),
       body: FutureBuilder(
-        future: (query.isEmpty || userNotifier.currentUser.isEmpty)
+        future: (userNotifier.currentUser.isEmpty)
             ? loadData(userNotifier, userSumaryNotifier)
             : null,
         builder: (context, AsyncSnapshot snapshot) {
@@ -444,7 +465,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   void _lotteryEditModalBottomSheet(context) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft:Radius.circular(20),topRight: Radius.circular(20)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
         isScrollControlled: true,
         context: context,
@@ -469,19 +491,21 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           ))
                     ],
                   ),
-                  textcutom("สถานะ"),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Wrap(
-                    children: [
-                      filterOption(mystate, "ทั้งหมด", 0),
-                      filterOption(mystate, "ถูกรางวัล", 1),
-                      filterOption(mystate, "ถูกรางวัล", 2),
-                    ],
-                  ),
+                  // textcutom("สถานะ"),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Wrap(
+                  //   spacing: 20,
+                  //   children: [
+                  //     filterOption(mystate, "ทั้งหมด", 0),
+                  //     filterOption(mystate, "ถูกรางวัล", 1),
+                  //     filterOption(mystate, "ถูกรางวัล", 2),
+                  //   ],
+                  // ),
                   textcutom("รางวัล"),
                   Wrap(
+                    spacing: 20,
                     children: [
                       filterOptionByReward(mystate, "ทั้งหมด", 0),
                       filterOptionByReward(mystate, "เลขท้ายสองตัว", 1),
@@ -512,7 +536,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       ),
                       Spacer(),
                       FloatingActionButton.extended(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         label: const Text(
                           'ตกลง',
                           style: TextStyle(
@@ -544,14 +570,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedindexsecond == i ? Colors.blue : Colors.white10,
+              color: selectedReward == i ? Colors.blue : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color:
-                      selectedindexsecond == i ? Colors.blue : Colors.blueGrey),
+                  color: selectedReward == i ? Colors.blue : Colors.blueGrey),
             ),
           ],
         ),
@@ -562,7 +587,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ),
         side: BorderSide(
             width: 2,
-            color: selectedindexsecond == i ? Colors.blue : Colors.blueGrey),
+            color: selectedReward == i ? Colors.blue : Colors.blueGrey),
       ),
     );
   }
@@ -580,13 +605,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedindex == i ? Colors.blue : Colors.white10,
+              color: selectedStatus == i ? Colors.blue : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color: selectedindex == i ? Colors.blue : Colors.blueGrey),
+                  color: selectedStatus == i ? Colors.blue : Colors.blueGrey),
             ),
           ],
         ),
@@ -597,7 +622,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ),
         side: BorderSide(
             width: 2,
-            color: selectedindex == i ? Colors.blue : Colors.blueGrey),
+            color: selectedStatus == i ? Colors.blue : Colors.blueGrey),
       ),
     );
   }
