@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SearchWidget extends StatefulWidget {
   final String text, type;
@@ -22,8 +19,6 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final controller = TextEditingController();
-  // int selectedindex = 0;
-  // int selectedindexsecond = 0;
 
   @override
   Widget build(BuildContext context) {

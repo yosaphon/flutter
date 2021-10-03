@@ -63,6 +63,10 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             "ตรวจรางวัล",
             style: TextStyle(color: Colors.black87),
           ),
+          leading: new IconButton(
+                      icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
           shape: RoundedRectangleBorder(),
           // backgroundColor: Colors.transparent,
           backgroundColor: Colors.indigo,

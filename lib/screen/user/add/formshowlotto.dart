@@ -153,7 +153,10 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 title: Text(
                   "บันทึกสลากผู้ใช้",
                   style: TextStyle(color: Colors.white),
-                ),
+                ),leading: new IconButton(
+                      icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
@@ -550,7 +553,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 child: Text(
                   numToWord(value),
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black,fontFamily: "Mitr"),
                 ),
               );
             }).toList();
@@ -568,7 +571,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
               value: value,
               child: Text(
                 numToWord(value),
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.right,style: TextStyle(fontFamily: "Mitr"),
               ),
             );
           }).toList(),

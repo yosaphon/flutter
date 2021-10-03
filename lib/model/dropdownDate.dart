@@ -60,7 +60,7 @@ class _DropdownDateState extends State<DropdownDate> {
                 child: Text(
                   numToWord(value.date),
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white,fontFamily: "Mitr"),
                 ),
               );
             }).toList();
@@ -79,7 +79,7 @@ class _DropdownDateState extends State<DropdownDate> {
               value: value.date,
               child: Text(
                 numToWord(value.date),
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.right, style: TextStyle(fontFamily: "Mitr"),
               ),
             );
           }).toList(),

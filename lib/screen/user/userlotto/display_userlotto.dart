@@ -12,6 +12,7 @@ import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/user/sumary/purchaseShow.dart';
 
 import 'package:lotto/screen/user/add/userlotteryDetail.dart';
+import 'package:lotto/widgets/filtterSearch.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
@@ -32,6 +33,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   String number, query = '';
   bool stateCheck = false;
   _DisplayScreenState paddingStyle;
+  String filterSelect = "";
 
   ScrollController _scrollController =
       new ScrollController(); // set controller on scrolling
@@ -96,13 +98,16 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     UserSumaryNotifier userSumaryNotifier =
         Provider.of<UserSumaryNotifier>(context, listen: false);
     docID = userNotifier.keyCurrentUser.keys.toList();
-    //var size = MediaQuery.of(context).size;
 
     void searchLotto(String query) {
-      final lottos = userNotifier.currentUser.where((lotto) {
-        final lNumber = lotto.number;
-        return lNumber.contains(query);
-      }).toList();
+      var lottos;
+      if (filterSelect == "true") {
+      } else {
+        lottos = userNotifier.currentUser.where((lotto) {
+          final lNumber = lotto.number;
+          return lNumber.contains(query);
+        }).toList();
+      }
 
       setState(() {
         this.query = query;
@@ -112,11 +117,12 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
     Widget buildSearch() => SearchWidget(
           text: query,
-          hintText: 'ค้นหาเลข',
+          hintText: 'ค้นหาด้วยตัวเลข',
           onChanged: searchLotto,
         );
-    String getKeyByValue(Map<String,UserData> curr, UserData userData) {
-      return curr.keys.firstWhere((k) => curr[k] == userData, orElse: () => null);
+    String getKeyByValue(Map<String, UserData> curr, UserData userData) {
+      return curr.keys
+          .firstWhere((k) => curr[k] == userData, orElse: () => null);
     }
 
     Widget buildLotto(UserData lotto, String docID) {
@@ -290,13 +296,36 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
-              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม" ,style: TextStyle(fontSize: 18)),
+              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม",
+                  style: TextStyle(fontSize: 18)),
             );
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSearch(),
+              Stack(
+                children: [
+                  Container(
+                      constraints: BoxConstraints(maxWidth: 330),
+                      child: buildSearch()),
+                  Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 4), // changes position of shadow
+                            ),
+                          ],
+                          color: Colors.white,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                      margin: EdgeInsets.only(top: 18, left: 330),
+                      child: Center(child: null))
+                ],
+              ),
               Expanded(
                 child: Container(
                     constraints: BoxConstraints(
@@ -308,7 +337,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       children: [
                         ...lottos.map((e) {
                           UserData lotto = e;
-                          return frameWidget(buildLotto(lotto, getKeyByValue(userNotifier.keyCurrentUser,e)));
+                          return frameWidget(buildLotto(lotto,
+                              getKeyByValue(userNotifier.keyCurrentUser, e)));
                         }).toList(),
                         SizedBox(
                           height: 100,
