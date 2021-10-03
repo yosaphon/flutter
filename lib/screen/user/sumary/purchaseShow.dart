@@ -218,7 +218,8 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-     UserSumaryNotifier userSumaryNotifier =Provider.of<UserSumaryNotifier>(context);
+    UserSumaryNotifier userSumaryNotifier =
+        Provider.of<UserSumaryNotifier>(context);
     return Scaffold(
         extendBodyBehindAppBar: false,
         backgroundColor: Color(0xFFF3FFFE),
@@ -273,10 +274,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("เริ่ม :",
-                                      style: TextStyle(color: Colors.black54)),
+                                      style: TextStyle(color: Colors.orange)),
                                   selectdate1(context),
                                   Text("ถึง :",
-                                      style: TextStyle(color: Colors.black54)),
+                                      style: TextStyle(color: Colors.orange)),
                                   state == false
                                       ? IgnorePointer(
                                           child: selectdateFake(context),
@@ -286,7 +287,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                               ),
                             ),
                           ] else ...[
-                            SizedBox()
+                            SizedBox(height:78)
                           ]
                         ],
                       ),
@@ -310,13 +311,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                 '฿${NumberFormat("#,###").format(totalReward)}',
                                 'บาท',
                                 Colors.white,
-                                Color(0xFF40E0D0)),
+                                Colors.indigo),
                             _buildStatCard(
                                 'เสียเงิน',
                                 '฿${NumberFormat("#,###").format(totalPay)}',
                                 'บาท',
                                 Colors.white,
-                                Color(0XFFC70039)),
+                                Color(0xFFF63C4F)),
                           ],
                         ),
                       ),
@@ -339,7 +340,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                     ? Colors.amber
                                     : totalReward == totalPay
                                         ? Colors.black
-                                        : Color(0XFFC70039)),
+                                        : Color(0xFFF63C4F)),
                           ],
                         ),
                       ),
@@ -354,7 +355,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   child: Text(
                     "สรุปผลรายงวด",
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.indigo,
                       fontSize: 20.0,
                     ),
                   ),
@@ -392,10 +393,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                 width: double.infinity,
                                 child: Row(
                                   children: [
-                                    Text(
-                                      " ${numToWord(_sumaryData[index].date)}",
-                                      style: TextStyle(fontSize: 20),
-                                    )
+                                    
+                                      textToTextspan(numToWord(_sumaryData[index].date)),
+                                     
+                                    
                                   ],
                                 ),
                               ),
@@ -415,13 +416,13 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                           '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward)}',
                                           'บาท',
                                           Colors.white,
-                                          Color(0xFF40E0D0)),
+                                          Colors.indigo),
                                       _builddateCard(
                                           'เสียเงิน',
                                           '฿${NumberFormat("#,###").format(_sumaryData[index].sumPay)}',
                                           'บาท',
                                           Colors.white,
-                                          Color(0XFFC70039)),
+                                          Color(0xFFF63C4F)),
                                     ],
                                   ),
                                   Row(
@@ -444,7 +445,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                               : _sumaryData[index].sumReward ==
                                                       _sumaryData[index].sumPay
                                                   ? Colors.black
-                                                  : Color(0XFFC70039)),
+                                                  : Color(0xFFF63C4F)),
                                     ],
                                   ),
                                 ],
@@ -677,7 +678,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(left: 15.0, top: 5, right: 5, bottom: 5),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -732,7 +733,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(left: 15.0, top: 5, right: 5, bottom: 5),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),
@@ -780,7 +781,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(left: 15.0, top: 5, right: 5, bottom: 5),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -811,16 +812,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                     style:
                         const TextStyle(color: Colors.black54, fontSize: 10.0),
                   ),
-                  colorfont == Color(0XFFC70039)
+                  colorfont == Color(0xFFF63C4F)
                       ? Text(
                           double.parse(percen).toStringAsFixed(1) + "%",
                           style: TextStyle(color: colorfont, fontSize: 10.0),
                         )
                       : colorfont == Colors.amber
                           ? Text(
-                              "+" +
-                                  double.parse(percen).toStringAsFixed(1) +
-                                  "%",
+                              "+ ${double.parse(percen).toStringAsFixed(1)} +%",
                               style:
                                   TextStyle(color: colorfont, fontSize: 10.0),
                             )
@@ -853,7 +852,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(left: 15.0, top: 5, right: 5, bottom: 5),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),
@@ -875,14 +874,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                   "($typestring)",
                   style: const TextStyle(color: Colors.black54, fontSize: 8.0),
                 ),
-                colorfont == Color(0XFFC70039)
+                colorfont == Color(0xFFF63C4F)
                     ? Text(
                         double.parse(percen).toStringAsFixed(1) + "%",
                         style: TextStyle(color: colorfont, fontSize: 10.0),
                       )
                     : colorfont == Colors.amber
                         ? Text(
-                            "+" + double.parse(percen).toStringAsFixed(1) + "%",
+                            "+ ${double.parse(percen).toStringAsFixed(1)}%",
                             style: TextStyle(color: colorfont, fontSize: 10.0),
                           )
                         : Text(
@@ -901,6 +900,26 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget textToTextspan(String txt) {
+    var a = txt.split(" ");
+    return RichText(
+      text: TextSpan(children: <TextSpan>[
+        TextSpan(
+            text: a[0]+" ",
+            style: TextStyle(
+                fontSize: 18, color: Colors.black54, fontFamily: "Mitr")),
+        TextSpan(
+            text: a[1]+" ",
+            style: TextStyle(
+                fontSize: 18, color: Colors.black, fontFamily: "Mitr")),
+        TextSpan(
+            text: a[2],
+            style: TextStyle(
+                fontSize: 18, color: Colors.black54, fontFamily: "Mitr")),
+      ]),
     );
   }
 }
