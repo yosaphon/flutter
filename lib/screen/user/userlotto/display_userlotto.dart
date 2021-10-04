@@ -151,7 +151,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         //allLottos = this.lottos;
       }
       //เลือกรางวัล
-      switch (sTypeR) {
+      setState(() {
+        checkstate = false;
+        switch (sTypeR) {
         case "last2":
           lottos = allLottos.where((lotto) {
             var last2 = lotto.number.substring(4, 6);
@@ -179,6 +181,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             return lNumber.contains(query);
           }).toList();
       }
+      });
+      
 
       setState(() {
         this.query = query;
@@ -308,8 +312,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             checkstate = result;
           });
         },
-        onLongPress: ()async {
-         await confirmDialog(context, docID, lotto.imageurl, user.uid);
+        onLongPress: () async {
+          await confirmDialog(context, docID, lotto.imageurl, user.uid);
           setState(() {
             checkstate = false;
           });
@@ -598,6 +602,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       FloatingActionButton.extended(
                         onPressed: () {
                           setState(() {
+                            // checkstate = false;
                             sTypeR = selectedReward;
                             sTypeS = selectedStatus;
                           });
