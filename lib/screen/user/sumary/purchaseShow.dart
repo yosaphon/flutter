@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/UserData.dart';
 import 'package:lotto/model/dropdownDate.dart';
-import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
 import 'package:provider/provider.dart';
 

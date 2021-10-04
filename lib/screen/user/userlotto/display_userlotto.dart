@@ -724,6 +724,7 @@ Future<Null> confirmDialog(
                     style: TextStyle(fontSize: 16, color: Colors.red)),
               ),
               onPressed: () async {
+                FocusScope.of(context).unfocus();
                 Navigator.of(context).pop();
                 if (imageurl != null) {
                   deleteImage(imageurl);
@@ -747,6 +748,7 @@ Future<Null> confirmDialog(
                         backgroundColor: Colors.white70)),
               ),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 Navigator.pop(context);
               },
             ),
