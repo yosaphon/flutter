@@ -88,7 +88,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
               prizeNotifier.predictData.data[0].title != ""
                   ? predictByName(prizeNotifier)
                   : null,
-              predictByCal(
+              prizeNotifier.selectedPrize.data['first'].number[0].value !="" ?predictByCal(
                 Lottoerypredition(
                     //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
                     prizeNotifier.selectedPrize.data['first'].number[0].value,
@@ -98,8 +98,8 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                     prizeNotifier.selectedPrize.data['last3b'].number[0].value,
                     prizeNotifier.selectedPrize.data['last3b'].number[1].value,
                     "1"),
-              ),
-              predictByCal(
+              ):SizedBox(),
+              prizeNotifier.selectedPrize.data['first'].number[0].value !="" ? predictByCal(
                 Lottoerypredition(
                     //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
                     prizeNotifier.selectedPrize.data['first'].number[0].value,
@@ -109,7 +109,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                     prizeNotifier.selectedPrize.data['last3b'].number[0].value,
                     prizeNotifier.selectedPrize.data['last3b'].number[1].value,
                     "2"),
-              ),SizedBox(height: 100,)
+              ):SizedBox(),SizedBox(height: 100,)
                   ],
                 ),
             ),
