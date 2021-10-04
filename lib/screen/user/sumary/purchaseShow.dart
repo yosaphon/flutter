@@ -245,7 +245,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     } else {
       return Scaffold(
           extendBodyBehindAppBar: false,
-          backgroundColor: Color(0xFFF3FFFE),
+        
           appBar: AppBar(
             title: Text(
               "สรุปผลการซื้อสลากกินแบ่งรัฐบาล",
@@ -275,6 +275,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         offset: Offset(0, 4), // changes position of shadow
                       ),
                     ],
+                    
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(18))),
                 //color: Colors.white,

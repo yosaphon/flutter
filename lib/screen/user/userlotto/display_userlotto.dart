@@ -537,22 +537,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter mystate) {
             return Container(
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height * 0.58,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(
-                            Icons.clear,
-                            color: Colors.indigo,
-                            size: 25,
-                          ))
-                    ],
+                  Container(
+                    height: 30,
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.indigo,
+                              size: 25,
+                            ))
+                      ],
+                    ),
                   ),
                   textcutom("สถานะ"),
                   SizedBox(
@@ -596,7 +599,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                             color: Colors.black,
                           ),
                         ),
-                        backgroundColor: Colors.amberAccent,
+                        backgroundColor: Color(0xFFB3B7C0),
                       ),
                       Spacer(),
                       FloatingActionButton.extended(
@@ -641,24 +644,26 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedReward == i ? Colors.blue : Colors.white10,
+              color: selectedReward == i ? Colors.indigoAccent : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color: selectedReward == i ? Colors.blue : Colors.blueGrey),
+                  color: selectedReward == i ? Colors.indigoAccent : Colors.blueGrey),
             ),
           ],
         ),
       ),
       style: OutlinedButton.styleFrom(
+        backgroundColor:selectedReward == i ? Colors.indigo[50] : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
         side: BorderSide(
+        
             width: 2,
-            color: selectedReward == i ? Colors.blue : Colors.blueGrey),
+            color: selectedReward == i ? Colors.indigo : Colors.blueGrey),
       ),
     );
   }
@@ -676,24 +681,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedStatus == i ? Colors.blue : Colors.white10,
+              color: selectedStatus == i ? Colors.indigoAccent : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color: selectedStatus == i ? Colors.blue : Colors.blueGrey),
+                  color: selectedStatus == i ? Colors.indigoAccent : Colors.blueGrey),
             ),
           ],
         ),
       ),
       style: OutlinedButton.styleFrom(
+        backgroundColor:selectedStatus == i ? Colors.indigo[50] : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
         side: BorderSide(
             width: 2,
-            color: selectedStatus == i ? Colors.blue : Colors.blueGrey),
+            color: selectedStatus == i ? Colors.indigo : Colors.blueGrey),
       ),
     );
   }
@@ -701,7 +707,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   Widget textcutom(String data) {
     return Text(
       data,
-      style: TextStyle(color: Colors.blue, fontSize: 20),
+      style: TextStyle(color: Colors.black87, fontSize: 20),
     );
   }
 }
