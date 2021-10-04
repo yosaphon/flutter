@@ -57,57 +57,63 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
         elevation: 0,
       ),
       body: Center(
-          child: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Center(
-              child: RichText(
-                text: TextSpan(children: <TextSpan>[
-                  TextSpan(
-                      text: 'ทำนาย งวดวันที่ ',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontFamily: "Mitr")),
-                  TextSpan(
-                      text: numToWord(prizeNotifier.predictData.date),
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.orange,
-                          fontFamily: "Mitr")),
-                  TextSpan(),
-                ]),
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Center(
+                  child: RichText(
+                    text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: 'ทำนาย งวดวันที่ ',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: "Mitr")),
+                      TextSpan(
+                          text: numToWord(prizeNotifier.predictData.date),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.orange,
+                              fontFamily: "Mitr")),
+                      TextSpan(),
+                    ]),
+                  ),
+                ),
               ),
+              prizeNotifier.predictData.data[0].title != ""
+                  ? predictByName(prizeNotifier)
+                  : null,
+              predictByCal(
+                Lottoerypredition(
+                    //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                    prizeNotifier.selectedPrize.data['first'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                    prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                    "1"),
+              ),
+              predictByCal(
+                Lottoerypredition(
+                    //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                    prizeNotifier.selectedPrize.data['first'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                    prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                    prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                    "2"),
+              ),SizedBox(height: 100,)
+                  ],
+                ),
             ),
-          ),
-          prizeNotifier.predictData.data[0].title != ""
-              ? predictByName(prizeNotifier)
-              : null,
-          predictByCal(
-            Lottoerypredition(
-                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                prizeNotifier.selectedPrize.data['first'].number[0].value,
-                prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                "1"),
-          ),
-          predictByCal(
-            Lottoerypredition(
-                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                prizeNotifier.selectedPrize.data['first'].number[0].value,
-                prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                "2"),
-          )
-        ],
-      )),
+          )),
     );
   }
 
