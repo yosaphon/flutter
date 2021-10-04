@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lotto/screen/check/displaycheck.dart';
 
 class SearchWidget extends StatefulWidget {
   final String text, type;
@@ -37,11 +39,12 @@ class _SearchWidgetState extends State<SearchWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: TextField(
             controller: controller,
+            keyboardType: TextInputType.number,
             // กรอกได้เฉพาะตัวเลย กับ ยาวสุก 6
-            // inputFormatters: [
-            //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-            //   LengthLimitingTextInputFormatter(6),
-            //   ],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              LengthLimitingTextInputFormatter(6),
+              ],
             decoration: InputDecoration(
               icon: Icon(Icons.search, color: style.color),
               //ปุ่มท้าย textfild
