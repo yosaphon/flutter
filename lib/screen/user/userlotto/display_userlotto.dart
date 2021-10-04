@@ -30,8 +30,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   String selectedReward = "allReward";
   List<dynamic> lottos = [];
   List<String> docID = [];
+
   String number, query = '';
-  bool searchStatus = false;
+  bool searchStatus = false, checkstate = false;
   _DisplayScreenState paddingStyle;
   String filterSelect = "";
   String sTypeS = "allStatus";
@@ -63,6 +64,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   @override
   void dispose() {
+    lottos = [];
     _scrollController.removeListener(() {});
     selectedStatus = "allStatus";
     selectedReward = "allReward";
@@ -101,6 +103,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
     lottos = userNotifier.keyCurrentUser.values.toList();
     docID = userNotifier.keyCurrentUser.keys.toList();
+    checkstate = true;
   }
 
   void changeIndexfirst(String index) {
@@ -181,6 +184,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         this.query = query;
         this.lottos = lottos;
       });
+    }
+
+    Future<void> _refreshProducts(BuildContext context) async {
+      UserNotifier userNotifier = Provider.of(context, listen: false);
+      UserSumaryNotifier userSumaryNotifier =
+          Provider.of(context, listen: false);
+      await loadData(userNotifier, userSumaryNotifier);
     }
 
     Widget buildSearch() => SearchWidget(
@@ -287,16 +297,22 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         onTap: () async {
           //กดเพื่อดูรายละเอียด
           String docid = docID;
-          Navigator.push(
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => Formshowdetaillotto(
                     userID: userNotifier.keyCurrentUser[docid].userid,
                     docid: docid)),
           );
+          setState(() {
+            checkstate = result;
+          });
         },
-        onLongPress: () {
-          confirmDialog(context, docID, lotto.imageurl, user.uid);
+        onLongPress: ()async {
+         await confirmDialog(context, docID, lotto.imageurl, user.uid);
+          setState(() {
+            checkstate = false;
+          });
         },
       );
     }
@@ -360,74 +376,79 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: searchLotto(query),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (userNotifier.currentUser.isEmpty) {
-            return Center(
-              child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม",
-                  style: TextStyle(fontSize: 18)),
+      body: Center(
+        child: FutureBuilder(
+          future: checkstate == true
+              ? searchLotto(query)
+              : loadData(userNotifier, userSumaryNotifier),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (userNotifier.currentUser.isEmpty) {
+              return Center(
+                child: Text("สามารถเพิ่มสลากเข้าสู้ระบบโดยกดปุ่มเพิ่ม",
+                    style: TextStyle(fontSize: 18)),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                        constraints: BoxConstraints(maxWidth: 330),
+                        child: buildSearch()),
+                    Container(
+                        constraints: BoxConstraints(maxHeight: 42),
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.4),
+                                spreadRadius: 0,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                            color: Colors.amberAccent,
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16))),
+                        margin: EdgeInsets.only(top: 16, left: 330, right: 20),
+                        child: TextButton(
+                          child: Icon(
+                            FontAwesomeIcons.alignJustify,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            _lotteryEditModalBottomSheet(context);
+                          },
+                        )) //_lotteryEditModalBottomSheet(context)))
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                      constraints: BoxConstraints(
+                        minHeight: 3000,
+                        // maxHeight: 200, //minimum height
+                      ),
+                      child: ListView(
+                        controller: _scrollController,
+                        children: [
+                          ...lottos.map((e) {
+                            UserData lotto = e;
+                            return frameWidget(buildLotto(lotto,
+                                getKeyByValue(userNotifier.keyCurrentUser, e)));
+                          }).toList(),
+                          SizedBox(
+                            height: 100,
+                          ),
+                        ],
+                      )),
+                )
+              ],
             );
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Container(
-                      constraints: BoxConstraints(maxWidth: 330),
-                      child: buildSearch()),
-                  Container(
-                      constraints: BoxConstraints(maxHeight: 42),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 0,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                          color: Colors.amberAccent,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
-                      margin: EdgeInsets.only(top: 16, left: 330, right: 20),
-                      child: TextButton(
-                        child: Icon(
-                          FontAwesomeIcons.alignJustify,
-                          color: Colors.black87,
-                          size: 18,
-                        ),
-                        onPressed: () {
-                          _lotteryEditModalBottomSheet(context);
-                        },
-                      )) //_lotteryEditModalBottomSheet(context)))
-                ],
-              ),
-              Expanded(
-                child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: 3000,
-                      // maxHeight: 200, //minimum height
-                    ),
-                    child: ListView(
-                      controller: _scrollController,
-                      children: [
-                        ...lottos.map((e) {
-                          UserData lotto = e;
-                          return frameWidget(buildLotto(lotto,
-                              getKeyByValue(userNotifier.keyCurrentUser, e)));
-                        }).toList(),
-                        SizedBox(
-                          height: 100,
-                        ),
-                      ],
-                    )),
-              )
-            ],
-          );
-        },
+          },
+        ),
       ),
       floatingActionButton: Visibility(
         visible: _show,
@@ -473,12 +494,15 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               padding: const EdgeInsets.only(bottom: 50),
               child: FloatingActionButton.extended(
                 heroTag: "add",
-                onPressed: () {
+                onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  Navigator.push(
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Formshowlotto()),
                   );
+                  setState(() {
+                    checkstate = result;
+                  });
                 },
                 icon: Icon(Icons.add),
                 label: const Text(
@@ -718,7 +742,7 @@ Future<Null> confirmDialog(
                         backgroundColor: Colors.white70)),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
           ],

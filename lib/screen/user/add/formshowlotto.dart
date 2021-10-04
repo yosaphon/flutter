@@ -125,7 +125,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
     //_numberController.text = "";
     PrizeNotifier prizeNotifier =
         Provider.of<PrizeNotifier>(context, listen: false);
-        UserNotifier userNotifier =
+    UserNotifier userNotifier =
         Provider.of<UserNotifier>(context, listen: false);
     // _numberController.text =
     //     "999999";
@@ -153,10 +153,11 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 title: Text(
                   "บันทึกสลากผู้ใช้",
                   style: TextStyle(color: Colors.white),
-                ),leading: new IconButton(
-                      icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
+                ),
+                leading: new IconButton(
+                  icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(16)),
@@ -504,7 +505,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                         if (formKey.currentState.validate()) {
                           formKey.currentState.save();
 
-                          addToFirebase(context, prizeNotifier,userNotifier);
+                          addToFirebase(context, prizeNotifier, userNotifier);
                         }
                       });
                     });
@@ -553,7 +554,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
                 child: Text(
                   numToWord(value),
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: Colors.black,fontFamily: "Mitr"),
+                  style: TextStyle(color: Colors.black, fontFamily: "Mitr"),
                 ),
               );
             }).toList();
@@ -571,7 +572,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
               value: value,
               child: Text(
                 numToWord(value),
-                textAlign: TextAlign.right,style: TextStyle(fontFamily: "Mitr"),
+                textAlign: TextAlign.right,
+                style: TextStyle(fontFamily: "Mitr"),
               ),
             );
           }).toList(),
@@ -580,8 +582,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
     );
   }
 
-  Future<void> addToFirebase(
-      BuildContext context, PrizeNotifier prizeNotifier, UserNotifier userNotifier) async {
+  Future<void> addToFirebase(BuildContext context, PrizeNotifier prizeNotifier,
+      UserNotifier userNotifier) async {
     if (_image != null) {
       await uploadPicture();
     }
@@ -596,7 +598,7 @@ class _FormshowlottoState extends State<Formshowlotto> {
         "date": dateValue,
         "latlng": userlottery.latlng,
         "userid": user.uid,
-        "token" : userNotifier.token,
+        "token": userNotifier.token,
         "won": []
       });
       String nonsplit = dateValue;
@@ -622,7 +624,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
         dataForAdd.won.add(new Won(name: null, wonNum: null, reward: 0));
       }
       await _userltottery.add(jsonDecode(userDataToJson(dataForAdd)));
-      Navigator.pop(context);
+      bool checkstate = false;
+      Navigator.pop(context, checkstate);
     }
   }
 

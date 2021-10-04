@@ -62,7 +62,6 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
               extendBodyBehindAppBar: false,
               backgroundColor: Color(0xFFF3FFFE),
               appBar: AppBar(
-                
                 centerTitle: true,
                 title: Text(
                   "รายละเอียด",
@@ -128,34 +127,42 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            textSty("หมายเลข",Colors.black54),
-                                            textSty("จำนวนสลาก",Colors.black54),
-                                            textSty("ราคา",Colors.black54),
-                                            textSty("สถานะ",Colors.black54)
+                                            textSty("หมายเลข", Colors.black54),
+                                            textSty(
+                                                "จำนวนสลาก", Colors.black54),
+                                            textSty("ราคา", Colors.black54),
+                                            textSty("สถานะ", Colors.black54)
                                           ],
                                         ),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            textSty(snapshot.data['number'],Colors.black),
-                                            textSty(snapshot.data['amount'],Colors.black),
-                                            textSty(snapshot.data['lotteryprice'],Colors.black),
+                                            textSty(snapshot.data['number'],
+                                                Colors.black),
+                                            textSty(snapshot.data['amount'],
+                                                Colors.black),
+                                            textSty(
+                                                snapshot.data['lotteryprice'],
+                                                Colors.black),
                                             snapshot.data["state"] == null
-                                                ? textSty("รอตรวจ",Colors.black)
+                                                ? textSty(
+                                                    "รอตรวจ", Colors.black)
                                                 : snapshot.data["state"] == true
-                                                    ? textSty("ถูกรางวัล",Colors.black)
-                                                    : textSty("ไม่ถูกรางวัล",Colors.black)
+                                                    ? textSty("ถูกรางวัล",
+                                                        Colors.black)
+                                                    : textSty("ไม่ถูกรางวัล",
+                                                        Colors.black)
                                           ],
                                         ),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                             textSty("",Colors.black54),
-                                            textSty("ใบ",Colors.black54),
-                                            textSty("บาท",Colors.black54),
-                                             textSty("",Colors.black54),
+                                            textSty("", Colors.black54),
+                                            textSty("ใบ", Colors.black54),
+                                            textSty("บาท", Colors.black54),
+                                            textSty("", Colors.black54),
                                           ],
                                         ),
                                       ],
@@ -172,7 +179,8 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.only(left: 20,top: 20),
+                                              padding: EdgeInsets.only(
+                                                  left: 20, top: 20),
                                               child: textSty(
                                                   "รูปภาพ", Colors.black54),
                                             ),
@@ -213,7 +221,8 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                padding: EdgeInsets.only(bottom: 10),
+                                                padding:
+                                                    EdgeInsets.only(bottom: 10),
                                                 child: textSty(
                                                     "ตำแหน่ง", Colors.black54),
                                               ),
@@ -287,7 +296,8 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
                                       onPressed: () async {
                                         await confirmDialog(context, docid,
                                             snapshot.data["imageurl"], userID);
-                                        Navigator.pop(context);
+                                        bool checkstate = false;
+                                        Navigator.pop(context, checkstate);
                                       },
                                       icon: Icon(Icons.delete),
                                       label: const Text(
@@ -349,43 +359,42 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
   }
 
   Widget showReward(AsyncSnapshot<dynamic> snapshot) {
-    return  frameWidget(
+    return frameWidget(
       DataTable2(
-            columns: const <DataColumn>[
-              DataColumn2(
-                size: ColumnSize.S,
-                label: Text(
-                  'หมายเลข',
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
-              DataColumn2(
-                size: ColumnSize.M,
-                label: Text('ชื่อรางวัล', style: TextStyle(fontSize: 14)),
-              ),
-              DataColumn2(
-                size: ColumnSize.S,
-                label: Text('เงินรางวัล', style: TextStyle(fontSize: 14)),
-              ),
-            ],
-            rows: <DataRow>[
-              ...snapshot.data['won'].map((data) {
-                return DataRow(
-                  cells: <DataCell>[
-                    DataCell(
-                      Text(data['wonNum'], style: TextStyle(fontSize: 12)),
-                    ),
-                    DataCell(
-                      Text(data['name'], style: TextStyle(fontSize: 12)),
-                    ),
-                    DataCell(Text(data['reward'].toString(),
-                        style: TextStyle(fontSize: 12))),
-                  ],
-                );
-              }).toList(),
-            ],
+        columns: const <DataColumn>[
+          DataColumn2(
+            size: ColumnSize.S,
+            label: Text(
+              'หมายเลข',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-    
+          DataColumn2(
+            size: ColumnSize.M,
+            label: Text('ชื่อรางวัล', style: TextStyle(fontSize: 14)),
+          ),
+          DataColumn2(
+            size: ColumnSize.S,
+            label: Text('เงินรางวัล', style: TextStyle(fontSize: 14)),
+          ),
+        ],
+        rows: <DataRow>[
+          ...snapshot.data['won'].map((data) {
+            return DataRow(
+              cells: <DataCell>[
+                DataCell(
+                  Text(data['wonNum'], style: TextStyle(fontSize: 12)),
+                ),
+                DataCell(
+                  Text(data['name'], style: TextStyle(fontSize: 12)),
+                ),
+                DataCell(Text(data['reward'].toString(),
+                    style: TextStyle(fontSize: 12))),
+              ],
+            );
+          }).toList(),
+        ],
+      ),
     );
   }
 
@@ -395,5 +404,4 @@ class _FormshowdetaillottoState extends State<Formshowdetaillotto> {
       style: TextStyle(fontSize: 18, color: colorfont),
     );
   }
-
 }
