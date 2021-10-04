@@ -83,10 +83,7 @@ class Lottoerypredition extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 80,
-        ),
-        // Text("สูตรใบ้ " + type, style: TextStyle(fontSize: 16)),
+       type == "2"? Text("สูตรคำนวณเลขท้ายสองตัว ", style: TextStyle(fontSize: 16)):Text("สูตรคำนวณหวยแบบ 4 คู่  ", style: TextStyle(fontSize: 16)),
         SizedBox(height: 30,),
                   Text(
                   result,
