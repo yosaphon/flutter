@@ -13,7 +13,6 @@ import 'package:lotto/provider/auth_provider.dart';
 import 'package:lotto/screen/user/sumary/purchaseShow.dart';
 
 import 'package:lotto/screen/user/add/userlotteryDetail.dart';
-import 'package:lotto/widgets/filtterSearch.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 import 'package:lotto/widgets/searchWidget.dart';
 import 'package:path/path.dart' as Path;
@@ -27,14 +26,16 @@ class UserprofileLottery extends StatefulWidget {
 
 class _UserprofileLotteryState extends State<UserprofileLottery> {
   final user = FirebaseAuth.instance.currentUser;
-  int selectedStatus = 0;
-  int selectedReward = 0;
-  List<UserData> lottos = [];
+  String selectedStatus = "allStatus";
+  String selectedReward = "allReward";
+  List<dynamic> lottos = [];
   List<String> docID = [];
   String number, query = '';
-  bool stateCheck = false;
+  bool searchStatus = false;
   _DisplayScreenState paddingStyle;
   String filterSelect = "";
+  String sTypeS = "allStatus";
+  String sTypeR = "allReward";
 
   ScrollController _scrollController =
       new ScrollController(); // set controller on scrolling
@@ -49,6 +50,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   void initState() {
     //loadData();
+
+    //
+
+    if (lottos == null) {
+      UserNotifier userNotifier = Provider.of(context, listen: false);
+      userNotifier.keyCurrentUser.values.toList();
+    }
     handleScroll();
     super.initState();
   }
@@ -56,6 +64,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
   @override
   void dispose() {
     _scrollController.removeListener(() {});
+    selectedStatus = "allStatus";
+    selectedReward = "allReward";
     super.dispose();
   }
 
@@ -84,7 +94,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     });
   }
 
-  Future loadData(
+  loadData(
       UserNotifier userNotifier, UserSumaryNotifier userSumaryNotifier) async {
     await getUser(userNotifier, user.uid,
         userSumaryNotifier: userSumaryNotifier);
@@ -93,13 +103,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     docID = userNotifier.keyCurrentUser.keys.toList();
   }
 
-  void changeIndexfirst(int index) {
+  void changeIndexfirst(String index) {
     setState(() {
       selectedStatus = index;
     });
   }
 
-  void changeIndexsecon(int index) {
+  void changeIndexsecon(String index) {
     setState(() {
       selectedReward = index;
     });
@@ -112,35 +122,59 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         Provider.of<UserSumaryNotifier>(context, listen: false);
     docID = userNotifier.keyCurrentUser.keys.toList();
 
-    void searchLotto(String query) {
-      var lottos;
-      // if(selectedReward == 0 && selectedStatus == 0){
-
-      // }
-      // else
-      if (selectedReward == 1) {
-        lottos = userNotifier.currentUser.where((lotto) {
-          var last2 = lotto.number.substring(4, 6);
-          //final lNumber = lotto.number;
-          return last2.contains(query);
-        }).toList();
-      } else if (selectedReward == 2) {
-        lottos = userNotifier.currentUser.where((lotto) {
-          var first3 = lotto.number.substring(0, 3);
-          //final lNumber = lotto.number;
-          return first3.contains(query);
-        }).toList();
-      } else if (selectedReward == 3) {
-        lottos = userNotifier.currentUser.where((lotto) {
-          var last3 = lotto.number.substring(3, 6);
-          //final lNumber = lotto.number;
-          return last3.contains(query);
-        }).toList();
-      } else {
-        lottos = userNotifier.currentUser.where((lotto) {
-          final lNumber = lotto.number;
-          return lNumber.contains(query);
-        }).toList();
+    searchLotto(String query) {
+      List<dynamic> allLottos = userNotifier.currentUser;
+      //เลือกสถานะ
+      print("status = $sTypeS");
+      print("reward = $sTypeR");
+      print("==============================================");
+      switch (sTypeS) {
+        case "true":
+          allLottos = this.lottos.where((lotto) {
+            return lotto.state == true;
+          }).toList();
+          break;
+        case "false":
+          allLottos = this.lottos.where((lotto) {
+            return lotto.state == false;
+          }).toList();
+          break;
+        case "null":
+          allLottos = this.lottos.where((lotto) {
+            return lotto.state == null;
+          }).toList();
+          break;
+        default:
+        //allLottos = this.lottos;
+      }
+      //เลือกรางวัล
+      switch (sTypeR) {
+        case "last2":
+          lottos = allLottos.where((lotto) {
+            var last2 = lotto.number.substring(4, 6);
+            //final lNumber = lotto.number;
+            return last2.contains(query);
+          }).toList();
+          break;
+        case "first3":
+          lottos = allLottos.where((lotto) {
+            var first3 = lotto.number.substring(0, 3);
+            //final lNumber = lotto.number;
+            return first3.contains(query);
+          }).toList();
+          break;
+        case "last3":
+          lottos = allLottos.where((lotto) {
+            var last3 = lotto.number.substring(3, 6);
+            //final lNumber = lotto.number;
+            return last3.contains(query);
+          }).toList();
+          break;
+        default:
+          lottos = allLottos.where((lotto) {
+            final lNumber = lotto.number;
+            return lNumber.contains(query);
+          }).toList();
       }
 
       setState(() {
@@ -270,6 +304,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: Color(0xFFF3FFFE),
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -326,9 +361,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ],
       ),
       body: FutureBuilder(
-        future: (userNotifier.currentUser.isEmpty)
-            ? loadData(userNotifier, userSumaryNotifier)
-            : null,
+        future: searchLotto(query),
         builder: (context, AsyncSnapshot snapshot) {
           if (userNotifier.currentUser.isEmpty) {
             return Center(
@@ -405,6 +438,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                 ? FloatingActionButton.extended(
                     heroTag: "sumary",
                     onPressed: () async {
+                      FocusScope.of(context).unfocus();
                       List<String> date1 = [];
                       userNotifier.currentUser.forEach((element) {
                         date1.add(element.date);
@@ -440,6 +474,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
               child: FloatingActionButton.extended(
                 heroTag: "add",
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Formshowlotto()),
@@ -491,26 +526,27 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           ))
                     ],
                   ),
-                  // textcutom("สถานะ"),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // Wrap(
-                  //   spacing: 20,
-                  //   children: [
-                  //     filterOption(mystate, "ทั้งหมด", 0),
-                  //     filterOption(mystate, "ถูกรางวัล", 1),
-                  //     filterOption(mystate, "ถูกรางวัล", 2),
-                  //   ],
-                  // ),
+                  textcutom("สถานะ"),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Wrap(
+                    spacing: 20,
+                    children: [
+                      filterOption(mystate, "ทั้งหมด", "allStatus"),
+                      filterOption(mystate, "ถูกรางวัล", "true"),
+                      filterOption(mystate, "ไม่ถูกรางวัล", "false"),
+                      filterOption(mystate, "ยังไม่ตรวจ", "null"),
+                    ],
+                  ),
                   textcutom("รางวัล"),
                   Wrap(
                     spacing: 20,
                     children: [
-                      filterOptionByReward(mystate, "ทั้งหมด", 0),
-                      filterOptionByReward(mystate, "เลขท้ายสองตัว", 1),
-                      filterOptionByReward(mystate, "เลขหน้าสามตัว", 2),
-                      filterOptionByReward(mystate, "เลขท้ายสามตัว", 3),
+                      filterOptionByReward(mystate, "ทั้งหมด", "allReward"),
+                      filterOptionByReward(mystate, "เลขท้ายสองตัว", "last2"),
+                      filterOptionByReward(mystate, "เลขหน้าสามตัว", "first3"),
+                      filterOptionByReward(mystate, "เลขท้ายสามตัว", "last3"),
                     ],
                   ),
                   SizedBox(
@@ -522,8 +558,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       FloatingActionButton.extended(
                         onPressed: () {
                           mystate(() {
-                            changeIndexsecon(0);
-                            changeIndexfirst(0);
+                            changeIndexfirst("allStatus");
+                            changeIndexsecon("allReward");
                           });
                         },
                         label: const Text(
@@ -537,6 +573,11 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       Spacer(),
                       FloatingActionButton.extended(
                         onPressed: () {
+                          setState(() {
+                            sTypeR = selectedReward;
+                            sTypeS = selectedStatus;
+                          });
+
                           Navigator.pop(context);
                         },
                         label: const Text(
@@ -557,7 +598,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         });
   }
 
-  OutlinedButton filterOptionByReward(StateSetter mystate, String name, int i) {
+  OutlinedButton filterOptionByReward(
+      StateSetter mystate, String name, String i) {
     return OutlinedButton(
       onPressed: () {
         mystate(() {
@@ -592,7 +634,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
     );
   }
 
-  OutlinedButton filterOption(StateSetter mystate, String name, int i) {
+  OutlinedButton filterOption(StateSetter mystate, String name, String i) {
     return OutlinedButton(
       onPressed: () {
         mystate(() {

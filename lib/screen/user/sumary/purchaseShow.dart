@@ -132,14 +132,14 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
 //โหลดข้อมมูล
   Future loadData(List<String> selectedDate) async {
-    UserSumaryNotifier userSumaryNotifier =
-        Provider.of<UserSumaryNotifier>(context, listen: false);
+    UserNotifier userSumaryNotifier =
+        Provider.of<UserNotifier>(context, listen: false);
     totalProfit = 0;
     totalReward = 0;
     totalPay = 0;
     totalAmount = 0;
     for (String item in selectedDate) {
-      userSumaryNotifier.userSumary.forEach((element) {
+      userSumaryNotifier.currentUser.forEach((element) {
         if (item == element.date) {
           dataAfterSelected.add(element);
         }
@@ -152,12 +152,12 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     allresultdate = allDateNotUse.toSet().toList();
     print("alldate1 $allresultdate");
     await sumAllData(dataAfterSelected);
-    await sumEachData(dataAfterSelected);
-    totalProfit += totalReward - totalPay;
+    
   }
 
 //รวมข้อมูล
   sumAllData(List<UserData> dataAfterSelected) {
+    sumEachData(dataAfterSelected);
     if (selectedDate.isNotEmpty) {
       dataAfterSelected.forEach((element) {
         for (var i = 0; i < element.won.length; i++) {
@@ -170,6 +170,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         totalAmount += element.amount == null ? 1 : int.parse(element.amount);
       });
     }
+    totalProfit += totalReward - totalPay;
   }
 
 //โหลดข้อมูลตามงวด
@@ -217,9 +218,9 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
 
   @override
   Widget build(BuildContext context) {
-    UserSumaryNotifier userSumaryNotifier =
-        Provider.of<UserSumaryNotifier>(context);
-    return Scaffold(
+    //UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    if (_sumaryData == null) {
+      return Scaffold(
         extendBodyBehindAppBar: false,
         backgroundColor: Color(0xFFF3FFFE),
         appBar: AppBar(
@@ -238,243 +239,268 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           backgroundColor: Colors.indigo, //You can make this transparent
           elevation: 0.0, //No shadow
         ),
-        body: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 0,
-                      blurRadius: 2,
-                      offset: Offset(0, 4), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(18))),
-              //color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "แสดง :",
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05,
-                          ),
-                          dorpdownShow(),
-                        ],
-                      ),
-                      if (selectedindex == "เลือกช่วง") ...[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("เริ่ม :",
-                                  style: TextStyle(color: Colors.orange)),
-                              selectdate1(context),
-                              Text("ถึง :",
-                                  style: TextStyle(color: Colors.orange)),
-                              state == false
-                                  ? IgnorePointer(
-                                      child: selectdateFake(context),
-                                    )
-                                  : selectdate2(context),
-                            ],
-                          ),
-                        ),
-                      ] else ...[
-                        SizedBox(height: 0)
-                      ]
-                    ],
-                  ),
-                ],
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return Scaffold(
+          extendBodyBehindAppBar: false,
+          backgroundColor: Color(0xFFF3FFFE),
+          appBar: AppBar(
+            title: Text(
+              "สรุปผลการซื้อสลากกินแบ่งรัฐบาล",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
               ),
+            ), // You can add title here
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            Expanded(
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverPadding(
-                    padding: const EdgeInsets.only(
-                        top: 10, left: 20, right: 10, bottom: 5),
-                    sliver: SliverToBoxAdapter(),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    sliver: SliverToBoxAdapter(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        child: Column(
-                          children: <Widget>[
-                            Flexible(
-                              child: Row(
-                                children: <Widget>[
-                                  _buildStatCard(
-                                      'เงินรางวัล',
-                                      '฿${NumberFormat("#,###").format(totalReward)}',
-                                      'บาท',
-                                      Colors.white,
-                                      Colors.indigo),
-                                  _buildStatCard(
-                                      'เสียเงิน',
-                                      '฿${NumberFormat("#,###").format(totalPay)}',
-                                      'บาท',
-                                      Colors.white,
-                                      Color(0xFFF63C4F)),
-                                ],
-                              ),
+
+            backgroundColor: Colors.indigo, //You can make this transparent
+            elevation: 0.0, //No shadow
+          ),
+          body: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 0,
+                        blurRadius: 2,
+                        offset: Offset(0, 4), // changes position of shadow
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(18))),
+                //color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "แสดง :",
+                              style: TextStyle(color: Colors.black54),
                             ),
-                            Flexible(
-                              child: Row(
-                                children: <Widget>[
-                                  _buildStatCard(
-                                      'จำนวนสลาก',
-                                      '${NumberFormat("#,###").format(totalAmount)}',
-                                      'ใบ',
-                                      Colors.white,
-                                      Colors.black),
-                                  _buildStatCardTotal(
-                                      'กำไร',
-                                      '฿${NumberFormat("#,###").format(totalProfit)}',
-                                      '${(totalProfit / totalPay) * 100}',
-                                      'บาท',
-                                      Colors.white,
-                                      totalReward > totalPay
-                                          ? Colors.amber
-                                          : totalReward == totalPay
-                                              ? Colors.black
-                                              : Color(0xFFF63C4F)),
-                                ],
-                              ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05,
                             ),
+                            dorpdownShow(),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                  SliverPadding(
-                      padding: const EdgeInsets.only(left: 20, right: 10),
-                      sliver: SliverToBoxAdapter(
-                        child: Text(
-                          "สรุปผลรายงวด",
-                          style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 20.0,
+                        if (selectedindex == "เลือกช่วง") ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("เริ่ม :",
+                                    style: TextStyle(color: Colors.orange)),
+                                selectdate1(context),
+                                Text("ถึง :",
+                                    style: TextStyle(color: Colors.orange)),
+                                state == false
+                                    ? IgnorePointer(
+                                        child: selectdateFake(context),
+                                      )
+                                    : selectdate2(context),
+                              ],
+                            ),
                           ),
-                        ),
-                      )),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(
-                        top: 5.0, left: 10, right: 10, bottom: 5),
-                    sliver: SliverToBoxAdapter(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.53,
-                        child: ListView.builder(
-                          itemCount: _sumaryData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 0,
-                                        blurRadius: 7,
-                                        offset: Offset(
-                                            0, 4), // changes position of shadow
-                                      ),
-                                    ],
-                                    color: Colors.white,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      child: Row(
-                                        children: [
-                                          textToTextspan(numToWord(
-                                              _sumaryData[index].date)),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxHeight: 200, //minimum height
-                                      ),
-                                      child: userDataTable(getListOfUserData(
-                                          _sumaryData[index].date)),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            _builddateCard(
-                                                'เงินรางวัล',
-                                                '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward)}',
-                                                'บาท',
-                                                Colors.white,
-                                                Colors.indigo),
-                                            _builddateCard(
-                                                'เสียเงิน',
-                                                '฿${NumberFormat("#,###").format(_sumaryData[index].sumPay)}',
-                                                'บาท',
-                                                Colors.white,
-                                                Color(0xFFF63C4F)),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            _builddateCard(
-                                                'จำนวน',
-                                                '${NumberFormat("#,###").format(_sumaryData[index].amount)}',
-                                                'บาท',
-                                                Colors.white,
-                                                Colors.black),
-                                            _builddateCardTotal(
-                                                'กำไร',
-                                                '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward - _sumaryData[index].sumPay)}',
-                                                '${(((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / _sumaryData[index].sumPay) * 100)}',
-                                                'บาท',
-                                                Colors.white,
-                                                _sumaryData[index].sumReward >
-                                                        _sumaryData[index]
-                                                            .sumPay
-                                                    ? Colors.amber
-                                                    : _sumaryData[index]
-                                                                .sumReward ==
-                                                            _sumaryData[index]
-                                                                .sumPay
-                                                        ? Colors.black
-                                                        : Color(0xFFF63C4F)),
-                                          ],
-                                        ),
-                                      ],
-                                    )
+                        ] else ...[
+                          SizedBox(height: 0)
+                        ]
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: const EdgeInsets.only(
+                          top: 10, left: 20, right: 10, bottom: 5),
+                      sliver: SliverToBoxAdapter(),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      sliver: SliverToBoxAdapter(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          child: Column(
+                            children: <Widget>[
+                              Flexible(
+                                child: Row(
+                                  children: <Widget>[
+                                    _buildStatCard(
+                                        'เงินรางวัล',
+                                        '฿${NumberFormat("#,###").format(totalReward)}',
+                                        'บาท',
+                                        Colors.white,
+                                        Colors.indigo),
+                                    _buildStatCard(
+                                        'เสียเงิน',
+                                        '฿${NumberFormat("#,###").format(totalPay)}',
+                                        'บาท',
+                                        Colors.white,
+                                        Color(0xFFF63C4F)),
                                   ],
                                 ),
                               ),
-                            );
-                          },
+                              Flexible(
+                                child: Row(
+                                  children: <Widget>[
+                                    _buildStatCard(
+                                        'จำนวนสลาก',
+                                        '${NumberFormat("#,###").format(totalAmount)}',
+                                        'ใบ',
+                                        Colors.white,
+                                        Colors.black),
+                                    _buildStatCardTotal(
+                                        'กำไร',
+                                        '฿${NumberFormat("#,###").format(totalProfit)}',
+                                        '${(totalProfit / totalPay) * 100}',
+                                        'บาท',
+                                        Colors.white,
+                                        totalReward > totalPay
+                                            ? Colors.amber
+                                            : totalReward == totalPay
+                                                ? Colors.black
+                                                : Color(0xFFF63C4F)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    SliverPadding(
+                        padding: const EdgeInsets.only(left: 20, right: 10),
+                        sliver: SliverToBoxAdapter(
+                          child: Text(
+                            "สรุปผลรายงวด",
+                            style: const TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        )),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, left: 10, right: 10, bottom: 5),
+                      sliver: SliverToBoxAdapter(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.53,
+                          child: ListView.builder(
+                            itemCount: _sumaryData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              4), // changes position of shadow
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        child: Row(
+                                          children: [
+                                            textToTextspan(numToWord(
+                                                _sumaryData[index].date)),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight: 200, //minimum height
+                                        ),
+                                        child: userDataTable(getListOfUserData(
+                                            _sumaryData[index].date)),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              _builddateCard(
+                                                  'เงินรางวัล',
+                                                  '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward)}',
+                                                  'บาท',
+                                                  Colors.white,
+                                                  Colors.indigo),
+                                              _builddateCard(
+                                                  'เสียเงิน',
+                                                  '฿${NumberFormat("#,###").format(_sumaryData[index].sumPay)}',
+                                                  'บาท',
+                                                  Colors.white,
+                                                  Color(0xFFF63C4F)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              _builddateCard(
+                                                  'จำนวน',
+                                                  '${NumberFormat("#,###").format(_sumaryData[index].amount)}',
+                                                  'บาท',
+                                                  Colors.white,
+                                                  Colors.black),
+                                              _builddateCardTotal(
+                                                  'กำไร',
+                                                  '฿${NumberFormat("#,###").format(_sumaryData[index].sumReward - _sumaryData[index].sumPay)}',
+                                                  '${(((_sumaryData[index].sumReward - _sumaryData[index].sumPay) / _sumaryData[index].sumPay) * 100)}',
+                                                  'บาท',
+                                                  Colors.white,
+                                                  _sumaryData[index].sumReward >
+                                                          _sumaryData[index]
+                                                              .sumPay
+                                                      ? Colors.amber
+                                                      : _sumaryData[index]
+                                                                  .sumReward ==
+                                                              _sumaryData[index]
+                                                                  .sumPay
+                                                          ? Colors.black
+                                                          : Color(0xFFF63C4F)),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ));
+    }
   }
 
   DataTable userDataTable(List<DataInTable> _userData) {
@@ -833,7 +859,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                         )
                       : colorfont == Colors.amber
                           ? Text(
-                              "+ ${double.parse(percen).toStringAsFixed(1)} +%",
+                              "+ ${double.parse(percen).toStringAsFixed(1)} %",
                               style:
                                   TextStyle(color: colorfont, fontSize: 10.0),
                             )
