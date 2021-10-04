@@ -82,194 +82,129 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
             ),
           ),
           prizeNotifier.predictData.data[0].title != ""
-              ? Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: ListView(
-                      children: prizeNotifier.predictData.data
-                          .map<Widget>((document) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, top: 5, bottom: 5),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 0,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 4), // changes position of shadow
-                                  ),
-                                ],
-                                color: Colors.white,
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20),
-                                  child: Text(document.title,
-                                      style: TextStyle(
-                                          fontSize: 18, color: Colors.black87)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: GridView.count(
-                                    crossAxisCount: 4,
-                                    childAspectRatio: (90 / 45),
-                                    crossAxisSpacing: 1,
-                                    mainAxisSpacing: 1,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    children: document.numbers.map<Widget>((n) {
-                                      return Center(
-                                        child: Text(
-                                          n,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.indigo),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: GridView.count(
-                                      crossAxisCount: 4,
-                                      childAspectRatio: (90 / 45),
-                                      crossAxisSpacing: 1,
-                                      mainAxisSpacing: 1,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      children: [
-                                        Center(
-                                          child: Lottoerypredition(
-                                              //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['first']
-                                                  .number[0]
-                                                  .value,
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['last2']
-                                                  .number[0]
-                                                  .value,
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['last3f']
-                                                  .number[0]
-                                                  .value,
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['last3f']
-                                                  .number[1]
-                                                  .value,
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['last3b']
-                                                  .number[0]
-                                                  .value,
-                                              prizeNotifier
-                                                  .selectedPrize
-                                                  .data['last3b']
-                                                  .number[1]
-                                                  .value,
-                                              "1"),
-                                        )
-                                      ]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                )
-              : Text("รอผลทำนายที่เหลือ"),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 7,
-                      offset: Offset(0, 4), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.white,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Lottoerypredition(
-                      //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                      prizeNotifier.selectedPrize.data['first'].number[0].value,
-                      prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3f'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3f'].number[1].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3b'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3b'].number[1].value,
-                      "1"),
-                ),
-              ),
-            ),
+              ? predictByName(prizeNotifier)
+              : null,
+          predictByCal(
+            Lottoerypredition(
+                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                prizeNotifier.selectedPrize.data['first'].number[0].value,
+                prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                "1"),
           ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 7,
-                      offset: Offset(0, 4), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.white,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Lottoerypredition(
-                      //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                      prizeNotifier.selectedPrize.data['first'].number[0].value,
-                      prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3f'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3f'].number[1].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3b'].number[0].value,
-                      prizeNotifier
-                          .selectedPrize.data['last3b'].number[1].value,
-                      "2"),
-                ),
-              ),
-            ),
-          ),
+          predictByCal(
+            Lottoerypredition(
+                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                prizeNotifier.selectedPrize.data['first'].number[0].value,
+                prizeNotifier.selectedPrize.data['last2'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3f'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3f'].number[1].value,
+                prizeNotifier.selectedPrize.data['last3b'].number[0].value,
+                prizeNotifier.selectedPrize.data['last3b'].number[1].value,
+                "2"),
+          )
         ],
       )),
+    );
+  }
+
+  Padding predictByCal(Widget data) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 7,
+                offset: Offset(0, 4), // changes position of shadow
+              ),
+            ],
+            color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Center(
+          child: Padding(padding: const EdgeInsets.all(8.0), child: data),
+        ),
+      ),
+    );
+  }
+
+  Expanded predictByName(PrizeNotifier prizeNotifier) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: ListView(
+          children: prizeNotifier.predictData.data.map<Widget>((document) {
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 7,
+                        offset: Offset(0, 4), // changes position of shadow
+                      ),
+                    ],
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: Text(document.title,
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.black87)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: GridView.count(
+                        crossAxisCount: 4,
+                        childAspectRatio: (90 / 45),
+                        crossAxisSpacing: 1,
+                        mainAxisSpacing: 1,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        children: document.numbers.map<Widget>((n) {
+                          return Center(
+                            child: Text(
+                              n,
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.indigo),
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: GridView.count(
+                          crossAxisCount: 4,
+                          childAspectRatio: (90 / 45),
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: []),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

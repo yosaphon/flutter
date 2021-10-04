@@ -42,7 +42,6 @@ getPrize(PrizeNotifier prizeNotifier) async {
   QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection('predictData')
       .orderBy('date', descending: true)
-      .limit(1)
       .get();
   snapshot.docs.forEach((element) {
     _predictData = PredictData.fromJson(element.data());
