@@ -144,12 +144,12 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   Expanded predictByName(PrizeNotifier prizeNotifier) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.only(bottom: 1),
         child: ListView(
           children: prizeNotifier.predictData.data.map<Widget>((document) {
             return Padding(
               padding:
-                  const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 5),
+                  const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 10),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
