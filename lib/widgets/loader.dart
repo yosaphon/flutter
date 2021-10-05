@@ -15,24 +15,29 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 1), () {
-      Navigator.push(context, PageTransition(duration: Duration(milliseconds: 1000),
-                        reverseDuration: Duration(milliseconds: 1000),type: PageTransitionType.fade, child: MyHomePage()));
-      // Navigator.of(context).pushReplacement(
-        
-      //     MaterialPageRoute(builder: (context) => MyHomePage()));
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              duration: Duration(milliseconds: 1000),
+              reverseDuration: Duration(milliseconds: 1000),
+              type: PageTransitionType.fade,
+              child: MyHomePage()));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF4B0082),
+      backgroundColor: Color(0xff3f51b5),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('asset/guraLottery.png',height: 100,
-    width: 100,),
+            Image.asset(
+              'asset/guraLottery.png',
+              height: 100,
+              width: 100,
+            ),
             Text(
               "Lotto Check",
               style: TextStyle(
