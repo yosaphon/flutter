@@ -14,6 +14,7 @@ import 'package:lotto/screen/check/displaycheck.dart';
 import 'package:lotto/screen/prize/displaylotto.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto/widgets/bottonTabBar.dart';
+import 'package:lotto/widgets/loader.dart';
 import 'package:provider/provider.dart';
 
 /// To verify things are working, check out the native platform logs.
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.indigo,
           fontFamily: 'Mitr',
         ),
-        home: MyHomePage(title: 'Lottery app'),
+        home: Loader(),//MyHomePage(title: 'Lottery app'),
       ),
     );
   }
