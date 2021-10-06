@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:footer/footer.dart';
 import 'package:lotto/main.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -33,6 +34,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(),
             Image.asset(
               'asset/guraLottery.png',
               height: 90,
@@ -45,7 +47,9 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                 fontSize: 18,color: Colors.black54
               ,fontFamily: "Mitr"),
             ),
-            
+            Spacer(),
+            Footer(backgroundColor: Colors.redAccent[100],
+              child: Text("v1.0.0" ,style: TextStyle(fontSize: 10,color: Colors.black87),))
           ],
         ),
       ),

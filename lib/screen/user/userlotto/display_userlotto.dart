@@ -669,7 +669,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         side: BorderSide(
         
             width: 2,
-            color: selectedReward == i ? Colors.indigo : Colors.black87),
+            color: selectedReward == i ? Colors.indigo : Colors.black54),
       ),
     );
   }
@@ -705,7 +705,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
         ),
         side: BorderSide(
             width: 2,
-            color: selectedStatus == i ? Colors.indigo : Colors.black87),
+            color: selectedStatus == i ? Colors.indigo : Colors.black54),
       ),
     );
   }
