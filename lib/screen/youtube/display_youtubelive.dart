@@ -26,6 +26,12 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
 
     super.initState();
   }
+   Future<void> _refreshYoutube(
+      BuildContext context, PrizeNotifier prizeNotifier) async {
+    await getPrize(prizeNotifier);
+
+    await Future.delayed(Duration(milliseconds: 1000));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +78,7 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
             elevation: 0,
           ),
           body: RefreshIndicator(
-            onRefresh: getPrize(prizeNotifier),
+            onRefresh: () => _refreshYoutube(context,prizeNotifier),
             child: Column(
               children: [
                 SizedBox(height: 15,),
