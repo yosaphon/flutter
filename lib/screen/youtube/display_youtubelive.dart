@@ -71,50 +71,52 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
             backgroundColor: Colors.indigo,
             elevation: 0,
           ),
-          body: Column(
-            
-            children: [
-              SizedBox(height: 15,),
-              Expanded(
-                child: ListView(
-                  children: prizeNotifier.prizeList.values.map((document) {
-                    String url = document.youtubeUrl;
-                    String id = url.substring(url.length - 11);
-                    String urlThumnail =
-                        "https://img.youtube.com/vi/" + id + "/sddefault.jpg";
-                    return cardContainer(
-                      url: document.youtubeUrl,
-                      listTile: ListTile(
-                        title: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            textToTextspan(numToWord(document.date),Colors.orange),
-                            document.status != 1
-                                ? Text("กำลังถ่ายทอดสด",
-                                    style: TextStyle(color: Colors.red))
-                                : Text("")
-                          ],
+          body: RefreshIndicator(
+            onRefresh: getPrize(prizeNotifier),
+            child: Column(
+              children: [
+                SizedBox(height: 15,),
+                Expanded(
+                  child: ListView(
+                    children: prizeNotifier.prizeList.values.map((document) {
+                      String url = document.youtubeUrl;
+                      String id = url.substring(url.length - 11);
+                      String urlThumnail =
+                          "https://img.youtube.com/vi/" + id + "/sddefault.jpg";
+                      return cardContainer(
+                        url: document.youtubeUrl,
+                        listTile: ListTile(
+                          title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              textToTextspan(numToWord(document.date),Colors.orange),
+                              document.status != 1
+                                  ? Text("กำลังถ่ายทอดสด",
+                                      style: TextStyle(color: Colors.red))
+                                  : Text("")
+                            ],
+                          ),
+                          subtitle: Text(
+                            "งวดที่ ${document.period[0]},${document.period[1]}",
+                            style: TextStyle(color: Colors.indigo),
+                          ),
                         ),
-                        subtitle: Text(
-                          "งวดที่ ${document.period[0]},${document.period[1]}",
-                          style: TextStyle(color: Colors.indigo),
+                        image: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          height: 150,
+                          imageUrl: urlThumnail,
+                          placeholder: (context, url) => SpinKitChasingDots(
+                            color: Colors.indigo[100],
+                            size: 30.0,
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
-                      ),
-                      image: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        height: 150,
-                        imageUrl: urlThumnail,
-                        placeholder: (context, url) => SpinKitChasingDots(
-                          color: Colors.indigo[100],
-                          size: 30.0,
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ));
     }
   }
