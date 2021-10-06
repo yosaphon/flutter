@@ -395,13 +395,13 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
+                Row(
                   children: [
                     Container(
-                        constraints: BoxConstraints(maxWidth: 330),
+                        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*0.83),
                         child: buildSearch()),
                     Container(
-                        constraints: BoxConstraints(maxHeight: 42),
+                        constraints: BoxConstraints(maxHeight: 42,maxWidth: 50),
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -416,8 +416,9 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                             shape: BoxShape.rectangle,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16))),
-                        margin: EdgeInsets.only(top: 16, left: 330, right: 20),
+                     
                         child: TextButton(
+                          
                           child: Icon(
                             FontAwesomeIcons.alignJustify,
                             color: Colors.black87,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lotto/api/prize_api.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
@@ -87,7 +88,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
             backgroundColor: Colors.indigo,
             elevation: 0,
           ),
-          body: Center(child: CircularProgressIndicator()));
+          body: Center(child: SpinKitChasingDots(
+              color: Colors.indigo[100],
+              size: 30.0,
+            ),));
     } else {
       return Scaffold(
         extendBodyBehindAppBar: false,

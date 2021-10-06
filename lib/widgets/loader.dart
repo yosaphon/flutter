@@ -14,13 +14,13 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
 
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
           context,
           PageTransition(
-              duration: Duration(milliseconds: 1000),
-              reverseDuration: Duration(milliseconds: 1000),
-              type: PageTransitionType.fade,
+              duration: Duration(milliseconds: 500),
+              reverseDuration: Duration(milliseconds: 5000),
+              type: PageTransitionType.rightToLeft,
               child: MyHomePage()));
     });
   }
@@ -28,26 +28,24 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff3f51b5),
+      backgroundColor: Color(0xFFF3FFFE),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'asset/guraLottery.png',
-              height: 100,
-              width: 100,
+              height: 90,
+              width: 90,
             ),
+            SizedBox(height: 10,),
             Text(
               "Lotto Check",
               style: TextStyle(
-                fontSize: 30,
-              ),
+                fontSize: 18,color: Colors.black54
+              ,fontFamily: "Mitr"),
             ),
-            SpinKitWave(
-              color: Colors.amber,
-              size: 50.0,
-            ),
+            
           ],
         ),
       ),
