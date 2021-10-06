@@ -421,8 +421,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           
                           child: Icon(
                             FontAwesomeIcons.alignJustify,
-                            color: Colors.indigo[700],
-                            size: 18,
+                            color: Colors.black87,
+                            size: 20,
                           ),
                           onPressed: () {
                             _lotteryEditModalBottomSheet(context);

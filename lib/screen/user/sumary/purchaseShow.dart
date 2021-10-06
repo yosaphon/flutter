@@ -433,7 +433,7 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
                                         child: Row(
                                           children: [
                                             textToTextspan(numToWord(
-                                                _sumaryData[index].date)),
+                                                _sumaryData[index].date),Colors.black87),
                                           ],
                                         ),
                                       ),
@@ -947,14 +947,15 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
     );
   }
 
-  Widget textToTextspan(String txt) {
+  }
+Widget textToTextspan(String txt,Color color) {
     var a = txt.split(" ");
     return RichText(
       text: TextSpan(children: <TextSpan>[
         TextSpan(
             text: a[0] + " ",
             style: TextStyle(
-                fontSize: 18, color: Colors.black54, fontFamily: "Mitr")),
+                fontSize: 18, color: color, fontFamily: "Mitr")),
         TextSpan(
             text: a[1] + " ",
             style: TextStyle(
@@ -962,11 +963,10 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
         TextSpan(
             text: a[2],
             style: TextStyle(
-                fontSize: 18, color: Colors.black54, fontFamily: "Mitr")),
+                fontSize: 18, color: color, fontFamily: "Mitr")),
       ]),
     );
   }
-}
 
 class DataInTable {
   String number;

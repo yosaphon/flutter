@@ -44,7 +44,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
             Text(
               "Lotto Check",
               style: TextStyle(
-                fontSize: 18,color: Colors.black54
+                fontSize: 18,color: Colors.black87
               ,fontFamily: "Mitr"),
             ),
             Spacer(),
