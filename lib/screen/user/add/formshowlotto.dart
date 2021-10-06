@@ -500,7 +500,8 @@ class _FormshowlottoState extends State<Formshowlotto> {
                   heroTag: "add",
                   onPressed: () {
                     FocusScope.of(context).unfocus();
-                    Future.delayed(const Duration(milliseconds: 500), () {
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      
                       setState(() {
                         if (formKey.currentState.validate()) {
                           formKey.currentState.save();

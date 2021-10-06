@@ -421,7 +421,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                           
                           child: Icon(
                             FontAwesomeIcons.alignJustify,
-                            color: Colors.black87,
+                            color: Colors.indigo[700],
                             size: 18,
                           ),
                           onPressed: () {
@@ -469,6 +469,7 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                       userNotifier.currentUser.forEach((element) {
                         date1.add(element.date);
                       });
+                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -528,6 +529,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
 
   void _lotteryEditModalBottomSheet(context) {
     showModalBottomSheet(
+      backgroundColor: Color(0xFFF3FFFE),
+      
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
@@ -548,6 +551,8 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
                         Spacer(),
                         IconButton(
                             onPressed: () {
+                              selectedReward = sTypeR ;
+                              selectedStatus = sTypeS;
                               Navigator.of(context).pop();
                             },
                             icon: Icon(
@@ -645,26 +650,26 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedReward == i ? Colors.indigoAccent : Colors.white10,
+              color: selectedReward == i ? Colors.white : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color: selectedReward == i ? Colors.indigoAccent : Colors.blueGrey),
+                  color: selectedReward == i ? Colors.white : Colors.black87),
             ),
           ],
         ),
       ),
       style: OutlinedButton.styleFrom(
-        backgroundColor:selectedReward == i ? Colors.indigo[50] : Colors.white,
+        backgroundColor:selectedReward == i ? Color(0xFF6390E9) : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
         side: BorderSide(
         
             width: 2,
-            color: selectedReward == i ? Colors.indigo : Colors.blueGrey),
+            color: selectedReward == i ? Colors.indigo : Colors.black87),
       ),
     );
   }
@@ -682,25 +687,25 @@ class _UserprofileLotteryState extends State<UserprofileLottery> {
           children: [
             Icon(
               Icons.check_circle_outline_outlined,
-              color: selectedStatus == i ? Colors.indigoAccent : Colors.white10,
+              color: selectedStatus == i ? Colors.white : Colors.white10,
               size: 20,
             ),
             Text(
               name,
               style: TextStyle(
-                  color: selectedStatus == i ? Colors.indigoAccent : Colors.blueGrey),
+                  color: selectedStatus == i ? Colors.white : Colors.black87),
             ),
           ],
         ),
       ),
       style: OutlinedButton.styleFrom(
-        backgroundColor:selectedStatus == i ? Colors.indigo[50] : Colors.white,
+        backgroundColor:selectedStatus == i ? Color(0xFF6390E9) : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
         side: BorderSide(
             width: 2,
-            color: selectedStatus == i ? Colors.indigo : Colors.blueGrey),
+            color: selectedStatus == i ? Colors.indigo : Colors.black87),
       ),
     );
   }

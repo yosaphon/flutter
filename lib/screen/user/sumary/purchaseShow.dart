@@ -1,6 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:lotto/model/SumaryData.dart';
 import 'package:lotto/model/UserData.dart';
@@ -239,13 +240,16 @@ class _ShowPurchaseReportState extends State<ShowPurchaseReport> {
           elevation: 0.0, //No shadow
         ),
         body: Center(
-          child: CircularProgressIndicator(),
+          child: SpinKitChasingDots(
+              color: Colors.indigo[100],
+              size: 30.0,
+            ),
         ),
       );
     } else {
       return Scaffold(
           extendBodyBehindAppBar: false,
-        
+         backgroundColor: Color(0xFFF3FFFE),
           appBar: AppBar(
             title: Text(
               "สรุปผลการซื้อสลากกินแบ่งรัฐบาล",
