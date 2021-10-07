@@ -49,5 +49,5 @@ getPrize(PrizeNotifier prizeNotifier) async {
   });
 
   prizeNotifier.predictData = _predictData;
-  print(_predictData.first.date);
+  //print(_predictData.first.date);
 }
