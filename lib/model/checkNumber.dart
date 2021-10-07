@@ -32,16 +32,16 @@ class CheckNumber {
       getSelectedData = prizeNotifier.selectedPrize;
       getDataForCheck(getSelectedData);
       print(prizeNotifier.selectedPrize.date);
-      print("_first  = $_first   ");
-      print("_second = $_second   ");
-      print("_third  = $_third   ");
-      print("_fourth = $_fourth   ");
-      print("_fifth  = $_fifth   ");
-      print("_near1st= $_near1st   ");
-      print("_last2  = $_last2   ");
-      print("_last3f = $_last3f   ");
-      print("_last3b = $_last3b   ");
-      print("_usernumber = $userNum");
+      // print("_first  = $_first   ");
+      // print("_second = $_second   ");
+      // print("_third  = $_third   ");
+      // print("_fourth = $_fourth   ");
+      // print("_fifth  = $_fifth   ");
+      // print("_near1st= $_near1st   ");
+      // print("_last2  = $_last2   ");
+      // print("_last3f = $_last3f   ");
+      // print("_last3b = $_last3b   ");
+      // print("_usernumber = $userNum");
       checkPrize();
 
       print(_listCheckResult);
