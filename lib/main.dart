@@ -152,10 +152,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         backgroundColor: Color(0xFFF63C4F),
         onPressed: () {
-          Navigator.push(
+          if(prizeNotifier.prizeList.isNotEmpty){
+             Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Formqrcodescan()),
           );
+          }
+         
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

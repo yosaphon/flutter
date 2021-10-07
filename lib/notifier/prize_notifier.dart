@@ -39,10 +39,10 @@ class PrizeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  PredictData _predictData;
+    List<PredictData> _predictData =[];
   get predictData => _predictData;
 
-  set predictData(PredictData predictData) {
+  set predictData(  List<PredictData> predictData) {
     _predictData = predictData;
     notifyListeners();
   }

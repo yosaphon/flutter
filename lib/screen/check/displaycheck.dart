@@ -30,6 +30,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   Map<String, String> date = {};
   List<PrizeData> prizeData = [];
   String dateValue;
+  @override
+  void dispose() {
+    lotterylist.clear();
+    super.dispose();
+  }
 
 //   Future loadData(PrizeNotifier prizeNotifier) async {
 //     if (prizeNotifier.prizeList.isNotEmpty) {
@@ -64,9 +69,9 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
             style: TextStyle(color: Colors.black87),
           ),
           leading: new IconButton(
-                      icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
+            icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           shape: RoundedRectangleBorder(),
           // backgroundColor: Colors.transparent,
           backgroundColor: Colors.indigo,
@@ -116,7 +121,11 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                     setState(() {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => QRScanPage(wantToCheck: true,prizeNotifier: prizeNotifier,)),
+                        MaterialPageRoute(
+                            builder: (context) => QRScanPage(
+                                  wantToCheck: true,
+                                  prizeNotifier: prizeNotifier,
+                                )),
                       );
                     });
                   });
@@ -132,12 +141,13 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
               FloatingActionButton.extended(
                 heroTag: "check",
                 onPressed: () async {
+                  
                   if (_formKey.currentState.validate()) {
                     CheckNumber data = new CheckNumber(
                         userNum: lotterylist, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
                     FocusScope.of(context).unfocus();
-
+                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -194,6 +204,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           // add new text-fields at the top of all friends textfields
           if (lotterylist[index] != null && lotterylist[index].length >= 6) {
             lotterylist.insert(0, '');
+            //FocusScope.of(context).isFirstFocus;
           }
         } else
           lotterylist.removeAt(index);
@@ -224,7 +235,7 @@ class LotteryTextFilds extends StatefulWidget {
 
 class _LotteryTextFildsState extends State<LotteryTextFilds> {
   TextEditingController _lotteryController;
-
+  // FocusNode _focusNode;
   @override
   void initState() {
     super.initState();
@@ -262,7 +273,9 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 42),
       child: TextFormField(
+        textInputAction: TextInputAction.next,
         autofocus: true,
+        //focusNode: FocusScopeNode(),
         style: TextStyle(fontSize: 20),
         keyboardType: TextInputType.number,
         inputFormatters: [

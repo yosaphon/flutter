@@ -11,39 +11,27 @@ String predictDataToJson(PredictData data) => json.encode(data.toJson());
 class PredictData {
     PredictData({
         this.date,
-        this.data,
+        this.name,
+        this.number,
+        this.url,
     });
 
     String date;
-    List<Datum> data;
+    String name;
+    String number;
+    String url;
 
     factory PredictData.fromJson(Map<String, dynamic> json) => PredictData(
         date: json["date"] == null ? null : json["date"],
-        data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        name: json["name"] == null ? null : json["name"],
+        number: json["number"] == null ? null : json["number"],
+        url: json["url"] == null ? null : json["url"],
     );
 
     Map<String, dynamic> toJson() => {
         "date": date == null ? null : date,
-        "data": data == null ? null : List<dynamic>.from(data.map((x) => x.toJson())),
-    };
-}
-
-class Datum {
-    Datum({
-        this.title,
-        this.numbers,
-    });
-
-    String title;
-    List<String> numbers;
-
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        title: json["title"] == null ? null : json["title"],
-        numbers: json["numbers"] == null ? null : List<String>.from(json["numbers"].map((x) => x)),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "title": title == null ? null : title,
-        "numbers": numbers == null ? null : List<dynamic>.from(numbers.map((x) => x)),
+        "name": name == null ? null : name,
+        "number": number == null ? null : number,
+        "url": url == null ? null : url,
     };
 }

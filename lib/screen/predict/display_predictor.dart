@@ -58,11 +58,11 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
       ),
       body: Center(
           child: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                  children: [
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
               Container(
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: Center(
@@ -75,7 +75,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                               color: Colors.black,
                               fontFamily: "Mitr")),
                       TextSpan(
-                          text: numToWord(prizeNotifier.predictData.date),
+                          text: numToWord(prizeNotifier.predictData.first.date),
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.orange,
@@ -85,35 +85,51 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   ),
                 ),
               ),
-              prizeNotifier.predictData.data[0].title != ""
+              prizeNotifier.predictData.first.date != null
                   ? predictByName(prizeNotifier)
                   : null,
-              prizeNotifier.selectedPrize.data['first'].number[0].value !="" ?predictByCal(
-                Lottoerypredition(
-                    //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                    prizeNotifier.selectedPrize.data['first'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                    prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                    "1"),
-              ):SizedBox(),
-              prizeNotifier.selectedPrize.data['first'].number[0].value !="" ? predictByCal(
-                Lottoerypredition(
-                    //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                    prizeNotifier.selectedPrize.data['first'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last2'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3f'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3f'].number[1].value,
-                    prizeNotifier.selectedPrize.data['last3b'].number[0].value,
-                    prizeNotifier.selectedPrize.data['last3b'].number[1].value,
-                    "2"),
-              ):SizedBox(),SizedBox(height: 100,)
-                  ],
-                ),
-            ),
-          )),
+              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
+                  ? predictByCal(
+                      Lottoerypredition(
+                          //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                          prizeNotifier
+                              .selectedPrize.data['first'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last2'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3f'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3f'].number[1].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3b'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3b'].number[1].value,
+                          "1"),
+                    )
+                  : SizedBox(),
+              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
+                  ? predictByCal(
+                      Lottoerypredition(
+                          //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                          prizeNotifier
+                              .selectedPrize.data['first'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last2'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3f'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3f'].number[1].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3b'].number[0].value,
+                          prizeNotifier
+                              .selectedPrize.data['last3b'].number[1].value,
+                          "2"),
+                    )
+                  : SizedBox(),
+            ],
+          ),
+        ),
+      )),
     );
   }
 
@@ -143,73 +159,58 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
 
   Expanded predictByName(PrizeNotifier prizeNotifier) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 1),
-        child: ListView(
-          children: prizeNotifier.predictData.data.map<Widget>((document) {
-            return Padding(
-              padding:
-                  const EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 10),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 7,
-                        offset: Offset(0, 4), // changes position of shadow
-                      ),
-                    ],
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Text(document.title,
-                          style:
-                              TextStyle(fontSize: 18, color: Colors.black87)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: GridView.count(
-                        crossAxisCount: 4,
-                        childAspectRatio: (90 / 45),
-                        crossAxisSpacing: 1,
-                        mainAxisSpacing: 1,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: document.numbers.map<Widget>((n) {
-                          return Center(
-                            child: Text(
-                              n,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.indigo),
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: GridView.count(
-                          crossAxisCount: 4,
-                          childAspectRatio: (90 / 45),
-                          crossAxisSpacing: 1,
-                          mainAxisSpacing: 1,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          children: []),
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: prizeNotifier.predictData.map<Widget>((document) {
+          return Padding(
+            padding: const EdgeInsets.only(
+                left: 10,  top: 5, bottom: 10),
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.9,
+              height:  MediaQuery.of(context).size.height*0.2,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 7,
+                      offset: Offset(0, 4), // changes position of shadow
                     ),
                   ],
-                ),
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Text(document.name,
+                        style:
+                            TextStyle(fontSize: 18, color: Colors.black87)),
+                  ),
+                  GridView.count(
+                    crossAxisCount: 4,
+                    childAspectRatio: (90 / 45),
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: document.number.split(',').map<Widget>((n) {
+                      return Center(
+                        child: Text(
+                          n,
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.indigo),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
