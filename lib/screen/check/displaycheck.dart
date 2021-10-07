@@ -340,14 +340,14 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(26),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.4),
             spreadRadius: 0,
             blurRadius: 7,
-            offset: Offset(0, 4), // changes position of shadow
+            offset: Offset(1, 4), // changes position of shadow
           ),
         ],
         //border: Border.all(color: Colors.black26),
