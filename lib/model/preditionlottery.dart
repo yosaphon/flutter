@@ -87,9 +87,9 @@ class Lottoerypredition extends StatelessWidget {
         SizedBox(height: 30,),
                   Text(
                   result,
-                  style: TextStyle(fontSize: 24,fontWeight: FontWeight.w500,color: Colors.black87, fontFamily: "Mitr"),
+                  style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.indigo, fontFamily: "Mitr"),
                   textAlign: TextAlign.center,
-                ),
+                ),SizedBox(height: 20,),
       ],
     );
   }

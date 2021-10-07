@@ -126,6 +126,9 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                           "2"),
                     )
                   : SizedBox(),
+              SizedBox(
+                height: 100,
+              )
             ],
           ),
         ),
@@ -157,17 +160,18 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
     );
   }
 
-  Expanded predictByName(PrizeNotifier prizeNotifier) {
-    return Expanded(
+  Widget predictByName(PrizeNotifier prizeNotifier) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10,right: 10),
+      height: 200,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: prizeNotifier.predictData.map<Widget>((document) {
           return Padding(
             padding: const EdgeInsets.only(
-                left: 10,  top: 5, bottom: 10),
+                left: 5,  top: 5, bottom: 10),
             child: Container(
               width: MediaQuery.of(context).size.width*0.9,
-              height:  MediaQuery.of(context).size.height*0.2,
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -177,7 +181,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                       offset: Offset(0, 4), // changes position of shadow
                     ),
                   ],
-                  color: Colors.white,
+                  color: Color(0xFF6390E9),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Column(
@@ -190,9 +194,9 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   ),
                   GridView.count(
                     crossAxisCount: 4,
-                    childAspectRatio: (90 / 45),
+                    childAspectRatio: 4/(5/4) ,
                     crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
+                    mainAxisSpacing: 10,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     children: document.number.split(',').map<Widget>((n) {
@@ -200,7 +204,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                         child: Text(
                           n,
                           style:
-                              TextStyle(fontSize: 16, color: Colors.indigo),
+                              TextStyle(fontSize: 20, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       );
