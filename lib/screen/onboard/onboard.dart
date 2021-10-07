@@ -19,7 +19,7 @@ Color kbrown = Color(0xFF795548);
   PageController _pageController;
   List<OnboardModel> screens = <OnboardModel>[
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showprize.jpg',
       text: "ผลการออกรางวัล",
       desc:
           "สามารถดูผลการออกรางวัลในงวดปัจจุบันและสามารถดูผลกการออกรางวัลย้อนหลังได้",
@@ -27,23 +27,31 @@ Color kbrown = Color(0xFF795548);
       button: Color(0xFF4756DF),
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
-      text: "ลิงค์ดูถ่ายทอดสด",
+      img: 'asset/showyoutube.jpg',
+      text: "ลิงค์ดูการออกสลากกินแบ่ง",
       desc:
           "สามารถเปิดดูการถ่ายทอดสดในปัจจุบันและอดีตได้",
       bg: Color(0xFF4756DF),
       button: Colors.white,
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showcheck.jpg',
       text: "ตรวจผลรางวัล",
       desc:
-          "สามารถตรวจรางวัลด้วยการ สแกน Data Matrix 2D Code หรือ กรอกเลขตรวจได้",
+          "สามารถตรวจรางวัลด้วยการ สแกน QR Code หรือ กรอกเลขตรวจได้",
       bg: Color(0xFF4756DF),
       button: Colors.white,
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showprediction.jpg',
+      text: "ดูการใบ้รางวัล",
+      desc:
+          "สามารถดูเลขเด็ดของงวดต่อไปได้",
+      bg: Color(0xFF4756DF),
+      button: Colors.white,
+    ),
+    OnboardModel(
+      img: 'asset/showuser.jpg',
       text: "บันทึกสลาก",
       desc:
           "สามารถบันทึกสลากก่อนออกรางวัลได้และเมือรางวัลออกระบบจะส่งแจ้งเตือนไปยังมือถือ",
@@ -75,9 +83,10 @@ Color kbrown = Color(0xFF795548);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: currentIndex % 2 == 0 ? kwhite : kblue,
+      backgroundColor: Color(0xFFF3FFFE) ,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: currentIndex % 2 == 0 ? kwhite : kblue,
+        backgroundColor: Colors.white.withOpacity(0),
         elevation: 0.0,
         actions: [
           TextButton(
@@ -89,7 +98,7 @@ Color kbrown = Color(0xFF795548);
             child: Text(
               "Skip",
               style: TextStyle(
-                color: currentIndex % 2 == 0 ? kblack : kwhite,
+                color:  kblack,
               ),
             ),
           )
@@ -112,7 +121,7 @@ Color kbrown = Color(0xFF795548);
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(screens[index].img,width: 100,height: 100,),
+                  Image.asset(screens[index].img,width:  MediaQuery.of(context).size.width*0.5,height:  MediaQuery.of(context).size.height*0.6,),
                   Container(
                     height: 10.0,
                     child: ListView.builder(
@@ -143,8 +152,8 @@ Color kbrown = Color(0xFF795548);
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 27.0,
-                      fontWeight: FontWeight.bold,
-                      color: index % 2 == 0 ? kblack : kwhite,
+                      fontWeight: FontWeight.w400,
+                      color:  kblack ,
                     ),
                   ),
                   Text(
@@ -152,7 +161,7 @@ Color kbrown = Color(0xFF795548);
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14.0,
-                      color: index % 2 == 0 ? kblack : kwhite,
+                      color:  kblack,
                     ),
                   ),
                   InkWell(
@@ -166,28 +175,28 @@ Color kbrown = Color(0xFF795548);
 
                       _pageController.nextPage(
                         duration: Duration(milliseconds: 300),
-                        curve: Curves.bounceIn,
+                        curve: Curves.fastOutSlowIn,
                       );
                     },
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
                       decoration: BoxDecoration(
-                          color: index % 2 == 0 ? kblue : kwhite,
+                          color:  kblue ,
                           borderRadius: BorderRadius.circular(15.0)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(
                          index == screens.length-1? "เริ่มต้นใช้งาน":"Next",
-                          style: TextStyle(
+                          style: TextStyle( 
                               fontSize: 16.0,
-                              color: index % 2 == 0 ? kwhite : kblue),
+                              color:  kwhite ),
                         ),
-                        SizedBox(
+                        index == screens.length-1 ?SizedBox():SizedBox(
                           width: 15.0,
                         ),
-                        Icon(
+                        index == screens.length-1 ?SizedBox():Icon(
                           Icons.arrow_forward_sharp,
-                          color: index % 2 == 0 ? kwhite : kblue,
+                          color:  kwhite,
                         )
                       ]),
                     ),
