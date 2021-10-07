@@ -189,8 +189,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: Text(document.name,
-                        style:
-                            TextStyle(fontSize: 18, color: Colors.black87)),
+                        style: TextStyle(fontSize: 18, color: Colors.black87)),
                   ),
                   GridView.count(
                     crossAxisCount: 4,
