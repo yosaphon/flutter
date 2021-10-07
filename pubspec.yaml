@@ -52,6 +52,7 @@ dependencies:
 # animation
   animations: ^2.0.1
   flutter_spinkit: ^5.1.0
+  shared_preferences: ^2.0.0
 # image uploade
   image_picker: ^0.8.2
   firebase_storage: ^10.0.1
