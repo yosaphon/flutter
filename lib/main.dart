@@ -7,6 +7,7 @@ import 'package:lotto/notification.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/notifier/sumary_notifier.dart';
 import 'package:lotto/notifier/user_notifier.dart';
+import 'package:lotto/screen/onboard/onboard.dart';
 import 'package:lotto/screen/user/login/check_login_user.dart';
 import 'package:lotto/screen/predict/display_predictor.dart';
 import 'package:lotto/screen/youtube/display_youtubelive.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:lotto/widgets/bottonTabBar.dart';
 import 'package:lotto/widgets/loader.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// To verify things are working, check out the native platform logs.
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -24,6 +26,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
 }
+int isviewed;
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel',
@@ -46,6 +49,8 @@ void main() async {
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  isviewed = prefs.getInt('onBoard');    
   runApp(MyApp());
 }
 
@@ -71,7 +76,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.indigo,
           fontFamily: 'Mitr',
         ),
-        home: Loader(),//MyHomePage(title: 'Lottery app'),
+        home: isviewed != 0 ? OnBoard() : Loader(),//MyHomePage(title: 'Lottery app'),
       ),
     );
   }
