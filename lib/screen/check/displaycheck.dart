@@ -32,7 +32,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
   String dateValue;
   @override
   void dispose() {
-    lotterylist.clear();
+    lotterylist = [null];
     super.dispose();
   }
 
@@ -141,20 +141,29 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
               FloatingActionButton.extended(
                 heroTag: "check",
                 onPressed: () async {
-                  
+                  List<String> _list = [];
+                  lotterylist.toSet().toList();
+                  lotterylist.forEach((element) {
+                    if (element != null && element != '') {
+                      _list.add(element);
+                    }
+                  });
+                  print(_list);
+
                   if (_formKey.currentState.validate()) {
                     CheckNumber data = new CheckNumber(
-                        userNum: lotterylist, prizeNotifier: prizeNotifier);
+                        userNum: _list, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
                     FocusScope.of(context).unfocus();
-                    
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShowResultCheck(
-                              allResult: data.getCheckedData(),
-                              length: data.getLength())),
-                    );
+                    if (_list.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShowResultCheck(
+                                allResult: data.getCheckedData(),
+                                length: data.getLength())),
+                      );
+                    }
                   }
                 },
                 icon: Icon(Icons.pin),
@@ -181,7 +190,7 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
         padding: const EdgeInsets.symmetric(vertical: 1.0),
         child: Stack(
           children: [
-            LotteryTextFilds(i),
+            LotteryTextFilds(i, lotterylist.length),
             // we need add button at last friends row
             Padding(
               padding: const EdgeInsets.only(right: 40, top: 18),
@@ -205,9 +214,43 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
           if (lotterylist[index] != null && lotterylist[index].length >= 6) {
             lotterylist.insert(0, '');
             //FocusScope.of(context).isFirstFocus;
+          } else {
+            print("ไม่ครบ");
+            showDialog<Null>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return new AlertDialog(
+                    title: Center(
+                        child: Text(
+                      'กรุณากรอกข้อมูล',
+                      style: TextStyle(color: Colors.orange),
+                    )),
+                    actions: <Widget>[
+                      Center(
+                        child: new TextButton(
+                          child: Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                });
           }
-        } else
+        } else {
           lotterylist.removeAt(index);
+        }
+
         setState(() {});
       },
       child: Container(
@@ -228,12 +271,15 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
 
 class LotteryTextFilds extends StatefulWidget {
   final int index;
-  LotteryTextFilds(this.index);
+  final int listLength;
+  LotteryTextFilds(this.index, this.listLength);
   @override
-  _LotteryTextFildsState createState() => _LotteryTextFildsState();
+  _LotteryTextFildsState createState() => _LotteryTextFildsState(listLength);
 }
 
 class _LotteryTextFildsState extends State<LotteryTextFilds> {
+  final int listLength;
+  _LotteryTextFildsState(this.listLength);
   TextEditingController _lotteryController;
   // FocusNode _focusNode;
   @override
@@ -274,7 +320,7 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
       padding: const EdgeInsets.symmetric(horizontal: 42),
       child: TextFormField(
         textInputAction: TextInputAction.next,
-        autofocus: true,
+        //autofocus: true,
         //focusNode: FocusScopeNode(),
         style: TextStyle(fontSize: 20),
         keyboardType: TextInputType.number,
@@ -291,7 +337,8 @@ class _LotteryTextFildsState extends State<LotteryTextFilds> {
         // validator:
         //     MultiValidator([RequiredValidator(errorText: "กรุณาป้อน เลขสลาก")]),
         validator: (v) {
-          if (v.isEmpty) {
+          print(listLength);
+          if (v.isEmpty && listLength < 1) {
             return 'กรุณากรอกเลขสลาก';
           } else if (v.trim().length < 6 && v.isNotEmpty)
             return 'กรุณากรอกเลขสลากให้ครบ 6 หลัก';
