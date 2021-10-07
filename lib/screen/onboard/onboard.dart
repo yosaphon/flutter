@@ -19,7 +19,7 @@ Color kbrown = Color(0xFF795548);
   PageController _pageController;
   List<OnboardModel> screens = <OnboardModel>[
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showprize.jpg',
       text: "ผลการออกรางวัล",
       desc:
           "สามารถดูผลการออกรางวัลในงวดปัจจุบันและสามารถดูผลกการออกรางวัลย้อนหลังได้",
@@ -27,7 +27,7 @@ Color kbrown = Color(0xFF795548);
       button: Color(0xFF4756DF),
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showyoutube.jpg',
       text: "ลิงค์ดูถ่ายทอดสด",
       desc:
           "สามารถเปิดดูการถ่ายทอดสดในปัจจุบันและอดีตได้",
@@ -35,7 +35,7 @@ Color kbrown = Color(0xFF795548);
       button: Colors.white,
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showprediction.jpg',
       text: "ตรวจผลรางวัล",
       desc:
           "สามารถตรวจรางวัลด้วยการ สแกน Data Matrix 2D Code หรือ กรอกเลขตรวจได้",
@@ -43,7 +43,15 @@ Color kbrown = Color(0xFF795548);
       button: Colors.white,
     ),
     OnboardModel(
-      img: 'asset/guraLottery.png',
+      img: 'asset/showprediction.jpg',
+      text: "ดูการใบ้รางวัล",
+      desc:
+          "สามารถดูเลขเด็ดของงวดต่อไปได้",
+      bg: Color(0xFF4756DF),
+      button: Colors.white,
+    ),
+    OnboardModel(
+      img: 'asset/showuser.jpg',
       text: "บันทึกสลาก",
       desc:
           "สามารถบันทึกสลากก่อนออกรางวัลได้และเมือรางวัลออกระบบจะส่งแจ้งเตือนไปยังมือถือ",
@@ -112,7 +120,7 @@ Color kbrown = Color(0xFF795548);
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(screens[index].img,width: 100,height: 100,),
+                  Image.asset(screens[index].img,width:  MediaQuery.of(context).size.width*0.5,height:  MediaQuery.of(context).size.height*0.6,),
                   Container(
                     height: 10.0,
                     child: ListView.builder(

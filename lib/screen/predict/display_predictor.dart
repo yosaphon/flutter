@@ -88,44 +88,53 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
               prizeNotifier.predictData.first.date != null
                   ? predictByName(prizeNotifier)
                   : null,
-              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
-                  ? predictByCal(
-                      Lottoerypredition(
-                          //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                          prizeNotifier
-                              .selectedPrize.data['first'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last2'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3f'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3f'].number[1].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3b'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3b'].number[1].value,
-                          "1"),
-                    )
-                  : SizedBox(),
-              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
-                  ? predictByCal(
-                      Lottoerypredition(
-                          //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                          prizeNotifier
-                              .selectedPrize.data['first'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last2'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3f'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3f'].number[1].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3b'].number[0].value,
-                          prizeNotifier
-                              .selectedPrize.data['last3b'].number[1].value,
-                          "2"),
-                    )
-                  : SizedBox(),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    prizeNotifier.selectedPrize.data['first'].number[0].value !=
+                            ""
+                        ? predictByCal(
+                            Lottoerypredition(
+                                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                                prizeNotifier.selectedPrize.data['first']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last2']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3f']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3f']
+                                    .number[1].value,
+                                prizeNotifier.selectedPrize.data['last3b']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3b']
+                                    .number[1].value,
+                                "1"),
+                          )
+                        : SizedBox(),
+                    prizeNotifier.selectedPrize.data['first'].number[0].value !=
+                            ""
+                        ? predictByCal(
+                            Lottoerypredition(
+                                //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                                prizeNotifier.selectedPrize.data['first']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last2']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3f']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3f']
+                                    .number[1].value,
+                                prizeNotifier.selectedPrize.data['last3b']
+                                    .number[0].value,
+                                prizeNotifier.selectedPrize.data['last3b']
+                                    .number[1].value,
+                                "2"),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -159,15 +168,14 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
 
   Expanded predictByName(PrizeNotifier prizeNotifier) {
     return Expanded(
+      flex: 1,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: prizeNotifier.predictData.map<Widget>((document) {
           return Padding(
-            padding: const EdgeInsets.only(
-                left: 10,  top: 5, bottom: 10),
+            padding: const EdgeInsets.only(left: 10, top: 5, bottom: 10),
             child: Container(
-              width: MediaQuery.of(context).size.width*0.9,
-              height:  MediaQuery.of(context).size.height*0.2,
+              width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -185,24 +193,26 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: Text(document.name,
-                        style:
-                            TextStyle(fontSize: 18, color: Colors.black87)),
+                        style: TextStyle(fontSize: 18, color: Colors.black87)),
                   ),
                   GridView.count(
                     crossAxisCount: 4,
-                    childAspectRatio: (90 / 45),
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height * 1 / 4),
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 1,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     children: document.number.split(',').map<Widget>((n) {
                       return Center(
-                        child: Text(
-                          n,
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.indigo),
-                          textAlign: TextAlign.center,
-                        ),
+                        
+                          child: Text(
+                            n,
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.indigo),
+                            textAlign: TextAlign.center,
+                          ),
+                        
                       );
                     }).toList(),
                   ),
