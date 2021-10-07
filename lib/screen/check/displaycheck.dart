@@ -155,15 +155,50 @@ class _FormqrcodescanState extends State<Formqrcodescan> {
                         userNum: _list, prizeNotifier: prizeNotifier);
                     print(data.getCheckedData());
                     FocusScope.of(context).unfocus();
+                    PrizeData prizeData = prizeNotifier.selectedPrize;
                     if (_list.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ShowResultCheck(
-                                allResult: data.getCheckedData(),
-                                length: data.getLength())),
-                      );
-                    }
+                    if (prizeData.data['first'].number[0].value == '') {
+                      showDialog<Null>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return new AlertDialog(
+                              title: Center(
+                                  child: Text(
+                                'กำลังออกรางวัล โปรดรอสักครู่',
+                                style: TextStyle(color: Colors.redAccent),
+                              )),
+                              actions: <Widget>[
+                                Center(
+                                  child: new TextButton(
+                                    child: Text(
+                                      'ตกลง',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onPressed: () {
+                                      FocusScope.of(context).unfocus();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                    } else {
+                      
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ShowResultCheck(
+                                  allResult: data.getCheckedData(),
+                                  length: data.getLength())),
+                        );
+                      
+                    }}
                   }
                 },
                 icon: Icon(Icons.pin),

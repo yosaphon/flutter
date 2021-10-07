@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lotto/api/prize_api.dart';
+import 'package:lotto/model/PrizeData.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
 import 'package:lotto/model/preditionlottery.dart';
 
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/widgets/paddingStyle.dart';
 
 import 'package:provider/provider.dart';
 
@@ -26,7 +29,6 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   @override
   void initState() {
     super.initState();
-
   }
 
   getOutDate() {
@@ -34,6 +36,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
   }
+
   Future<void> _refreshprediction(
       BuildContext context, PrizeNotifier prizeNotifier) async {
     await getPrize(prizeNotifier);
@@ -48,104 +51,158 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
-
-    return Scaffold(
-      extendBodyBehindAppBar: false,
-      backgroundColor: Color(0xFFF3FFFE),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "ผลรางวัลฉลากกินแบ่งรัฐบาล",
-          style: TextStyle(color: Colors.white),
+    PrizeData prizeData = prizeNotifier.prizeList.values.first;
+    if (prizeData.data['first'].number[0].value == '') {
+      return Scaffold(
+          extendBodyBehindAppBar: false,
+          backgroundColor: Color(0xFFF3FFFE),
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "ผลรางวัลฉลากกินแบ่งรัฐบาล",
+              style: TextStyle(color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+            ),
+            // backgroundColor: Colors.transparent,
+            backgroundColor: Colors.indigo,
+            elevation: 0,
+          ),
+          body: Center(
+              child: frameWidget(Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+            "กำลังออกรางวัล สามารถรับชมได้ที่หน้าชมการออกสลาก",
+            style: TextStyle(color: Colors.red, fontSize: 20),
+          ),
+              ))));
+    } else if (prizeNotifier.prizeList.isEmpty) {
+      return Scaffold(
+          extendBodyBehindAppBar: false,
+          backgroundColor: Color(0xFFF3FFFE),
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "ผลรางวัลฉลากกินแบ่งรัฐบาล",
+              style: TextStyle(color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+            ),
+            // backgroundColor: Colors.transparent,
+            backgroundColor: Colors.indigo,
+            elevation: 0,
+          ),
+          body: Center(
+            child: SpinKitChasingDots(
+              color: Colors.indigo[100],
+              size: 30.0,
+            ),
+          ));
+    } else {
+      return Scaffold(
+        extendBodyBehindAppBar: false,
+        backgroundColor: Color(0xFFF3FFFE),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "ผลรางวัลฉลากกินแบ่งรัฐบาล",
+            style: TextStyle(color: Colors.white),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+          ),
+          // backgroundColor: Colors.transparent,
+          backgroundColor: Colors.indigo,
+          elevation: 0,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-        ),
-        // backgroundColor: Colors.transparent,
-        backgroundColor: Colors.indigo,
-        elevation: 0,
-      ),
-      body: RefreshIndicator(
-        onRefresh:()=> _refreshprediction(context,prizeNotifier),
-        child: Center(
-            child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  child: Center(
-                    child: RichText(
-                      text: TextSpan(children: <TextSpan>[
-                        TextSpan(
-                            text: 'ทำนาย งวดวันที่ ',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontFamily: "Mitr")),
-                        TextSpan(
-                            text: numToWord(prizeNotifier.listOutDate.last),
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.orange,
-                                fontFamily: "Mitr")),
-                        TextSpan(),
-                      ]),
+        body: RefreshIndicator(
+          onRefresh: () => _refreshprediction(context, prizeNotifier),
+          child: Center(
+              child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                              text: 'ทำนาย งวดวันที่ ',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontFamily: "Mitr")),
+                          TextSpan(
+                              text: numToWord(prizeNotifier.listOutDate.last),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.orange,
+                                  fontFamily: "Mitr")),
+                          TextSpan(),
+                        ]),
+                      ),
                     ),
                   ),
-                ),
-                // prizeNotifier.predictData.first.name!=null
-                //     ? predictByName(prizeNotifier)
-                //     : SizedBox(),
-                prizeNotifier.prizeList.values.first.data['first'].number[0].value != ""
-                    ? predictByCal(
-                        Lottoerypredition(
-                            //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                            prizeNotifier
-                                .prizeList.values.first.data['first'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last2'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3f'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3f'].number[1].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3b'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3b'].number[1].value,
-                            "1"),
-                      )
-                    : SizedBox(),
-                prizeNotifier.prizeList.values.first.data['first'].number[0].value != ""
-                    ? predictByCal(
-                        Lottoerypredition(
-                            //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
-                            prizeNotifier
-                                .prizeList.values.first.data['first'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last2'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3f'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3f'].number[1].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3b'].number[0].value,
-                            prizeNotifier
-                                .prizeList.values.first.data['last3b'].number[1].value,
-                            "2"),
-                      )
-                    : SizedBox(),
-                SizedBox(
-                  height: 100,
-                )
-              ],
+                  // prizeNotifier.predictData.first.name!=null
+                  //     ? predictByName(prizeNotifier)
+                  //     : SizedBox(),
+                  prizeNotifier.prizeList.values.first.data['first'].number[0]
+                              .value !=
+                          ""
+                      ? predictByCal(
+                          Lottoerypredition(
+                              //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                              prizeNotifier.prizeList.values.first.data['first']
+                                  .number[0].value,
+                              prizeNotifier.prizeList.values.first.data['last2']
+                                  .number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3f'].number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3f'].number[1].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3b'].number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3b'].number[1].value,
+                              "1"),
+                        )
+                      : SizedBox(),
+                  prizeNotifier.prizeList.values.first.data['first'].number[0]
+                              .value !=
+                          ""
+                      ? predictByCal(
+                          Lottoerypredition(
+                              //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
+                              prizeNotifier.prizeList.values.first.data['first']
+                                  .number[0].value,
+                              prizeNotifier.prizeList.values.first.data['last2']
+                                  .number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3f'].number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3f'].number[1].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3b'].number[0].value,
+                              prizeNotifier.prizeList.values.first
+                                  .data['last3b'].number[1].value,
+                              "2"),
+                        )
+                      : SizedBox(),
+                  SizedBox(
+                    height: 100,
+                  )
+                ],
+              ),
             ),
-          ),
-        )),
-      ),
-    );
+          )),
+        ),
+      );
+    }
   }
 
   Padding predictByCal(Widget data) {

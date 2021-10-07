@@ -23,7 +23,39 @@ class PrizeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    if(_listNumber[0] == ''){
+return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Text(name, style: TextStyle(fontSize: 18)),
+          RichText(
+            text: TextSpan(children: <TextSpan>[
+              TextSpan(
+                  text:
+                      'รางวัลละ ',
+                  style: TextStyle(fontSize: 12,color: Colors.black, fontFamily: "Mitr")),TextSpan(
+                  text:
+                      '${NumberFormat("#,###").format(int.parse(sReward[0]))}',
+                  style: TextStyle(fontSize: 13,color: Colors.orange, fontFamily: "Mitr")),TextSpan(
+                  text:
+                      ' บาท',
+                  style: TextStyle(fontSize: 12,color: Colors.black, fontFamily: "Mitr")),
+            ]),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text("___________",style: TextStyle(color: Colors.redAccent ,fontSize: 14),)
+          )
+        ],
+      ),
+    );
+    }
+    else{
+      return Container(
       padding: EdgeInsets.all(20),
       child: Column(
         children: [
@@ -65,5 +97,8 @@ class PrizeBox extends StatelessWidget {
         ],
       ),
     );
-  }
+ 
+    }
+
+     }
 }

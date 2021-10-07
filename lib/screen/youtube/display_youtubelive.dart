@@ -95,7 +95,7 @@ class _DisplayLiveYoutubeState extends State<DisplayLiveYoutube> {
                           title: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              textToTextspan(numToWord(document.date),Colors.orange),
+                              textToTextspan(numToWord(document.date),Colors.orange),Spacer(),
                               document.status != 1
                                   ? Text("กำลังถ่ายทอดสด",
                                       style: TextStyle(color: Colors.red))

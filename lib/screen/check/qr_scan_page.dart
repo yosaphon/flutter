@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:lotto/model/PrizeData.dart';
 import 'package:lotto/model/checkNumber.dart';
 import 'package:lotto/notifier/prize_notifier.dart';
+import 'package:lotto/screen/check/displaycheck.dart';
 import 'package:lotto/screen/check/showResultCheck.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanPage extends StatefulWidget {
@@ -133,7 +136,10 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   bool _popBack = false;
+  bool _popup = false;
   getDateAndNumber(String barcode) {
+    PrizeNotifier prizeNotifier =
+        Provider.of<PrizeNotifier>(context, listen: false);
     List<String> data = barcode.split('-');
     print(data);
     if (data.length == 4) {
@@ -143,28 +149,73 @@ class _QRScanPageState extends State<QRScanPage> {
       print(number);
       // int times = int.parse(data[1]); //งวด
       // int index = (times / 2).ceil();
-      int peroid = int.parse(data[1]);
+      int peroid = 37; //int.parse(data[1]);
       print(peroid);
       //แสกนแล้วตรวจ
       if (_wantToCheck) {
         print("แสกนตรวจ");
-        var check = new CheckNumber(
-            userNum: [number],
-            peroid: peroid,
-            prizeNotifier: this.prizeNotifier);
-        print(check.getCheckedData());
-        setState(() {
-          if (_popBack != true) {
-            _popBack = true;
-            Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ShowResultCheck(
-                    allResult: check.getCheckedData(),
-                    length: check.getLength())));
+        List<PrizeData> _prizeData = prizeNotifier.prizeList.values
+            .where((element) => element.period.contains(peroid))
+            .toList();
+        if (_prizeData[0].data['first'].number[0].value == '') {
+          if (_popup == false) {
+            showDialog<Null>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return new AlertDialog(
+                    title: Center(
+                        child: Text(
+                      'กำลังออกรางวัลงวดนี้ โปรดรอสักครู่',
+                      style: TextStyle(color: Colors.redAccent),
+                    )),
+                    actions: <Widget>[
+                      Center(
+                        child: new TextButton(
+                          child: Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () async {
+                            FocusScope.of(context).unfocus();
+                            bool status = await controller.getFlashStatus();
+                            print(status);
+                            if (status == true) {
+                              controller?.toggleFlash();
+                            }
+                            int count = 0;
+                            Navigator.of(context).popUntil((_) => count++ >= 2)
+                            ;
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                });
+            _popup = true;
           }
-        });
-       
+        } else {
+          var check = new CheckNumber(
+              userNum: [number],
+              peroid: peroid,
+              prizeNotifier: this.prizeNotifier);
+          print(check.getCheckedData());
+          setState(() {
+            if (_popBack != true) {
+              _popBack = true;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShowResultCheck(
+                          allResult: check.getCheckedData(),
+                          length: check.getLength())));
+            }
+          });
+        }
       }
       //แสกนแล้วคืนค่า
       else {
