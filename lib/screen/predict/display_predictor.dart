@@ -89,41 +89,41 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
               // prizeNotifier.predictData.first.name!=null
               //     ? predictByName(prizeNotifier)
               //     : SizedBox(),
-              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
+              prizeNotifier.prizeList.values.first.data['first'].number[0].value != ""
                   ? predictByCal(
                       Lottoerypredition(
                           //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
                           prizeNotifier
-                              .selectedPrize.data['first'].number[0].value,
+                              .prizeList.values.first.data['first'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last2'].number[0].value,
+                              .prizeList.values.first.data['last2'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3f'].number[0].value,
+                              .prizeList.values.first.data['last3f'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3f'].number[1].value,
+                              .prizeList.values.first.data['last3f'].number[1].value,
                           prizeNotifier
-                              .selectedPrize.data['last3b'].number[0].value,
+                              .prizeList.values.first.data['last3b'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3b'].number[1].value,
+                              .prizeList.values.first.data['last3b'].number[1].value,
                           "1"),
                     )
                   : SizedBox(),
-              prizeNotifier.selectedPrize.data['first'].number[0].value != ""
+              prizeNotifier.prizeList.values.first.data['first'].number[0].value != ""
                   ? predictByCal(
                       Lottoerypredition(
                           //ส่งค่า รางวัลไปคำนวณ ที่lottoerypredition
                           prizeNotifier
-                              .selectedPrize.data['first'].number[0].value,
+                              .prizeList.values.first.data['first'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last2'].number[0].value,
+                              .prizeList.values.first.data['last2'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3f'].number[0].value,
+                              .prizeList.values.first.data['last3f'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3f'].number[1].value,
+                              .prizeList.values.first.data['last3f'].number[1].value,
                           prizeNotifier
-                              .selectedPrize.data['last3b'].number[0].value,
+                              .prizeList.values.first.data['last3b'].number[0].value,
                           prizeNotifier
-                              .selectedPrize.data['last3b'].number[1].value,
+                              .prizeList.values.first.data['last3b'].number[1].value,
                           "2"),
                     )
                   : SizedBox(),
