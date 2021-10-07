@@ -25,9 +25,10 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
   @override
   void initState() {
     super.initState();
+
   }
 
-  getKeyByValue() {
+  getOutDate() {
     return date.keys
         .firstWhere((k) => date[k] == dateValue, //หา Keys โดยใช้ value
             orElse: () => null);
@@ -75,7 +76,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                               color: Colors.black,
                               fontFamily: "Mitr")),
                       TextSpan(
-                          text: numToWord(prizeNotifier.predictData.first.date),
+                          text: numToWord(prizeNotifier.listOutDate.last),
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.orange,
@@ -85,9 +86,9 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   ),
                 ),
               ),
-              prizeNotifier.predictData.first.date != null
-                  ? predictByName(prizeNotifier)
-                  : null,
+              // prizeNotifier.predictData.first.name!=null
+              //     ? predictByName(prizeNotifier)
+              //     : SizedBox(),
               prizeNotifier.selectedPrize.data['first'].number[0].value != ""
                   ? predictByCal(
                       Lottoerypredition(
@@ -162,16 +163,15 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
 
   Widget predictByName(PrizeNotifier prizeNotifier) {
     return Container(
-      margin: const EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       height: 200,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: prizeNotifier.predictData.map<Widget>((document) {
           return Padding(
-            padding: const EdgeInsets.only(
-                left: 5,  top: 5, bottom: 10),
+            padding: const EdgeInsets.only(left: 5, top: 5, bottom: 10),
             child: Container(
-              width: MediaQuery.of(context).size.width*0.9,
+              width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -193,7 +193,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                   ),
                   GridView.count(
                     crossAxisCount: 4,
-                    childAspectRatio: 4/(5/4) ,
+                    childAspectRatio: 4 / (5 / 4),
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 10,
                     physics: NeverScrollableScrollPhysics(),
@@ -202,8 +202,7 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                       return Center(
                         child: Text(
                           n,
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.white),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       );
