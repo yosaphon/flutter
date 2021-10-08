@@ -149,7 +149,7 @@ class _QRScanPageState extends State<QRScanPage> {
       print(number);
       // int times = int.parse(data[1]); //งวด
       // int index = (times / 2).ceil();
-      int peroid = 37; //int.parse(data[1]);
+      int peroid = int.parse(data[1]);
       print(peroid);
       //แสกนแล้วตรวจ
       if (_wantToCheck) {

@@ -39,14 +39,28 @@ getPrize(PrizeNotifier prizeNotifier) async {
   prizeNotifier.listOutDate = _listOutDate;
 
   List<PredictData> _predictData = [];
-  QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection('predictData')
-      .where("date", isGreaterThan: _prizeList.values.first.date)
-      .get();
-  snapshot.docs.forEach((element) {
-    PredictData predictData = PredictData.fromJson(element.data());
+  try {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('predictData')
+        .where("date", isGreaterThan: prizeNotifier.prizeList.values.first.date)
+        .get();
+    snapshot.docs.forEach((element) {
+      PredictData predictData = PredictData.fromJson(element.data());
+      _predictData.add(predictData);
+    });
+    print(snapshot.docs);
+    if (snapshot.docs.isEmpty) {
+      print("emtpy");
+      PredictData predictData =
+          PredictData(name: "", number: "", url: "", date: "");
+      _predictData.add(predictData);
+    }
+  } catch (e) {
+    print("_predictData.first.date");
+    PredictData predictData =
+        PredictData(name: "", number: "", url: "", date: "");
     _predictData.add(predictData);
-  });
+  }
 
   prizeNotifier.predictData = _predictData;
   //print(_predictData.first.date);

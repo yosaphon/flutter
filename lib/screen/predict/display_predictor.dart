@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lotto/api/prize_api.dart';
+import 'package:lotto/model/PredictData.dart';
 import 'package:lotto/model/PrizeData.dart';
 
 import 'package:lotto/model/dropdownDate.dart';
@@ -42,16 +43,28 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
     await getPrize(prizeNotifier);
 
     await Future.delayed(Duration(milliseconds: 1000));
-    prizeNotifier.selectedPrize = prizeNotifier.prizeList.values.first;
+    setState(() {
+      if (prizeNotifier.predictData.first.date == "" ||
+          prizeNotifier.predictData.first.date.isEmpty) {
+        _show = false;
+      } else {
+        _show = true;
+      }
+    });
   }
 
   bool isBack = true;
+  bool _show = true;
   double angle1 = 0, angle2 = 0;
 
   @override
   Widget build(BuildContext context) {
     PrizeNotifier prizeNotifier = Provider.of<PrizeNotifier>(context);
     PrizeData prizeData = prizeNotifier.prizeList.values.first;
+    PredictData predictData = prizeNotifier.predictData.first;
+    if (predictData.date == "" || predictData.date.isEmpty) {
+      _show = false;
+    }
     if (prizeData.data['first'].number[0].value == '') {
       return Scaffold(
           extendBodyBehindAppBar: false,
@@ -71,12 +84,12 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
           ),
           body: Center(
               child: frameWidget(Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-            "กำลังออกรางวัล สามารถรับชมได้ที่หน้าชมการออกสลาก",
-            style: TextStyle(color: Colors.red, fontSize: 20),
-          ),
-              ))));
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              "กำลังออกรางวัล สามารถรับชมได้ที่หน้าชมการออกสลาก",
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            ),
+          ))));
     } else if (prizeNotifier.prizeList.isEmpty) {
       return Scaffold(
           extendBodyBehindAppBar: false,
@@ -148,9 +161,8 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                       ),
                     ),
                   ),
-                  // prizeNotifier.predictData.first.name!=null
-                  //     ? predictByName(prizeNotifier)
-                  //     : SizedBox(),
+                  Visibility(
+                      visible: _show, child: predictByName(prizeNotifier)),
                   prizeNotifier.prizeList.values.first.data['first'].number[0]
                               .value !=
                           ""
