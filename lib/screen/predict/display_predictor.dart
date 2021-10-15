@@ -12,6 +12,7 @@ import 'package:lotto/notifier/prize_notifier.dart';
 import 'package:lotto/widgets/paddingStyle.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DispalyPredictor extends StatefulWidget {
   @override
@@ -271,23 +272,33 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                     child: Text(document.name,
                         style: TextStyle(fontSize: 18, color: Colors.black87)),
                   ),
-                  GridView.count(
-                    crossAxisCount: 4,
-                    childAspectRatio: 4 / (5 / 4),
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 10,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: document.number.split(',').map<Widget>((n) {
-                      return Center(
-                        child: Text(
-                          n,
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                  Stack(children: [
+                    GridView.count(
+                      crossAxisCount: 4,
+                      childAspectRatio: 4 / (5 / 4),
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 10,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: document.number.split(',').map<Widget>((n) {
+                        return Center(
+                          child: Text(
+                            n,
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                     Positioned(
+                      left: 290,
+                      top: 85,
+                       child: InkWell(
+                          child: new Text('เพิ่มเติม',style: TextStyle( decoration: TextDecoration.underline,color: Colors.lightBlue[100])),
+                          onTap: () => launch(
+                              'https://docs.flutter.io/flutter/services/UrlLauncher-class.html')),
+                     ),
+                  ]),
                 ],
               ),
             ),
