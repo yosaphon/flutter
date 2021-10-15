@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lotto/main.dart';
 import 'package:lotto/model/onboardModel.dart';
@@ -10,11 +9,11 @@ class OnBoard extends StatefulWidget {
 }
 
 class _OnBoardState extends State<OnBoard> {
-Color kblue = Color(0xFF4756DF);
-Color kwhite = Color(0xFFFFFFFF);
-Color kblack = Color(0xFF000000);
-Color kbrown300 = Color(0xFF8D6E63);
-Color kbrown = Color(0xFF795548);
+  Color kblue = Color(0xFF4756DF);
+  Color kwhite = Color(0xFFFFFFFF);
+  Color kblack = Color(0xFF000000);
+  Color indigo300 = Colors.indigo[300];
+  Color indigo = Colors.indigo;
   int currentIndex = 0;
   PageController _pageController;
   List<OnboardModel> screens = <OnboardModel>[
@@ -29,24 +28,21 @@ Color kbrown = Color(0xFF795548);
     OnboardModel(
       img: 'asset/showyoutube.jpg',
       text: "ลิงค์ดูการออกสลากกินแบ่ง",
-      desc:
-          "สามารถเปิดดูการถ่ายทอดสดในปัจจุบันและอดีตได้",
+      desc: "สามารถเปิดดูการถ่ายทอดสดในปัจจุบันและอดีตได้",
       bg: Color(0xFF4756DF),
       button: Colors.white,
     ),
     OnboardModel(
       img: 'asset/showcheck.jpg',
       text: "ตรวจผลรางวัล",
-      desc:
-          "สามารถตรวจรางวัลด้วยการ สแกน QR Code หรือ กรอกเลขตรวจได้",
+      desc: "สามารถตรวจรางวัลด้วยการ สแกน QR Code หรือ กรอกเลขตรวจได้",
       bg: Color(0xFF4756DF),
       button: Colors.white,
     ),
     OnboardModel(
       img: 'asset/showprediction.jpg',
       text: "ดูการใบ้รางวัล",
-      desc:
-          "สามารถดูเลขเด็ดของงวดต่อไปได้",
+      desc: "สามารถดูเลขเด็ดของงวดต่อไปได้",
       bg: Color(0xFF4756DF),
       button: Colors.white,
     ),
@@ -83,7 +79,7 @@ Color kbrown = Color(0xFF795548);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3FFFE) ,
+      backgroundColor: Color(0xFFF3FFFE),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0),
@@ -92,13 +88,13 @@ Color kbrown = Color(0xFF795548);
           TextButton(
             onPressed: () {
               _storeOnboardInfo();
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => MyHomePage()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()));
             },
             child: Text(
               "Skip",
               style: TextStyle(
-                color:  kblack,
+                color: kblack,
               ),
             ),
           )
@@ -121,7 +117,11 @@ Color kbrown = Color(0xFF795548);
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(screens[index].img,width:  MediaQuery.of(context).size.width*0.5,height:  MediaQuery.of(context).size.height*0.6,),
+                  Image.asset(
+                    screens[index].img,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.6,
+                  ),
                   Container(
                     height: 10.0,
                     child: ListView.builder(
@@ -138,8 +138,8 @@ Color kbrown = Color(0xFF795548);
                                 height: 8,
                                 decoration: BoxDecoration(
                                   color: currentIndex == index
-                                      ? kbrown
-                                      : kbrown300,
+                                      ? indigo
+                                      : indigo300,
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                               ),
@@ -153,7 +153,7 @@ Color kbrown = Color(0xFF795548);
                     style: TextStyle(
                       fontSize: 27.0,
                       fontWeight: FontWeight.w400,
-                      color:  kblack ,
+                      color: kblack,
                     ),
                   ),
                   Text(
@@ -161,7 +161,7 @@ Color kbrown = Color(0xFF795548);
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14.0,
-                      color:  kblack,
+                      color: kblack,
                     ),
                   ),
                   InkWell(
@@ -169,8 +169,10 @@ Color kbrown = Color(0xFF795548);
                       print(index);
                       if (index == screens.length - 1) {
                         await _storeOnboardInfo();
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => MyHomePage()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()));
                       }
 
                       _pageController.nextPage(
@@ -182,22 +184,26 @@ Color kbrown = Color(0xFF795548);
                       padding:
                           EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
                       decoration: BoxDecoration(
-                          color:  kblue ,
+                          color: kblue,
                           borderRadius: BorderRadius.circular(15.0)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(
-                         index == screens.length-1? "เริ่มต้นใช้งาน":"Next",
-                          style: TextStyle( 
-                              fontSize: 16.0,
-                              color:  kwhite ),
+                          index == screens.length - 1
+                              ? "เริ่มต้นใช้งาน"
+                              : "Next",
+                          style: TextStyle(fontSize: 16.0, color: kwhite),
                         ),
-                        index == screens.length-1 ?SizedBox():SizedBox(
-                          width: 15.0,
-                        ),
-                        index == screens.length-1 ?SizedBox():Icon(
-                          Icons.arrow_forward_sharp,
-                          color:  kwhite,
-                        )
+                        index == screens.length - 1
+                            ? SizedBox()
+                            : SizedBox(
+                                width: 15.0,
+                              ),
+                        index == screens.length - 1
+                            ? SizedBox()
+                            : Icon(
+                                Icons.arrow_forward_sharp,
+                                color: kwhite,
+                              )
                       ]),
                     ),
                   )

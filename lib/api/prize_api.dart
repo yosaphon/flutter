@@ -42,7 +42,7 @@ getPrize(PrizeNotifier prizeNotifier) async {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('predictData')
-        .where("date", isEqualTo: "2021-10-01")
+        .where("date", isGreaterThan: prizeNotifier.prizeList.values.first.date)
         .get();
     snapshot.docs.forEach((element) {
       PredictData predictData = PredictData.fromJson(element.data());

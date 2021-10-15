@@ -295,8 +295,8 @@ class _DispalyPredictorState extends State<DispalyPredictor> {
                       top: 85,
                        child: InkWell(
                           child: new Text('เพิ่มเติม',style: TextStyle( decoration: TextDecoration.underline,color: Colors.lightBlue[100])),
-                          onTap: () => launch(
-                              'https://docs.flutter.io/flutter/services/UrlLauncher-class.html')),
+                          onTap: () => launch(document.url
+                              )),
                      ),
                   ]),
                 ],
